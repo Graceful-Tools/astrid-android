@@ -133,4 +133,5 @@
     <string name="repeat_ends_after">After</string>
     <string name="repeat_ends_on_date">On a date</string>
     <string name="repeat_times">times</string>
+    <string name="detail_pick_time">Pick a time</string>
 </resources>

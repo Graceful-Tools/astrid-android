@@ -136,4 +136,19 @@ class TaskDetailViewModelTest {
         assertEquals(JsonPrimitive(1), daily["interval"])
         assertFalse(daily.containsKey("weekdays"))
     }
+
+    @Test
+    fun `AATD-25 a picked time is turned into an instant by the core and saved as a timed date`() = runTest {
+        val core = FakeCore().apply {
+            answer("taskDetail", detail)
+            answer("dueDateAtTime", """{"dueDateTime":"2026-12-25T21:30:00Z","isAllDay":false}""")
+        }
+        val vm = vm(core)
+        vm.pickTime(14, 30)
+        assertEquals(JsonPrimitive(14), core.last("dueDateAtTime")!!["hour"])
+        assertEquals(JsonPrimitive(30), core.last("dueDateAtTime")!!["minute"])
+        val changes = core.last("updateTask")!!["changes"] as JsonObject
+        assertEquals(JsonPrimitive("2026-12-25T21:30:00Z"), changes["dueDateTime"])
+        assertEquals(JsonPrimitive(false), changes["isAllDay"])
+    }
 }

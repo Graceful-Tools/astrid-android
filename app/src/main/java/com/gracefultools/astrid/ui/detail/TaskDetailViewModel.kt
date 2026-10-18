@@ -92,6 +92,16 @@ class TaskDetailViewModel(
         load()
     }
 
+    /** A time from the time picker: the core puts it on the task's own day (dueDateAtTime). */
+    fun pickTime(hour: Int, minute: Int) = work {
+        runCommand {
+            val answer = core.run(command("dueDateAtTime", "taskId" to id, "hour" to hour, "minute" to minute)) as JsonObject
+            val due = (answer["dueDateTime"] as? JsonPrimitive)?.contentOrNull
+            core.run(command("updateTask", "taskId" to id, "changes" to mapOf("dueDateTime" to due, "isAllDay" to false)))
+        }
+        load()
+    }
+
     fun loadDueOptions() = work {
         runCatching { CoreJson.decodeFromJsonElement(DueDateOptions.serializer(), core.run(command("dueDateOptions", "taskId" to id))) }
             .onSuccess { options -> _state.update { it.copy(dueOptions = options) } }

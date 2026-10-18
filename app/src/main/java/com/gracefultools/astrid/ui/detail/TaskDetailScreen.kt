@@ -237,6 +237,7 @@ private fun WhenField(detail: TaskDetail, state: TaskDetailState, vm: TaskDetail
     val colors = AstridTheme.colors
     var picking by remember { mutableStateOf(false) }
     var calendar by remember { mutableStateOf(false) }
+    var clock by remember { mutableStateOf(false) }
     val label = dueText(detail.due) ?: stringResource(R.string.tasks_no_due_date)
     FieldRow(stringResource(R.string.detail_when), onClick = { vm.loadDueOptions(); picking = true }) {
         Text(label, color = if (detail.isOverdue) Error else colors.textPrimary, fontSize = 16.sp)
@@ -244,7 +245,12 @@ private fun WhenField(detail: TaskDetail, state: TaskDetailState, vm: TaskDetail
     if (picking) {
         AlertDialog(
             onDismissRequest = { picking = false },
-            confirmButton = { TextButton(onClick = { picking = false; calendar = true }) { Text(stringResource(R.string.detail_pick_date)) } },
+            confirmButton = {
+                Row {
+                    TextButton(onClick = { picking = false; clock = true }) { Text(stringResource(R.string.detail_pick_time)) }
+                    TextButton(onClick = { picking = false; calendar = true }) { Text(stringResource(R.string.detail_pick_date)) }
+                }
+            },
             dismissButton = { TextButton(onClick = { picking = false; vm.setDue(null, false) }) { Text(stringResource(R.string.detail_clear_date)) } },
             title = { Text(stringResource(R.string.detail_when)) },
             text = {
@@ -259,6 +265,20 @@ private fun WhenField(detail: TaskDetail, state: TaskDetailState, vm: TaskDetail
                     }
                 }
             },
+        )
+    }
+    if (clock) {
+        val now = detail.task.dueDateTime?.takeIf { !detail.task.isAllDay }
+            ?.let { runCatching { java.time.Instant.parse(it).atZone(java.time.ZoneId.systemDefault()) }.getOrNull() }
+        val time = androidx.compose.material3.rememberTimePickerState(
+            initialHour = now?.hour ?: 9, initialMinute = now?.minute ?: 0,
+            is24Hour = android.text.format.DateFormat.is24HourFormat(androidx.compose.ui.platform.LocalContext.current),
+        )
+        AlertDialog(
+            onDismissRequest = { clock = false },
+            confirmButton = { TextButton(onClick = { clock = false; vm.pickTime(time.hour, time.minute) }) { Text(stringResource(R.string.detail_done)) } },
+            dismissButton = { TextButton(onClick = { clock = false }) { Text(stringResource(R.string.common_cancel)) } },
+            text = { androidx.compose.material3.TimePicker(time) },
         )
     }
     if (calendar) {
