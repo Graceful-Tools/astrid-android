@@ -1,0 +1,5 @@
+# Kotlin generation for Android: `android` selects the Android-compatible cleaner (java.lang.ref.Cleaner
+# is API 33; the app's minSdk is 28) and Android-friendly defaults.
+[bindings.kotlin]
+android = true
+android_cleaner = true

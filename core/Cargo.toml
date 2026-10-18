@@ -1,0 +1,40 @@
+# The Android app's bindings to astrid-core.
+#
+# astrid-core is the shared client core (https://github.com/Graceful-Tools/astrid-core). Its rule 8
+# puts each platform's binding layer in that platform's repository: astrid-windows keeps its C ABI,
+# astrid-ios its UniFFI crate, and this is Android's — UniFFI again, whose Kotlin generator is
+# first-party.
+#
+# The core is pinned by revision and bumped deliberately. Building against a local checkout instead
+# is `scripts/build-core.sh --core ../astrid-core`, which patches the dependency for that build only.
+[workspace]
+resolver = "2"
+members = ["astrid-android", "bindgen"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.82"
+license = "MIT"
+publish = false
+
+[workspace.dependencies]
+astrid-core = { git = "https://github.com/Graceful-Tools/astrid-core.git", rev = "c0c83ed4f3d6fd040ab4ae990f786cc8ce585d3b" }
+uniffi = "0.32"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+strip = "debuginfo"
+# Unwind, not abort: every door catches a panic and answers with a failure, which only works if a
+# panic unwinds to the catch.
+panic = "unwind"
+
+# What a debug APK ships: optimised and stripped. The dev profile's debug info made each .so ~148 MB,
+# which is a 357 MB APK that takes a minute to install. Release APKs build with `--release`.
+[profile.jni]
+inherits = "release"
+lto = false
+codegen-units = 16
+incremental = true
+strip = "symbols"

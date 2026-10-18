@@ -1,0 +1,8 @@
+# Pinned so every machine and CI runner builds the same core.
+# Bump deliberately; a toolchain bump is a PR of its own.
+#
+# Targets: the two Android ABIs this app ships (arm64 phones, x86_64 emulators on Intel hosts).
+[toolchain]
+channel = "stable"
+components = ["rustfmt", "clippy"]
+targets = ["aarch64-linux-android", "x86_64-linux-android"]

@@ -1,0 +1,25 @@
+[package]
+name = "astrid-android"
+description = "UniFFI bindings from astrid-core to the Astrid Android app."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lib]
+# cdylib for the .so the app loads through JNA (and for the host build the JVM tests load);
+# lib so the bindgen can read the metadata.
+crate-type = ["cdylib", "lib"]
+name = "astrid_android"
+
+[dependencies]
+astrid-core = { workspace = true }
+uniffi = { workspace = true }
+tokio = { version = "1", features = ["rt-multi-thread"] }
+async-trait = "0.1"
+serde_json = "1"
+thiserror = "2"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }

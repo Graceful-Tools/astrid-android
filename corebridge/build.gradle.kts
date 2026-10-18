@@ -24,9 +24,17 @@ kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarg
 
 dependencies {
     api(libs.kotlinx.coroutines.android)
+    // The generated bindings mark the API-34 cleaner @RequiresApi.
+    implementation(libs.androidx.annotation)
     api(libs.kotlinx.serialization.json)
     implementation("${libs.jna.aar.get().module}:${libs.versions.jna.get()}@aar")
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.jna.jvm)
+}
+
+// The JVM unit tests load the host build of the crate (scripts/build-core.sh puts it there), so the
+// bridge is tested against the real core, not a stand-in.
+tasks.withType<Test>().configureEach {
+    systemProperty("jna.library.path", file("src/test/resources/native").absolutePath)
 }
