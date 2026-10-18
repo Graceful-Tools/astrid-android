@@ -13,6 +13,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Rule
@@ -23,7 +24,10 @@ import org.junit.Test
  * real core. Screenshots land in the app's files dir (`adb pull`), for a person to compare with iOS.
  */
 class SmokeTest {
-    @get:Rule val compose = createAndroidComposeRule<MainActivity>()
+    // Granted up front: the system's own permission dialog would cover the app (and its tree).
+    @get:Rule(order = 0) val notifications: androidx.test.rule.GrantPermissionRule =
+        androidx.test.rule.GrantPermissionRule.grant(android.Manifest.permission.POST_NOTIFICATIONS)
+    @get:Rule(order = 1) val compose = createAndroidComposeRule<MainActivity>()
 
     /** To /data/local/tmp through the shell: the app's own files go when the test APK is uninstalled. */
     private fun shot(name: String) {
@@ -33,8 +37,11 @@ class SmokeTest {
         Thread.sleep(500)
     }
 
+    /** A row may be below the fold, and a lazy list composes only what is on screen: scroll to it. */
     private fun waitForRow(title: String) = compose.waitUntil(10_000) {
-        compose.onAllNodes(hasContentDescription("Complete $title")).fetchSemanticsNodes().isNotEmpty()
+        runCatching {
+            compose.onNode(hasTestTag("taskList")).performScrollToNode(hasContentDescription("Complete $title"))
+        }.isSuccess
     }
 
     private fun waitFor(text: String) =
@@ -73,15 +80,32 @@ class SmokeTest {
         compose.onNode(hasSetTextAction()).performImeAction()
         waitForRow("Book dentist")
 
+        // Completed in My Tasks, it is either shown done or filtered out (the core's completion
+        // window decides); either way its "Complete" control is gone.
         compose.onNodeWithContentDescription("Complete Call mum").performClick()
-        compose.waitUntil(10_000) { compose.onAllNodesWithContentDescription("Mark Call mum not done").fetchSemanticsNodes().isNotEmpty() }
+        compose.waitUntil(10_000) { compose.onAllNodes(hasContentDescription("Complete Call mum")).fetchSemanticsNodes().isEmpty() }
 
         compose.onNodeWithText("Water plants").performClick()
         waitFor("Description")
         compose.onNodeWithText("blue", substring = true).assertIsDisplayed()
         shot("04-detail")
     }
-}
 
-private fun androidx.compose.ui.test.junit4.AndroidComposeTestRule<*, *>.onAllNodesWithContentDescription(label: String) =
-    onAllNodes(androidx.compose.ui.test.hasContentDescription(label))
+    @Test
+    fun aatd12_a_project_list_shows_as_a_board_and_a_card_moves_through_the_status_picker() {
+        waitFor("My Tasks")
+        compose.onNodeWithContentDescription("Open the sidebar").performClick()
+        compose.onNode(hasTestTag("sidebar:l-launch")).performClick()
+        compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag("listTitle") and hasText("Launch")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithContentDescription("Show as board").performClick()
+        // Columns are 300dp wide; the first two are on a phone's screen (Inbox, Ready).
+        waitFor("Ready")
+        shot("05-board")
+        // A board card's leading control opens the status picker (the core's `openPicker`).
+        compose.onNodeWithContentDescription("Complete Write copy").performClick()
+        waitFor("Move to")
+        compose.onAllNodes(hasText("Doing") and androidx.compose.ui.test.hasClickAction()).onFirst().performClick()
+        compose.waitUntil(10_000) { compose.onAllNodesWithText("Move to").fetchSemanticsNodes().isEmpty() }
+        shot("06-board-after-move")
+    }
+}

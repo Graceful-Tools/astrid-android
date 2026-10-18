@@ -69,3 +69,24 @@ data class ListSummary(
     val isVirtual: Boolean? = null,
     val imageUrl: String? = null,
 )
+
+/** One board column — `app::dispatch::board`: its cards are the core's rows for the board surface. */
+@Serializable
+data class BoardColumn(
+    val id: String = "",
+    val name: String = "",
+    val description: String? = null,
+    val kind: String = "status",
+    val total: Int = 0,
+    val cards: List<TaskRow> = emptyList(),
+)
+
+@Serializable
+data class Board(val projectId: String? = null, val listId: String? = null, val columns: List<BoardColumn> = emptyList())
+
+@Serializable
+data class StatusChoice(val id: String = "", val name: String = "", val kind: String = "status", val isCurrent: Boolean = false)
+
+/** `taskStatusOptions`: the columns a task may be moved to from its menu (Done is never offered, D46). */
+@Serializable
+data class StatusOptions(val current: String? = null, val columns: List<StatusChoice> = emptyList())

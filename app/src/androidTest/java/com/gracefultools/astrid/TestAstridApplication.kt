@@ -15,6 +15,8 @@ import uniffi.astrid_android.CredentialStore
  * sends it anywhere. A UI test can therefore never reach the real account.
  */
 class TestAstridApplication : AstridApplication() {
+    override val schedulesBackgroundWork = false
+
     override fun makeGraph(): AppGraph {
         val credentials = object : CredentialStore {
             val map = hashMapOf(
@@ -34,9 +36,12 @@ class TestAstridApplication : AstridApplication() {
         val SEED = """{"kind":"seedCache",
           "currentUser":{"id":"u-me","name":"Ada Lovelace","email":"ada@example.com"},
           "users":[{"id":"u-me","name":"Ada Lovelace","email":"ada@example.com"}],
-          "lists":[{"id":"l-home","name":"Home","color":"#22c55e","privacy":"PRIVATE","ownerId":"u-me","isFavorite":true,"favoriteOrder":1},
+          "projects":[{"id":"p-launch","name":"Launch","ownerId":"u-me","key":"LCH"}],
+          "lists":[{"id":"l-launch","name":"Launch","color":"#a855f7","privacy":"PRIVATE","ownerId":"u-me","projectId":"p-launch"},{"id":"l-home","name":"Home","color":"#22c55e","privacy":"PRIVATE","ownerId":"u-me","isFavorite":true,"favoriteOrder":1},
                    {"id":"l-work","name":"Work","color":"#3b82f6","privacy":"PRIVATE","ownerId":"u-me"}],
           "tasks":[
+            {"id":"t-copy","title":"Write copy","listIds":["l-launch"],"statusRole":"ready","creatorId":"u-me","assigneeId":"u-me",
+             "createdAt":"2026-10-04T00:00:00.000Z","updatedAt":"2026-10-04T00:00:00.000Z"},
             {"id":"t-plants","title":"Water plants","priority":2,"listIds":["l-home"],"completed":false,"creatorId":"u-me","assigneeId":"u-me",
              "description":"Use the **blue** can.","createdAt":"2026-10-01T00:00:00.000Z","updatedAt":"2026-10-01T00:00:00.000Z"},
             {"id":"t-mum","title":"Call mum","priority":3,"listIds":["l-home"],"completed":false,"creatorId":"u-me","assigneeId":"u-me",

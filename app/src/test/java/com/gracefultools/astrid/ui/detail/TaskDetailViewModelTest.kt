@@ -71,4 +71,22 @@ class TaskDetailViewModelTest {
         vm.postComment("  done soon ")
         assertEquals(JsonPrimitive("done soon"), core.last("postComment")!!["content"])
     }
+
+    @Test
+    fun `AATD-9 the pickers send the core's own values`() = runTest {
+        val core = FakeCore().apply {
+            answer("taskDetail", detail)
+            answer("assigneeOptions", """{"assigneeId":null,"options":[{"userId":null},{"userId":"u-bo","name":"Bo","initials":"B"}]}""")
+            answer("repeatOptions", """{"repeating":"never","presets":[{"value":"never","titleKey":"repeating.one_time_only","isSelected":true},{"value":"weekly","titleKey":"repeating.weekly"}]}""")
+        }
+        val vm = vm(core)
+        vm.loadAssignees(); vm.loadRepeats()
+        assertEquals("u-bo", vm.state.value.assignees!!.options[1].userId)
+        vm.setAssignee("u-bo")
+        assertEquals(JsonPrimitive("u-bo"), (core.last("updateTask")!!["changes"] as JsonObject)["assigneeId"])
+        vm.setRepeating("weekly")
+        assertEquals(JsonPrimitive("weekly"), (core.last("updateTask")!!["changes"] as JsonObject)["repeating"])
+        vm.setAssignee(null)
+        assertEquals(kotlinx.serialization.json.JsonNull, (core.last("updateTask")!!["changes"] as JsonObject)["assigneeId"])
+    }
 }

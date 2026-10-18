@@ -17,6 +17,11 @@ import com.gracefultools.astrid.AppGraph
 import com.gracefultools.astrid.DeepLinks
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.factory
+import com.gracefultools.astrid.ui.board.BoardContent
+import com.gracefultools.astrid.ui.common.StatusPicker
+import com.gracefultools.astrid.ui.board.BoardViewModel
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import com.gracefultools.astrid.ui.detail.TaskDetailScreen
 import com.gracefultools.astrid.ui.detail.TaskDetailViewModel
 import com.gracefultools.astrid.ui.search.SearchScreen
@@ -37,6 +42,10 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
     val tasks: TaskListViewModel = viewModel(factory = factory { TaskListViewModel(graph.core) })
     val side by sidebar.state.collectAsStateWithLifecycle()
     val list by tasks.state.collectAsStateWithLifecycle()
+    val boardVm: BoardViewModel = viewModel(factory = factory { BoardViewModel(graph.core) })
+    val boardState by boardVm.state.collectAsStateWithLifecycle()
+    // Board or list, per list, on this device — iOS keeps the choice per list too.
+    val boardLists = remember { mutableStateMapOf<String, Boolean>() }
     val drawer = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -63,13 +72,35 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                 },
             ) {
                 val title = side.selected?.let { if (it.id == side.myTasks?.id) stringResource(R.string.navigation_my_tasks) else it.name } ?: ""
+                val selected = side.selected
+                val onBoard = selected?.projectId != null
+                val showingBoard = onBoard && boardLists[selected!!.id] == true
+                if (showingBoard) LaunchedEffect(selected!!.id) { boardVm.open(selected.id) }
+                (list.statusPicker ?: boardState.statusPicker)?.let { picker ->
+                    val fromBoard = boardState.statusPicker != null
+                    StatusPicker(
+                        picker.options,
+                        onPick = { if (fromBoard) boardVm.pickStatus(it) else tasks.pickStatus(it) },
+                        onDismiss = { if (fromBoard) boardVm.dismissStatusPicker() else tasks.dismissStatusPicker() },
+                    )
+                }
                 TaskListScreen(
                     title = title,
+                    onToggleBoard = if (onBoard) ({ boardLists[selected!!.id] = !showingBoard }) else null,
+                    showingBoard = showingBoard,
+                    board = {
+                        BoardContent(
+                            boardState,
+                            onOpenTask = { nav.navigate("task/$it") },
+                            onMove = boardVm::moveTo,
+                            onComplete = boardVm::leading,
+                        )
+                    },
                     state = list,
                     onMenu = { scope.launch { drawer.open() } },
                     onSearch = { nav.navigate("search") },
                     onOpenTask = { nav.navigate("task/$it") },
-                    onComplete = { tasks.setCompleted(it.id, !it.completed) },
+                    onComplete = { row -> if (row.action == "complete") tasks.setCompleted(row.id, !row.completed) else tasks.leading(row) },
                     onDelete = { tasks.delete(it.id) },
                     onAdd = tasks::create,
                     onRefresh = tasks::refresh,

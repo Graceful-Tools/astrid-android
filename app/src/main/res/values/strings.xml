@@ -76,4 +76,13 @@
     <string name="settings_version">Version %1$s · core %2$s</string>
     <string name="settings_waiting_to_send">%1$d waiting to send</string>
     <string name="settings_all_sent">Everything is sent</string>
+    <string name="detail_reminder">Reminder</string>
+    <!-- Reminders: iOS reminder.* -->
+    <string name="reminders_channel">Reminders</string>
+    <string name="reminders_due_now">Reminder</string>
+    <string name="reminders_complete">Complete</string>
+    <string name="reminders_snooze_hour">Snooze 1 hour</string>
+    <string name="board_move_to">Move to</string>
+    <string name="board_show_board">Show as board</string>
+    <string name="board_show_list">Show as list</string>
 </resources>

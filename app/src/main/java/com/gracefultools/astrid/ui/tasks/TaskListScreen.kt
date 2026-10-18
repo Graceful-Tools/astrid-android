@@ -23,6 +23,8 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ViewKanban
+import androidx.compose.material.icons.automirrored.filled.ViewList
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -81,6 +83,10 @@ fun TaskListScreen(
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
     onDismissError: () -> Unit,
+    /** Set for a list on a board: the header offers list ⇄ board, as iOS's does. */
+    onToggleBoard: (() -> Unit)? = null,
+    showingBoard: Boolean = false,
+    board: @Composable () -> Unit = {},
 ) {
     val colors = AstridTheme.colors
     val snackbar = remember { SnackbarHostState() }
@@ -89,8 +95,10 @@ fun TaskListScreen(
     }
     Box(Modifier.fillMaxSize().background(colors.bgPrimary)) {
         Column(Modifier.fillMaxSize()) {
-            Header(title, onMenu, onSearch)
-            PullToRefreshBox(isRefreshing = state.refreshing, onRefresh = onRefresh, modifier = Modifier.weight(1f)) {
+            Header(title, onMenu, onSearch, onToggleBoard, showingBoard)
+            if (showingBoard) {
+                Box(Modifier.weight(1f)) { board() }
+            } else PullToRefreshBox(isRefreshing = state.refreshing, onRefresh = onRefresh, modifier = Modifier.weight(1f)) {
                 val listState = rememberLazyListState()
                 LaunchedEffect(listState, state.rows.size) {
                     snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0 }
@@ -106,7 +114,7 @@ fun TaskListScreen(
                     state = listState,
                     contentPadding = PaddingValues(horizontal = Spacing.s12, vertical = Spacing.s8),
                     verticalArrangement = Arrangement.spacedBy(Spacing.s8),
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().testTag("taskList"),
                 ) {
                     items(state.rows, key = { it.id }) { row ->
                         SwipeRow(row, onComplete = { onComplete(row) }, onDelete = { onDelete(row) }) {
@@ -122,7 +130,7 @@ fun TaskListScreen(
 }
 
 @Composable
-private fun Header(title: String, onMenu: () -> Unit, onSearch: () -> Unit) {
+private fun Header(title: String, onMenu: () -> Unit, onSearch: () -> Unit, onToggleBoard: (() -> Unit)?, showingBoard: Boolean) {
     val colors = AstridTheme.colors
     Row(
         Modifier.fillMaxWidth().background(colors.headerBg).padding(top = 36.dp, start = Spacing.s4, end = Spacing.s4, bottom = Spacing.s4),
@@ -133,6 +141,15 @@ private fun Header(title: String, onMenu: () -> Unit, onSearch: () -> Unit) {
             title, fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
             modifier = Modifier.weight(1f).testTag("listTitle").semantics { heading() }, maxLines = 1,
         )
+        if (onToggleBoard != null) {
+            IconButton(onClick = onToggleBoard) {
+                Icon(
+                    if (showingBoard) Icons.AutoMirrored.Filled.ViewList else Icons.Filled.ViewKanban,
+                    stringResource(if (showingBoard) R.string.board_show_list else R.string.board_show_board),
+                    tint = colors.textPrimary,
+                )
+            }
+        }
         IconButton(onClick = onSearch) { Icon(Icons.Filled.Search, stringResource(R.string.navigation_search), tint = colors.textPrimary) }
     }
 }

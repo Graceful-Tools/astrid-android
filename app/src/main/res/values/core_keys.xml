@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- GENERATED from astrid-windows Strings/en-US/Resources.resw: the English for astrid-core's label
+     keys (a key like repeating.weekly is the resource core_repeating_weekly). Same words on every
+     client. {0} became %1$s. Regenerate rather than hand-edit. -->
+<resources>
+    <string name="core_picker_no_due_date" formatted="false">No due date</string>
+    <string name="core_picker_today" formatted="false">Today</string>
+    <string name="core_picker_tomorrow" formatted="false">Tomorrow</string>
+    <string name="core_picker_in_3_days" formatted="false">In 3 days</string>
+    <string name="core_picker_next_week" formatted="false">Next week</string>
+    <string name="core_picker_morning" formatted="false">Morning</string>
+    <string name="core_picker_afternoon" formatted="false">Afternoon</string>
+    <string name="core_picker_evening" formatted="false">Evening</string>
+    <string name="core_picker_night" formatted="false">Night</string>
+    <string name="core_repeating_one_time_only" formatted="false">Never</string>
+    <string name="core_repeating_daily" formatted="false">Daily</string>
+    <string name="core_repeating_weekly" formatted="false">Weekly</string>
+    <string name="core_repeating_monthly" formatted="false">Monthly</string>
+    <string name="core_repeating_yearly" formatted="false">Yearly</string>
+    <string name="core_repeating_custom" formatted="false">Custom…</string>
+    <string name="core_repeat_none" formatted="false">Does not repeat</string>
+    <string name="core_repeat_every_day" formatted="false">Every day</string>
+    <string name="core_repeat_every_n_days" formatted="false">Every %1$s days</string>
+    <string name="core_repeat_every_week" formatted="false">Every week</string>
+    <string name="core_repeat_every_n_weeks" formatted="false">Every %1$s weeks</string>
+    <string name="core_repeat_every_month" formatted="false">Every month</string>
+    <string name="core_repeat_every_n_months" formatted="false">Every %1$s months</string>
+    <string name="core_repeat_every_year" formatted="false">Every year</string>
+    <string name="core_repeat_every_n_years" formatted="false">Every %1$s years</string>
+    <string name="core_repeat_on_weekdays" formatted="false">on %1$s</string>
+    <string name="core_repeat_on_day_of_month" formatted="false">on the %1$s</string>
+    <string name="core_repeat_on_nth_weekday" formatted="false">on the %1$s %2$s</string>
+    <string name="core_repeat_on_month_and_day" formatted="false">on %1$s %2$s</string>
+    <string name="core_repeat_ends_after" formatted="false">(%1$sx)</string>
+    <string name="core_repeat_ends_on" formatted="false">until %1$s</string>
+    <string name="core_repeat_from_due_date" formatted="false">from due date</string>
+    <string name="core_reminder_none" formatted="false">No reminder</string>
+    <string name="core_reminder_set" formatted="false">Reminder set</string>
+    <string name="core_reminder_at_due_time" formatted="false">At the time it is due</string>
+    <string name="core_reminder_5_minutes_before" formatted="false">5 minutes before</string>
+    <string name="core_reminder_15_minutes_before" formatted="false">15 minutes before</string>
+    <string name="core_reminder_30_minutes_before" formatted="false">30 minutes before</string>
+    <string name="core_reminder_hour_before" formatted="false">An hour before</string>
+    <string name="core_reminder_2_hours_before" formatted="false">2 hours before</string>
+    <string name="core_reminder_day_before" formatted="false">A day before</string>
+    <string name="core_reminder_week_before" formatted="false">A week before</string>
+    <string name="core_filter_any" formatted="false">Any</string>
+    <string name="core_filter_button" formatted="false">Filter</string>
+    <string name="core_filter_button_active" formatted="false">Filtered</string>
+    <string name="core_filter_completion" formatted="false">Finished tasks</string>
+    <string name="core_filter_completion_recent" formatted="false">Recently finished</string>
+    <string name="core_filter_completion_incomplete" formatted="false">Hide them</string>
+    <string name="core_filter_completion_completed" formatted="false">Only finished ones</string>
+    <string name="core_filter_completion_all" formatted="false">Show them all</string>
+    <string name="core_filter_priority" formatted="false">Priority</string>
+    <string name="core_filter_due" formatted="false">Due</string>
+    <string name="core_filter_due_overdue" formatted="false">Overdue</string>
+    <string name="core_filter_due_today" formatted="false">Today</string>
+    <string name="core_filter_due_this_week" formatted="false">This week</string>
+    <string name="core_filter_due_this_month" formatted="false">This month</string>
+    <string name="core_filter_due_none" formatted="false">No due date</string>
+    <string name="core_filter_assignee" formatted="false">Assigned to</string>
+    <string name="core_filter_assignee_me" formatted="false">Me</string>
+    <string name="core_filter_assignee_someone_else" formatted="false">Somebody else</string>
+    <string name="core_filter_assignee_nobody" formatted="false">Nobody</string>
+    <string name="core_filter_repeat" formatted="false">Repeat</string>
+    <string name="core_filter_repeat_never" formatted="false">Does not repeat</string>
+    <string name="core_filter_assigned_by" formatted="false">Assigned by</string>
+    <string name="core_filter_assigned_by_me" formatted="false">Me</string>
+    <string name="core_filter_assigned_by_someone_else" formatted="false">Somebody else</string>
+    <string name="core_filter_lists" formatted="false">Lists</string>
+    <string name="core_filter_lists_in_a_list" formatted="false">In a list</string>
+    <string name="core_filter_lists_not_in_a_list" formatted="false">Not in a list</string>
+    <string name="core_filter_lists_public" formatted="false">In a public list</string>
+    <string name="core_reminder_toast_complete" formatted="false">Complete</string>
+    <string name="core_reminder_toast_snooze" formatted="false">Snooze %1$s min</string>
+</resources>

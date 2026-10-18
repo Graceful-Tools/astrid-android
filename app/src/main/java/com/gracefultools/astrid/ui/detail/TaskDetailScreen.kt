@@ -71,6 +71,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.TaskDetail
+import com.gracefultools.astrid.ui.common.CoreLabels
+import com.gracefultools.astrid.ui.common.coreLabel
 import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.tasks.dueText
 import com.gracefultools.astrid.ui.tasks.parseColor
@@ -107,17 +109,17 @@ fun TaskDetailScreen(vm: TaskDetailViewModel, onBack: () -> Unit) {
                         detail.fieldOrder.forEachIndexed { index, field ->
                             if (index > 0) HorizontalDivider(color = colors.border)
                             when (field) {
-                                "assignee" -> FieldRow(stringResource(R.string.detail_assignee)) {
-                                    Text(detail.assignee?.display ?: stringResource(R.string.detail_unassigned), color = colors.textPrimary, fontSize = 16.sp)
-                                }
+                                "assignee" -> AssigneeField(detail, state, vm)
                                 "when" -> WhenField(detail, state, vm)
                                 "priority" -> PriorityField(detail.task.priority, vm::setPriority)
                                 "lists" -> ListsField(detail, state, vm)
                             }
                         }
-                        repeatText(detail)?.let {
+                        HorizontalDivider(color = colors.border)
+                        RepeatField(detail, state, vm)
+                        if (detail.task.dueDateTime != null) {
                             HorizontalDivider(color = colors.border)
-                            FieldRow(stringResource(R.string.detail_repeat)) { Text(it, color = colors.textPrimary, fontSize = 16.sp) }
+                            ReminderField(state, vm)
                         }
                     }
                     DescriptionCard(detail, vm::setDescription)
@@ -271,13 +273,7 @@ private fun WhenField(detail: TaskDetail, state: TaskDetailState, vm: TaskDetail
 }
 
 @Composable
-private fun duePickLabel(key: String): String = when {
-    key.endsWith("today") -> stringResource(R.string.due_pick_today)
-    key.endsWith("tomorrow") -> stringResource(R.string.due_pick_tomorrow)
-    key.contains("next_week") || key.contains("nextWeek") -> stringResource(R.string.due_pick_next_week)
-    key.contains("next_month") || key.contains("nextMonth") -> stringResource(R.string.due_pick_next_month)
-    else -> key.substringAfterLast('.').replace('_', ' ').replaceFirstChar { it.uppercase() }
-}
+private fun duePickLabel(key: String): String = coreLabel(key)
 
 @Composable
 private fun Chip(text: String, selected: Boolean, onClick: () -> Unit) {
@@ -421,10 +417,84 @@ private fun CommentComposer(onSend: (String) -> Unit) {
     }
 }
 
-/** The repeat row's words, from the core's summary. */
-private fun repeatText(detail: TaskDetail): String? {
-    val summary = detail.repeatSummary ?: return null
-    (summary as? JsonPrimitive)?.contentOrNull?.let { return it.takeIf(String::isNotBlank) }
-    val obj = runCatching { summary.jsonObject }.getOrNull() ?: return null
-    return ((obj["text"] ?: obj["label"] ?: obj["summary"]) as? JsonPrimitive)?.contentOrNull
+
+/** Who: the core's assignee options, first of them "nobody". */
+@Composable
+private fun AssigneeField(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailViewModel) {
+    val colors = AstridTheme.colors
+    var picking by remember { mutableStateOf(false) }
+    FieldRow(stringResource(R.string.detail_assignee), onClick = if (detail.isCopyOnly) null else ({ vm.loadAssignees(); picking = true })) {
+        Text(detail.assignee?.display ?: stringResource(R.string.detail_unassigned), color = colors.textPrimary, fontSize = 16.sp)
+    }
+    if (picking) {
+        PickerDialog(stringResource(R.string.detail_assignee), onDismiss = { picking = false }) {
+            state.assignees?.options?.forEach { option ->
+                val label = option.name ?: if (option.userId == null) stringResource(R.string.detail_unassigned) else option.userId
+                PickerRow(label, selected = option.userId == state.assignees.assigneeId) { picking = false; vm.setAssignee(option.userId) }
+            }
+        }
+    }
+}
+
+/** Repeat: the core's presets, worded by its keys; the summary row says what is set now. */
+@Composable
+private fun RepeatField(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailViewModel) {
+    val colors = AstridTheme.colors
+    val context = androidx.compose.ui.platform.LocalContext.current
+    var picking by remember { mutableStateOf(false) }
+    val summary = CoreLabels.summary(context, detail.repeatSummary) ?: coreLabel("repeat.none")
+    FieldRow(stringResource(R.string.detail_repeat), onClick = if (detail.isCopyOnly) null else ({ vm.loadRepeats(); picking = true })) {
+        Text(summary, color = colors.textPrimary, fontSize = 16.sp)
+    }
+    if (picking) {
+        PickerDialog(stringResource(R.string.detail_repeat), onDismiss = { picking = false }) {
+            // Custom patterns need their own editor (a later task); the presets are the iOS menu.
+            state.repeats?.presets?.filter { it.value != "custom" }?.forEach { preset ->
+                PickerRow(coreLabel(preset.titleKey), preset.isSelected) { picking = false; vm.setRepeating(preset.value) }
+            }
+        }
+    }
+}
+
+/** Reminder: the core's offsets from the due time. */
+@Composable
+private fun ReminderField(state: TaskDetailState, vm: TaskDetailViewModel) {
+    val colors = AstridTheme.colors
+    var picking by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { vm.loadReminders() }
+    val current = state.reminders?.picks?.firstOrNull { it.isSelected }?.titleKey ?: "reminder.none"
+    FieldRow(stringResource(R.string.detail_reminder), onClick = { vm.loadReminders(); picking = true }) {
+        Text(coreLabel(current), color = colors.textPrimary, fontSize = 16.sp)
+    }
+    if (picking) {
+        PickerDialog(stringResource(R.string.detail_reminder), onDismiss = { picking = false }) {
+            state.reminders?.picks?.forEach { pick ->
+                PickerRow(coreLabel(pick.titleKey), pick.isSelected) { picking = false; vm.setReminder(pick.reminderTime) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PickerDialog(title: String, onDismiss: () -> Unit, content: @Composable () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        confirmButton = {},
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
+        text = { Column(Modifier.verticalScroll(rememberScrollState())) { content() } },
+    )
+}
+
+@Composable
+private fun PickerRow(label: String, selected: Boolean, onClick: () -> Unit) {
+    val colors = AstridTheme.colors
+    Row(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).clickable(onClick = onClick)
+            .semantics { this.selected = selected }.padding(vertical = 12.dp, horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(label, color = colors.textPrimary, fontSize = 17.sp, modifier = Modifier.weight(1f))
+        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accent)
+    }
 }

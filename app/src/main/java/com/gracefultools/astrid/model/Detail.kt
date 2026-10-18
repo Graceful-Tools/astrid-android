@@ -68,3 +68,29 @@ data class ListPick(val id: String = "", val name: String = "", val color: Strin
 
 @Serializable
 data class ListPicks(val selected: List<ListPick> = emptyList(), val options: List<ListPick> = emptyList(), val createName: String? = null)
+
+@Serializable
+data class AssigneeOption(
+    val userId: String? = null,
+    val name: String? = null,
+    val initials: String = "",
+    val isCurrentUser: Boolean = false,
+    val isAgent: Boolean = false,
+    val image: String? = null,
+)
+
+/** `assigneeOptions`: who the picker offers, in the core's order, first entry "nobody". */
+@Serializable
+data class AssigneeOptions(val assigneeId: String? = null, val options: List<AssigneeOption> = emptyList())
+
+@Serializable
+data class RepeatPreset(val value: String = "", val titleKey: String = "", val isSelected: Boolean = false)
+
+@Serializable
+data class RepeatOptions(val repeating: String? = null, val presets: List<RepeatPreset> = emptyList())
+
+@Serializable
+data class ReminderPick(val titleKey: String = "", val reminderTime: String? = null, val isSelected: Boolean = false)
+
+@Serializable
+data class ReminderOptions(val reminderTime: String? = null, val picks: List<ReminderPick> = emptyList())

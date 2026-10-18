@@ -17,6 +17,8 @@ junit = "4.13.2"
 robolectric = "4.14.1"
 androidxTestExt = "1.2.1"
 androidxTestRunner = "1.6.2"
+androidxTestCore = "1.6.1"
+androidxTestRules = "1.6.1"
 espresso = "3.6.1"
 turbine = "1.2.0"
 
@@ -46,6 +48,8 @@ jna-jvm = { module = "net.java.dev.jna:jna", version.ref = "jna" }
 junit = { module = "junit:junit", version.ref = "junit" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestExt" }
+androidx-test-core = { module = "androidx.test:core", version.ref = "androidxTestCore" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxTestRules" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTestRunner" }
 espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }

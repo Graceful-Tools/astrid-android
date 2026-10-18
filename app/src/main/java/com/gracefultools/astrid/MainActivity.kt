@@ -41,6 +41,7 @@ class MainActivity : ComponentActivity() {
             url?.let { open(it); signIn.browserOpened() }
         }
         if (state == SignInState.SignedIn) {
+            NotificationPermission()
             AppRoot(graph = graph, onSignedOut = signIn::signedOut, onDeepLink = deepLinks)
         } else {
             SignInScreen(
@@ -49,6 +50,19 @@ class MainActivity : ComponentActivity() {
                 onOpenAgain = { signIn.begin(null) },
                 onCancel = signIn::cancel,
             )
+        }
+    }
+
+    /** Reminders need it on Android 13+; asked once, when there is first something to remind about. */
+    @Composable
+    private fun NotificationPermission() {
+        if (android.os.Build.VERSION.SDK_INT < 33) return
+        val launcher = androidx.activity.compose.rememberLauncherForActivityResult(
+            androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
+        ) { }
+        LaunchedEffect(Unit) {
+            val granted = checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == android.content.pm.PackageManager.PERMISSION_GRANTED
+            if (!granted) launcher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 

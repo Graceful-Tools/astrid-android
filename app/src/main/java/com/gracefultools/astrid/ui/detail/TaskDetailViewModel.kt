@@ -4,7 +4,10 @@ import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
 import com.gracefultools.astrid.core.CoreJson
 import com.gracefultools.astrid.core.command
+import com.gracefultools.astrid.model.AssigneeOptions
 import com.gracefultools.astrid.model.DueDateOptions
+import com.gracefultools.astrid.model.ReminderOptions
+import com.gracefultools.astrid.model.RepeatOptions
 import com.gracefultools.astrid.model.ListPicks
 import com.gracefultools.astrid.model.TaskDetail
 import com.gracefultools.astrid.ui.common.CoreViewModel
@@ -20,6 +23,9 @@ import kotlinx.serialization.json.contentOrNull
 
 data class TaskDetailState(
     val detail: TaskDetail? = null,
+    val assignees: AssigneeOptions? = null,
+    val repeats: RepeatOptions? = null,
+    val reminders: ReminderOptions? = null,
     val dueOptions: DueDateOptions? = null,
     val listPicks: ListPicks? = null,
     val deleted: Boolean = false,
@@ -96,6 +102,29 @@ class TaskDetailViewModel(
             CoreJson.decodeFromJsonElement(ListPicks.serializer(), core.run(command("listPicks", "taskId" to id, "query" to query, "asToggles" to true)))
         }.onSuccess { picks -> _state.update { it.copy(listPicks = picks) } }
     }
+
+    fun loadAssignees() = work {
+        runCatching { CoreJson.decodeFromJsonElement(AssigneeOptions.serializer(), core.run(command("assigneeOptions", "taskId" to id))) }
+            .onSuccess { options -> _state.update { it.copy(assignees = options) } }
+    }
+
+    /** `null` is nobody: the core's first option, and an explicit unassign on the wire. */
+    fun setAssignee(userId: String?) = update("assigneeId" to userId)
+
+    fun loadRepeats() = work {
+        runCatching { CoreJson.decodeFromJsonElement(RepeatOptions.serializer(), core.run(command("repeatOptions", "taskId" to id))) }
+            .onSuccess { options -> _state.update { it.copy(repeats = options) } }
+    }
+
+    /** A preset's wire value (`never`, `daily`, …). Custom patterns are their own editor. */
+    fun setRepeating(value: String) = update("repeating" to value)
+
+    fun loadReminders() = work {
+        runCatching { CoreJson.decodeFromJsonElement(ReminderOptions.serializer(), core.run(command("reminderOptions", "taskId" to id))) }
+            .onSuccess { options -> _state.update { it.copy(reminders = options) } }
+    }
+
+    fun setReminder(reminderTime: String?) = update("reminderTime" to reminderTime)
 
     fun setLists(listIds: List<String>) = work {
         runCommand { core.run(command("setTaskLists", "taskId" to id, "listIds" to listIds)) }

@@ -28,6 +28,8 @@ data class TaskListState(
     val refreshing: Boolean = false,
     /** A refusal to show. Never set for an offline write — that is still going to happen. */
     val error: String? = null,
+    /** Open when a row's leading control asked for the status picker. */
+    val statusPicker: com.gracefultools.astrid.ui.common.LeadingOutcome.PickStatus? = null,
 )
 
 /**
@@ -155,6 +157,26 @@ class TaskListViewModel(
         }
         reload()
     }
+
+    private val rowActions = com.gracefultools.astrid.ui.common.RowActions(core)
+
+    /** A tap on a row's leading control — whatever the core says that control does. */
+    fun leading(row: com.gracefultools.astrid.model.TaskRow) = work {
+        when (val outcome = rowActions.leading(row)) {
+            is com.gracefultools.astrid.ui.common.LeadingOutcome.PickStatus -> _state.update { it.copy(statusPicker = outcome) }
+            is com.gracefultools.astrid.ui.common.LeadingOutcome.Refused -> _state.update { it.copy(error = outcome.message) }
+            com.gracefultools.astrid.ui.common.LeadingOutcome.Done -> reload()
+        }
+    }
+
+    fun pickStatus(columnId: String) = work {
+        val picker = _state.value.statusPicker ?: return@work
+        _state.update { it.copy(statusPicker = null) }
+        rowActions.setStatus(picker.taskId, columnId)?.let { message -> _state.update { it.copy(error = message) } }
+        reload()
+    }
+
+    fun dismissStatusPicker() = _state.update { it.copy(statusPicker = null) }
 
     fun dismissError() = _state.update { it.copy(error = null) }
 
