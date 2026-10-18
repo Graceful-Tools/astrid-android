@@ -1,0 +1,13 @@
+{
+  "name": "astrid-android",
+  "private": true,
+  "description": "Astrid for Android — gates and scripts (the build itself is Gradle and Cargo)",
+  "scripts": {
+    "predeploy": "./scripts/predeploy.sh",
+    "predeploy:quick": "./scripts/predeploy.sh --quick",
+    "predeploy:full": "./scripts/predeploy.sh --full",
+    "build:core": "./scripts/build-core.sh",
+    "install:debug": "./gradlew :app:installDebug"
+  },
+  "license": "MIT"
+}

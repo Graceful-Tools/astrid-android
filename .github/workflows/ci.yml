@@ -1,0 +1,47 @@
+# The PR gate: the same steps as `npm run predeploy`, so a green run here means what a green local
+# run means. The core's own gate and the contract check against astrid-web run in astrid-core;
+# what this repo pins is a revision that passed there.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: android-actions/setup-android@v3
+      - name: NDK
+        run: sdkmanager "ndk;27.2.12479018"
+      - name: Rust targets and cargo-ndk
+        if: hashFiles('core/Cargo.toml') != ''
+        run: |
+          rustup target add aarch64-linux-android x86_64-linux-android
+          cargo install cargo-ndk --locked
+      - uses: Swatinem/rust-cache@v2
+        if: hashFiles('core/Cargo.toml') != ''
+        with:
+          workspaces: core
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Gate
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_SDK_ROOT }}/ndk/27.2.12479018
+        run: ./scripts/predeploy.sh
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk

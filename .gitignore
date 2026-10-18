@@ -1,0 +1,16 @@
+.gradle/
+build/
+local.properties
+.idea/
+*.iml
+.DS_Store
+captures/
+.kotlin/
+# Native libraries are built by scripts/build-core.sh, never committed.
+corebridge/src/main/jniLibs/
+corebridge/src/test/resources/native/
+core/target/
+# Signing material never enters the repository.
+*.jks
+*.keystore
+keystore.properties

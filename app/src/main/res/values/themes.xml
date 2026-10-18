@@ -1,0 +1,9 @@
+<resources>
+    <!-- The window behind Compose. Compose draws the real theme (ui/theme); this only keeps the
+         first frame from flashing white on the Ocean background. -->
+    <style name="Theme.Astrid" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/ocean_bg</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>
