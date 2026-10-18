@@ -29,7 +29,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildFeatures { compose = true }
+    buildFeatures { compose = true; buildConfig = true }
     testOptions { unitTests.isIncludeAndroidResources = true }
     lint {
         warningsAsErrors = false
@@ -70,4 +70,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test.junit4)
+}
+
+tasks.withType<Test>().configureEach {
+    systemProperty("jna.library.path", rootProject.file("corebridge/src/test/resources/native").absolutePath)
 }
