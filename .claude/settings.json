@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__astrid__get_agent_queue",
+      "mcp__astrid__get_lists",
+      "mcp__astrid__get_task",
+      "mcp__astrid__get_task_comments",
+      "mcp__astrid__add_comment",
+      "mcp__astrid__update_task",
+      "mcp__astrid__create_task",
+      "Bash(./gradlew:*)",
+      "Bash(./scripts/predeploy.sh:*)",
+      "Bash(./scripts/build-core.sh:*)",
+      "Bash(npm run predeploy)",
+      "Bash(npm run predeploy:*)",
+      "Bash(cargo:*)",
+      "Bash(adb:*)",
+      "Bash(emulator:*)",
+      "Bash(npx:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git fetch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)"
+    ]
+  }
+}

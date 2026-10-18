@@ -45,6 +45,13 @@ completion report → complete. Polishing after M2 is driven from the board, not
 | [AATD-18](https://astrid.cc/t/AATD-18) | Instrumented smoke tests, accessibility, startup performance |
 | [AATD-19](https://astrid.cc/t/AATD-19) | Release build and Play listing draft (Play upload needs Jon) |
 
+## State, 2026-10-18 morning
+
+M0, M1 and M2 are on `main`; AATD-1…18, 21 and 22 are complete. Open: AATD-19 (Play — needs
+Jon), AATD-20 (board drag-and-drop), and the polish rows in [PARITY.md](./PARITY.md). Cross-repo
+work it needed: astrid-web e6410f63 (deployed), astrid-core 8750331, 4e046e1, c0c83ed, 778d817,
+c2bcc92, 3d27881.
+
 ## Decisions taken while planning
 
 - **applicationId `com.gracefultools.astrid`.** Permanent once on Play; change it before the first

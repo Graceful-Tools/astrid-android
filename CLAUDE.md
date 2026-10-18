@@ -25,7 +25,8 @@ scripts/build-core.sh --core ../astrid-core   # build against a local core check
 
 ## Tasks
 
-The **Astrid Android To-do** board (`85eef4ce-3d4d-4072-9ca7-bd631ca815b1`, key AATD). Per-task
+`/fixstuff` (interactive) and `/fixall` (the Ready queue) — `.claude/commands/`. The
+**Astrid Android To-do** board (`85eef4ce-3d4d-4072-9ca7-bd631ca815b1`, key AATD). Per-task
 process is astrid-web `docs/FIXALL_WORKFLOW.md`: strategy comment → RED-GREEN-refactor → gate →
 completion report → complete. Use `listIds` (not `listId`) and the `X-OAuth-Token` header.
 
