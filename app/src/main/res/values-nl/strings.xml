@@ -86,6 +86,13 @@
     <string name="chat_title">Chat</string>
     <string name="chat_empty">No messages yet</string>
     <string name="detail_attach">Bestand bijvoegen</string>
+    <string name="repeat_every">Elke</string>
+    <string name="repeat_unit_days">Dagen</string>
+    <string name="repeat_unit_weeks">Weken</string>
+    <string name="repeat_unit_months">Maanden</string>
+    <string name="repeat_unit_years">Jaren</string>
+    <string name="repeat_ends">Eindigt</string>
+    <string name="repeat_ends_never">Nooit</string>
     <string name="core_picker_no_due_date" formatted="false">Geen deadline</string>
     <string name="core_picker_today" formatted="false">Vandaag</string>
     <string name="core_picker_tomorrow" formatted="false">Morgen</string>

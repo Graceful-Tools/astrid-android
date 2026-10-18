@@ -121,4 +121,16 @@
     <string name="chat_empty">No messages yet.</string>
     <string name="chat_placeholder">Message</string>
     <string name="detail_attach">Attach a file</string>
+    <!-- Custom repeat: iOS repeat.* -->
+    <string name="repeat_custom_title">Custom repeat</string>
+    <string name="repeat_every">Every</string>
+    <string name="repeat_unit_days">Days</string>
+    <string name="repeat_unit_weeks">Weeks</string>
+    <string name="repeat_unit_months">Months</string>
+    <string name="repeat_unit_years">Years</string>
+    <string name="repeat_ends">Ends</string>
+    <string name="repeat_ends_never">Never</string>
+    <string name="repeat_ends_after">After</string>
+    <string name="repeat_ends_on_date">On a date</string>
+    <string name="repeat_times">times</string>
 </resources>

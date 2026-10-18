@@ -105,4 +105,35 @@ class TaskDetailViewModelTest {
         vm.open("f1") { opened = it }
         assertEquals("/data/files/attachments/f1-report.pdf", opened)
     }
+
+    @Test
+    fun `AATD-24 a preset clears any custom pattern, and Custom alone writes nothing`() = runTest {
+        val core = FakeCore().apply { answer("taskDetail", detail) }
+        val vm = vm(core)
+        vm.setRepeating("custom")
+        assertFalse(core.kinds().contains("updateTask"))
+        vm.setRepeating("daily")
+        val changes = core.last("updateTask")!!["changes"] as JsonObject
+        assertEquals(JsonPrimitive("daily"), changes["repeating"])
+        assertEquals(kotlinx.serialization.json.JsonNull, changes["repeatingData"])
+    }
+
+    @Test
+    fun `AATD-24 a custom pattern sends only the fields it needs`() = runTest {
+        val core = FakeCore().apply { answer("taskDetail", detail) }
+        val vm = vm(core)
+        vm.setCustomRepeat(unit = "weeks", interval = 2, weekdays = listOf("monday", "wednesday"), endCondition = "after_occurrences", endAfterOccurrences = 5)
+        val changes = core.last("updateTask")!!["changes"] as JsonObject
+        assertEquals(JsonPrimitive("custom"), changes["repeating"])
+        val pattern = changes["repeatingData"] as JsonObject
+        assertEquals(JsonPrimitive("weeks"), pattern["unit"])
+        assertEquals(JsonPrimitive(2), pattern["interval"])
+        assertEquals(kotlinx.serialization.json.JsonArray(listOf(JsonPrimitive("monday"), JsonPrimitive("wednesday"))), pattern["weekdays"])
+        assertEquals(JsonPrimitive(5), pattern["endAfterOccurrences"])
+        assertFalse(pattern.containsKey("endUntilDate"))
+        vm.setCustomRepeat(unit = "days", interval = 0, weekdays = listOf("monday"))
+        val daily = (core.last("updateTask")!!["changes"] as JsonObject)["repeatingData"] as JsonObject
+        assertEquals(JsonPrimitive(1), daily["interval"])
+        assertFalse(daily.containsKey("weekdays"))
+    }
 }

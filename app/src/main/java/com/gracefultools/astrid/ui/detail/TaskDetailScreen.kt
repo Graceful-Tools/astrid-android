@@ -462,13 +462,26 @@ private fun RepeatField(detail: TaskDetail, state: TaskDetailState, vm: TaskDeta
     FieldRow(stringResource(R.string.detail_repeat), onClick = if (detail.isCopyOnly) null else ({ vm.loadRepeats(); picking = true })) {
         Text(summary, color = colors.textPrimary, fontSize = 16.sp)
     }
+    var custom by remember { mutableStateOf(false) }
     if (picking) {
         PickerDialog(stringResource(R.string.detail_repeat), onDismiss = { picking = false }) {
-            // Custom patterns need their own editor (a later task); the presets are the iOS menu.
-            state.repeats?.presets?.filter { it.value != "custom" }?.forEach { preset ->
-                PickerRow(coreLabel(preset.titleKey), preset.isSelected) { picking = false; vm.setRepeating(preset.value) }
+            state.repeats?.presets?.forEach { preset ->
+                PickerRow(coreLabel(preset.titleKey), preset.isSelected) {
+                    picking = false
+                    if (preset.value == "custom") custom = true else vm.setRepeating(preset.value)
+                }
             }
         }
+    }
+    if (custom) {
+        CustomRepeatDialog(
+            initial = state.repeats?.pattern,
+            onSave = { unit, interval, weekdays, end, after, until ->
+                custom = false
+                vm.setCustomRepeat(unit, interval, weekdays, end, after, until)
+            },
+            onDismiss = { custom = false },
+        )
     }
 }
 

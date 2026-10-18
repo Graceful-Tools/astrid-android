@@ -86,4 +86,19 @@ class CoreSessionTest {
         println("LISTS " + lists)
         println("MYTASKS " + core.run(command("myTasksList")))
     }
+
+    @Test
+    fun `AATD-24 a custom pattern written by the app is one the core reads back in its own words`() = runBlocking {
+        val core = session()
+        core.run(CoreJson.parseToJsonElement("""{"kind":"seedCache","currentUser":{"id":"u"},
+            "tasks":[{"id":"t1","title":"Gym","dueDateTime":"2030-01-07T00:00:00Z","isAllDay":true}]}""").jsonObject)
+        core.run(command("updateTask", "taskId" to "t1", "changes" to mapOf(
+            "repeating" to "custom",
+            "repeatingData" to mapOf("type" to "custom", "unit" to "weeks", "interval" to 2,
+                "weekdays" to listOf("monday", "wednesday"), "endCondition" to "after_occurrences", "endAfterOccurrences" to 5),
+        )))
+        val summary = (core.run(command("taskDetail", "taskId" to "t1")).jsonObject["repeatSummary"] as JsonArray)
+            .map { (it.jsonObject["key"] as JsonPrimitive).content }
+        assertEquals(listOf("repeat.every_n_weeks", "repeat.on_weekdays", "repeat.ends_after"), summary)
+    }
 }

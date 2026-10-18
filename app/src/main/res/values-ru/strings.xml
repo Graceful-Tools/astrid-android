@@ -86,6 +86,13 @@
     <string name="chat_title">Chat</string>
     <string name="chat_empty">No messages yet</string>
     <string name="detail_attach">Прикрепить файл</string>
+    <string name="repeat_every">Каждые</string>
+    <string name="repeat_unit_days">Дней</string>
+    <string name="repeat_unit_weeks">Недель</string>
+    <string name="repeat_unit_months">Месяцев</string>
+    <string name="repeat_unit_years">Лет</string>
+    <string name="repeat_ends">Окончание</string>
+    <string name="repeat_ends_never">Никогда</string>
     <string name="core_picker_no_due_date" formatted="false">Без срока</string>
     <string name="core_picker_today" formatted="false">Сегодня</string>
     <string name="core_picker_tomorrow" formatted="false">Завтра</string>

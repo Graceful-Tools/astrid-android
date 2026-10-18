@@ -99,7 +99,22 @@ data class AssigneeOptions(val assigneeId: String? = null, val options: List<Ass
 data class RepeatPreset(val value: String = "", val titleKey: String = "", val isSelected: Boolean = false)
 
 @Serializable
-data class RepeatOptions(val repeating: String? = null, val presets: List<RepeatPreset> = emptyList())
+data class RepeatOptions(
+    val repeating: String? = null,
+    val presets: List<RepeatPreset> = emptyList(),
+    /** The task's custom pattern, when it has one — what the custom editor opens on. */
+    val pattern: RepeatPattern? = null,
+)
+
+@Serializable
+data class RepeatPattern(
+    val unit: String? = null,
+    val interval: Int? = null,
+    val weekdays: List<String>? = null,
+    val endCondition: String? = null,
+    val endAfterOccurrences: Int? = null,
+    val endUntilDate: String? = null,
+)
 
 @Serializable
 data class ReminderPick(val titleKey: String = "", val reminderTime: String? = null, val isSelected: Boolean = false)

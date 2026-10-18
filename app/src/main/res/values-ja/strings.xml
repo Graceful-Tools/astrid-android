@@ -86,6 +86,13 @@
     <string name="chat_title">Chat</string>
     <string name="chat_empty">No messages yet</string>
     <string name="detail_attach">ファイルを添付</string>
+    <string name="repeat_every">毎</string>
+    <string name="repeat_unit_days">日</string>
+    <string name="repeat_unit_weeks">週</string>
+    <string name="repeat_unit_months">月</string>
+    <string name="repeat_unit_years">年</string>
+    <string name="repeat_ends">終了</string>
+    <string name="repeat_ends_never">なし</string>
     <string name="core_picker_no_due_date" formatted="false">期限なし</string>
     <string name="core_picker_today" formatted="false">今日</string>
     <string name="core_picker_tomorrow" formatted="false">明日</string>

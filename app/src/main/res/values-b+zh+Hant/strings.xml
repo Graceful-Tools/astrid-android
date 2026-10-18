@@ -86,6 +86,13 @@
     <string name="chat_title">Chat</string>
     <string name="chat_empty">No messages yet</string>
     <string name="detail_attach">附加檔案</string>
+    <string name="repeat_every">每</string>
+    <string name="repeat_unit_days">天</string>
+    <string name="repeat_unit_weeks">週</string>
+    <string name="repeat_unit_months">月</string>
+    <string name="repeat_unit_years">年</string>
+    <string name="repeat_ends">結束</string>
+    <string name="repeat_ends_never">從不</string>
     <string name="core_picker_no_due_date" formatted="false">無截止日期</string>
     <string name="core_picker_today" formatted="false">今天</string>
     <string name="core_picker_tomorrow" formatted="false">明天</string>

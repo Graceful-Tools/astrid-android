@@ -86,6 +86,13 @@
     <string name="chat_title">Chat</string>
     <string name="chat_empty">No messages yet</string>
     <string name="detail_attach">Anexar um ficheiro</string>
+    <string name="repeat_every">A cada</string>
+    <string name="repeat_unit_days">Dias</string>
+    <string name="repeat_unit_weeks">Semanas</string>
+    <string name="repeat_unit_months">Meses</string>
+    <string name="repeat_unit_years">Anos</string>
+    <string name="repeat_ends">Termina</string>
+    <string name="repeat_ends_never">Nunca</string>
     <string name="core_picker_no_due_date" formatted="false">Sem prazo</string>
     <string name="core_picker_today" formatted="false">Hoje</string>
     <string name="core_picker_tomorrow" formatted="false">Amanhã</string>

@@ -86,6 +86,13 @@
     <string name="chat_title">Chat</string>
     <string name="chat_empty">No messages yet</string>
     <string name="detail_attach">Joindre un fichier</string>
+    <string name="repeat_every">Tous les</string>
+    <string name="repeat_unit_days">Jours</string>
+    <string name="repeat_unit_weeks">Semaines</string>
+    <string name="repeat_unit_months">Mois</string>
+    <string name="repeat_unit_years">Années</string>
+    <string name="repeat_ends">Fin</string>
+    <string name="repeat_ends_never">Jamais</string>
     <string name="core_picker_no_due_date" formatted="false">Sans échéance</string>
     <string name="core_picker_today" formatted="false">Aujourd\'hui</string>
     <string name="core_picker_tomorrow" formatted="false">Demain</string>

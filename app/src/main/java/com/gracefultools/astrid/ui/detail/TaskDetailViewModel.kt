@@ -116,8 +116,41 @@ class TaskDetailViewModel(
             .onSuccess { options -> _state.update { it.copy(repeats = options) } }
     }
 
-    /** A preset's wire value (`never`, `daily`, …). Custom patterns are their own editor. */
-    fun setRepeating(value: String) = update("repeating" to value)
+    /**
+     * A preset's wire value (`never`, `daily`, …). `custom` alone writes nothing — there is no rule
+     * to store until the editor has built one — and a preset clears any old pattern, or the task
+     * would repeat one way and read another (as astrid-windows does).
+     */
+    fun setRepeating(value: String) {
+        if (value == "custom") return
+        update("repeating" to value, "repeatingData" to null)
+    }
+
+    /**
+     * A custom pattern (`CustomRepeatingPattern`), sending only the fields this rule needs: a weekly
+     * rule carrying a stale month day means something else to the next client that reads it.
+     */
+    fun setCustomRepeat(
+        unit: String,
+        interval: Int,
+        weekdays: List<String> = emptyList(),
+        endCondition: String? = null,
+        endAfterOccurrences: Int? = null,
+        endUntilDate: String? = null,
+    ) {
+        val pattern = buildMap<String, Any?> {
+            put("type", "custom")
+            put("unit", unit)
+            put("interval", interval.coerceAtLeast(1))
+            if (unit == "weeks" && weekdays.isNotEmpty()) put("weekdays", weekdays)
+            if (endCondition != null) {
+                put("endCondition", endCondition)
+                if (endCondition == "after_occurrences" && (endAfterOccurrences ?: 0) > 0) put("endAfterOccurrences", endAfterOccurrences)
+                if (endCondition == "until_date" && endUntilDate != null) put("endUntilDate", endUntilDate)
+            }
+        }
+        update("repeating" to "custom", "repeatingData" to pattern)
+    }
 
     fun loadReminders() = work {
         runCatching { CoreJson.decodeFromJsonElement(ReminderOptions.serializer(), core.run(command("reminderOptions", "taskId" to id))) }
