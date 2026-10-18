@@ -18,8 +18,24 @@ android {
         testInstrumentationRunner = "com.gracefultools.astrid.AstridTestRunner"
     }
 
+    // A real key comes from the environment (CI secrets, or keystore.properties kept out of git).
+    // Without one, a release build is signed with the debug key so it can be installed and tested
+    // — never uploaded (Play refuses a debug-signed bundle).
+    signingConfigs {
+        create("release") {
+            val path = System.getenv("ASTRID_UPLOAD_KEYSTORE")
+            if (path != null) {
+                storeFile = file(path)
+                storePassword = System.getenv("ASTRID_UPLOAD_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("ASTRID_UPLOAD_KEY_ALIAS")
+                keyPassword = System.getenv("ASTRID_UPLOAD_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = if (System.getenv("ASTRID_UPLOAD_KEYSTORE") != null) signingConfigs.getByName("release") else signingConfigs.getByName("debug")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
