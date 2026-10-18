@@ -8,6 +8,9 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * 1"
+
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -47,3 +50,13 @@ jobs:
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
+
+  # The Rust dependency tree the APK ships, against the RustSec database — on every push and
+  # weekly, since an advisory is published between commits (astrid-core's gate, task b6147418).
+  supply-chain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: EmbarkStudios/cargo-deny-action@v2
+        with:
+          manifest-path: core/Cargo.toml
