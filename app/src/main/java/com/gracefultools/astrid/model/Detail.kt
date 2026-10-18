@@ -51,6 +51,18 @@ data class CommentRow(
     val isSystem: Boolean = false,
     val parentId: String? = null,
     val isReply: Boolean = false,
+    val files: List<FileRow> = emptyList(),
+)
+
+/** A file on a comment (`rows::comment::FileRow`); `localPath` once downloaded or attached here. */
+@Serializable
+data class FileRow(
+    val id: String = "",
+    val name: String = "",
+    val size: Long = 0,
+    val mimeType: String = "application/octet-stream",
+    val rendersInline: Boolean = false,
+    val localPath: String? = null,
 )
 
 @Serializable

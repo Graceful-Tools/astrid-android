@@ -89,4 +89,20 @@ class TaskDetailViewModelTest {
         vm.setAssignee(null)
         assertEquals(kotlinx.serialization.json.JsonNull, (core.last("updateTask")!!["changes"] as JsonObject)["assigneeId"])
     }
+
+    @Test
+    fun `AATD-17 an attached file goes to the core, and opening one asks the core for its path`() = runTest {
+        val core = FakeCore().apply {
+            answer("taskDetail", detail)
+            answer("downloadAttachment", """{"path":"/data/files/attachments/f1-report.pdf"}""")
+        }
+        val vm = vm(core)
+        vm.attach("/cache/outgoing/1-report.pdf", "report.pdf", "application/pdf")
+        val sent = core.last("attachFile")!!
+        assertEquals(JsonPrimitive("t1"), sent["taskId"])
+        assertEquals(JsonPrimitive("report.pdf"), sent["name"])
+        var opened: String? = null
+        vm.open("f1") { opened = it }
+        assertEquals("/data/files/attachments/f1-report.pdf", opened)
+    }
 }

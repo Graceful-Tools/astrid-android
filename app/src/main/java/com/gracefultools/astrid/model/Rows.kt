@@ -124,3 +124,19 @@ data class ListSettings(
     val currentUserId: String? = null,
     val members: List<Member> = emptyList(),
 )
+
+/** One chat message, projected by the core (`rows::chat::MessageRow`). */
+@Serializable
+data class ChatMessage(
+    val id: String = "",
+    val content: String = "",
+    val blocks: List<kotlinx.serialization.json.JsonObject> = emptyList(),
+    val authorName: String? = null,
+    val initials: String = "",
+    val isMine: Boolean = false,
+    val isPending: Boolean = false,
+    val createdAt: String? = null,
+)
+
+@Serializable
+data class Chat(val channelId: String? = null, val messages: List<ChatMessage> = emptyList())

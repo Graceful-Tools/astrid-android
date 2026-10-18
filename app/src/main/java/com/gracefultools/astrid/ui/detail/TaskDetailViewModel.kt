@@ -144,6 +144,22 @@ class TaskDetailViewModel(
         load()
     }
 
+    /** A file the person picked, already copied to app storage: the core uploads it with a comment. */
+    fun attach(path: String, name: String, mimeType: String?) = work {
+        runCommand { core.run(command("attachFile", "taskId" to id, "path" to path, "name" to name, "mimeType" to mimeType)) }
+        load()
+    }
+
+    /** The file on this device — downloaded by the core if it is not already — for [onReady] to open. */
+    fun open(fileId: String, onReady: (String) -> Unit) = work {
+        try {
+            val answer = core.run(command("downloadAttachment", "taskId" to id, "fileId" to fileId)) as JsonObject
+            (answer["path"] as? JsonPrimitive)?.contentOrNull?.let(onReady)
+        } catch (failure: CoreFailure) {
+            _state.update { it.copy(error = failure.message) }
+        }
+    }
+
     fun delete() = work {
         runCommand { core.run(command("deleteTask", "taskId" to id)) }
         _state.update { it.copy(deleted = true) }

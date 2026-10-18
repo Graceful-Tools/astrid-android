@@ -25,6 +25,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.AlertDialog
@@ -92,6 +93,7 @@ fun TaskDetailScreen(vm: TaskDetailViewModel, onBack: () -> Unit) {
     val state by vm.state.collectAsStateWithLifecycle()
     val colors = AstridTheme.colors
     val snackbar = remember { SnackbarHostState() }
+    val context = androidx.compose.ui.platform.LocalContext.current
     BackHandler(onBack = onBack)
     LaunchedEffect(state.deleted) { if (state.deleted) onBack() }
     LaunchedEffect(state.error) { state.error?.let { snackbar.showSnackbar(it); vm.dismissError() } }
@@ -137,10 +139,13 @@ fun TaskDetailScreen(vm: TaskDetailViewModel, onBack: () -> Unit) {
                         }
                     }
                     Section(stringResource(R.string.detail_comments))
-                    Comments(detail)
+                    Comments(detail, onOpenFile = { file -> vm.open(file.id) { path -> openFile(context, path, file.mimeType) } })
                     Spacer(Modifier.size(Spacing.s24))
                 }
-                CommentComposer(vm::postComment)
+                val picker = androidx.activity.compose.rememberLauncherForActivityResult(
+                    androidx.activity.result.contract.ActivityResultContracts.GetContent(),
+                ) { uri -> uri?.let { copyIntoApp(context, it) }?.let { (path, name, mime) -> vm.attach(path, name, mime) } }
+                CommentComposer(vm::postComment, onAttach = { picker.launch("*/*") })
             }
         }
         SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).padding(bottom = 80.dp))
@@ -378,7 +383,7 @@ private fun DescriptionCard(detail: TaskDetail, onSave: (String) -> Unit) {
 }
 
 @Composable
-private fun Comments(detail: TaskDetail) {
+private fun Comments(detail: TaskDetail, onOpenFile: (com.gracefultools.astrid.model.FileRow) -> Unit) {
     val colors = AstridTheme.colors
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
         detail.comments.filter { it.showsText }.forEach { comment ->
@@ -390,6 +395,17 @@ private fun Comments(detail: TaskDetail) {
             ) {
                 Text(comment.authorName ?: "", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = colors.textSecondary)
                 Text(comment.content, fontSize = 16.sp, color = if (comment.isSystem) colors.textMuted else colors.textPrimary)
+                comment.files.forEach { file ->
+                    Row(
+                        Modifier.padding(top = 6.dp).clip(RoundedCornerShape(8.dp)).background(colors.bgTertiary)
+                            .clickable { onOpenFile(file) }.padding(horizontal = 10.dp, vertical = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(Icons.Filled.AttachFile, null, tint = colors.textSecondary, modifier = Modifier.size(16.dp))
+                        Spacer(Modifier.width(6.dp))
+                        Text(file.name, fontSize = 14.sp, color = colors.textPrimary)
+                    }
+                }
                 if (comment.isPending) Text(stringResource(R.string.tasks_waiting_to_send), fontSize = 12.sp, color = colors.textMuted)
             }
         }
@@ -397,10 +413,11 @@ private fun Comments(detail: TaskDetail) {
 }
 
 @Composable
-private fun CommentComposer(onSend: (String) -> Unit) {
+private fun CommentComposer(onSend: (String) -> Unit, onAttach: () -> Unit) {
     val colors = AstridTheme.colors
     var text by rememberSaveable { mutableStateOf("") }
     Row(Modifier.fillMaxWidth().background(colors.headerBg).navigationBarsPadding().imePadding().padding(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
+        IconButton(onClick = onAttach) { Icon(Icons.Filled.AttachFile, stringResource(R.string.detail_attach), tint = colors.textSecondary) }
         TextField(
             value = text, onValueChange = { text = it }, placeholder = { Text(stringResource(R.string.detail_add_comment)) },
             shape = RoundedCornerShape(12.dp), maxLines = 4,
@@ -496,4 +513,24 @@ private fun PickerRow(label: String, selected: Boolean, onClick: () -> Unit) {
         Text(label, color = colors.textPrimary, fontSize = 17.sp, modifier = Modifier.weight(1f))
         if (selected) Icon(Icons.Filled.Check, null, tint = colors.accent)
     }
+}
+
+/** Copy a picked document into app storage, where the core can read it: (path, name, MIME type). */
+private fun copyIntoApp(context: android.content.Context, uri: android.net.Uri): Triple<String, String, String?>? = runCatching {
+    val resolver = context.contentResolver
+    val name = resolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
+        if (cursor.moveToFirst()) cursor.getString(0) else null
+    } ?: "attachment"
+    val dir = java.io.File(context.cacheDir, "outgoing").apply { mkdirs() }
+    val target = java.io.File(dir, "${System.currentTimeMillis()}-${name.replace('/', '_')}")
+    resolver.openInputStream(uri)!!.use { input -> target.outputStream().use { input.copyTo(it) } }
+    Triple(target.absolutePath, name, resolver.getType(uri))
+}.getOrNull()
+
+/** Hand a downloaded file to whatever opens its type, through the app's FileProvider. */
+private fun openFile(context: android.content.Context, path: String, mimeType: String) {
+    val uri = androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.files", java.io.File(path))
+    val view = android.content.Intent(android.content.Intent.ACTION_VIEW).setDataAndType(uri, mimeType)
+        .addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION or android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+    runCatching { context.startActivity(android.content.Intent.createChooser(view, null).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)) }
 }

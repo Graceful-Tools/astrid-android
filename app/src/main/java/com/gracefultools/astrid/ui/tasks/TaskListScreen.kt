@@ -22,6 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ViewKanban
@@ -90,6 +91,8 @@ fun TaskListScreen(
     board: @Composable () -> Unit = {},
     /** Set for a real list (not My Tasks): iOS's list settings button. */
     onListSettings: (() -> Unit)? = null,
+    /** Set for a real list: its chat, iOS's chat button. */
+    onChat: (() -> Unit)? = null,
 ) {
     val colors = AstridTheme.colors
     val snackbar = remember { SnackbarHostState() }
@@ -98,7 +101,7 @@ fun TaskListScreen(
     }
     Box(Modifier.fillMaxSize().background(colors.bgPrimary)) {
         Column(Modifier.fillMaxSize()) {
-            Header(title, onMenu, onSearch, onToggleBoard, showingBoard, onListSettings)
+            Header(title, onMenu, onSearch, onToggleBoard, showingBoard, onListSettings, onChat)
             if (showingBoard) {
                 Box(Modifier.weight(1f)) { board() }
             } else PullToRefreshBox(isRefreshing = state.refreshing, onRefresh = onRefresh, modifier = Modifier.weight(1f)) {
@@ -133,7 +136,7 @@ fun TaskListScreen(
 }
 
 @Composable
-private fun Header(title: String, onMenu: () -> Unit, onSearch: () -> Unit, onToggleBoard: (() -> Unit)?, showingBoard: Boolean, onListSettings: (() -> Unit)?) {
+private fun Header(title: String, onMenu: () -> Unit, onSearch: () -> Unit, onToggleBoard: (() -> Unit)?, showingBoard: Boolean, onListSettings: (() -> Unit)?, onChat: (() -> Unit)?) {
     val colors = AstridTheme.colors
     Row(
         Modifier.fillMaxWidth().background(colors.headerBg).padding(top = 36.dp, start = Spacing.s4, end = Spacing.s4, bottom = Spacing.s4),
@@ -152,6 +155,9 @@ private fun Header(title: String, onMenu: () -> Unit, onSearch: () -> Unit, onTo
                     tint = colors.textPrimary,
                 )
             }
+        }
+        if (onChat != null) {
+            IconButton(onClick = onChat) { Icon(Icons.AutoMirrored.Filled.Chat, stringResource(R.string.chat_title), tint = colors.textPrimary) }
         }
         IconButton(onClick = onSearch) { Icon(Icons.Filled.Search, stringResource(R.string.navigation_search), tint = colors.textPrimary) }
         if (onListSettings != null) {

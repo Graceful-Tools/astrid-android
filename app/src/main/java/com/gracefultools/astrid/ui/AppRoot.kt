@@ -30,6 +30,8 @@ import com.gracefultools.astrid.ui.detail.TaskDetailScreen
 import com.gracefultools.astrid.ui.detail.TaskDetailViewModel
 import com.gracefultools.astrid.ui.lists.ListSettingsScreen
 import com.gracefultools.astrid.ui.lists.ListSettingsViewModel
+import com.gracefultools.astrid.ui.chat.ChatScreen
+import com.gracefultools.astrid.ui.chat.ChatViewModel
 import com.gracefultools.astrid.ui.search.SearchScreen
 import com.gracefultools.astrid.ui.search.SearchViewModel
 import com.gracefultools.astrid.ui.settings.SettingsScreen
@@ -105,6 +107,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onToggleBoard = if (onBoard) ({ boardLists[selected!!.id] = !showingBoard }) else null,
                     showingBoard = showingBoard,
                     onListSettings = selected?.takeIf { it.isVirtual != true }?.let { list -> { nav.navigate("list/${list.id}") } },
+                    onChat = selected?.takeIf { it.isVirtual != true }?.let { list -> { nav.navigate("chat/${list.id}") } },
                     board = {
                         BoardContent(
                             boardState,
@@ -139,6 +142,12 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                 side.myTasks?.let { sidebar.select(it.id) }
                 sidebar.load()
             })
+        }
+        composable("chat/{id}") { entry ->
+            val id = entry.arguments?.getString("id").orEmpty()
+            val vm: ChatViewModel = viewModel(key = "chat-$id", factory = factory { ChatViewModel(graph.core, id) })
+            val name = (listOfNotNull(side.myTasks) + side.favorites + side.lists).firstOrNull { it.id == id }?.name
+            ChatScreen(vm, title = name ?: stringResource(R.string.chat_title), onBack = { nav.popBackStack() })
         }
         composable("search") {
             val search: SearchViewModel = viewModel(factory = factory { SearchViewModel(graph.core) })

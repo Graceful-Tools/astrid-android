@@ -53,6 +53,14 @@
                 <data android:scheme="astrid" android:host="auth" android:path="/callback" />
             </intent-filter>
         </activity>
+        <!-- Opens a downloaded attachment in another app; only the attachment cache is shared. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
+        </provider>
         <receiver android:name=".platform.ReminderActionReceiver" android:exported="false" />
         <receiver android:name=".platform.ReminderAlarmReceiver" android:exported="false">
             <intent-filter>
