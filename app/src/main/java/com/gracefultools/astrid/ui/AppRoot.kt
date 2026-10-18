@@ -114,6 +114,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                             onOpenTask = { nav.navigate("task/$it") },
                             onMove = boardVm::moveTo,
                             onComplete = boardVm::leading,
+                            onDrop = boardVm::drop,
                         )
                     },
                     state = list,

@@ -33,4 +33,16 @@ class BoardViewModelTest {
         assertEquals(JsonPrimitive("doing"), sent["columnId"])
         assertEquals(JsonPrimitive("l1"), sent["listId"])
     }
+
+    @Test
+    fun `AATD-20 a dropped card sends dropBoardCard with its column and position`() = runTest {
+        val core = FakeCore().apply { answer("board", board) }
+        val vm = BoardViewModel(core, UnconfinedTestDispatcher())
+        vm.open("l1")
+        vm.drop("t1", "doing", 0)
+        val sent = core.last("dropBoardCard")!!
+        assertEquals(JsonPrimitive("doing"), sent["columnId"])
+        assertEquals(JsonPrimitive(0), sent["index"])
+        assertEquals(JsonPrimitive("l1"), sent["listId"])
+    }
 }

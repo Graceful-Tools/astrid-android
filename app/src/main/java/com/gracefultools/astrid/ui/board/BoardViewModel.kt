@@ -59,6 +59,20 @@ class BoardViewModel(private val core: Core, dispatcher: CoroutineDispatcher = D
         reload()
     }
 
+    /**
+     * A card dropped at `index` in a column — the web's drop (dropBoardCard): the core writes the
+     * status, the manual position, and whatever else a move into that column means for this board.
+     */
+    fun drop(taskId: String, columnId: String, index: Int) = work {
+        val listId = _state.value.listId ?: return@work
+        try {
+            core.run(command("dropBoardCard", "taskId" to taskId, "columnId" to columnId, "listId" to listId, "index" to index.coerceAtLeast(0)))
+        } catch (failure: CoreFailure) {
+            if (!failure.isStillPending) _state.update { it.copy(error = failure.message) }
+        }
+        reload()
+    }
+
     fun setCompleted(taskId: String, completed: Boolean) = work {
         runCatching { core.run(command("completeTask", "taskId" to taskId, "completed" to completed, "source" to "android")) }
         reload()

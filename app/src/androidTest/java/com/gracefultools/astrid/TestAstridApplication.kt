@@ -40,6 +40,8 @@ class TestAstridApplication : AstridApplication() {
           "lists":[{"id":"l-launch","name":"Launch","color":"#a855f7","privacy":"PRIVATE","ownerId":"u-me","projectId":"p-launch"},{"id":"l-home","name":"Home","color":"#22c55e","privacy":"PRIVATE","ownerId":"u-me","isFavorite":true,"favoriteOrder":1},
                    {"id":"l-work","name":"Work","color":"#3b82f6","privacy":"PRIVATE","ownerId":"u-me"}],
           "tasks":[
+            {"id":"t-plan","title":"Plan launch","listIds":["l-launch"],"statusRole":"ready","creatorId":"u-me","assigneeId":"u-me",
+             "createdAt":"2026-10-05T00:00:00.000Z","updatedAt":"2026-10-05T00:00:00.000Z"},
             {"id":"t-copy","title":"Write copy","listIds":["l-launch"],"statusRole":"ready","creatorId":"u-me","assigneeId":"u-me",
              "createdAt":"2026-10-04T00:00:00.000Z","updatedAt":"2026-10-04T00:00:00.000Z"},
             {"id":"t-plants","title":"Water plants","priority":2,"listIds":["l-home"],"completed":false,"creatorId":"u-me","assigneeId":"u-me",
