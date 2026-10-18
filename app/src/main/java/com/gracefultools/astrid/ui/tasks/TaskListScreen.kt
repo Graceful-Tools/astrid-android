@@ -47,6 +47,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -130,7 +131,7 @@ private fun Header(title: String, onMenu: () -> Unit, onSearch: () -> Unit) {
         IconButton(onClick = onMenu) { Icon(Icons.Filled.Menu, stringResource(R.string.navigation_open_sidebar), tint = colors.textPrimary) }
         Text(
             title, fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
-            modifier = Modifier.weight(1f).semantics { heading() }, maxLines = 1,
+            modifier = Modifier.weight(1f).testTag("listTitle").semantics { heading() }, maxLines = 1,
         )
         IconButton(onClick = onSearch) { Icon(Icons.Filled.Search, stringResource(R.string.navigation_search), tint = colors.textPrimary) }
     }

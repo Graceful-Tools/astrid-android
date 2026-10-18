@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
@@ -99,6 +100,7 @@ private fun Entry(
             .clip(RoundedCornerShape(8.dp))
             .background(if (selected) colors.bgSelected else androidx.compose.ui.graphics.Color.Transparent)
             .clickable(onClick = onClick)
+            .testTag("sidebar:${list.id}")
             .semantics { this.selected = selected }
             .padding(horizontal = Spacing.s12, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,

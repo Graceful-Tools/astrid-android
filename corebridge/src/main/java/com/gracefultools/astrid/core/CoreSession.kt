@@ -1,6 +1,8 @@
 package com.gracefultools.astrid.core
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -39,7 +41,15 @@ class CoreSession private constructor(private val client: CoreClient) : Core {
         })
     }
 
-    override suspend fun run(command: JsonObject): JsonElement = answerOf(client.run(command.toString()))
+    /**
+     * Awaited on [Dispatchers.IO], never on the caller's dispatcher. UniFFI resumes the waiting
+     * coroutine from a core thread; resumed inline there (an unconfined or immediate dispatcher),
+     * the coroutine calls back into Rust, a nested callback returns, JNA detaches the thread while
+     * the outer Kotlin frame is still running, and ART aborts the process ("attempting to detach
+     * while still running code"). On IO every resumption is dispatched off the core's thread.
+     */
+    override suspend fun run(command: JsonObject): JsonElement =
+        withContext(Dispatchers.IO) { answerOf(client.run(command.toString())) }
 
     /**
      * Run a command that stays on this device and wait for it on this thread — for the one read

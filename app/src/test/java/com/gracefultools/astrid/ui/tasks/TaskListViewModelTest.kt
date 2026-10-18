@@ -102,4 +102,27 @@ class TaskListViewModelTest {
         core.emit("synced")
         assertEquals(before + 1, core.kinds().count { it == "rowsForList" })
     }
+
+    @Test
+    fun `AATD-8 a task added in My Tasks is assigned as the core's quick-add default says, so it stays in My Tasks`() = runTest {
+        val core = FakeCore().apply {
+            answer("rowsForList", rows)
+            answer("quickAddDefaults", """{"assigneeId":"u-me","priority":0}""")
+        }
+        val vm = vm(core)
+        vm.open("virtual:my-tasks", isVirtual = true)
+        vm.create("Buy milk")
+        assertEquals(JsonPrimitive("virtual:my-tasks"), core.last("quickAddDefaults")!!["listId"])
+        assertEquals(JsonPrimitive("u-me"), core.last("createTask")!!["assigneeId"])
+    }
+
+    @Test
+    fun `AATD-8 in a real list the core applies the list's own defaults, so nothing is asserted`() = runTest {
+        val core = FakeCore().apply { answer("rowsForList", rows) }
+        val vm = vm(core)
+        vm.open("l1")
+        vm.create("Buy milk")
+        assertFalse(core.kinds().contains("quickAddDefaults"))
+        assertNull(core.last("createTask")!!["assigneeId"])
+    }
 }

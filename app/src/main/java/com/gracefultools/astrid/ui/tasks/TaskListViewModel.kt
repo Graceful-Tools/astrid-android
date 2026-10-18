@@ -121,8 +121,22 @@ class TaskListViewModel(
         if (trimmed.isEmpty()) return false
         val state = _state.value
         val listIds = listOfNotNull(state.listId?.takeUnless { state.isVirtual })
+        // In a real list the core applies that list's defaults itself. A virtual list has no row
+        // for it to read them from, so the core's own quick-add answer for it is forwarded — in
+        // My Tasks that is the reader, without whom the new task would leave the list it was
+        // added to (D25: My Tasks is only what is assigned to you).
+        val assigneeId = if (state.isVirtual && state.listId != null) {
+            runCatching {
+                ((core.run(command("quickAddDefaults", "listId" to state.listId)) as? JsonObject)?.get("assigneeId") as? JsonPrimitive)?.contentOrNull
+            }.getOrNull()
+        } else null
         return try {
-            core.run(command("createTask", "title" to trimmed, "listIds" to listIds, "quickAdd" to true, "locale" to locale()))
+            core.run(
+                command(
+                    "createTask", "title" to trimmed, "listIds" to listIds, "quickAdd" to true, "locale" to locale(),
+                    *listOfNotNull(assigneeId?.let { "assigneeId" to it }).toTypedArray(),
+                ),
+            )
             reload()
             true
         } catch (failure: CoreFailure) {
