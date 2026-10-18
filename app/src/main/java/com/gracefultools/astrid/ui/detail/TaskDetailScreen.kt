@@ -295,21 +295,20 @@ private fun PriorityField(current: Int, onPick: (Int) -> Unit) {
             for (level in 0..3) {
                 val tint = PriorityColors[level]
                 val selected = level == current
+                // Spoken as its name ("High"), never as the glyph ("!!!").
+                val spoken = stringResource(R.string.priority_a11y, stringResource(names[level]))
                 Box(
                     Modifier.size(40.dp, 32.dp).clip(RoundedCornerShape(8.dp))
                         .background(if (selected) tint else Color.Transparent)
                         .border(1.5.dp, tint, RoundedCornerShape(8.dp))
                         .clickable { onPick(level) }
-                        .semantics { this.selected = selected; role = Role.RadioButton },
+                        .semantics(mergeDescendants = true) { this.selected = selected; role = Role.RadioButton; contentDescription = spoken },
                     contentAlignment = Alignment.Center,
                 ) {
-                    val glyph = if (level == 0) "–" else "!".repeat(level)
-                    Text(glyph, color = if (selected) Color.White else tint, fontWeight = FontWeight.Bold, fontSize = 15.sp,
-                        modifier = Modifier.semantics { contentDescription = "" })
+                    Text(if (level == 0) "–" else "!".repeat(level), color = if (selected) Color.White else tint, fontWeight = FontWeight.Bold, fontSize = 15.sp)
                 }
             }
         }
-        @Suppress("UNUSED_VARIABLE") val unused = names
     }
 }
 
