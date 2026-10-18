@@ -82,9 +82,11 @@ class SmokeTest {
 
         // Completed in My Tasks, it is either shown done or filtered out (the core's completion
         // window decides); either way its "Complete" control is gone.
+        waitForRow("Call mum")
         compose.onNodeWithContentDescription("Complete Call mum").performClick()
         compose.waitUntil(10_000) { compose.onAllNodes(hasContentDescription("Complete Call mum")).fetchSemanticsNodes().isEmpty() }
 
+        compose.onNode(hasTestTag("taskList")).performScrollToNode(hasText("Water plants"))
         compose.onNodeWithText("Water plants").performClick()
         waitFor("Description")
         compose.onNodeWithText("blue", substring = true).assertIsDisplayed()

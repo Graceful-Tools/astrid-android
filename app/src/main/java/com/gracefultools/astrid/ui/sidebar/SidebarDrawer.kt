@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.HorizontalDivider
@@ -25,6 +26,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,7 +47,7 @@ import com.gracefultools.astrid.ui.theme.Spacing
 
 /** The iOS overlay sidebar, as a navigation drawer: My Tasks, Favorites, Lists, then Settings. */
 @Composable
-fun SidebarDrawer(state: SidebarState, onSelect: (ListSummary) -> Unit, onSettings: () -> Unit) {
+fun SidebarDrawer(state: SidebarState, onSelect: (ListSummary) -> Unit, onSettings: () -> Unit, onCreate: (String) -> Unit = {}) {
     val colors = AstridTheme.colors
     ModalDrawerSheet(drawerContainerColor = colors.bgSecondary, modifier = Modifier.width(300.dp)) {
         Column(Modifier.fillMaxHeight().statusBarsPadding()) {
@@ -64,6 +67,25 @@ fun SidebarDrawer(state: SidebarState, onSelect: (ListSummary) -> Unit, onSettin
                     item { Section(stringResource(R.string.navigation_lists)) }
                     items(state.lists, key = { "l" + it.id }) { list -> Entry(list, list.name, state.selectedId == list.id) { onSelect(list) } }
                 }
+            }
+            var adding by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+            Row(
+                Modifier.fillMaxWidth().clickable { adding = true }.padding(Spacing.s16),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(androidx.compose.material.icons.Icons.Outlined.Add, null, tint = colors.accent)
+                Spacer(Modifier.width(Spacing.s12))
+                Text(stringResource(R.string.navigation_add_list), color = colors.accent, fontSize = 17.sp)
+            }
+            if (adding) {
+                var name by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf("") }
+                androidx.compose.material3.AlertDialog(
+                    onDismissRequest = { adding = false },
+                    title = { Text(stringResource(R.string.navigation_add_list)) },
+                    text = { androidx.compose.material3.OutlinedTextField(name, { name = it }, label = { Text(stringResource(R.string.lists_new_name)) }, singleLine = true) },
+                    confirmButton = { androidx.compose.material3.TextButton(onClick = { adding = false; onCreate(name) }, enabled = name.isNotBlank()) { Text(stringResource(R.string.lists_create)) } },
+                    dismissButton = { androidx.compose.material3.TextButton(onClick = { adding = false }) { Text(stringResource(R.string.common_cancel)) } },
+                )
             }
             HorizontalDivider(color = colors.border)
             Row(

@@ -73,10 +73,16 @@ class MainActivity : ComponentActivity() {
         handle(intent)
     }
 
-    /** The hand-off's callback, a shared text, or an `astrid.cc/t/<id>` link. */
+    /** The hand-off's callback, a shared text, the New task shortcut, or a task link. */
     private fun handle(intent: Intent?) {
-        val data = intent?.data?.toString() ?: return
-        if (SignInViewModel.isCallback(data)) signIn.callback(data) else deepLinks.offer(data)
+        intent ?: return
+        if (intent.action == Intent.ACTION_SEND) {
+            val text = DeepLinks.shared(intent.getStringExtra(Intent.EXTRA_SUBJECT), intent.getStringExtra(Intent.EXTRA_TEXT))
+            deepLinks.offer(Arrival.NewTask(text))
+            return
+        }
+        val data = intent.data?.toString() ?: return
+        if (SignInViewModel.isCallback(data)) signIn.callback(data) else DeepLinks.parse(data)?.let(deepLinks::offer)
     }
 
     private fun open(url: String) {

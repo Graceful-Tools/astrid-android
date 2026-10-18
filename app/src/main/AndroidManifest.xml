@@ -22,6 +22,27 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
+            <!-- Share-to-Astrid: iOS's share extension. -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <!-- Task links. Not autoVerify until astrid.cc serves assetlinks.json for the release key. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="astrid.cc" android:pathPrefix="/t/" />
+                <data android:scheme="https" android:host="www.astrid.cc" android:pathPrefix="/t/" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="astrid" android:host="task" />
+                <data android:scheme="astrid" android:host="new" />
+            </intent-filter>
             <!-- The browser hand-off's fixed callback (astrid-web lib/auth/desktop-handoff.ts). -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

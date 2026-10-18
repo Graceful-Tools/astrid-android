@@ -90,3 +90,37 @@ data class StatusChoice(val id: String = "", val name: String = "", val kind: St
 /** `taskStatusOptions`: the columns a task may be moved to from its menu (Done is never offered, D46). */
 @Serializable
 data class StatusOptions(val current: String? = null, val columns: List<StatusChoice> = emptyList())
+
+@Serializable
+data class Member(
+    val userId: String? = null,
+    val id: String? = null,
+    val role: String = "member",
+    val email: String? = null,
+    val name: String? = null,
+    val user: UserSummary? = null,
+    val isPending: Boolean = false,
+    val isInvitation: Boolean = false,
+) {
+    val who: String? get() = userId ?: user?.id ?: id
+    val display: String get() = user?.display ?: name ?: email ?: who.orEmpty()
+}
+
+/** `listMembers`: a list's settings and members, with what this account may do to them. */
+@Serializable
+data class ListSettings(
+    val listId: String = "",
+    val name: String = "",
+    val ownerId: String? = null,
+    val projectId: String? = null,
+    val color: String = "#3b82f6",
+    val colorChoices: List<String> = emptyList(),
+    val privacy: String? = null,
+    val isFavorite: Boolean = false,
+    val canManageMembers: Boolean = false,
+    val canManageList: Boolean = false,
+    val canDeleteList: Boolean = false,
+    val canLeave: Boolean = false,
+    val currentUserId: String? = null,
+    val members: List<Member> = emptyList(),
+)

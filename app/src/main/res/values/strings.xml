@@ -85,4 +85,27 @@
     <string name="board_move_to">Move to</string>
     <string name="board_show_board">Show as board</string>
     <string name="board_show_list">Show as list</string>
+    <!-- Lists: iOS navigation.add_list / lists.* -->
+    <string name="navigation_add_list">Add List</string>
+    <string name="lists_new_name">List name</string>
+    <string name="lists_create">Create</string>
+    <string name="lists_settings">List settings</string>
+    <string name="lists_name">Name</string>
+    <string name="lists_color">Color</string>
+    <string name="lists_privacy">Privacy</string>
+    <string name="lists_privacy_private">Private</string>
+    <string name="lists_privacy_shared">Shared</string>
+    <string name="lists_privacy_public">Public</string>
+    <string name="lists_favorite">Favorite</string>
+    <string name="lists_members">Members</string>
+    <string name="lists_invite_email">Invite by email</string>
+    <string name="lists_invite">Invite</string>
+    <string name="lists_role_admin">Admin</string>
+    <string name="lists_role_member">Member</string>
+    <string name="lists_remove_member">Remove</string>
+    <string name="lists_leave">Leave list</string>
+    <string name="lists_delete">Delete list</string>
+    <string name="lists_delete_confirm">Delete this list? Its tasks stay in any other lists they are in.</string>
+    <string name="share_add_to">Add to %1$s</string>
+    <string name="shortcut_new_task">New task</string>
 </resources>

@@ -14,7 +14,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gracefultools.astrid.AppGraph
+import com.gracefultools.astrid.Arrival
 import com.gracefultools.astrid.DeepLinks
+import com.gracefultools.astrid.ui.tasks.NewTaskSheet
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.factory
 import com.gracefultools.astrid.ui.board.BoardContent
@@ -24,6 +28,8 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import com.gracefultools.astrid.ui.detail.TaskDetailScreen
 import com.gracefultools.astrid.ui.detail.TaskDetailViewModel
+import com.gracefultools.astrid.ui.lists.ListSettingsScreen
+import com.gracefultools.astrid.ui.lists.ListSettingsViewModel
 import com.gracefultools.astrid.ui.search.SearchScreen
 import com.gracefultools.astrid.ui.search.SearchViewModel
 import com.gracefultools.astrid.ui.settings.SettingsScreen
@@ -54,9 +60,18 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
         side.selected?.let { tasks.open(it.id, isVirtual = it.isVirtual == true) }
     }
     val pending by onDeepLink.pending.collectAsStateWithLifecycle()
+    var newTask by remember { mutableStateOf<String?>(null) }
     LaunchedEffect(pending) {
-        val link = onDeepLink.take() ?: return@LaunchedEffect
-        taskRefFrom(link)?.let { nav.navigate("task/$it") }
+        when (val arrival = onDeepLink.take()) {
+            is Arrival.OpenTask -> nav.navigate("task/${arrival.ref}")
+            is Arrival.NewTask -> newTask = arrival.text
+            null -> Unit
+        }
+    }
+    newTask?.let { text ->
+        NewTaskSheet(initial = text, listName = side.selected?.name, onDismiss = { newTask = null }) { title ->
+            scope.launch { if (tasks.create(title)) newTask = null }
+        }
     }
 
     NavHost(nav, startDestination = "list") {
@@ -68,6 +83,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                         side,
                         onSelect = { sidebar.select(it.id); scope.launch { drawer.close() } },
                         onSettings = { scope.launch { drawer.close() }; nav.navigate("settings") },
+                        onCreate = { sidebar.create(it); scope.launch { drawer.close() } },
                     )
                 },
             ) {
@@ -88,6 +104,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     title = title,
                     onToggleBoard = if (onBoard) ({ boardLists[selected!!.id] = !showingBoard }) else null,
                     showingBoard = showingBoard,
+                    onListSettings = selected?.takeIf { it.isVirtual != true }?.let { list -> { nav.navigate("list/${list.id}") } },
                     board = {
                         BoardContent(
                             boardState,
@@ -114,6 +131,15 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
             val detail: TaskDetailViewModel = viewModel(key = "detail-$id", factory = factory { TaskDetailViewModel(graph.core, id) })
             TaskDetailScreen(detail, onBack = { nav.popBackStack() })
         }
+        composable("list/{id}") { entry ->
+            val id = entry.arguments?.getString("id").orEmpty()
+            val vm: ListSettingsViewModel = viewModel(key = "list-$id", factory = factory { ListSettingsViewModel(graph.core, id) })
+            ListSettingsScreen(vm, onBack = { nav.popBackStack() }, onGone = {
+                nav.popBackStack()
+                side.myTasks?.let { sidebar.select(it.id) }
+                sidebar.load()
+            })
+        }
         composable("search") {
             val search: SearchViewModel = viewModel(factory = factory { SearchViewModel(graph.core) })
             SearchScreen(search, onBack = { nav.popBackStack() }, onOpenTask = { nav.navigate("task/$it") })
@@ -123,12 +149,4 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
             SettingsScreen(settings, onBack = { nav.popBackStack() }, onSignedOut = onSignedOut)
         }
     }
-}
-
-/** `astrid.cc/t/AWTD-1066` or `astrid://task/<id>` → the task reference the core resolves. */
-fun taskRefFrom(link: String): String? {
-    val web = Regex("""^https://(?:www\.)?astrid\.cc/t/([A-Za-z0-9-]+)""").find(link)
-    if (web != null) return web.groupValues[1]
-    val app = Regex("""^astrid://task/([A-Za-z0-9-]+)""").find(link)
-    return app?.groupValues?.get(1)
 }

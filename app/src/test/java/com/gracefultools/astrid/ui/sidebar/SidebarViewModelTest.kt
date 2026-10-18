@@ -41,4 +41,14 @@ class SidebarViewModelTest {
         core.emit("synced")
         assertEquals("b", vm.state.value.selectedId)
     }
+
+    @Test
+    fun `AATD-15 Add List makes the list and opens it`() = runTest {
+        val core = core().apply { answer("createList", """{"id":"l-new","name":"Garden"}""") }
+        val vm = SidebarViewModel(core, UnconfinedTestDispatcher())
+        vm.load()
+        vm.create("  Garden ")
+        assertEquals(kotlinx.serialization.json.JsonPrimitive("Garden"), core.last("createList")!!["name"])
+        assertEquals("l-new", vm.state.value.selectedId)
+    }
 }

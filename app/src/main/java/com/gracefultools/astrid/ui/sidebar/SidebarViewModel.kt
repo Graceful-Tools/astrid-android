@@ -42,7 +42,9 @@ class SidebarViewModel(
         work { core.changes.collect { if (it.kind in RELOAD_ON) load() } }
     }
 
-    fun load() = work {
+    fun load() = work { reload() }
+
+    private suspend fun reload() {
         try {
             val all = CoreJson.decodeFromJsonElement(ListSerializer(ListSummary.serializer()), core.run(command("lists")))
                 .filter { it.isPlace() }
@@ -67,6 +69,19 @@ class SidebarViewModel(
     }
 
     fun select(id: String) = _state.update { it.copy(selectedId = id) }
+
+    /** A new private list, opened once made — iOS's "Add List". */
+    fun create(name: String) = work {
+        val trimmed = name.trim()
+        if (trimmed.isEmpty()) return@work
+        try {
+            val made = CoreJson.decodeFromJsonElement(ListSummary.serializer(), core.run(command("createList", "name" to trimmed)))
+            reload()
+            _state.update { it.copy(selectedId = made.id.ifEmpty { it.selectedId }) }
+        } catch (failure: CoreFailure) {
+            _state.update { it.copy(error = if (failure.isStillPending) null else failure.message) }
+        }
+    }
 
     private companion object {
         /** Changes that can add, rename or remove a list. */
