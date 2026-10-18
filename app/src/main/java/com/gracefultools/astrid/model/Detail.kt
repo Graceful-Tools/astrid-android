@@ -94,3 +94,27 @@ data class ReminderPick(val titleKey: String = "", val reminderTime: String? = n
 
 @Serializable
 data class ReminderOptions(val reminderTime: String? = null, val picks: List<ReminderPick> = emptyList())
+
+@Serializable
+data class ReminderSettingsModel(
+    val enablePushReminders: Boolean = true,
+    val enableEmailReminders: Boolean = false,
+    val defaultReminderTime: Int = 0,
+    val enableDailyDigest: Boolean = false,
+    val dailyDigestTime: String? = null,
+)
+
+@Serializable
+data class ReminderOffset(val titleKey: String = "", val minutes: Int = 0)
+
+@Serializable
+data class SmartTasks(val smartTaskCreationEnabled: Boolean = true, val emailToTaskEnabled: Boolean = false)
+
+/** `settings`: the account's settings as the core holds them, with the choices to offer. */
+@Serializable
+data class AccountSettings(
+    val user: UserSummary? = null,
+    val reminderSettings: ReminderSettingsModel = ReminderSettingsModel(),
+    val offsets: List<ReminderOffset> = emptyList(),
+    val smartTasks: SmartTasks = SmartTasks(),
+)

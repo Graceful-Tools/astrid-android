@@ -108,4 +108,12 @@
     <string name="lists_delete_confirm">Delete this list? Its tasks stay in any other lists they are in.</string>
     <string name="share_add_to">Add to %1$s</string>
     <string name="shortcut_new_task">New task</string>
+    <string name="settings_reminders">Reminders</string>
+    <string name="settings_push_reminders">Push notifications</string>
+    <string name="settings_email_reminders">Email reminders</string>
+    <string name="settings_daily_digest">Daily digest</string>
+    <string name="settings_default_reminder">Default reminder</string>
+    <string name="settings_tasks">Tasks</string>
+    <string name="settings_smart_tasks">Smart task creation</string>
+    <string name="settings_email_to_task">Email to task</string>
 </resources>

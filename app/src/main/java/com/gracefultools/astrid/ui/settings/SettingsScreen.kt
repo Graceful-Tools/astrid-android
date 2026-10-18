@@ -59,6 +59,25 @@ fun SettingsScreen(vm: SettingsViewModel, onBack: () -> Unit, onSignedOut: () ->
                     fontSize = 13.sp, color = colors.textMuted,
                 )
             }
+            state.account?.let { account ->
+                val r = account.reminderSettings
+                Group(stringResource(R.string.settings_reminders)) {
+                    Toggle(stringResource(R.string.settings_push_reminders), r.enablePushReminders) { vm.setReminder("enablePushReminders", it) }
+                    Toggle(stringResource(R.string.settings_email_reminders), r.enableEmailReminders) { vm.setReminder("enableEmailReminders", it) }
+                    Toggle(stringResource(R.string.settings_daily_digest), r.enableDailyDigest) { vm.setReminder("enableDailyDigest", it) }
+                    Text(stringResource(R.string.settings_default_reminder), color = colors.textSecondary, fontSize = 15.sp)
+                    account.offsets.forEach { offset ->
+                        Row(Modifier.fillMaxWidth().clickable { vm.setReminder("defaultReminderTime", offset.minutes) }, verticalAlignment = Alignment.CenterVertically) {
+                            RadioButton(selected = r.defaultReminderTime == offset.minutes, onClick = { vm.setReminder("defaultReminderTime", offset.minutes) })
+                            Text(com.gracefultools.astrid.ui.common.coreLabel(offset.titleKey), color = colors.textPrimary, fontSize = 16.sp)
+                        }
+                    }
+                }
+                Group(stringResource(R.string.settings_tasks)) {
+                    Toggle(stringResource(R.string.settings_smart_tasks), account.smartTasks.smartTaskCreationEnabled) { vm.setSmartTasks("smartTaskCreationEnabled", it) }
+                    Toggle(stringResource(R.string.settings_email_to_task), account.smartTasks.emailToTaskEnabled) { vm.setSmartTasks("emailToTaskEnabled", it) }
+                }
+            }
             Group(stringResource(R.string.settings_appearance)) {
                 listOf(
                     ThemeMode.OCEAN to R.string.settings_theme_ocean, ThemeMode.LIGHT to R.string.settings_theme_light,
@@ -79,6 +98,14 @@ fun SettingsScreen(vm: SettingsViewModel, onBack: () -> Unit, onSignedOut: () ->
                     .clickable(onClick = vm::signOut).padding(Spacing.s16),
             )
         }
+    }
+}
+
+@Composable
+private fun Toggle(label: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Text(label, color = AstridTheme.colors.textPrimary, fontSize = 17.sp, modifier = Modifier.weight(1f))
+        androidx.compose.material3.Switch(checked = checked, onCheckedChange = onChange)
     }
 }
 
