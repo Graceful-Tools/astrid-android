@@ -135,4 +135,21 @@
     <string name="repeat_times">times</string>
     <string name="detail_pick_time">Pick a time</string>
     <string name="detail_select_a_task">Select a task</string>
+    <!-- Account screens: iOS profile.* / stats.* -->
+    <string name="profile_title">Profile</string>
+    <string name="stats_completed">Completed</string>
+    <string name="stats_inspired">Inspired</string>
+    <string name="stats_supported">Supported</string>
+    <string name="stats_completed_tagline">Getting it done!</string>
+    <string name="stats_inspired_tagline">Motivating others!</string>
+    <string name="stats_supported_tagline">Helping the team win!</string>
+    <string name="profile_export">Export your data</string>
+    <string name="agents_title">AI Agents</string>
+    <string name="agents_mode_api">Astrid runs it</string>
+    <string name="agents_mode_polling">Polling</string>
+    <string name="agents_mode_webhook">Webhook</string>
+    <string name="agents_mode_off">Off</string>
+    <string name="connections_title">Connections</string>
+    <string name="connections_revoke">Revoke</string>
+    <string name="settings_more">Account and agents</string>
 </resources>

@@ -93,6 +93,17 @@
     <string name="repeat_unit_years">年</string>
     <string name="repeat_ends">終了</string>
     <string name="repeat_ends_never">なし</string>
+    <string name="profile_title">プロフィール</string>
+    <string name="stats_completed">完了</string>
+    <string name="stats_inspired">インスパイア</string>
+    <string name="stats_supported">サポート</string>
+    <string name="stats_completed_tagline">やり遂げました！</string>
+    <string name="stats_inspired_tagline">他者を動機づける！</string>
+    <string name="stats_supported_tagline">チームの勝利を助ける！</string>
+    <string name="agents_title">AIエージェント</string>
+    <string name="agents_mode_off">Off</string>
+    <string name="connections_title">Connections</string>
+    <string name="connections_revoke">Revoke</string>
     <string name="core_picker_no_due_date" formatted="false">期限なし</string>
     <string name="core_picker_today" formatted="false">今日</string>
     <string name="core_picker_tomorrow" formatted="false">明日</string>

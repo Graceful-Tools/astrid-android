@@ -93,6 +93,17 @@
     <string name="repeat_unit_years">Лет</string>
     <string name="repeat_ends">Окончание</string>
     <string name="repeat_ends_never">Никогда</string>
+    <string name="profile_title">Профиль</string>
+    <string name="stats_completed">Завершено</string>
+    <string name="stats_inspired">Вдохновлено</string>
+    <string name="stats_supported">Поддержано</string>
+    <string name="stats_completed_tagline">Так держать!</string>
+    <string name="stats_inspired_tagline">Мотивируете других!</string>
+    <string name="stats_supported_tagline">Помогаете команде побеждать!</string>
+    <string name="agents_title">ИИ-агенты</string>
+    <string name="agents_mode_off">Off</string>
+    <string name="connections_title">Connections</string>
+    <string name="connections_revoke">Revoke</string>
     <string name="core_picker_no_due_date" formatted="false">Без срока</string>
     <string name="core_picker_today" formatted="false">Сегодня</string>
     <string name="core_picker_tomorrow" formatted="false">Завтра</string>

@@ -93,6 +93,17 @@
     <string name="repeat_unit_years">年</string>
     <string name="repeat_ends">結束</string>
     <string name="repeat_ends_never">從不</string>
+    <string name="profile_title">個人資料</string>
+    <string name="stats_completed">已完成</string>
+    <string name="stats_inspired">受啟發</string>
+    <string name="stats_supported">受支持</string>
+    <string name="stats_completed_tagline">搞定了！</string>
+    <string name="stats_inspired_tagline">激勵他人！</string>
+    <string name="stats_supported_tagline">幫助團隊獲勝！</string>
+    <string name="agents_title">AI 代理</string>
+    <string name="agents_mode_off">Off</string>
+    <string name="connections_title">Connections</string>
+    <string name="connections_revoke">Revoke</string>
     <string name="core_picker_no_due_date" formatted="false">無截止日期</string>
     <string name="core_picker_today" formatted="false">今天</string>
     <string name="core_picker_tomorrow" formatted="false">明天</string>

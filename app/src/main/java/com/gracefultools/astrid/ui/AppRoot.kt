@@ -35,6 +35,10 @@ import com.gracefultools.astrid.ui.detail.TaskDetailScreen
 import com.gracefultools.astrid.ui.detail.TaskDetailViewModel
 import com.gracefultools.astrid.ui.lists.ListSettingsScreen
 import com.gracefultools.astrid.ui.lists.ListSettingsViewModel
+import com.gracefultools.astrid.ui.account.AccountViewModel
+import com.gracefultools.astrid.ui.account.AgentsScreen
+import com.gracefultools.astrid.ui.account.ConnectionsScreen
+import com.gracefultools.astrid.ui.account.ProfileScreen
 import com.gracefultools.astrid.ui.chat.ChatScreen
 import com.gracefultools.astrid.ui.chat.ChatViewModel
 import com.gracefultools.astrid.ui.search.SearchScreen
@@ -196,7 +200,19 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
         }
         composable("settings") {
             val settings: SettingsViewModel = viewModel(factory = factory { SettingsViewModel(graph.core, graph.preferences) })
-            SettingsScreen(settings, onBack = { nav.popBackStack() }, onSignedOut = onSignedOut)
+            SettingsScreen(settings, onBack = { nav.popBackStack() }, onSignedOut = onSignedOut, onOpen = { nav.navigate(it) })
+        }
+        composable("profile") {
+            val vm: AccountViewModel = viewModel(key = "account", factory = factory { AccountViewModel(graph.core) })
+            ProfileScreen(vm, onBack = { nav.popBackStack() })
+        }
+        composable("agents") {
+            val vm: AccountViewModel = viewModel(key = "account", factory = factory { AccountViewModel(graph.core) })
+            AgentsScreen(vm, onBack = { nav.popBackStack() })
+        }
+        composable("connections") {
+            val vm: AccountViewModel = viewModel(key = "account", factory = factory { AccountViewModel(graph.core) })
+            ConnectionsScreen(vm, onBack = { nav.popBackStack() })
         }
     }
 }

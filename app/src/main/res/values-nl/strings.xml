@@ -93,6 +93,17 @@
     <string name="repeat_unit_years">Jaren</string>
     <string name="repeat_ends">Eindigt</string>
     <string name="repeat_ends_never">Nooit</string>
+    <string name="profile_title">Profiel</string>
+    <string name="stats_completed">Voltooid</string>
+    <string name="stats_inspired">Geïnspireerd</string>
+    <string name="stats_supported">Ondersteund</string>
+    <string name="stats_completed_tagline">Lekker bezig!</string>
+    <string name="stats_inspired_tagline">Anderen motiveren!</string>
+    <string name="stats_supported_tagline">Het team helpen winnen!</string>
+    <string name="agents_title">AI-agenten</string>
+    <string name="agents_mode_off">Off</string>
+    <string name="connections_title">Connections</string>
+    <string name="connections_revoke">Revoke</string>
     <string name="core_picker_no_due_date" formatted="false">Geen deadline</string>
     <string name="core_picker_today" formatted="false">Vandaag</string>
     <string name="core_picker_tomorrow" formatted="false">Morgen</string>

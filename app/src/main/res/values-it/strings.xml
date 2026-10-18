@@ -93,6 +93,17 @@
     <string name="repeat_unit_years">Anni</string>
     <string name="repeat_ends">Termina</string>
     <string name="repeat_ends_never">Mai</string>
+    <string name="profile_title">Profilo</string>
+    <string name="stats_completed">Completati</string>
+    <string name="stats_inspired">Ispirati</string>
+    <string name="stats_supported">Supportati</string>
+    <string name="stats_completed_tagline">Fatto!</string>
+    <string name="stats_inspired_tagline">Motivare gli altri!</string>
+    <string name="stats_supported_tagline">Aiutare il team a vincere!</string>
+    <string name="agents_title">Agenti IA</string>
+    <string name="agents_mode_off">Off</string>
+    <string name="connections_title">Connections</string>
+    <string name="connections_revoke">Revoke</string>
     <string name="core_picker_no_due_date" formatted="false">Nessuna scadenza</string>
     <string name="core_picker_today" formatted="false">Oggi</string>
     <string name="core_picker_tomorrow" formatted="false">Domani</string>

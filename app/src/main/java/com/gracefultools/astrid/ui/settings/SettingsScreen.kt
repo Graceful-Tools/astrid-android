@@ -40,7 +40,7 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.ThemeMode
 
 @Composable
-fun SettingsScreen(vm: SettingsViewModel, onBack: () -> Unit, onSignedOut: () -> Unit) {
+fun SettingsScreen(vm: SettingsViewModel, onBack: () -> Unit, onSignedOut: () -> Unit, onOpen: (String) -> Unit = {}) {
     val state by vm.state.collectAsStateWithLifecycle()
     val colors = AstridTheme.colors
     BackHandler(onBack = onBack)
@@ -58,6 +58,11 @@ fun SettingsScreen(vm: SettingsViewModel, onBack: () -> Unit, onSignedOut: () ->
                     if (state.waitingToSend > 0) stringResource(R.string.settings_waiting_to_send, state.waitingToSend) else stringResource(R.string.settings_all_sent),
                     fontSize = 13.sp, color = colors.textMuted,
                 )
+            }
+            Group(stringResource(R.string.settings_more)) {
+                listOf("profile" to R.string.profile_title, "agents" to R.string.agents_title, "connections" to R.string.connections_title).forEach { (route, label) ->
+                    Text(stringResource(label), color = colors.textPrimary, fontSize = 17.sp, modifier = Modifier.fillMaxWidth().clickable { onOpen(route) }.padding(vertical = 6.dp))
+                }
             }
             state.account?.let { account ->
                 val r = account.reminderSettings

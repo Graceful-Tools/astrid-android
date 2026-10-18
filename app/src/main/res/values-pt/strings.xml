@@ -93,6 +93,17 @@
     <string name="repeat_unit_years">Anos</string>
     <string name="repeat_ends">Termina</string>
     <string name="repeat_ends_never">Nunca</string>
+    <string name="profile_title">Perfil</string>
+    <string name="stats_completed">Concluídas</string>
+    <string name="stats_inspired">Inspiradas</string>
+    <string name="stats_supported">Apoiadas</string>
+    <string name="stats_completed_tagline">Fazendo acontecer!</string>
+    <string name="stats_inspired_tagline">Motivando outros!</string>
+    <string name="stats_supported_tagline">Ajudando a equipe a vencer!</string>
+    <string name="agents_title">Agentes de IA</string>
+    <string name="agents_mode_off">Off</string>
+    <string name="connections_title">Connections</string>
+    <string name="connections_revoke">Revoke</string>
     <string name="core_picker_no_due_date" formatted="false">Sem prazo</string>
     <string name="core_picker_today" formatted="false">Hoje</string>
     <string name="core_picker_tomorrow" formatted="false">Amanhã</string>

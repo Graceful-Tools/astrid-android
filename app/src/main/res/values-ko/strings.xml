@@ -93,6 +93,17 @@
     <string name="repeat_unit_years">년</string>
     <string name="repeat_ends">종료</string>
     <string name="repeat_ends_never">없음</string>
+    <string name="profile_title">프로필</string>
+    <string name="stats_completed">완료</string>
+    <string name="stats_inspired">영감</string>
+    <string name="stats_supported">지원</string>
+    <string name="stats_completed_tagline">해냈어요!</string>
+    <string name="stats_inspired_tagline">다른 사람들에게 동기 부여!</string>
+    <string name="stats_supported_tagline">팀의 승리를 돕기!</string>
+    <string name="agents_title">AI 에이전트</string>
+    <string name="agents_mode_off">Off</string>
+    <string name="connections_title">Connections</string>
+    <string name="connections_revoke">Revoke</string>
     <string name="core_picker_no_due_date" formatted="false">마감일 없음</string>
     <string name="core_picker_today" formatted="false">오늘</string>
     <string name="core_picker_tomorrow" formatted="false">내일</string>
