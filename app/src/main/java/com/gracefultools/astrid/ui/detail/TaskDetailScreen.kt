@@ -139,7 +139,11 @@ fun TaskDetailScreen(vm: TaskDetailViewModel, onBack: () -> Unit) {
                         }
                     }
                     Section(stringResource(R.string.detail_comments))
-                    Comments(detail, onOpenFile = { file -> vm.open(file.id) { path -> openFile(context, path, file.mimeType) } })
+                    Comments(
+                        detail,
+                        onOpenFile = { file -> vm.open(file.id) { path -> openFile(context, path, file.mimeType) } },
+                        fetch = { id, done -> vm.open(id, done) },
+                    )
                     Spacer(Modifier.size(Spacing.s24))
                 }
                 val picker = androidx.activity.compose.rememberLauncherForActivityResult(
@@ -403,7 +407,11 @@ private fun DescriptionCard(detail: TaskDetail, onSave: (String) -> Unit) {
 }
 
 @Composable
-private fun Comments(detail: TaskDetail, onOpenFile: (com.gracefultools.astrid.model.FileRow) -> Unit) {
+private fun Comments(
+    detail: TaskDetail,
+    onOpenFile: (com.gracefultools.astrid.model.FileRow) -> Unit,
+    fetch: (String, (String) -> Unit) -> Unit,
+) {
     val colors = AstridTheme.colors
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
         detail.comments.filter { it.showsText }.forEach { comment ->
@@ -415,7 +423,8 @@ private fun Comments(detail: TaskDetail, onOpenFile: (com.gracefultools.astrid.m
             ) {
                 Text(comment.authorName ?: "", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = colors.textSecondary)
                 Text(comment.content, fontSize = 16.sp, color = if (comment.isSystem) colors.textMuted else colors.textPrimary)
-                comment.files.forEach { file ->
+                comment.files.filter { it.rendersInline }.forEach { file -> InlineImage(file, fetch) { onOpenFile(file) } }
+                comment.files.filterNot { it.rendersInline }.forEach { file ->
                     Row(
                         Modifier.padding(top = 6.dp).clip(RoundedCornerShape(8.dp)).background(colors.bgTertiary)
                             .clickable { onOpenFile(file) }.padding(horizontal = 10.dp, vertical = 6.dp),
