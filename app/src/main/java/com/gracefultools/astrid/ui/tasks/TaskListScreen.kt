@@ -76,7 +76,8 @@ import kotlinx.coroutines.launch
 fun TaskListScreen(
     title: String,
     state: TaskListState,
-    onMenu: () -> Unit,
+    /** Null when the sidebar is always on screen (a wide window). */
+    onMenu: (() -> Unit)?,
     onSearch: () -> Unit,
     onOpenTask: (String) -> Unit,
     onComplete: (TaskRow) -> Unit,
@@ -136,13 +137,17 @@ fun TaskListScreen(
 }
 
 @Composable
-private fun Header(title: String, onMenu: () -> Unit, onSearch: () -> Unit, onToggleBoard: (() -> Unit)?, showingBoard: Boolean, onListSettings: (() -> Unit)?, onChat: (() -> Unit)?) {
+private fun Header(title: String, onMenu: (() -> Unit)?, onSearch: () -> Unit, onToggleBoard: (() -> Unit)?, showingBoard: Boolean, onListSettings: (() -> Unit)?, onChat: (() -> Unit)?) {
     val colors = AstridTheme.colors
     Row(
         Modifier.fillMaxWidth().background(colors.headerBg).padding(top = 36.dp, start = Spacing.s4, end = Spacing.s4, bottom = Spacing.s4),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        IconButton(onClick = onMenu) { Icon(Icons.Filled.Menu, stringResource(R.string.navigation_open_sidebar), tint = colors.textPrimary) }
+        if (onMenu != null) {
+            IconButton(onClick = onMenu) { Icon(Icons.Filled.Menu, stringResource(R.string.navigation_open_sidebar), tint = colors.textPrimary) }
+        } else {
+            androidx.compose.foundation.layout.Spacer(Modifier.padding(start = Spacing.s12))
+        }
         Text(
             title, fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
             modifier = Modifier.weight(1f).testTag("listTitle").semantics { heading() }, maxLines = 1,

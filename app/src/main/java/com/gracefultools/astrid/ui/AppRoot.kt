@@ -18,6 +18,11 @@ import com.gracefultools.astrid.Arrival
 import com.gracefultools.astrid.DeepLinks
 import com.gracefultools.astrid.ui.tasks.NewTaskSheet
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
+import androidx.compose.ui.platform.testTag
 import androidx.compose.runtime.setValue
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.factory
@@ -78,17 +83,23 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
 
     NavHost(nav, startDestination = "list") {
         composable("list") {
-            ModalNavigationDrawer(
-                drawerState = drawer,
-                drawerContent = {
-                    SidebarDrawer(
-                        side,
-                        onSelect = { sidebar.select(it.id); scope.launch { drawer.close() } },
-                        onSettings = { scope.launch { drawer.close() }; nav.navigate("settings") },
-                        onCreate = { sidebar.create(it); scope.launch { drawer.close() } },
-                    )
-                },
-            ) {
+            // iPhone, iPad portrait, iPad landscape — by width, as Android's window size classes cut it.
+            val width = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp
+            val twoPane = width >= 600
+            val permanentSidebar = width >= 840
+            var paneTaskId by rememberSaveable { mutableStateOf<String?>(null) }
+            val openTask: (String) -> Unit = { id -> if (twoPane) paneTaskId = id else nav.navigate("task/$id") }
+            LaunchedEffect(side.selectedId) { paneTaskId = null }
+
+            val sidebarContent: @Composable () -> Unit = {
+                SidebarDrawer(
+                    side,
+                    onSelect = { sidebar.select(it.id); scope.launch { drawer.close() } },
+                    onSettings = { scope.launch { drawer.close() }; nav.navigate("settings") },
+                    onCreate = { sidebar.create(it); scope.launch { drawer.close() } },
+                )
+            }
+            val listContent: @Composable () -> Unit = {
                 val title = side.selected?.let { if (it.id == side.myTasks?.id) stringResource(R.string.navigation_my_tasks) else it.name } ?: ""
                 val selected = side.selected
                 val onBoard = selected?.projectId != null
@@ -111,16 +122,17 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     board = {
                         BoardContent(
                             boardState,
-                            onOpenTask = { nav.navigate("task/$it") },
+                            onOpenTask = openTask,
                             onMove = boardVm::moveTo,
                             onComplete = boardVm::leading,
                             onDrop = boardVm::drop,
                         )
                     },
                     state = list,
-                    onMenu = { scope.launch { drawer.open() } },
+                    // A permanent sidebar has nothing to open: no button that does nothing.
+                    onMenu = if (permanentSidebar) null else ({ scope.launch { drawer.open() } }),
                     onSearch = { nav.navigate("search") },
-                    onOpenTask = { nav.navigate("task/$it") },
+                    onOpenTask = openTask,
                     onComplete = { row -> if (row.action == "complete") tasks.setCompleted(row.id, !row.completed) else tasks.leading(row) },
                     onDelete = { tasks.delete(it.id) },
                     onAdd = tasks::create,
@@ -128,6 +140,34 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onLoadMore = tasks::loadMore,
                     onDismissError = tasks::dismissError,
                 )
+            }
+            val detailPane: @Composable () -> Unit = {
+                val id = paneTaskId
+                if (id == null) {
+                    androidx.compose.foundation.layout.Box(
+                        androidx.compose.ui.Modifier.fillMaxSize().background(com.gracefultools.astrid.ui.theme.AstridTheme.colors.bgPrimary),
+                        contentAlignment = androidx.compose.ui.Alignment.Center,
+                    ) { Text(stringResource(R.string.detail_select_a_task), color = com.gracefultools.astrid.ui.theme.AstridTheme.colors.textSecondary) }
+                } else {
+                    val detail: TaskDetailViewModel = viewModel(key = "pane-$id", factory = factory { TaskDetailViewModel(graph.core, id) })
+                    TaskDetailScreen(detail, onBack = { paneTaskId = null })
+                }
+            }
+            val panes: @Composable () -> Unit = {
+                if (twoPane) {
+                    androidx.compose.foundation.layout.Row(androidx.compose.ui.Modifier.fillMaxSize()) {
+                        androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.weight(1f)) { listContent() }
+                        androidx.compose.material3.VerticalDivider(color = com.gracefultools.astrid.ui.theme.AstridTheme.colors.border)
+                        androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.weight(1.2f).testTag("detailPane")) { detailPane() }
+                    }
+                } else {
+                    listContent()
+                }
+            }
+            if (permanentSidebar) {
+                androidx.compose.material3.PermanentNavigationDrawer(drawerContent = sidebarContent) { panes() }
+            } else {
+                ModalNavigationDrawer(drawerState = drawer, drawerContent = sidebarContent) { panes() }
             }
         }
         composable("task/{id}") { entry ->
