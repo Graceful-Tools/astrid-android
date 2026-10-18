@@ -3,6 +3,7 @@ package com.gracefultools.astrid
 import android.app.Application
 import com.gracefultools.astrid.platform.BackgroundSync
 import com.gracefultools.astrid.platform.NetworkWatch
+import com.gracefultools.astrid.platform.ReminderAlarm
 import com.gracefultools.astrid.platform.ReminderNotifier
 
 /** Owns the one [AppGraph] — and with it the one core — for the life of the process. */
@@ -16,6 +17,7 @@ open class AstridApplication : Application() {
         NetworkWatch.start(this, graph.core, graph.scope)
         if (schedulesBackgroundWork) BackgroundSync.schedule(this)
         ReminderNotifier.start(this, graph.core, graph.scope)
+        if (schedulesBackgroundWork) ReminderAlarm.start(this, graph.core, graph.scope)
     }
 
     /** The real graph. The instrumented tests replace it with an offline, seeded one. */

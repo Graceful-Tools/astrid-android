@@ -113,6 +113,8 @@ class ReminderActionReceiver : BroadcastReceiver() {
             try {
                 ReminderActions.handle(graph.core, intent.action, taskId)
                 NotificationManagerCompat.from(context).cancel(ReminderNotifier.notificationId(taskId))
+                // A snooze moved the next reminder; a completion may have removed it.
+                ReminderAlarm(graph.core, SystemAlarms(context)).reschedule()
             } finally {
                 pending.finish()
             }
