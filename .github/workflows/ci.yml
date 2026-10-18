@@ -23,9 +23,11 @@ jobs:
         with:
           distribution: temurin
           java-version: "21"
+      # Packages named explicitly: the action's default list still includes the retired `tools`,
+      # which no longer exists and fails the step.
       - uses: android-actions/setup-android@v3
-      - name: NDK
-        run: sdkmanager "ndk;27.2.12479018"
+        with:
+          packages: platform-tools platforms;android-35 build-tools;35.0.0 ndk;27.2.12479018
       - name: Rust targets and cargo-ndk
         if: hashFiles('core/Cargo.toml') != ''
         run: |
