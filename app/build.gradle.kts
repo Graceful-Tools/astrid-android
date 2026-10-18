@@ -51,6 +51,8 @@ android {
         warningsAsErrors = false
         abortOnError = true
         checkDependencies = true
+        // A string not yet translated falls back to English, on purpose, until AATD-23 covers it.
+        warning += "MissingTranslation"
     }
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
 }
