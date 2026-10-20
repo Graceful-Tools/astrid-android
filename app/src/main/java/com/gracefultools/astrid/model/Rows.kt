@@ -38,7 +38,14 @@ data class TaskRow(
     val assignee: UserSummary? = null,
     val statusRole: String? = null,
     val checkboxLabel: String? = null,
+    /** iOS's title chips: closed as won't-do, a GitHub sync mark (`pending`/`failed`), `repo#N`. */
+    val isCanceled: Boolean = false,
+    val syncMark: String? = null,
+    val remote: RemoteChip? = null,
 )
+
+@Serializable
+data class RemoteChip(val label: String = "", val url: String? = null)
 
 /** A due date the core has already worded: `key` is a label key, `date`/`time` its arguments. */
 @Serializable
@@ -67,7 +74,14 @@ data class UserSummary(val id: String = "", val name: String? = null, val email:
 }
 
 @Serializable
-data class RowWindow(val total: Int = 0, val offset: Int = 0, val rows: List<TaskRow> = emptyList(), val sortBy: String? = null)
+data class RowWindow(
+    val total: Int = 0,
+    val offset: Int = 0,
+    val rows: List<TaskRow> = emptyList(),
+    val sortBy: String? = null,
+    /** Whether quick add is offered here (core rowsForList, iOS ListPermissions.canAddTasks). */
+    val canAddTasks: Boolean = true,
+)
 
 /** A list, as the sidebar needs it. */
 @Serializable

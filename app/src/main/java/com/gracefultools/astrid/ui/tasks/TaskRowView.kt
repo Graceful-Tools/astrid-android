@@ -111,13 +111,17 @@ fun TaskRowView(
                 onLeading()
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text(
-                    row.title,
-                    style = TextStyles.rowTitle,
-                    color = if (row.completed) colors.textMuted else colors.textPrimary,
-                    textDecoration = if (row.completed) TextDecoration.LineThrough else null,
-                    maxLines = if (compact) 1 else Int.MAX_VALUE, overflow = TextOverflow.Ellipsis,
-                )
+                Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        row.title,
+                        style = TextStyles.rowTitle,
+                        color = if (row.completed) colors.textMuted else colors.textPrimary,
+                        textDecoration = if (row.completed) TextDecoration.LineThrough else null,
+                        maxLines = if (compact) 1 else Int.MAX_VALUE, overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f, fill = false),
+                    )
+                    TitleChips(row)
+                }
                 Metadata(row)
             }
         }
@@ -129,6 +133,26 @@ fun TaskRowView(
             )
         }
     }
+}
+
+/** iOS's title chips: outlined, radius 4, caption — Won't do, Syncing / Sync failed, and `repo#N`. */
+@Composable
+private fun TitleChips(row: TaskRow) {
+    val colors = AstridTheme.colors
+    val uri = androidx.compose.ui.platform.LocalUriHandler.current
+    @Composable
+    fun chip(text: String, onClick: (() -> Unit)? = null) = Text(
+        text, style = TextStyles.caption, color = colors.textSecondary, maxLines = 1,
+        modifier = Modifier.border(1.dp, colors.border, RoundedCornerShape(4.dp))
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+            .padding(horizontal = 6.dp, vertical = 2.dp),
+    )
+    if (row.isCanceled) chip(stringResource(R.string.tasks_wont_do_chip))
+    when (row.syncMark) {
+        "pending" -> chip(stringResource(R.string.tasks_sync_pending_chip))
+        "failed" -> chip(stringResource(R.string.tasks_sync_failed_chip))
+    }
+    row.remote?.let { remote -> chip(remote.label, remote.url?.let { url -> { runCatching { uri.openUri(url) } } }) }
 }
 
 @Composable

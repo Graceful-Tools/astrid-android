@@ -277,7 +277,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onDrop = { id, zone, target, at -> tasks.drop(id, zone, target, at) },
                     selectedTaskId = paneTaskId,
                     // iOS shows quick add where the reader may add: a collaborative public list, not a copy-only one.
-                    canAdd = featured?.isCollaborative ?: true,
+                    canAdd = list.canAdd,
                     onCopyList = featured?.let { { scope.launch { if (tasks.copyList()) sidebar.load() } } },
                     boardFullScreen = if (offersFullScreen) fullScreen else null,
                     onToggleBoardFullScreen = { boardFullScreen = !boardFullScreen; graph.preferences.boardFullScreen = boardFullScreen },

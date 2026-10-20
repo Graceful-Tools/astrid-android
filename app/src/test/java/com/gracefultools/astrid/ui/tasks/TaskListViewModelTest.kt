@@ -182,4 +182,12 @@ class TaskListViewModelTest {
         assertTrue(core.kinds().contains("nestTask"))
         assertFalse(core.kinds().contains("setManualOrder"))
     }
+
+    @Test
+    fun `AATD-37 quick add follows the core's canAddTasks`() = runTest {
+        val core = FakeCore().apply { answer("rowsForList", """{"total":0,"offset":0,"rows":[],"canAddTasks":false}""") }
+        val vm = vm(core)
+        vm.open("l1")
+        assertFalse(vm.state.value.canAdd)
+    }
 }

@@ -33,6 +33,8 @@ data class TaskListState(
     val statusPicker: com.gracefultools.astrid.ui.common.LeadingOutcome.PickStatus? = null,
     /** The sort in force — `manual` lets a drag reorder (AATD-42). */
     val sortBy: String? = null,
+    /** Whether the reader may add here; quick add hides when not (AATD-37). */
+    val canAdd: Boolean = true,
     /** What the quick-add bar's leading control shows and its picker offers (`quickAddDefaults`). */
     val quickAdd: QuickAddDefaults = QuickAddDefaults(),
     /** A featured public list the reader is not in (AATD-46): Copy List in the header, no rotator. */
@@ -136,7 +138,7 @@ class TaskListViewModel(
                 core.run(rowsCommand(listId, 0, wanted)),
             )
             if (mine != generation) return@work
-            _state.update { it.copy(rows = window.rows, total = window.total, loading = false, sortBy = window.sortBy) }
+            _state.update { it.copy(rows = window.rows, total = window.total, loading = false, sortBy = window.sortBy, canAdd = window.canAddTasks) }
         } catch (failure: CoreFailure) {
             if (mine == generation) _state.update { it.copy(loading = false, error = failure.shown()) }
         }
