@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hand-translated strings iOS does not have (AATD-65). scripts/port-ios-strings.py leaves these names alone. -->
+<resources>
+    <string name="auth_waiting_for_browser">Conclua o login no seu navegador.</string>
+    <string name="auth_open_browser_again">Abrir o navegador novamente</string>
+    <string name="navigation_open_sidebar">Abrir a barra lateral</string>
+    <string name="tasks_reopen_a11y">Marcar %1$s como não concluída</string>
+    <string name="tasks_unassigned_glyph">N</string>
+    <string name="tasks_waiting_to_send">Aguardando envio</string>
+    <string name="common_dismiss">Dispensar</string>
+    <string name="detail_more">Mais</string>
+    <string name="board_move_to">Mover para</string>
+    <string name="board_show_board">Mostrar como quadro</string>
+    <string name="board_show_list">Mostrar como lista</string>
+    <string name="priority_a11y">Prioridade %1$s</string>
+    <string name="chat_placeholder">Mensagem</string>
+    <string name="quick_add_picker_a11y">Prioridade e responsável pela nova tarefa</string>
+    <string name="picker_search_lists">Buscar listas…</string>
+    <string name="comments_delete_confirm">Tem certeza de que deseja excluir este comentário?</string>
+    <string name="comments_replying_to">Respondendo a %1$s</string>
+    <string name="comments_system_on">Em %1$s, %2$s</string>
+    <string name="search_clear">Limpar busca</string>
+    <string name="settings_outbox">Caixa de saída</string>
+    <string name="settings_outbox_summary">%1$d sincronizadas · %2$d em andamento · %3$d descartadas</string>
+    <string name="settings_outbox_retry">Tentar novamente as alterações descartadas</string>
+    <string name="settings_outbox_load">Carregar estatísticas da caixa de saída</string>
+    <string name="settings_outbox_unknown_error">erro desconhecido</string>
+    <string name="settings_core_label">Core</string>
+    <string name="settings_reminders_permission_denied">Permissão de notificação não concedida. Ative as notificações em Configurações.</string>
+    <string name="settings_reminders_test_body">Esta é uma notificação de teste do %1$s</string>
+    <string name="profile_enter_name">Digite seu nome</string>
+    <string name="account_edit_passkey">Renomear passkey</string>
+    <string name="account_save_passkey_name">Salvar nome</string>
+    <string name="account_change_photo">Alterar foto</string>
+    <string name="share_create_task">Criar tarefa</string>
+    <string name="share_attachment">Anexo</string>
+    <string name="share_task_title">Título da tarefa</string>
+    <string name="share_description_optional">Descrição (opcional)</string>
+    <string name="share_default_list_note">A tarefa será criada na sua lista padrão</string>
+    <string name="share_upload_note">O arquivo será enviado em segundo plano</string>
+    <string name="reminders_task_due_soon">Tarefa vencendo em breve</string>
+    <string name="notifications_exact_alarms">Alarmes e lembretes</string>
+    <string name="notifications_exact_alarms_hint">Permita alarmes exatos para que os lembretes cheguem na hora</string>
+    <string name="agents_model_screen_title">Modelo de IA de %1$s</string>
+    <string name="agents_model_none_subtitle">%1$s não responderá automaticamente</string>
+    <string name="agents_model_key_required">%1$s · Chave de API necessária</string>
+    <string name="lists_ai_coding_agent">Agente de programação com IA</string>
+    <string name="lists_project_board">Quadro do projeto</string>
+    <string name="lists_create_board">Criar quadro</string>
+    <string name="lists_create_board_footer">Cria um projeto com as colunas de estado Pronto / A fazer / Em espera. Caixa de entrada e Concluído são virtuais.</string>
+    <string name="lists_disable_board_footer">Remove o projeto e suas colunas de estado. A lista será desvinculada, mas manterá suas tarefas.</string>
+    <string name="lists_disable_board_title">Desativar quadro?</string>
+    <string name="lists_disable_board_message">Isso remove o projeto e suas colunas de estado. A lista mantém suas tarefas, mas as tarefas concluídas continuam concluídas e as ativas perdem o estado.</string>
+    <string name="lists_disable">Desativar</string>
+    <string name="lists_board_create_failed">Não foi possível criar o quadro: %1$s</string>
+    <string name="lists_board_disable_failed">Não foi possível desativar o quadro: %1$s</string>
+    <string name="lists_advanced">Avançado</string>
+    <string name="lists_recently_completed_footer">Define quais tarefas concluídas continuam visíveis no filtro padrão e na coluna Concluído do quadro.</string>
+    <string name="lists_recent_default_24h">Últimas 24 horas (padrão)</string>
+    <string name="lists_recent_last_7_days">Últimos 7 dias</string>
+    <string name="lists_recent_last_14_days">Últimos 14 dias</string>
+    <string name="lists_recent_last_28_days">Últimos 28 dias</string>
+    <string name="lists_recent_last_30_days">Últimos 30 dias</string>
+    <string name="lists_recent_since_sunday">Desde o último domingo (esta semana)</string>
+    <string name="lists_recent_since_monday">Desde a última segunda-feira (esta semana)</string>
+    <string name="lists_recent_since_first">Desde o dia 1º do mês</string>
+    <string name="lists_recent_since_date">Desde uma data específica…</string>
+    <string name="lists_pending">Pendente</string>
+    <string name="members_role">Função</string>
+    <string name="lists_created_failed_to_add">Lista criada, mas não foi possível adicionar: %1$s</string>
+    <string name="lists_member_options">Opções do membro</string>
+    <string name="lists_cancel_invitation">Cancelar convite de %1$s</string>
+    <string name="lists_remove_invitee">Remover %1$s</string>
+    <string name="lists_color_hue">Matiz</string>
+    <string name="lists_color_saturation">Saturação</string>
+    <string name="lists_color_brightness">Brilho</string>
+    <string name="tasks_nest_under_previous">Tornar subtarefa da tarefa acima</string>
+    <string name="tasks_move_out_a_level">Subir um nível</string>
+    <string name="tasks_move_up">Mover para cima</string>
+    <string name="tasks_move_down">Mover para baixo</string>
+    <string name="lists_copy_list">Copiar lista</string>
+    <string name="review_loving_title">Está gostando do Astrid?</string>
+    <string name="review_loving_message">Você adora usar o Astrid? Adoraríamos saber sua opinião!</string>
+    <string name="review_not_really">Na verdade, não</string>
+    <string name="review_love_it">Sim, eu adoro!</string>
+    <string name="review_help_us_improve">Ajude-nos a melhorar</string>
+    <string name="review_help_message">Lamentamos saber disso. Gostaria de relatar um problema ou nos enviar sua opinião?</string>
+    <string name="review_maybe_later">Talvez mais tarde</string>
+    <string name="review_report_issue">Relatar um problema</string>
+    <string name="review_send_feedback">Enviar feedback</string>
+    <string name="repeating_mode_due_date">Repetir a partir da data de vencimento</string>
+    <string name="repeating_mode_completion_date">Repetir a partir da data de conclusão</string>
+    <string name="repeating_decrease">Diminuir %1$s</string>
+    <string name="repeating_increase">Aumentar %1$s</string>
+    <string name="attachments_remove_a11y">Remover %1$s</string>
+    <string name="timer_start">Iniciar cronômetro</string>
+    <string name="timer_stop">Parar cronômetro</string>
+    <string name="comments_offline">Offline</string>
+    <string name="chat_agent_thinking">%1$s está pensando…</string>
+    <string name="core_repeat_none" formatted="false">Não se repete</string>
+    <string name="core_repeat_every_day" formatted="false">Todo dia</string>
+    <string name="core_repeat_every_n_days" formatted="false">A cada %1$s dias</string>
+    <string name="core_repeat_every_week" formatted="false">Toda semana</string>
+    <string name="core_repeat_every_n_weeks" formatted="false">A cada %1$s semanas</string>
+    <string name="core_repeat_every_month" formatted="false">Todo mês</string>
+    <string name="core_repeat_every_n_months" formatted="false">A cada %1$s meses</string>
+    <string name="core_repeat_every_year" formatted="false">Todo ano</string>
+    <string name="core_repeat_every_n_years" formatted="false">A cada %1$s anos</string>
+    <string name="core_repeat_on_weekdays" formatted="false">em %1$s</string>
+    <string name="core_repeat_on_day_of_month" formatted="false">no dia %1$s</string>
+    <string name="core_repeat_on_nth_weekday" formatted="false">na %1$s %2$s</string>
+    <string name="core_repeat_on_month_and_day" formatted="false">em %1$s %2$s</string>
+    <string name="core_repeat_ends_after" formatted="false">(%1$s vezes)</string>
+    <string name="core_repeat_ends_on" formatted="false">até %1$s</string>
+    <string name="core_repeat_from_due_date" formatted="false">a partir da data de vencimento</string>
+    <string name="core_reminder_set" formatted="false">Lembrete definido</string>
+    <string name="core_reminder_at_due_time" formatted="false">Na hora do vencimento</string>
+    <string name="core_reminder_5_minutes_before" formatted="false">5 minutos antes</string>
+    <string name="core_reminder_15_minutes_before" formatted="false">15 minutos antes</string>
+    <string name="core_reminder_30_minutes_before" formatted="false">30 minutos antes</string>
+    <string name="core_reminder_hour_before" formatted="false">Uma hora antes</string>
+    <string name="core_reminder_2_hours_before" formatted="false">2 horas antes</string>
+    <string name="core_reminder_day_before" formatted="false">Um dia antes</string>
+    <string name="core_reminder_week_before" formatted="false">Uma semana antes</string>
+    <string name="core_filter_any" formatted="false">Qualquer</string>
+    <string name="core_filter_button_active" formatted="false">Filtrado</string>
+    <string name="core_filter_completion" formatted="false">Tarefas concluídas</string>
+    <string name="core_filter_completion_recent" formatted="false">Concluídas recentemente</string>
+    <string name="core_filter_completion_incomplete" formatted="false">Ocultá-las</string>
+    <string name="core_filter_completion_completed" formatted="false">Somente as concluídas</string>
+    <string name="core_filter_completion_all" formatted="false">Mostrar todas</string>
+    <string name="core_filter_assignee" formatted="false">Atribuída a</string>
+    <string name="core_filter_assignee_someone_else" formatted="false">Outra pessoa</string>
+    <string name="core_filter_assignee_nobody" formatted="false">Ninguém</string>
+    <string name="core_filter_repeat_never" formatted="false">Não se repete</string>
+    <string name="core_filter_assigned_by" formatted="false">Atribuída por</string>
+    <string name="core_filter_assigned_by_someone_else" formatted="false">Outra pessoa</string>
+    <string name="core_filter_lists_in_a_list" formatted="false">Em uma lista</string>
+    <string name="core_filter_lists_not_in_a_list" formatted="false">Fora de listas</string>
+    <string name="core_filter_lists_public" formatted="false">Em uma lista pública</string>
+    <string name="core_reminder_toast_snooze" formatted="false">Adiar %1$s min</string>
+    <string name="tasks_complete_a11y">Concluir %1$s</string>
+</resources>

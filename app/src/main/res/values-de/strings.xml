@@ -104,6 +104,593 @@
     <string name="agents_mode_off">Off</string>
     <string name="connections_title">Connections</string>
     <string name="connections_revoke">Revoke</string>
+    <string name="tasks_task_id_copy">Aufgaben-ID kopieren</string>
+    <string name="common_back">Zurück</string>
+    <string name="tasks_loading">Aufgaben werden geladen...</string>
+    <string name="empty_state_my_tasks">Willkommen bei %1$s! Fügen Sie Ihre erste Aufgabe hinzu, um zu beginnen.</string>
+    <string name="empty_state_today">Nichts für heute geplant! Genießen Sie die freie Zeit.</string>
+    <string name="empty_state_public_list">Teilen Sie Ihre Ideen! Fügen Sie Aufgaben hinzu - jeder kann diese Liste sehen.</string>
+    <string name="empty_state_shared_list">Beginnen Sie mit der Zusammenarbeit! Fügen Sie eine Aufgabe hinzu.</string>
+    <string name="empty_state_list_with_name">Füllen wir \"%1$s\"! Fügen Sie Ihre erste Aufgabe hinzu.</string>
+    <string name="empty_state_default">Bereit, Ihre Gedanken festzuhalten? Erstellen Sie Ihre erste Aufgabe!</string>
+    <string name="tasks_priority">Priorität</string>
+    <string name="tasks_assignee">Wer</string>
+    <string name="assignee_unassigned">Nicht zugewiesen</string>
+    <string name="assignee_you">Sie</string>
+    <string name="profile_ai_agent">KI-Agent</string>
+    <string name="chat_show_messages">Nachrichten einblenden</string>
+    <string name="my_tasks_filters_title">Sortieren &amp; Filtern</string>
+    <string name="lists_new_list">Neue Liste</string>
+    <string name="tasks_task_details">Aufgabendetails</string>
+    <string name="tasks_when">Wann</string>
+    <string name="navigation_lists_label">Listen</string>
+    <string name="actions_copy">Kopieren</string>
+    <string name="actions_share">Teilen</string>
+    <string name="tasks_wont_do">Wird nicht erledigt</string>
+    <string name="tasks_reopen">Wieder öffnen</string>
+    <string name="tasks_delete_task">Aufgabe löschen</string>
+    <string name="tasks_delete_confirm">Diese Aufgabe löschen?</string>
+    <string name="actions_delete">Löschen</string>
+    <string name="actions_close">Schließen</string>
+    <string name="actions_done">Fertig</string>
+    <string name="actions_set">Setzen</string>
+    <string name="actions_edit">Bearbeiten</string>
+    <string name="picker_no_due_date">Kein Fälligkeitsdatum</string>
+    <string name="picker_all_day">Ganztägig</string>
+    <string name="picker_add_time">Zeit hinzufügen</string>
+    <string name="picker_add_to_lists">Zu Listen hinzufügen</string>
+    <string name="picker_no_lists_found">Keine Listen gefunden</string>
+    <string name="picker_time">Uhrzeit</string>
+    <string name="task_edit_add_description">Beschreibung hinzufügen...</string>
+    <string name="task_detail_subtasks">Unteraufgaben</string>
+    <string name="task_detail_add_subtask">Unteraufgabe hinzufügen</string>
+    <string name="task_detail_parent_task">Übergeordnete Aufgabe:</string>
+    <string name="task_detail_complete_subtasks_title">Unteraufgaben abschließen?</string>
+    <string name="task_detail_complete_all_subtasks">Alle Unteraufgaben abschließen</string>
+    <string name="task_detail_complete_only_this">Nur diese Aufgabe</string>
+    <string name="task_detail_completed_via">Erledigt über %1$s</string>
+    <string name="task_edit_last_timer">Zuletzt: %1$s</string>
+    <string name="comments_count">Kommentare (%1$d)</string>
+    <string name="comments_empty">Noch keine Kommentare. Seien Sie der Erste!</string>
+    <string name="comments_add_placeholder">Kommentar hinzufügen...</string>
+    <string name="comments_reply">Antworten</string>
+    <string name="comments_edit">Bearbeiten</string>
+    <string name="comments_delete_comment">Kommentar löschen</string>
+    <string name="comments_show_system">System einblenden</string>
+    <string name="comments_hide_system">System ausblenden</string>
+    <string name="board_project_state">Projektstatus</string>
+    <string name="tasks_waiting_on_label">Wartet auf</string>
+    <string name="tasks_waiting_on_add">Auf Aufgabe warten…</string>
+    <string name="tasks_waiting_on_search_placeholder">Aufgaben suchen…</string>
+    <string name="tasks_waiting_on_empty">Nichts, worauf gewartet wird</string>
+    <string name="tasks_waiting_on_hidden">Eine Aufgabe, die du nicht sehen kannst</string>
+    <string name="tasks_waiting_on_remove">Nicht mehr auf diese Aufgabe warten</string>
+    <string name="tasks_waiting_on_no_results">Keine passenden Aufgaben</string>
+    <string name="tasks_task_id_label">Aufgaben-ID</string>
+    <string name="tasks_created_by">Erstellt von</string>
+    <string name="repeating_title">Wiederholen</string>
+    <string name="tasks_due_date">Datum</string>
+    <string name="tasks_wont_do_chip">Wird nicht erledigt</string>
+    <string name="tasks_copy_task">Aufgabe kopieren</string>
+    <string name="lists_copy_to_list">In Liste kopieren</string>
+    <string name="lists_include_comments">Kommentare einschließen</string>
+    <string name="copy_my_tasks_only">Nur meine Aufgaben</string>
+    <string name="share_share_task">Aufgabe teilen</string>
+    <string name="share_private_task_message">Dies ist eine private Aufgabe. Nur Benutzer mit Zugriff auf diese Liste können sie sehen.</string>
+    <string name="share_generating_link">Link wird generiert...</string>
+    <string name="share_share_link_hint">Teilen Sie diesen Link mit jedem, der Zugriff auf diese Aufgabe hat</string>
+    <string name="share_copy_link">In Zwischenablage kopieren</string>
+    <string name="share_link_copied">Link kopiert!</string>
+    <string name="share_link_failed">Freigabelink konnte nicht erstellt werden. Bitte erneut versuchen.</string>
+    <string name="tasks_search_tasks_placeholder">Aufgaben suchen...</string>
+    <string name="filters_sort_by">Sortieren nach</string>
+    <string name="lists_filters">Filter</string>
+    <string name="lists_clear_all_filters">Alle Filter löschen</string>
+    <string name="core_lists_highest_priority">Höchste</string>
+    <string name="core_lists_high_priority">Hoch</string>
+    <string name="core_lists_medium_priority">Mittel</string>
+    <string name="core_lists_low_priority">Niedrig</string>
+    <string name="core_sort">Sortieren nach</string>
+    <string name="core_sort_auto">Automatisch</string>
+    <string name="core_sort_priority">Priorität</string>
+    <string name="core_sort_when">Fälligkeit</string>
+    <string name="core_sort_created">Hinzugefügt am</string>
+    <string name="core_sort_manual">Meine Reihenfolge</string>
+    <string name="core_repeat_daily">Täglich</string>
+    <string name="core_repeat_weekly">Wöchentlich</string>
+    <string name="core_repeat_monthly">Monatlich</string>
+    <string name="core_repeat_yearly">Jährlich</string>
+    <string name="core_repeat_custom">Benutzerdefiniert</string>
+    <string name="settings_profile_row">Profil</string>
+    <string name="settings_sync">Synchronisieren</string>
+    <string name="settings_last_sync">Letzte Synchronisation</string>
+    <string name="settings_never">Nie</string>
+    <string name="settings_sync_now">Jetzt synchronisieren</string>
+    <string name="settings_features">Funktionen</string>
+    <string name="settings_exploratory_features">Experimentelle Funktionen</string>
+    <string name="settings_agents_title">AI Agents</string>
+    <string name="settings_connections_title">Connections</string>
+    <string name="settings_preferences">Einstellungen</string>
+    <string name="settings_language">Sprache</string>
+    <string name="settings_automatic">Automatisch</string>
+    <string name="settings_smart_task_creation">Intelligente Aufgabenerstellung</string>
+    <string name="settings_smart_task_creation_description">Daten, Prioritäten und Hashtags aus Titeln analysieren</string>
+    <string name="settings_subtasks_title">Unteraufgaben</string>
+    <string name="settings_subtasks_display">Unteraufgaben anzeigen</string>
+    <string name="core_smart_subtasks_indented">In Listen, eingerückt</string>
+    <string name="core_smart_subtasks_under_parent">Nur in der übergeordneten Aufgabe</string>
+    <string name="settings_outbox_refresh">Aktualisieren</string>
+    <string name="settings_account_access">Konto &amp; Zugang</string>
+    <string name="settings_account_access_desc">Profil, E-Mail, Passkeys, Datenexport</string>
+    <string name="settings_version_label">Version</string>
+    <string name="settings_build_label">Build</string>
+    <string name="settings_are_you_sure_sign_out">Sind Sie sicher, dass Sie sich abmelden möchten?</string>
+    <string name="settings_reminders_push_notifications">Push-Benachrichtigungen</string>
+    <string name="settings_reminders_enable_push">Push-Benachrichtigungen aktivieren</string>
+    <string name="settings_reminders_open_settings">Einstellungen öffnen</string>
+    <string name="settings_reminders_email_notifications">E-Mail-Benachrichtigungen</string>
+    <string name="settings_reminders_send_email">E-Mail-Erinnerungen senden</string>
+    <string name="settings_reminders_default_time">Standard-Erinnerungszeit</string>
+    <string name="settings_reminders_when_to_remind">Wann erinnern</string>
+    <string name="settings_reminders_daily_digest">Täglicher Rückblick</string>
+    <string name="settings_reminders_send_daily_digest">Täglichen Rückblick senden</string>
+    <string name="settings_reminders_digest_time">Rückblick-Zeit</string>
+    <string name="settings_reminders_timezone">Zeitzone</string>
+    <string name="settings_reminders_quiet_hours">Ruhezeiten (Optional)</string>
+    <string name="settings_reminders_enable_quiet_hours">Ruhezeiten aktivieren</string>
+    <string name="settings_reminders_start">Beginn</string>
+    <string name="settings_reminders_end">Ende</string>
+    <string name="settings_reminders_test">Test</string>
+    <string name="settings_reminders_send_test">Testebenachrichtigung senden</string>
+    <string name="settings_reminders_test_reminder">Testerinnerung</string>
+    <string name="settings_reminders_test_message">Eine Testbenachrichtigung erscheint in 5 Sekunden</string>
+    <string name="settings_appearance_theme">Design</string>
+    <string name="settings_appearance_task_details">Aufgabendetails</string>
+    <string name="settings_appearance_task_details_footer">Wähle das Layout der Aufgabendetails. Liste gibt Priorität und zugewiesener Person eigene Zeilen. Projekt ist kompakt, und das Kästchen öffnet eine Auswahl, statt die Aufgabe abzuschließen.</string>
+    <string name="core_smart_layout_list">Liste</string>
+    <string name="core_smart_layout_project">Projekt</string>
+    <string name="settings_appearance_list_images_title">Listenbilder</string>
+    <string name="settings_appearance_list_images_off_description">Wenn aus, zeigt jede Liste stattdessen ihre Farbe.</string>
+    <string name="settings_appearance_list_images_label">Listenbilder anzeigen</string>
+    <string name="settings_appearance_email_to_task">E-Mail-zu-Aufgabe</string>
+    <string name="settings_appearance_email_to_task_footer">Erstellen Sie Aufgaben, indem Sie E-Mails an remindme@astrid.cc senden</string>
+    <string name="settings_appearance_email_to_task_self">Eigene Aufgabe: Senden AN remindme@astrid.cc</string>
+    <string name="settings_appearance_email_to_task_assigned">Zugewiesene Aufgabe: CC an remindme@astrid.cc mit einem Empfänger</string>
+    <string name="settings_appearance_email_to_task_group">Gruppenaufgabe: CC an remindme@astrid.cc mit mehreren Empfängern</string>
+    <string name="settings_appearance_email_to_task_subject">Betreff wird zum Aufgabentitel</string>
+    <string name="settings_appearance_email_to_task_body">Inhalt wird zur Aufgabenbeschreibung</string>
+    <string name="settings_device_language">Gerätesprache</string>
+    <string name="settings_language_restart_note">Sprachänderungen erfordern möglicherweise einen Neustart der App, um vollständig wirksam zu werden.</string>
+    <string name="actions_ok">OK</string>
+    <string name="messages_error">Fehler</string>
+    <string name="messages_success">Erfolg!</string>
+    <string name="messages_saving">Speichern...</string>
+    <string name="messages_deleting">Löschen...</string>
+    <string name="profile_loading">Profil wird geladen...</string>
+    <string name="profile_joined">Beigetreten am %1$s</string>
+    <string name="profile_edit_title">Profil bearbeiten</string>
+    <string name="profile_change_photo">Tippen zum Ändern des Fotos</string>
+    <string name="profile_uploading_photo">Foto wird hochgeladen...</string>
+    <string name="profile_display_name">Anzeigename</string>
+    <string name="profile_email_address">E-Mail-Adresse</string>
+    <string name="profile_save_changes">Änderungen speichern</string>
+    <string name="profile_saving">Speichern...</string>
+    <string name="profile_updated_success">Ihr Profil wurde erfolgreich aktualisiert!</string>
+    <string name="account_loading">Konto wird geladen...</string>
+    <string name="account_display_name">Anzeigename</string>
+    <string name="account_name_placeholder">Name</string>
+    <string name="account_email">E-Mail</string>
+    <string name="account_save_changes">Änderungen speichern</string>
+    <string name="account_oauth_footer">Angemeldet mit Google. Einige Felder werden über Ihr Google-Konto verwaltet.</string>
+    <string name="account_pending_email">Ausstehende E-Mail-Änderung</string>
+    <string name="account_resend_verification">Verifizierung erneut senden</string>
+    <string name="account_email_not_verified">E-Mail nicht verifiziert</string>
+    <string name="account_send_verification">Verifizierungs-E-Mail senden</string>
+    <string name="account_email_verification">E-Mail-Verifizierung</string>
+    <string name="account_pending_email_footer">Prüfen Sie Ihren Posteingang, um die neue Adresse zu verifizieren.</string>
+    <string name="account_verify_email_footer">Verifizieren Sie Ihre E-Mail, um alle Funktionen zu nutzen.</string>
+    <string name="account_info">Kontoinformationen</string>
+    <string name="account_id">Konto-ID</string>
+    <string name="account_created">Erstellt am</string>
+    <string name="account_auth_method">Authentifizierung</string>
+    <string name="account_google">Google</string>
+    <string name="account_passkey">Passkey</string>
+    <string name="account_loading_passkeys">Passkeys werden geladen...</string>
+    <string name="account_no_passkeys_registered">Keine Passkeys registriert</string>
+    <string name="account_add_passkey_description">Fügen Sie einen Passkey für eine schnellere Anmeldung hinzu</string>
+    <string name="account_add_passkey_button">Passkey hinzufügen</string>
+    <string name="account_passkeys">Passkeys</string>
+    <string name="account_passkeys_footer">Passkeys ermöglichen eine sichere Anmeldung ohne Passwort. Sie werden automatisch über Ihre Geräte synchronisiert.</string>
+    <string name="account_passkey_name_placeholder">Passkey-Name</string>
+    <string name="account_synced">Synchronisiert</string>
+    <string name="account_added_on">Hinzugefügt am %1$s</string>
+    <string name="account_added_recently">Vor kurzem hinzugefügt</string>
+    <string name="account_export_json">Daten exportieren (JSON)</string>
+    <string name="account_export_csv">Daten exportieren (CSV)</string>
+    <string name="account_your_data">Ihre Daten</string>
+    <string name="account_your_data_footer">Laden Sie alle Ihre Aufgaben, Listen und Kontodaten herunter.</string>
+    <string name="account_delete_account">Konto löschen</string>
+    <string name="account_danger_zone">Gefahrenzone</string>
+    <string name="account_delete_account_footer">Löschen Sie Ihr Konto und alle zugehörigen Daten dauerhaft. Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="account_delete_warning">Diese Aktion kann nicht rückgängig gemacht werden</string>
+    <string name="account_delete_remove_list_header">Das Löschen Ihres Kontos entfernt dauerhaft:</string>
+    <string name="account_delete_remove_tasks">Alle Ihre Aufgaben und deren Verlauf</string>
+    <string name="account_delete_remove_lists">Alle Listen, die Sie besitzen</string>
+    <string name="account_delete_remove_comments">Alle Ihre Kommentare</string>
+    <string name="account_delete_remove_profile">Ihr Profil und Ihre Einstellungen</string>
+    <string name="account_delete_remove_files">Alle hochgeladenen Dateien</string>
+    <string name="account_delete_confirm_prompt">Zur Bestätigung geben Sie unten \"MEIN KONTO LÖSCHEN\" ein:</string>
+    <string name="account_delete_confirm_placeholder">Bestätigung eingeben</string>
+    <string name="account_delete_confirmation">Bestätigung</string>
+    <string name="account_delete_confirm_instruction">Sie müssen \"MEIN KONTO LÖSCHEN\" genau so eingeben.</string>
+    <string name="account_delete_confirm_mismatch">Bestätigungstext stimmt nicht überein</string>
+    <string name="account_delete_confirm_match">Bestätigungstext stimmt überein</string>
+    <string name="account_delete_my_account_button">Mein Konto löschen</string>
+    <string name="account_delete_final_confirmation">Endgültige Bestätigung</string>
+    <string name="account_delete_forever">Dauerhaft löschen</string>
+    <string name="account_delete_final_warning">Sind Sie absolut sicher? Dies löscht Ihr Konto und ALLE Ihre Daten dauerhaft. Dies kann NICHT rückgängig gemacht werden.</string>
+    <string name="share_save">Speichern</string>
+    <string name="share_task_details">Aufgabendetails</string>
+    <string name="share_priority">Priorität</string>
+    <string name="share_priority_none">Keine</string>
+    <string name="share_priority_low">Niedrig</string>
+    <string name="share_priority_medium">Mittel</string>
+    <string name="share_priority_high">Hoch</string>
+    <string name="reminders_counting_on_you">Diese Leute zählen auf Sie!</string>
+    <string name="reminders_snooze_15_minutes">15 Minuten Schlummern</string>
+    <string name="reminders_snooze_1_day">1 Tag</string>
+    <string name="reminders_snooze_1_week">1 Woche</string>
+    <string name="reminders_triage_title">Sichten</string>
+    <string name="reminders_triage_progress">%1$d von %2$d</string>
+    <string name="reminders_triage_close">Schließen</string>
+    <string name="reminders_triage_card_hint">Öffnet die Aufgabe</string>
+    <string name="reminders_triage_keep">Behalten</string>
+    <string name="reminders_triage_caught_up">Alles erledigt</string>
+    <string name="reminders_triage_done">Fertig</string>
+    <string name="notifications_enable_push">Push-Benachrichtigungen aktivieren</string>
+    <string name="notifications_enable_message">Bitte aktivieren Sie Push-Benachrichtigungen!</string>
+    <string name="notifications_not_now">Nicht jetzt</string>
+    <string name="notifications_enable">Aktivieren</string>
+    <string name="notifications_disabled">Benachrichtigungen deaktiviert</string>
+    <string name="notifications_disabled_message">Push-Benachrichtigungen sind deaktiviert.</string>
+    <string name="notifications_open_settings">Einstellungen öffnen</string>
+    <string name="settings_agents_description">Choose who runs each agent. %1$s can run it in the cloud, your own harness can poll the queue, or your webhook server can receive work.</string>
+    <string name="settings_agents_your_agents">Your agents</string>
+    <string name="settings_agents_guide_link">Connect my coding agent guide</string>
+    <string name="settings_agents_download_skill">Download the workflow skill</string>
+    <string name="settings_agents_loading">Loading agent settings…</string>
+    <string name="settings_agents_load_failed">Could not load agent settings: %1$s</string>
+    <string name="settings_agents_save_failed">Could not save agent mode: %1$s</string>
+    <string name="settings_agents_needs_setup">Needs setup</string>
+    <string name="settings_agents_ownership_astrid">%1$s runs it</string>
+    <string name="settings_agents_ownership_user">I run it</string>
+    <string name="settings_agents_ownership_off">Off</string>
+    <string name="settings_agents_transport">Transport</string>
+    <string name="settings_agents_transport_polling">Native coding harness</string>
+    <string name="settings_agents_transport_webhook">Webhook server</string>
+    <string name="settings_agents_transport_sse">Custom Agent (SSE)</string>
+    <string name="settings_agents_api_description">%1$s runs this agent in the cloud, so it works without a computer running at home.</string>
+    <string name="settings_agents_polling_description">Your own %1$s setup does the work. Connect it once, assign this agent a task, and mark the task Ready.</string>
+    <string name="settings_agents_polling_guide_hint">Connect, install, schedule and test recipes for every harness live in the guide; the workflow skill is generated to match.</string>
+    <string name="settings_agents_webhook_description">A server you host receives this agent\'s work as soon as it appears. Webhook secrets are session-protected, so configure the server on the web.</string>
+    <string name="settings_agents_webhook_configure">Configure webhook server</string>
+    <string name="settings_agents_off_description">This agent is hidden from assignee pickers and %1$s never runs it. Saved settings and keys are kept.</string>
+    <string name="settings_agents_copilot_connected">Connected. Your Copilot subscription can run this agent.</string>
+    <string name="settings_agents_copilot_disconnected">Authorize GitHub so your Copilot subscription can run this agent.</string>
+    <string name="settings_agents_copilot_connect">Connect GitHub Copilot</string>
+    <string name="settings_agents_copilot_disconnect">Disconnect GitHub Copilot</string>
+    <string name="settings_agents_copilot_waiting">Waiting for GitHub to confirm…</string>
+    <string name="settings_agents_manage_key">Manage provider API key</string>
+    <string name="settings_agents_key_replace_placeholder">Key saved — paste to replace</string>
+    <string name="settings_agents_test_key">Test</string>
+    <string name="settings_agents_key_footer">Encrypted at rest, used only server-side.</string>
+    <string name="settings_agents_get_key">Get a key</string>
+    <string name="settings_agents_custom_title">Custom Agents</string>
+    <string name="settings_agents_custom_subtitle">Agents you operate over OAuth + REST + SSE</string>
+    <string name="settings_connections_subtitle">Everything that can act as your account</string>
+    <string name="settings_agents_model_title">%1$s\'s model</string>
+    <string name="settings_agents_model_description">Only models %1$s can run server-side are listed: providers with a key, and Custom Agents.</string>
+    <string name="settings_agents_model_footer">Choose the model that powers %1$s for My Tasks and your private lists. Mention @%2$s in any chat or comment to get help.</string>
+    <string name="settings_agents_github_title">GitHub connection</string>
+    <string name="settings_agents_github_description">Only needed when %1$s runs it: server-run agents create branches and pull requests through this connection. A harness or webhook server you run uses its own GitHub access. Pick the repository per list in List Settings → Admin.</string>
+    <string name="settings_agents_github_manage">Manage on the web</string>
+    <string name="settings_agents_session_required">This change needs a signed-in web session. Open the web settings to do it there.</string>
+    <string name="settings_agents_open_web">Open web settings</string>
+    <string name="settings_agents_copied">Copied</string>
+    <string name="settings_agents_webhook_url">Webhook URL</string>
+    <string name="settings_agents_webhook_url_hint">Your server\'s endpoint. Runs on the %1$s SDK (npx astrid-agent serve). It needs the client credentials below to call the API and the webhook secret to verify deliveries.</string>
+    <string name="settings_agents_webhook_enabled">Enabled</string>
+    <string name="settings_agents_webhook_agents">Agents this webhook handles</string>
+    <string name="settings_agents_webhook_agents_hint">Unselected agents fall back to polling.</string>
+    <string name="settings_agents_webhook_no_agents">No agents selected. All work falls back to polling.</string>
+    <string name="settings_agents_webhook_regenerate">Regenerate secret on save</string>
+    <string name="settings_agents_webhook_save">Save configuration</string>
+    <string name="settings_agents_webhook_update">Update configuration</string>
+    <string name="settings_agents_webhook_remove">Remove webhook</string>
+    <string name="settings_agents_webhook_remove_confirm">Remove your webhook configuration? Your server will stop receiving work.</string>
+    <string name="settings_agents_webhook_test">Test webhook</string>
+    <string name="settings_agents_webhook_status">Status</string>
+    <string name="settings_agents_webhook_active">Active</string>
+    <string name="settings_agents_webhook_disabled">Disabled</string>
+    <string name="settings_agents_webhook_failures">%1$d failures</string>
+    <string name="settings_agents_webhook_no_failures">No failures</string>
+    <string name="settings_agents_webhook_last_fired">Last fired %1$s</string>
+    <string name="settings_agents_webhook_secret_title">Save your webhook secret</string>
+    <string name="settings_agents_webhook_secret_warning">Shown once. Add it to your server\'s environment as ASTRID_WEBHOOK_SECRET.</string>
+    <string name="settings_agents_webhook_test_response">Response time: %1$d ms</string>
+    <string name="settings_agents_webhook_create_credentials">Create client credentials</string>
+    <string name="settings_agents_webhook_credentials_title">Client Credentials</string>
+    <string name="settings_agents_webhook_credentials_warning">Save these now. The client secret will not be shown again.</string>
+    <string name="settings_agents_webhook_credentials_needs_both">Your server needs both: these credentials to call the API, and the webhook secret to verify what it is sent.</string>
+    <string name="settings_openclaw_section">Custom Agents</string>
+    <string name="settings_openclaw_title">Custom Agents</string>
+    <string name="settings_openclaw_description">Registrieren Sie KI-Agenten, die sich über das OpenClaw-Protokoll verbinden. Jeder Agent erhält eine eindeutige Identität und OAuth-Zugangsdaten.</string>
+    <string name="settings_openclaw_loading">Agenten werden geladen...</string>
+    <string name="settings_openclaw_no_agents">Keine Agenten verbunden</string>
+    <string name="settings_openclaw_no_agents_hint">Registrieren Sie einen Agenten, um zu beginnen. Agenten erhalten OAuth-Zugangsdaten zur Kommunikation mit %1$s über REST und SSE.</string>
+    <string name="settings_openclaw_status_active">Aktiv</string>
+    <string name="settings_openclaw_status_idle">Inaktiv</string>
+    <string name="settings_openclaw_registered">Registriert %1$s</string>
+    <string name="settings_openclaw_last_active">Zuletzt aktiv %1$s</string>
+    <string name="settings_openclaw_connect_agent">Agent verbinden</string>
+    <string name="settings_openclaw_register_title">Agent registrieren</string>
+    <string name="settings_openclaw_agent_name">Agentenname</string>
+    <string name="settings_openclaw_agent_name_placeholder">buddy</string>
+    <string name="settings_openclaw_agent_name_hint">Wählen Sie einen Namen für Ihren Agenten (z.B. buddy, helper, dev-bot)</string>
+    <string name="settings_openclaw_agent_name_preview">%1$s.oc@astrid.cc</string>
+    <string name="settings_openclaw_create_agent">Agent erstellen</string>
+    <string name="settings_openclaw_credentials_title">Agent erstellt</string>
+    <string name="settings_openclaw_credentials_warning">Speichern Sie diese Zugangsdaten jetzt. Das Client-Secret wird nicht erneut angezeigt.</string>
+    <string name="settings_openclaw_credential_email">Agent-E-Mail</string>
+    <string name="settings_openclaw_credential_client_id">Client-ID</string>
+    <string name="settings_openclaw_credential_client_secret">Client-Secret</string>
+    <string name="settings_openclaw_credential_token_endpoint">Token-Endpoint</string>
+    <string name="settings_openclaw_credential_api_base">API-Basis</string>
+    <string name="settings_openclaw_credential_sse_endpoint">SSE-Endpoint</string>
+    <string name="settings_openclaw_delete_agent">Agent entfernen</string>
+    <string name="settings_openclaw_delete_confirm">Dies löscht %1$s dauerhaft und widerruft die OAuth-Zugangsdaten. Dies kann nicht rückgängig gemacht werden.</string>
+    <string name="settings_openclaw_agent_deleted">Agent entfernt</string>
+    <string name="settings_openclaw_agent_created">Agent erfolgreich erstellt</string>
+    <string name="settings_openclaw_about">Über OpenClaw</string>
+    <string name="settings_openclaw_about_description">OpenClaw ist ein offenes Protokoll zur Verbindung von KI-Agenten mit %1$s. Agenten authentifizieren sich über OAuth, empfangen Aufgaben über die REST-API und erhalten Echtzeit-Updates über SSE. Funktioniert mit jedem KI-Anbieter.</string>
+    <string name="settings_openclaw_tip_title">Tipp: Listenbeschreibungen = Agentenanweisungen</string>
+    <string name="settings_openclaw_tip_description">Die Beschreibung jeder Liste dient als Anweisung für KI-Agenten, die an Aufgaben in dieser Liste arbeiten. Schreiben Sie Markdown, um Agenten zu sagen, wie sie Aufgaben bearbeiten sollen.</string>
+    <string name="settings_connections_empty">Nothing is connected to your account yet.</string>
+    <string name="settings_connections_category_app">Apps</string>
+    <string name="settings_connections_category_token">Zugriffstoken</string>
+    <string name="settings_connections_category_webhook">Webhook-Server</string>
+    <string name="settings_connections_category_unknown">Sonstige</string>
+    <string name="settings_connections_kind_oauth_client">OAuth apps</string>
+    <string name="settings_connections_kind_authorized_app">Authorized apps</string>
+    <string name="settings_connections_kind_custom_agent">Custom Agents</string>
+    <string name="settings_connections_kind_access_token">Access tokens</string>
+    <string name="settings_connections_kind_webhook">Webhook server</string>
+    <string name="settings_connections_kind_unknown">Other</string>
+    <string name="settings_connections_owner_you">Ihre</string>
+    <string name="settings_connections_owner_third_party">Drittanbieter</string>
+    <string name="settings_connections_owner_agent">Agent</string>
+    <string name="settings_connections_status_active">Active</string>
+    <string name="settings_connections_status_expired">Expired</string>
+    <string name="settings_connections_status_disabled">Disabled</string>
+    <string name="settings_connections_status_unknown">Unknown</string>
+    <string name="settings_connections_acts_as">Acts as %1$s</string>
+    <string name="settings_connections_acts_as_you">you</string>
+    <string name="settings_connections_created">Created %1$s</string>
+    <string name="settings_connections_last_used">Last used %1$s</string>
+    <string name="settings_connections_expires">Expires %1$s</string>
+    <string name="settings_connections_never">never</string>
+    <string name="settings_connections_revoke_confirm">Revoke %1$s? Anything using it stops working immediately.</string>
+    <string name="settings_connections_remove_agent_confirm">Remove %1$s? The agent and its credentials are deleted.</string>
+    <string name="settings_connections_manage_in_agents">Managed in AI Agents</string>
+    <string name="settings_connections_developer_web">Developer tools on the web</string>
+    <string name="settings_connections_new">Neue Verbindung</string>
+    <string name="settings_connections_new_title">Neue Verbindung</string>
+    <string name="settings_connections_edit_title">Verbindung bearbeiten</string>
+    <string name="settings_connections_create">Erstellen</string>
+    <string name="settings_connections_name_fixed">Name und Beschreibung werden beim Erstellen der Verbindung festgelegt.</string>
+    <string name="settings_connections_field_name">Name</string>
+    <string name="settings_connections_field_name_placeholder">Mein Skript</string>
+    <string name="settings_connections_field_description">Beschreibung</string>
+    <string name="settings_connections_field_description_placeholder">Wofür diese Verbindung gedacht ist</string>
+    <string name="settings_connections_field_description_none">Keine Beschreibung</string>
+    <string name="settings_connections_field_grant_types">Grant-Typen</string>
+    <string name="settings_connections_field_redirect_uris">Weiterleitungs-URIs</string>
+    <string name="settings_connections_field_redirect_uris_hint">Eine pro Zeile. Der Authorization-Code-Grant benötigt mindestens eine.</string>
+    <string name="settings_connections_field_scopes">Berechtigungen</string>
+    <string name="settings_connections_scopes_hint">Was diese Verbindung in deinem Namen tun darf.</string>
+    <string name="settings_connections_scopes_none">Keine Berechtigungen: Diese Verbindung kann sich anmelden, aber nichts lesen oder ändern.</string>
+    <string name="settings_connections_grant_client_credentials">Client Credentials</string>
+    <string name="settings_connections_grant_client_credentials_hint">Server zu Server, ohne dass sich jemand anmeldet</string>
+    <string name="settings_connections_grant_authorization_code">Authorization Code</string>
+    <string name="settings_connections_grant_authorization_code_hint">Jemand bestätigt sie im Browser</string>
+    <string name="settings_connections_grant_refresh_token">Refresh Token</string>
+    <string name="settings_connections_grant_refresh_token_hint">Angemeldet bleiben; gehört zum Authorization-Code-Grant</string>
+    <string name="settings_connections_error_name_required">Gib dieser Verbindung einen Namen.</string>
+    <string name="settings_connections_error_grant_required">Wähle mindestens einen Grant-Typ.</string>
+    <string name="settings_connections_error_redirect_required">Der Authorization-Code-Grant benötigt mindestens eine Weiterleitungs-URI.</string>
+    <string name="settings_connections_error_redirect_invalid">Keine http- oder https-Adresse: %1$s</string>
+    <string name="sync_account">Konto</string>
+    <string name="sync_connect_github">GitHub verbinden</string>
+    <string name="sync_connect_google">Google verbinden</string>
+    <string name="sync_connected">Verbunden</string>
+    <string name="sync_disconnect">Trennen</string>
+    <string name="sync_github_footer">Issues in verknüpften Repos werden zu Aufgaben gespiegelt (und zurück). %1$s bleibt die Datenquelle; dein GitHub-Token verlässt nie den Server.</string>
+    <string name="sync_google_footer">Aufgaben in verknüpften Google-Listen werden zu %1$s-Aufgaben gespiegelt (und zurück), inklusive Unteraufgaben. Google-Fälligkeiten sind nur Datumsangaben; Uhrzeiten bleiben in %1$s. Dein Google-Token verlässt nie den Server.</string>
+    <string name="sync_linked_lists">Verknüpfte Listen</string>
+    <string name="sync_link_list_repo">Liste mit einem Repo verknüpfen</string>
+    <string name="sync_link_list_tasklist">Liste mit einer Google Tasks-Liste verknüpfen</string>
+    <string name="sync_list">Liste</string>
+    <string name="sync_repository">Repository</string>
+    <string name="sync_google_list">Google-Liste</string>
+    <string name="sync_choose_list">Liste wählen</string>
+    <string name="sync_choose_repo">Repo wählen</string>
+    <string name="sync_choose_google_list">Google-Liste wählen</string>
+    <string name="sync_link">Verknüpfen</string>
+    <string name="sync_linking">Wird verknüpft …</string>
+    <string name="sync_sync_now">Jetzt synchronisieren</string>
+    <string name="sync_last_synced">Zuletzt synchronisiert: %1$s</string>
+    <string name="sync_mode">Modus</string>
+    <string name="sync_sync_mode">Synchronisierungsmodus</string>
+    <string name="sync_mode_manual">Nur von mir verknüpfte Listen</string>
+    <string name="sync_mode_google_to_astrid">Google-Listen in %1$s übernehmen</string>
+    <string name="sync_mode_astrid_to_google">%1$s-Listen zu Google sichern</string>
+    <string name="sync_mode_bidirectional">Alles synchron halten (beide Richtungen)</string>
+    <string name="sync_mode_footer_manual">Nur die unten verknüpften Listen bleiben synchron.</string>
+    <string name="sync_mode_footer_google_to_astrid">Jede Google Tasks-Liste wird in %1$s gespiegelt — neue Google-Listen werden automatisch übernommen und mit dem Zusatz benannt. Gleichnamige %1$s-Listen werden übernommen, nicht dupliziert.</string>
+    <string name="sync_mode_footer_astrid_to_google">Jede %1$s-Liste wird als Backup zu Google Tasks gespiegelt — neue %1$s-Listen werden automatisch übernommen.</string>
+    <string name="sync_mode_footer_bidirectional">Deine Google Tasks-Listen erscheinen in %1$s und deine %1$s-Listen in Google Tasks. Neue Listen auf beiden Seiten kommen automatisch dazu; gleichnamige Listen werden gekoppelt statt dupliziert.</string>
+    <string name="sync_suffix_placeholder">Namenszusatz, z. B. [GT]</string>
+    <string name="sync_external_sync">Externe Synchronisierung</string>
+    <string name="sync_external_footer">Issues oder Aufgaben im verknüpften Dienst werden mit dieser Liste hin und zurück gespiegelt, synchronisiert über dein verbundenes Konto.</string>
+    <string name="sync_not_linked">Nicht verknüpft</string>
+    <string name="sync_unlink">Trennen</string>
+    <string name="sync_connect_github_hint">Verbinde GitHub unter Einstellungen → GitHub Issues, um diese Liste in ein Repository zu spiegeln.</string>
+    <string name="sync_connect_google_hint">Verbinde Google unter Einstellungen → Google Tasks, um diese Liste in eine Aufgabenliste zu spiegeln.</string>
+    <string name="lists_link_repo_description">Repository für KI-Programmieragenten verknüpfen</string>
+    <string name="lists_loading_repositories">Repositories werden geladen...</string>
+    <string name="lists_github_repository">GitHub-Repository</string>
+    <string name="lists_no_repositories_found">Keine Repositories gefunden. Stellen Sie sicher, dass Ihr GitHub-Konto verbunden ist.</string>
+    <string name="agents_actions_save">Speichern</string>
+    <string name="agents_actions_update">Aktualisieren</string>
+    <string name="agents_actions_retry">Erneut versuchen</string>
+    <string name="agents_model_none">Keine</string>
+    <string name="user_menu_refresh_data">Daten aktualisieren</string>
+    <string name="lists_list_settings">Listeneinstellungen</string>
+    <string name="lists_admin">Administrator</string>
+    <string name="lists_leave_list">Liste verlassen</string>
+    <string name="lists_leave_confirm">Sind Sie sicher, dass Sie diese Liste verlassen möchten? Sie müssen erneut eingeladen werden, um beizutreten.</string>
+    <string name="lists_list_information">Listeninformationen</string>
+    <string name="lists_list_name">Listenname</string>
+    <string name="lists_list_appearance">Listenerscheinung</string>
+    <string name="lists_list_image">Listenbild</string>
+    <string name="lists_list_image_description">Wählen Sie ein benutzerdefiniertes Bild oder Symbol</string>
+    <string name="actions_change">Ändern</string>
+    <string name="lists_list_color">Listenfarbe</string>
+    <string name="lists_custom_color">Eigene Farbe</string>
+    <string name="lists_default_task_settings">Standard-Aufgabeneinstellungen</string>
+    <string name="lists_task_creator">Aufgabenersteller</string>
+    <string name="lists_none">Keine</string>
+    <string name="lists_tomorrow">Morgen</string>
+    <string name="lists_next_week">Nächste Woche</string>
+    <string name="lists_next_month">Nächster Monat</string>
+    <string name="tasks_due_time">Fälligkeitszeit</string>
+    <string name="lists_all_day">Ganztägig (Keine Zeit)</string>
+    <string name="lists_repeating">Wiederholend</string>
+    <string name="lists_never">Nie</string>
+    <string name="lists_daily">Täglich</string>
+    <string name="lists_weekly">Wöchentlich</string>
+    <string name="lists_monthly">Monatlich</string>
+    <string name="lists_disable_board">Board deaktivieren</string>
+    <string name="lists_recently_completed">Kürzlich erledigt</string>
+    <string name="lists_since">Seit</string>
+    <string name="messages_danger_zone">Gefahrenzone</string>
+    <string name="lists_delete_confirm_message">Sind Sie sicher, dass Sie diese Liste löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.</string>
+    <string name="profile_no_email">Keine E-Mail</string>
+    <string name="lists_owner">Besitzer</string>
+    <string name="lists_make_member">Zum Mitglied machen</string>
+    <string name="lists_make_admin">Zum Administrator machen</string>
+    <string name="lists_add_member">Mitglied hinzufügen</string>
+    <string name="lists_share_list">Liste teilen</string>
+    <string name="lists_share_list_description">Generieren Sie einen teilbaren Link für diese Liste</string>
+    <string name="share_private_list_message">Dies ist eine private Liste. Nur Mitglieder mit Zugriff können sie sehen.</string>
+    <string name="share_public_list_message">Dies ist eine öffentliche Liste. Jeder mit dem Link kann sie sehen.</string>
+    <string name="share_share_list_link_hint">Teile diesen Link mit allen, die Zugriff haben, um diese Liste zu sehen</string>
+    <string name="lists_available_agents">Verfügbare Agenten</string>
+    <string name="lists_ai_coding_agents">KI-Programmieragenten</string>
+    <string name="lists_ai_agents">KI-Agenten</string>
+    <string name="lists_connect_github_description">GitHub-Repository verbinden, um Programmier-Workflows zu aktivieren</string>
+    <string name="lists_default_agent_description">KI-Agent für Aufgabenhilfe</string>
+    <string name="lists_list_privacy">Listenschutz</string>
+    <string name="lists_make_public">Öffentlich machen</string>
+    <string name="lists_make_private">Privat machen</string>
+    <string name="lists_public_description">Jeder mit dem Link kann diese Liste sehen</string>
+    <string name="lists_private_description">Nur Mitglieder können diese Liste sehen</string>
+    <string name="lists_owner_cannot_leave_yet">Dir gehört diese Liste. Die Übertragung an eine andere Person ist hier noch nicht möglich — nutze dafür die Web-App.</string>
+    <string name="lists_transfer_ownership_none">Es gibt noch niemanden, dem du diese Liste übergeben könntest — lade zuerst jemanden ein.</string>
+    <string name="lists_transfer_ownership_select">Neue Eigentümerin oder neuen Eigentümer wählen</string>
+    <string name="lists_transfer_and_leave">Übertragen &amp; verlassen</string>
+    <string name="lists_transfer_ownership">Eigentum übertragen</string>
+    <string name="lists_transfer_ownership_prompt">Dir gehört „%1$s“. Zum Verlassen musst du sie zuerst jemandem übergeben.</string>
+    <string name="lists_transfer_ownership_confirm">„%1$s“ gehört jetzt dieser Person und du hast die Liste verlassen. Das lässt sich nicht rückgängig machen.</string>
+    <string name="actions_remove">Entfernen</string>
+    <string name="actions_add">Hinzufügen</string>
+    <string name="members_searching">Kontakte werden durchsucht...</string>
+    <string name="members_add_member">Mitglied hinzufügen</string>
+    <string name="members_email_address">E-Mail-Adresse</string>
+    <string name="lists_enter_name">Listenname eingeben</string>
+    <string name="lists_list_description">Beschreibung</string>
+    <string name="lists_description_placeholder">Beschreibung hinzufügen (optional)...</string>
+    <string name="lists_no_members">Noch keine Mitglieder hinzugefügt</string>
+    <string name="lists_favorite_description">Diese Liste erscheint oben in Ihren Listen</string>
+    <string name="lists_show_subtasks">Unteraufgaben anzeigen</string>
+    <string name="lists_show_subtasks_footer">Unteraufgaben erscheinen in dieser Liste eingerückt unter ihrer übergeordneten Aufgabe. Deaktiviere dies für eine Liste, die du als einfachen Posteingang lesen möchtest. Deine kontoweite Anzeigeeinstellung für Unteraufgaben gilt weiterhin: Eine Liste kann Unteraufgaben nicht inline anzeigen, wenn du nur die Detailansicht gewählt hast.</string>
+    <string name="lists_saved_filter">Gespeicherter Filter</string>
+    <string name="lists_saved_filter_description">Diese Liste zeigt Aufgaben basierend auf Filtern, nicht auf Listenmitgliedschaft</string>
+    <string name="navigation_public_shared_lists">Öffentliche geteilte Listen</string>
+    <string name="navigation_public_lists">Öffentliche Listen</string>
+    <string name="navigation_see_all_collaborative">Alle kollaborativen Listen anzeigen →</string>
+    <string name="navigation_see_all_suggested">Alle vorgeschlagenen Listen anzeigen →</string>
+    <string name="filters_featured_lists">Empfohlene Listen</string>
+    <string name="filters_view_add">Anzeigen &amp; Hinzufügen</string>
+    <string name="filters_tasks_count">%1$d Aufgaben</string>
+    <string name="lists_copying">Kopieren...</string>
+    <string name="lists_copy_failed">Diese Liste konnte nicht kopiert werden. Bitte versuche es erneut.</string>
+    <string name="board_full_screen">Vollbild</string>
+    <string name="board_exit_full_screen">Vollbild beenden</string>
+    <string name="chat_hide_messages">Nachrichten ausblenden</string>
+    <string name="chat_show_messages_pane">Nachrichten einblenden</string>
+    <string name="repeating_custom_pattern">Benutzerdefiniertes Wiederholungsmuster</string>
+    <string name="repeating_repeat_every">Wiederholen alle</string>
+    <string name="repeating_repeat_on_days">An diesen Tagen wiederholen</string>
+    <string name="repeating_repeat_type">Wiederholungsart</string>
+    <string name="repeating_same_date_monthly">Gleiches Datum jeden Monat</string>
+    <string name="repeating_same_weekday_monthly">Gleicher Wochentag und Woche im Monat</string>
+    <string name="repeating_day_of_month">Tag des Monats</string>
+    <string name="repeating_weekday">Wochentag</string>
+    <string name="repeating_week_of_month">Woche des Monats</string>
+    <string name="repeating_month">Monat</string>
+    <string name="repeating_day">Tag</string>
+    <string name="repeating_repeat_mode">Wiederholungsmodus</string>
+    <string name="repeating_from_completion">Nächste Wiederholung ab Abschlussdatum</string>
+    <string name="repeating_from_due_date">Nächste Wiederholung ab ursprünglichem Fälligkeitsdatum</string>
+    <string name="repeating_end_condition">Endebedingung</string>
+    <string name="repeating_never">Nie</string>
+    <string name="repeating_after_occurrences">Nach X Wiederholungen</string>
+    <string name="repeating_until_date">Bis zu einem bestimmten Datum</string>
+    <string name="repeating_num_occurrences">Anzahl der Wiederholungen</string>
+    <string name="repeating_end_date">Enddatum</string>
+    <string name="repeating_1st">1.</string>
+    <string name="repeating_2nd">2.</string>
+    <string name="repeating_3rd">3.</string>
+    <string name="repeating_4th">4.</string>
+    <string name="repeating_5th">5.</string>
+    <string name="assignee_someone_else">Jemand anderes</string>
+    <string name="members_invite_email">Per E-Mail einladen</string>
+    <string name="actions_assign">Zuweisen</string>
+    <string name="assignee_needs_a_list">Füge diese Aufgabe zuerst einer Liste hinzu, dann kannst du sie jemand Neuem zuweisen.</string>
+    <string name="attachments_count">Anhänge (%1$d)</string>
+    <string name="attachments_from_photos">Aus Fotos</string>
+    <string name="attachments_from_documents">Aus Dateien</string>
+    <string name="attachments_from_camera">Mit Kamera</string>
+    <string name="attachments_open">Öffnen</string>
+    <string name="tasks_occurrences_label">Wiederholungen</string>
+    <string name="tasks_occurrences_previous">Vorherige</string>
+    <string name="tasks_occurrences_next">Nächste</string>
+    <string name="tasks_project_fields_clear">Keine</string>
+    <string name="tasks_project_fields_empty">Nicht gesetzt</string>
+    <string name="tasks_project_fields_error_auth_required">Verbinde dein GitHub-Konto, um dieses Feld zu ändern.</string>
+    <string name="tasks_project_fields_error_sso_required">Deine Organisation verlangt Single Sign-on für dieses Projekt. Melde dich bei GitHub an und versuche es erneut.</string>
+    <string name="tasks_project_fields_error_save_failed">Diese Änderung konnte nicht in GitHub gespeichert werden. Versuche es erneut.</string>
+    <string name="timer_complete_task">AUFGABE ABSCHLIESSEN</string>
+    <string name="timer_open">Timer</string>
+    <string name="chat_offline">Offline — messages will sync when connected</string>
+    <string name="chat_agent_fallback">Agent</string>
+    <string name="repeating_preview">Vorschau</string>
+    <string name="comments_streak_summary">%1$d Mal in %2$d Tagen erledigt</string>
+    <string name="comments_streak_summary_no_span">%1$d Mal erledigt</string>
+    <string name="reminders_triage_assign_to">%1$s zuweisen</string>
+    <string name="tasks_sync_pending_chip">Wird synchronisiert</string>
+    <string name="tasks_sync_failed_chip">Synchronisierung fehlgeschlagen</string>
     <string name="core_picker_no_due_date" formatted="false">Kein Fälligkeitsdatum</string>
     <string name="core_picker_today" formatted="false">Heute</string>
     <string name="core_picker_tomorrow" formatted="false">Morgen</string>
@@ -119,40 +706,8 @@
     <string name="core_repeating_monthly" formatted="false">Monatlich</string>
     <string name="core_repeating_yearly" formatted="false">Jährlich</string>
     <string name="core_repeating_custom" formatted="false">Benutzerdefiniert…</string>
-    <string name="core_repeat_none" formatted="false">Wiederholt sich nicht</string>
-    <string name="core_repeat_every_day" formatted="false">Jeden Tag</string>
-    <string name="core_repeat_every_n_days" formatted="false">Alle %1$s Tage</string>
-    <string name="core_repeat_every_week" formatted="false">Jede Woche</string>
-    <string name="core_repeat_every_n_weeks" formatted="false">Alle %1$s Wochen</string>
-    <string name="core_repeat_every_month" formatted="false">Jeden Monat</string>
-    <string name="core_repeat_every_n_months" formatted="false">Alle %1$s Monate</string>
-    <string name="core_repeat_every_year" formatted="false">Jedes Jahr</string>
-    <string name="core_repeat_every_n_years" formatted="false">Alle %1$s Jahre</string>
-    <string name="core_repeat_on_weekdays" formatted="false">am %1$s</string>
-    <string name="core_repeat_on_day_of_month" formatted="false">am %1$s</string>
-    <string name="core_repeat_on_nth_weekday" formatted="false">am %1$s %2$s</string>
-    <string name="core_repeat_on_month_and_day" formatted="false">am %2$s %1$s</string>
-    <string name="core_repeat_ends_after" formatted="false">(%1$sx)</string>
-    <string name="core_repeat_ends_on" formatted="false">bis %1$s</string>
-    <string name="core_repeat_from_due_date" formatted="false">ab Fälligkeitsdatum</string>
     <string name="core_reminder_none" formatted="false">Keine Erinnerung</string>
-    <string name="core_reminder_set" formatted="false">Erinnerung gesetzt</string>
-    <string name="core_reminder_at_due_time" formatted="false">Zur Fälligkeit</string>
-    <string name="core_reminder_5_minutes_before" formatted="false">5 Minuten vorher</string>
-    <string name="core_reminder_15_minutes_before" formatted="false">15 Minuten vorher</string>
-    <string name="core_reminder_30_minutes_before" formatted="false">30 Minuten vorher</string>
-    <string name="core_reminder_hour_before" formatted="false">1 Stunde vorher</string>
-    <string name="core_reminder_2_hours_before" formatted="false">2 Stunden vorher</string>
-    <string name="core_reminder_day_before" formatted="false">1 Tag vorher</string>
-    <string name="core_reminder_week_before" formatted="false">1 Woche vorher</string>
-    <string name="core_filter_any" formatted="false">Alle</string>
     <string name="core_filter_button" formatted="false">Filtern</string>
-    <string name="core_filter_button_active" formatted="false">Gefiltert</string>
-    <string name="core_filter_completion" formatted="false">Erledigte Aufgaben</string>
-    <string name="core_filter_completion_recent" formatted="false">Kürzlich erledigt</string>
-    <string name="core_filter_completion_incomplete" formatted="false">Ausblenden</string>
-    <string name="core_filter_completion_completed" formatted="false">Nur erledigte</string>
-    <string name="core_filter_completion_all" formatted="false">Alle anzeigen</string>
     <string name="core_filter_priority" formatted="false">Priorität</string>
     <string name="core_filter_due" formatted="false">Fällig</string>
     <string name="core_filter_due_overdue" formatted="false">Überfällig</string>
@@ -160,19 +715,9 @@
     <string name="core_filter_due_this_week" formatted="false">Diese Woche</string>
     <string name="core_filter_due_this_month" formatted="false">Dieser Monat</string>
     <string name="core_filter_due_none" formatted="false">Kein Fälligkeitsdatum</string>
-    <string name="core_filter_assignee" formatted="false">Zugewiesen an</string>
     <string name="core_filter_assignee_me" formatted="false">Mich</string>
-    <string name="core_filter_assignee_someone_else" formatted="false">Jemand anderen</string>
-    <string name="core_filter_assignee_nobody" formatted="false">Niemanden</string>
     <string name="core_filter_repeat" formatted="false">Wiederholung</string>
-    <string name="core_filter_repeat_never" formatted="false">Wiederholt sich nicht</string>
-    <string name="core_filter_assigned_by" formatted="false">Zugewiesen von</string>
     <string name="core_filter_assigned_by_me" formatted="false">Mir</string>
-    <string name="core_filter_assigned_by_someone_else" formatted="false">Jemand anderem</string>
     <string name="core_filter_lists" formatted="false">Listen</string>
-    <string name="core_filter_lists_in_a_list" formatted="false">In einer Liste</string>
-    <string name="core_filter_lists_not_in_a_list" formatted="false">Ohne Liste</string>
-    <string name="core_filter_lists_public" formatted="false">In einer öffentlichen Liste</string>
     <string name="core_reminder_toast_complete" formatted="false">Erledigen</string>
-    <string name="core_reminder_toast_snooze" formatted="false">%1$s Min. schlummern</string>
 </resources>

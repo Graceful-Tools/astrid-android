@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hand-translated strings iOS does not have (AATD-65). scripts/port-ios-strings.py leaves these names alone. -->
+<resources>
+    <string name="auth_waiting_for_browser">Завершите вход в браузере.</string>
+    <string name="auth_open_browser_again">Открыть браузер снова</string>
+    <string name="navigation_open_sidebar">Открыть боковую панель</string>
+    <string name="tasks_reopen_a11y">Отметить %1$s как невыполненную</string>
+    <string name="tasks_unassigned_glyph">Н</string>
+    <string name="tasks_waiting_to_send">Ожидает отправки</string>
+    <string name="common_dismiss">Закрыть</string>
+    <string name="detail_more">Ещё</string>
+    <string name="board_move_to">Переместить в</string>
+    <string name="board_show_board">Показать доской</string>
+    <string name="board_show_list">Показать списком</string>
+    <string name="priority_a11y">Приоритет %1$s</string>
+    <string name="chat_placeholder">Сообщение</string>
+    <string name="quick_add_picker_a11y">Приоритет и исполнитель новой задачи</string>
+    <string name="picker_search_lists">Поиск списков…</string>
+    <string name="comments_delete_confirm">Вы уверены, что хотите удалить этот комментарий?</string>
+    <string name="comments_replying_to">Ответ для %1$s</string>
+    <string name="comments_system_on">%1$s, %2$s</string>
+    <string name="search_clear">Очистить поиск</string>
+    <string name="settings_outbox">Исходящие</string>
+    <string name="settings_outbox_summary">Синхронизировано: %1$d · в пути: %2$d · отброшено: %3$d</string>
+    <string name="settings_outbox_retry">Повторить отброшенные изменения</string>
+    <string name="settings_outbox_load">Загрузить статистику исходящих</string>
+    <string name="settings_outbox_unknown_error">неизвестная ошибка</string>
+    <string name="settings_core_label">Core</string>
+    <string name="settings_reminders_permission_denied">Разрешение на уведомления не предоставлено. Включите уведомления в настройках.</string>
+    <string name="settings_reminders_test_body">Это тестовое уведомление от %1$s</string>
+    <string name="profile_enter_name">Введите ваше имя</string>
+    <string name="account_edit_passkey">Переименовать passkey</string>
+    <string name="account_save_passkey_name">Сохранить имя</string>
+    <string name="account_change_photo">Изменить фото</string>
+    <string name="share_create_task">Создать задачу</string>
+    <string name="share_attachment">Вложение</string>
+    <string name="share_task_title">Название задачи</string>
+    <string name="share_description_optional">Описание (необязательно)</string>
+    <string name="share_default_list_note">Задача будет создана в вашем списке по умолчанию</string>
+    <string name="share_upload_note">Файл будет загружен в фоновом режиме</string>
+    <string name="reminders_task_due_soon">Скоро срок задачи</string>
+    <string name="notifications_exact_alarms">Будильники и напоминания</string>
+    <string name="notifications_exact_alarms_hint">Разрешите точные будильники, чтобы напоминания приходили вовремя</string>
+    <string name="agents_model_screen_title">ИИ-модель %1$s</string>
+    <string name="agents_model_none_subtitle">%1$s не будет отвечать автоматически</string>
+    <string name="agents_model_key_required">%1$s · Требуется API-ключ</string>
+    <string name="lists_ai_coding_agent">ИИ-агент для программирования</string>
+    <string name="lists_project_board">Доска проекта</string>
+    <string name="lists_create_board">Создать доску</string>
+    <string name="lists_create_board_footer">Создаёт проект с колонками статусов «Готово / В работе / Ожидание». «Входящие» и «Выполнено» — виртуальные.</string>
+    <string name="lists_disable_board_footer">Удаляет проект и его колонки статусов. Список будет отвязан, но сохранит свои задачи.</string>
+    <string name="lists_disable_board_title">Отключить доску?</string>
+    <string name="lists_disable_board_message">Проект и его колонки статусов будут удалены. Список сохранит задачи, но выполненные задачи останутся выполненными, а активные потеряют статус.</string>
+    <string name="lists_disable">Отключить</string>
+    <string name="lists_board_create_failed">Не удалось создать доску: %1$s</string>
+    <string name="lists_board_disable_failed">Не удалось отключить доску: %1$s</string>
+    <string name="lists_advanced">Дополнительно</string>
+    <string name="lists_recently_completed_footer">Определяет, какие выполненные задачи остаются видимыми в фильтре по умолчанию и в колонке «Выполнено» на доске.</string>
+    <string name="lists_recent_default_24h">Последние 24 часа (по умолчанию)</string>
+    <string name="lists_recent_last_7_days">Последние 7 дней</string>
+    <string name="lists_recent_last_14_days">Последние 14 дней</string>
+    <string name="lists_recent_last_28_days">Последние 28 дней</string>
+    <string name="lists_recent_last_30_days">Последние 30 дней</string>
+    <string name="lists_recent_since_sunday">С прошлого воскресенья (эта неделя)</string>
+    <string name="lists_recent_since_monday">С прошлого понедельника (эта неделя)</string>
+    <string name="lists_recent_since_first">С 1-го числа месяца</string>
+    <string name="lists_recent_since_date">С определённой даты…</string>
+    <string name="lists_pending">Ожидает</string>
+    <string name="members_role">Роль</string>
+    <string name="lists_created_failed_to_add">Список создан, но не удалось добавить: %1$s</string>
+    <string name="lists_member_options">Параметры участника</string>
+    <string name="lists_cancel_invitation">Отменить приглашение для %1$s</string>
+    <string name="lists_remove_invitee">Удалить %1$s</string>
+    <string name="lists_color_hue">Оттенок</string>
+    <string name="lists_color_saturation">Насыщенность</string>
+    <string name="lists_color_brightness">Яркость</string>
+    <string name="tasks_nest_under_previous">Сделать подзадачей задачи выше</string>
+    <string name="tasks_move_out_a_level">На уровень выше</string>
+    <string name="tasks_move_up">Переместить вверх</string>
+    <string name="tasks_move_down">Переместить вниз</string>
+    <string name="lists_copy_list">Копировать список</string>
+    <string name="review_loving_title">Нравится Astrid?</string>
+    <string name="review_loving_message">Вам нравится пользоваться Astrid? Нам будет приятно узнать ваше мнение!</string>
+    <string name="review_not_really">Не очень</string>
+    <string name="review_love_it">Да, очень!</string>
+    <string name="review_help_us_improve">Помогите нам стать лучше</string>
+    <string name="review_help_message">Нам жаль это слышать. Хотите сообщить о проблеме или отправить нам отзыв?</string>
+    <string name="review_maybe_later">Может быть, позже</string>
+    <string name="review_report_issue">Сообщить о проблеме</string>
+    <string name="review_send_feedback">Отправить отзыв</string>
+    <string name="repeating_mode_due_date">Повторять от срока</string>
+    <string name="repeating_mode_completion_date">Повторять от даты выполнения</string>
+    <string name="repeating_decrease">Уменьшить %1$s</string>
+    <string name="repeating_increase">Увеличить %1$s</string>
+    <string name="attachments_remove_a11y">Удалить %1$s</string>
+    <string name="timer_start">Запустить таймер</string>
+    <string name="timer_stop">Остановить таймер</string>
+    <string name="comments_offline">Офлайн</string>
+    <string name="chat_agent_thinking">%1$s думает…</string>
+    <string name="core_repeat_none" formatted="false">Не повторяется</string>
+    <string name="core_repeat_every_day" formatted="false">Каждый день</string>
+    <string name="core_repeat_every_n_days" formatted="false">Каждые %1$s дн.</string>
+    <string name="core_repeat_every_week" formatted="false">Каждую неделю</string>
+    <string name="core_repeat_every_n_weeks" formatted="false">Каждые %1$s нед.</string>
+    <string name="core_repeat_every_month" formatted="false">Каждый месяц</string>
+    <string name="core_repeat_every_n_months" formatted="false">Каждые %1$s мес.</string>
+    <string name="core_repeat_every_year" formatted="false">Каждый год</string>
+    <string name="core_repeat_every_n_years" formatted="false">Каждые %1$s г.</string>
+    <string name="core_repeat_on_weekdays" formatted="false">по дням: %1$s</string>
+    <string name="core_repeat_on_day_of_month" formatted="false">%1$s числа</string>
+    <string name="core_repeat_on_nth_weekday" formatted="false">в %1$s %2$s</string>
+    <string name="core_repeat_on_month_and_day" formatted="false">%1$s %2$s</string>
+    <string name="core_repeat_ends_after" formatted="false">(%1$s раз)</string>
+    <string name="core_repeat_ends_on" formatted="false">до %1$s</string>
+    <string name="core_repeat_from_due_date" formatted="false">от срока</string>
+    <string name="core_reminder_set" formatted="false">Напоминание установлено</string>
+    <string name="core_reminder_at_due_time" formatted="false">В момент наступления срока</string>
+    <string name="core_reminder_5_minutes_before" formatted="false">За 5 минут</string>
+    <string name="core_reminder_15_minutes_before" formatted="false">За 15 минут</string>
+    <string name="core_reminder_30_minutes_before" formatted="false">За 30 минут</string>
+    <string name="core_reminder_hour_before" formatted="false">За час</string>
+    <string name="core_reminder_2_hours_before" formatted="false">За 2 часа</string>
+    <string name="core_reminder_day_before" formatted="false">За день</string>
+    <string name="core_reminder_week_before" formatted="false">За неделю</string>
+    <string name="core_filter_any" formatted="false">Любые</string>
+    <string name="core_filter_button_active" formatted="false">Отфильтровано</string>
+    <string name="core_filter_completion" formatted="false">Выполненные задачи</string>
+    <string name="core_filter_completion_recent" formatted="false">Недавно выполненные</string>
+    <string name="core_filter_completion_incomplete" formatted="false">Скрыть их</string>
+    <string name="core_filter_completion_completed" formatted="false">Только выполненные</string>
+    <string name="core_filter_completion_all" formatted="false">Показать все</string>
+    <string name="core_filter_assignee" formatted="false">Исполнитель</string>
+    <string name="core_filter_assignee_someone_else" formatted="false">Кто-то другой</string>
+    <string name="core_filter_assignee_nobody" formatted="false">Никто</string>
+    <string name="core_filter_repeat_never" formatted="false">Не повторяется</string>
+    <string name="core_filter_assigned_by" formatted="false">Кто назначил</string>
+    <string name="core_filter_assigned_by_someone_else" formatted="false">Кто-то другой</string>
+    <string name="core_filter_lists_in_a_list" formatted="false">В списке</string>
+    <string name="core_filter_lists_not_in_a_list" formatted="false">Вне списков</string>
+    <string name="core_filter_lists_public" formatted="false">В публичном списке</string>
+    <string name="core_reminder_toast_snooze" formatted="false">Отложить на %1$s мин</string>
+    <string name="tasks_complete_a11y">Завершить %1$s</string>
+</resources>

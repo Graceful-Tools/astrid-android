@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hand-translated strings iOS does not have (AATD-65). scripts/port-ios-strings.py leaves these names alone. -->
+<resources>
+    <string name="auth_waiting_for_browser">请在浏览器中完成登录。</string>
+    <string name="auth_open_browser_again">再次打开浏览器</string>
+    <string name="navigation_open_sidebar">打开侧边栏</string>
+    <string name="tasks_reopen_a11y">将%1$s标记为未完成</string>
+    <string name="tasks_unassigned_glyph">未</string>
+    <string name="tasks_waiting_to_send">等待发送</string>
+    <string name="common_dismiss">关闭</string>
+    <string name="detail_more">更多</string>
+    <string name="board_move_to">移动到</string>
+    <string name="board_show_board">以看板显示</string>
+    <string name="board_show_list">以清单显示</string>
+    <string name="priority_a11y">优先级 %1$s</string>
+    <string name="chat_placeholder">消息</string>
+    <string name="quick_add_picker_a11y">新任务的优先级和负责人</string>
+    <string name="picker_search_lists">搜索清单…</string>
+    <string name="comments_delete_confirm">确定要删除此评论吗？</string>
+    <string name="comments_replying_to">回复 %1$s</string>
+    <string name="comments_system_on">%1$s %2$s</string>
+    <string name="search_clear">清除搜索</string>
+    <string name="settings_outbox">发件箱</string>
+    <string name="settings_outbox_summary">已同步 %1$d · 发送中 %2$d · 已丢弃 %3$d</string>
+    <string name="settings_outbox_retry">重试已丢弃的更改</string>
+    <string name="settings_outbox_load">加载发件箱统计</string>
+    <string name="settings_outbox_unknown_error">未知错误</string>
+    <string name="settings_core_label">Core</string>
+    <string name="settings_reminders_permission_denied">未授予通知权限。请在设置中开启通知。</string>
+    <string name="settings_reminders_test_body">这是来自 %1$s 的测试通知</string>
+    <string name="profile_enter_name">输入您的姓名</string>
+    <string name="account_edit_passkey">重命名通行密钥</string>
+    <string name="account_save_passkey_name">保存名称</string>
+    <string name="account_change_photo">更换照片</string>
+    <string name="share_create_task">创建任务</string>
+    <string name="share_attachment">附件</string>
+    <string name="share_task_title">任务标题</string>
+    <string name="share_description_optional">描述（可选）</string>
+    <string name="share_default_list_note">任务将创建在您的默认清单中</string>
+    <string name="share_upload_note">文件将在后台上传</string>
+    <string name="reminders_task_due_soon">任务即将到期</string>
+    <string name="notifications_exact_alarms">闹钟和提醒</string>
+    <string name="notifications_exact_alarms_hint">允许精确闹钟，让提醒准时送达</string>
+    <string name="agents_model_screen_title">%1$s 的 AI 模型</string>
+    <string name="agents_model_none_subtitle">%1$s 不会自动回复</string>
+    <string name="agents_model_key_required">%1$s · 需要 API 密钥</string>
+    <string name="lists_ai_coding_agent">AI 编程代理</string>
+    <string name="lists_project_board">项目看板</string>
+    <string name="lists_create_board">创建看板</string>
+    <string name="lists_create_board_footer">创建一个项目并添加“就绪 / 进行中 / 等待”状态列。收件箱和已完成是虚拟列。</string>
+    <string name="lists_disable_board_footer">移除项目及其状态列。此清单将解除关联，但保留其任务。</string>
+    <string name="lists_disable_board_title">停用看板？</string>
+    <string name="lists_disable_board_message">这将移除项目及其状态列。清单会保留其任务，但已完成的任务仍保持完成，进行中的任务将失去状态。</string>
+    <string name="lists_disable">停用</string>
+    <string name="lists_board_create_failed">无法创建看板：%1$s</string>
+    <string name="lists_board_disable_failed">无法停用看板：%1$s</string>
+    <string name="lists_advanced">高级</string>
+    <string name="lists_recently_completed_footer">控制哪些已完成任务在默认筛选器和看板的“已完成”列中保持可见。</string>
+    <string name="lists_recent_default_24h">过去 24 小时（默认）</string>
+    <string name="lists_recent_last_7_days">过去 7 天</string>
+    <string name="lists_recent_last_14_days">过去 14 天</string>
+    <string name="lists_recent_last_28_days">过去 28 天</string>
+    <string name="lists_recent_last_30_days">过去 30 天</string>
+    <string name="lists_recent_since_sunday">自上周日起（本周）</string>
+    <string name="lists_recent_since_monday">自上周一起（本周）</string>
+    <string name="lists_recent_since_first">自本月 1 日起</string>
+    <string name="lists_recent_since_date">自指定日期起…</string>
+    <string name="lists_pending">待处理</string>
+    <string name="members_role">角色</string>
+    <string name="lists_created_failed_to_add">清单已创建，但无法添加：%1$s</string>
+    <string name="lists_member_options">成员选项</string>
+    <string name="lists_cancel_invitation">取消对 %1$s 的邀请</string>
+    <string name="lists_remove_invitee">移除 %1$s</string>
+    <string name="lists_color_hue">色相</string>
+    <string name="lists_color_saturation">饱和度</string>
+    <string name="lists_color_brightness">亮度</string>
+    <string name="tasks_nest_under_previous">设为上方任务的子任务</string>
+    <string name="tasks_move_out_a_level">上移一级</string>
+    <string name="tasks_move_up">上移</string>
+    <string name="tasks_move_down">下移</string>
+    <string name="lists_copy_list">复制清单</string>
+    <string name="review_loving_title">喜欢 Astrid 吗？</string>
+    <string name="review_loving_message">您喜欢使用 Astrid 吗？我们很想听听您的意见！</string>
+    <string name="review_not_really">不太喜欢</string>
+    <string name="review_love_it">是的，我很喜欢！</string>
+    <string name="review_help_us_improve">帮助我们改进</string>
+    <string name="review_help_message">很抱歉听到这个消息。您想报告问题或向我们发送反馈吗？</string>
+    <string name="review_maybe_later">以后再说</string>
+    <string name="review_report_issue">报告问题</string>
+    <string name="review_send_feedback">发送反馈</string>
+    <string name="repeating_mode_due_date">从截止日期开始重复</string>
+    <string name="repeating_mode_completion_date">从完成日期开始重复</string>
+    <string name="repeating_decrease">减少%1$s</string>
+    <string name="repeating_increase">增加%1$s</string>
+    <string name="attachments_remove_a11y">移除 %1$s</string>
+    <string name="timer_start">开始计时</string>
+    <string name="timer_stop">停止计时</string>
+    <string name="comments_offline">离线</string>
+    <string name="chat_agent_thinking">%1$s 正在思考…</string>
+    <string name="core_repeat_none" formatted="false">不重复</string>
+    <string name="core_repeat_every_day" formatted="false">每天</string>
+    <string name="core_repeat_every_n_days" formatted="false">每 %1$s 天</string>
+    <string name="core_repeat_every_week" formatted="false">每周</string>
+    <string name="core_repeat_every_n_weeks" formatted="false">每 %1$s 周</string>
+    <string name="core_repeat_every_month" formatted="false">每月</string>
+    <string name="core_repeat_every_n_months" formatted="false">每 %1$s 个月</string>
+    <string name="core_repeat_every_year" formatted="false">每年</string>
+    <string name="core_repeat_every_n_years" formatted="false">每 %1$s 年</string>
+    <string name="core_repeat_on_weekdays" formatted="false">在%1$s</string>
+    <string name="core_repeat_on_day_of_month" formatted="false">在%1$s日</string>
+    <string name="core_repeat_on_nth_weekday" formatted="false">在%1$s%2$s</string>
+    <string name="core_repeat_on_month_and_day" formatted="false">在%1$s%2$s</string>
+    <string name="core_repeat_ends_after" formatted="false">（%1$s 次）</string>
+    <string name="core_repeat_ends_on" formatted="false">直到 %1$s</string>
+    <string name="core_repeat_from_due_date" formatted="false">从截止日期起</string>
+    <string name="core_reminder_set" formatted="false">已设置提醒</string>
+    <string name="core_reminder_at_due_time" formatted="false">到期时</string>
+    <string name="core_reminder_5_minutes_before" formatted="false">提前 5 分钟</string>
+    <string name="core_reminder_15_minutes_before" formatted="false">提前 15 分钟</string>
+    <string name="core_reminder_30_minutes_before" formatted="false">提前 30 分钟</string>
+    <string name="core_reminder_hour_before" formatted="false">提前 1 小时</string>
+    <string name="core_reminder_2_hours_before" formatted="false">提前 2 小时</string>
+    <string name="core_reminder_day_before" formatted="false">提前 1 天</string>
+    <string name="core_reminder_week_before" formatted="false">提前 1 周</string>
+    <string name="core_filter_any" formatted="false">任意</string>
+    <string name="core_filter_button_active" formatted="false">已筛选</string>
+    <string name="core_filter_completion" formatted="false">已完成的任务</string>
+    <string name="core_filter_completion_recent" formatted="false">最近完成</string>
+    <string name="core_filter_completion_incomplete" formatted="false">隐藏</string>
+    <string name="core_filter_completion_completed" formatted="false">仅已完成</string>
+    <string name="core_filter_completion_all" formatted="false">全部显示</string>
+    <string name="core_filter_assignee" formatted="false">分配给</string>
+    <string name="core_filter_assignee_someone_else" formatted="false">其他人</string>
+    <string name="core_filter_assignee_nobody" formatted="false">无人</string>
+    <string name="core_filter_repeat_never" formatted="false">不重复</string>
+    <string name="core_filter_assigned_by" formatted="false">分配人</string>
+    <string name="core_filter_assigned_by_someone_else" formatted="false">其他人</string>
+    <string name="core_filter_lists_in_a_list" formatted="false">在清单中</string>
+    <string name="core_filter_lists_not_in_a_list" formatted="false">不在清单中</string>
+    <string name="core_filter_lists_public" formatted="false">在公开清单中</string>
+    <string name="core_reminder_toast_snooze" formatted="false">延后 %1$s 分钟</string>
+    <string name="tasks_complete_a11y">完成 %1$s</string>
+</resources>

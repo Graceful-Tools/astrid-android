@@ -2,6 +2,7 @@ package com.gracefultools.astrid
 
 import androidx.test.core.app.ApplicationProvider
 import com.gracefultools.astrid.ui.common.CoreLabels
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,7 +30,21 @@ class LocalisationTest {
 
     @Test
     @Config(qualifiers = "ko")
-    fun `AATD-23 an untranslated string falls back to English rather than going blank`() {
-        assertEquals("Open the sidebar", context.getString(R.string.navigation_open_sidebar))
+    fun `AATD-65 strings iOS lacks are translated too, not left in English`() {
+        assertEquals("사이드바 열기", context.getString(R.string.navigation_open_sidebar))
+    }
+
+    @Test
+    fun `AATD-65 every language has every string, so nothing falls back to English`() {
+        val res = File("src/main/res")
+        fun names(dir: File) = dir.listFiles { f -> f.name.endsWith(".xml") }.orEmpty()
+            .flatMap { f -> Regex("""<string name="([^"]+)"(?![^>]*translatable="false")""").findAll(f.readText()).map { it.groupValues[1] } }
+            .toSet()
+        val english = names(File(res, "values")) - "app_name"
+        val locales = res.listFiles { f -> f.name.startsWith("values-") && File(f, "strings.xml").exists() }.orEmpty()
+        assertEquals(11, locales.size)
+        for (dir in locales) {
+            assertEquals("${dir.name} is missing", emptySet<String>(), english - names(dir))
+        }
     }
 }

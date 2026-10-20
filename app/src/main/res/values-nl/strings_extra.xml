@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hand-translated strings iOS does not have (AATD-65). scripts/port-ios-strings.py leaves these names alone. -->
+<resources>
+    <string name="auth_waiting_for_browser">Rond het inloggen af in je browser.</string>
+    <string name="auth_open_browser_again">Browser opnieuw openen</string>
+    <string name="navigation_open_sidebar">Zijbalk openen</string>
+    <string name="tasks_reopen_a11y">%1$s markeren als niet klaar</string>
+    <string name="tasks_unassigned_glyph">N</string>
+    <string name="tasks_waiting_to_send">Wacht op verzenden</string>
+    <string name="common_dismiss">Sluiten</string>
+    <string name="detail_more">Meer</string>
+    <string name="board_move_to">Verplaatsen naar</string>
+    <string name="board_show_board">Als bord weergeven</string>
+    <string name="board_show_list">Als lijst weergeven</string>
+    <string name="priority_a11y">Prioriteit %1$s</string>
+    <string name="chat_placeholder">Bericht</string>
+    <string name="quick_add_picker_a11y">Prioriteit en toegewezen persoon voor de nieuwe taak</string>
+    <string name="picker_search_lists">Lijsten zoeken…</string>
+    <string name="comments_delete_confirm">Weet je zeker dat je deze reactie wilt verwijderen?</string>
+    <string name="comments_replying_to">Antwoord aan %1$s</string>
+    <string name="comments_system_on">Op %1$s, %2$s</string>
+    <string name="search_clear">Zoekopdracht wissen</string>
+    <string name="settings_outbox">Postvak UIT</string>
+    <string name="settings_outbox_summary">%1$d gesynchroniseerd · %2$d onderweg · %3$d verworpen</string>
+    <string name="settings_outbox_retry">Verworpen wijzigingen opnieuw proberen</string>
+    <string name="settings_outbox_load">Statistieken Postvak UIT laden</string>
+    <string name="settings_outbox_unknown_error">onbekende fout</string>
+    <string name="settings_core_label">Core</string>
+    <string name="settings_reminders_permission_denied">Geen toestemming voor meldingen. Schakel meldingen in via Instellingen.</string>
+    <string name="settings_reminders_test_body">Dit is een testmelding van %1$s</string>
+    <string name="profile_enter_name">Voer je naam in</string>
+    <string name="account_edit_passkey">Passkey hernoemen</string>
+    <string name="account_save_passkey_name">Naam opslaan</string>
+    <string name="account_change_photo">Foto wijzigen</string>
+    <string name="share_create_task">Taak maken</string>
+    <string name="share_attachment">Bijlage</string>
+    <string name="share_task_title">Taaktitel</string>
+    <string name="share_description_optional">Beschrijving (optioneel)</string>
+    <string name="share_default_list_note">De taak wordt gemaakt in je standaardlijst</string>
+    <string name="share_upload_note">Het bestand wordt op de achtergrond geüpload</string>
+    <string name="reminders_task_due_soon">Taak verloopt binnenkort</string>
+    <string name="notifications_exact_alarms">Wekkers &amp; herinneringen</string>
+    <string name="notifications_exact_alarms_hint">Sta exacte wekkers toe zodat herinneringen op tijd komen</string>
+    <string name="agents_model_screen_title">AI-model van %1$s</string>
+    <string name="agents_model_none_subtitle">%1$s reageert niet automatisch</string>
+    <string name="agents_model_key_required">%1$s · API-sleutel vereist</string>
+    <string name="lists_ai_coding_agent">AI-programmeeragent</string>
+    <string name="lists_project_board">Projectbord</string>
+    <string name="lists_create_board">Bord maken</string>
+    <string name="lists_create_board_footer">Maakt een project met de statuskolommen Gereed / Bezig / Wachten. Inbox en Klaar zijn virtueel.</string>
+    <string name="lists_disable_board_footer">Verwijdert het project en zijn statuskolommen. De lijst wordt losgekoppeld, maar houdt haar taken.</string>
+    <string name="lists_disable_board_title">Bord uitschakelen?</string>
+    <string name="lists_disable_board_message">Hiermee worden het project en zijn statuskolommen verwijderd. De lijst houdt haar taken, maar voltooide taken blijven voltooid en actieve taken verliezen hun status.</string>
+    <string name="lists_disable">Uitschakelen</string>
+    <string name="lists_board_create_failed">Kan bord niet maken: %1$s</string>
+    <string name="lists_board_disable_failed">Kan bord niet uitschakelen: %1$s</string>
+    <string name="lists_advanced">Geavanceerd</string>
+    <string name="lists_recently_completed_footer">Bepaalt welke voltooide taken zichtbaar blijven in het standaardfilter en in de kolom Klaar van het bord.</string>
+    <string name="lists_recent_default_24h">Laatste 24 uur (standaard)</string>
+    <string name="lists_recent_last_7_days">Laatste 7 dagen</string>
+    <string name="lists_recent_last_14_days">Laatste 14 dagen</string>
+    <string name="lists_recent_last_28_days">Laatste 28 dagen</string>
+    <string name="lists_recent_last_30_days">Laatste 30 dagen</string>
+    <string name="lists_recent_since_sunday">Sinds afgelopen zondag (deze week)</string>
+    <string name="lists_recent_since_monday">Sinds afgelopen maandag (deze week)</string>
+    <string name="lists_recent_since_first">Sinds de 1e van de maand</string>
+    <string name="lists_recent_since_date">Sinds een bepaalde datum…</string>
+    <string name="lists_pending">In afwachting</string>
+    <string name="members_role">Rol</string>
+    <string name="lists_created_failed_to_add">Lijst gemaakt, maar toevoegen mislukt: %1$s</string>
+    <string name="lists_member_options">Lidopties</string>
+    <string name="lists_cancel_invitation">Uitnodiging voor %1$s intrekken</string>
+    <string name="lists_remove_invitee">%1$s verwijderen</string>
+    <string name="lists_color_hue">Tint</string>
+    <string name="lists_color_saturation">Verzadiging</string>
+    <string name="lists_color_brightness">Helderheid</string>
+    <string name="tasks_nest_under_previous">Subtaak maken van de taak erboven</string>
+    <string name="tasks_move_out_a_level">Een niveau omhoog</string>
+    <string name="tasks_move_up">Omhoog</string>
+    <string name="tasks_move_down">Omlaag</string>
+    <string name="lists_copy_list">Lijst kopiëren</string>
+    <string name="review_loving_title">Vind je Astrid fijn?</string>
+    <string name="review_loving_message">Gebruik je Astrid graag? We horen graag van je!</string>
+    <string name="review_not_really">Niet echt</string>
+    <string name="review_love_it">Ja, geweldig!</string>
+    <string name="review_help_us_improve">Help ons verbeteren</string>
+    <string name="review_help_message">Wat jammer om te horen. Wil je een probleem melden of ons feedback sturen?</string>
+    <string name="review_maybe_later">Misschien later</string>
+    <string name="review_report_issue">Probleem melden</string>
+    <string name="review_send_feedback">Feedback sturen</string>
+    <string name="repeating_mode_due_date">Herhalen vanaf vervaldatum</string>
+    <string name="repeating_mode_completion_date">Herhalen vanaf voltooiingsdatum</string>
+    <string name="repeating_decrease">%1$s verlagen</string>
+    <string name="repeating_increase">%1$s verhogen</string>
+    <string name="attachments_remove_a11y">%1$s verwijderen</string>
+    <string name="timer_start">Timer starten</string>
+    <string name="timer_stop">Timer stoppen</string>
+    <string name="comments_offline">Offline</string>
+    <string name="chat_agent_thinking">%1$s denkt na…</string>
+    <string name="core_repeat_none" formatted="false">Herhaalt niet</string>
+    <string name="core_repeat_every_day" formatted="false">Elke dag</string>
+    <string name="core_repeat_every_n_days" formatted="false">Elke %1$s dagen</string>
+    <string name="core_repeat_every_week" formatted="false">Elke week</string>
+    <string name="core_repeat_every_n_weeks" formatted="false">Elke %1$s weken</string>
+    <string name="core_repeat_every_month" formatted="false">Elke maand</string>
+    <string name="core_repeat_every_n_months" formatted="false">Elke %1$s maanden</string>
+    <string name="core_repeat_every_year" formatted="false">Elk jaar</string>
+    <string name="core_repeat_every_n_years" formatted="false">Elke %1$s jaar</string>
+    <string name="core_repeat_on_weekdays" formatted="false">op %1$s</string>
+    <string name="core_repeat_on_day_of_month" formatted="false">op de %1$s</string>
+    <string name="core_repeat_on_nth_weekday" formatted="false">op de %1$s %2$s</string>
+    <string name="core_repeat_on_month_and_day" formatted="false">op %1$s %2$s</string>
+    <string name="core_repeat_ends_after" formatted="false">(%1$s×)</string>
+    <string name="core_repeat_ends_on" formatted="false">tot %1$s</string>
+    <string name="core_repeat_from_due_date" formatted="false">vanaf vervaldatum</string>
+    <string name="core_reminder_set" formatted="false">Herinnering ingesteld</string>
+    <string name="core_reminder_at_due_time" formatted="false">Op het moment dat hij vervalt</string>
+    <string name="core_reminder_5_minutes_before" formatted="false">5 minuten van tevoren</string>
+    <string name="core_reminder_15_minutes_before" formatted="false">15 minuten van tevoren</string>
+    <string name="core_reminder_30_minutes_before" formatted="false">30 minuten van tevoren</string>
+    <string name="core_reminder_hour_before" formatted="false">Een uur van tevoren</string>
+    <string name="core_reminder_2_hours_before" formatted="false">2 uur van tevoren</string>
+    <string name="core_reminder_day_before" formatted="false">Een dag van tevoren</string>
+    <string name="core_reminder_week_before" formatted="false">Een week van tevoren</string>
+    <string name="core_filter_any" formatted="false">Alle</string>
+    <string name="core_filter_button_active" formatted="false">Gefilterd</string>
+    <string name="core_filter_completion" formatted="false">Voltooide taken</string>
+    <string name="core_filter_completion_recent" formatted="false">Recent voltooid</string>
+    <string name="core_filter_completion_incomplete" formatted="false">Verbergen</string>
+    <string name="core_filter_completion_completed" formatted="false">Alleen voltooide</string>
+    <string name="core_filter_completion_all" formatted="false">Alle tonen</string>
+    <string name="core_filter_assignee" formatted="false">Toegewezen aan</string>
+    <string name="core_filter_assignee_someone_else" formatted="false">Iemand anders</string>
+    <string name="core_filter_assignee_nobody" formatted="false">Niemand</string>
+    <string name="core_filter_repeat_never" formatted="false">Herhaalt niet</string>
+    <string name="core_filter_assigned_by" formatted="false">Toegewezen door</string>
+    <string name="core_filter_assigned_by_someone_else" formatted="false">Iemand anders</string>
+    <string name="core_filter_lists_in_a_list" formatted="false">In een lijst</string>
+    <string name="core_filter_lists_not_in_a_list" formatted="false">Niet in een lijst</string>
+    <string name="core_filter_lists_public" formatted="false">In een openbare lijst</string>
+    <string name="core_reminder_toast_snooze" formatted="false">%1$s min snoozen</string>
+    <string name="tasks_complete_a11y">%1$s voltooien</string>
+</resources>

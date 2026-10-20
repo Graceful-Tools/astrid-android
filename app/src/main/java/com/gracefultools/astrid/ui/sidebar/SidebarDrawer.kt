@@ -164,7 +164,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.publicSection(
     itemsIndexed(shown, key = { _, it -> "$key-" + it.id }) { index, list ->
         Group(if (!more && index == shown.lastIndex) Position.Last else Position.Middle) {
             val summary = list.asListSummary()
-            Entry(summary, state.selectedId == list.id, list.taskCount, list.imageUrl, state.showListImages, { onSelect(list) }, null)
+            Entry(summary, state.selectedId == list.id, list.taskCount, state.images[list.id], state.showListImages, { onSelect(list) }, null)
         }
     }
     if (more) item(key = "$key-more") {
@@ -329,7 +329,9 @@ private fun Entry(list: ListSummary, selected: Boolean, count: Int?, image: Stri
 @Composable
 fun ListPicture(list: ListSummary, image: String?, size: androidx.compose.ui.unit.Dp, modifier: Modifier = Modifier) {
     val tint = parseColor(list.color)
-    val source = image ?: defaultListImage(list.id)
+    // A secure file the core fetched with the session is a path on this device: hand Coil a File,
+    // which it reads as one (a bare path string is not reliably a file to it).
+    val source: Any = image?.let { if (it.startsWith("/")) java.io.File(it) else it } ?: defaultListImage(list.id)
     Box(modifier.size(size).clip(RoundedCornerShape(size * 0.2f)).background(tint)) {
         AsyncImage(model = source, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.size(size))
     }

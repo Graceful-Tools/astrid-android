@@ -13,6 +13,10 @@ import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.test.platform.app.InstrumentationRegistry
+import com.gracefultools.astrid.core.CoreJson
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Rule
@@ -66,6 +70,29 @@ class LiveAccountTest {
         }.isSuccess
     }
 
+    /** iOS draws the Bugs list's own picture and the public sections; so must the sidebar (AATD-39/46). */
+    @Test
+    fun the_bugs_list_picture_and_the_public_lists_come_from_the_server() {
+        val core = (androidx.test.core.app.ApplicationProvider.getApplicationContext<android.app.Application>() as AstridApplication).graph.core
+        fun ask(json: String) = kotlinx.coroutines.runBlocking {
+            runCatching { core.run(CoreJson.parseToJsonElement(json).jsonObject) }
+        }
+        val lists = ask("""{"kind":"lists"}""").getOrThrow().jsonArray
+        val bugs = lists.first { it.jsonObject["name"]?.jsonPrimitive?.content.orEmpty().startsWith("Astrid Bugs") }
+        val id = bugs.jsonObject["id"]!!.jsonPrimitive.content
+        val image = ask("""{"kind":"listImage","listId":"$id"}""")
+        val source = image.getOrThrow().jsonObject["source"]?.jsonPrimitive?.content
+        org.junit.Assert.assertNotNull("the Bugs list has a picture", source)
+        org.junit.Assert.assertTrue("$source is on this device", java.io.File(source!!).length() > 0)
+        val public = ask("""{"kind":"publicLists"}""")
+        org.junit.Assert.assertTrue("public lists: $public", public.getOrThrow().jsonArray.isNotEmpty())
+        // A public list is not in the store, but its picture comes the same way, by its address.
+        val pictured = public.getOrThrow().jsonArray.first { it.jsonObject["imageUrl"]?.jsonPrimitive?.content != null }.jsonObject
+        val publicImage = ask("""{"kind":"listImage","listId":"${pictured["id"]!!.jsonPrimitive.content}","imageUrl":"${pictured["imageUrl"]!!.jsonPrimitive.content}"}""")
+        val publicSource = publicImage.getOrThrow().jsonObject["source"]?.jsonPrimitive?.content
+        org.junit.Assert.assertTrue("$publicImage is on this device", java.io.File(publicSource.orEmpty()).length() > 0)
+    }
+
     @Test
     fun the_test_account_signs_in_and_reads_its_fixtures_from_the_server() {
         waitFor("My Tasks")
@@ -103,6 +130,8 @@ class LiveAccountTest {
         shot("tour-01-my-tasks")
         compose.onNodeWithContentDescription("Open the sidebar").performClick()
         waitFor("UI Test List")
+        // Pictures and the public sections load last, from the network: shoot once they are in.
+        waitFor("PUBLIC SHARED LISTS")  // the caption is drawn in capitals, as iOS's
         shot("tour-02-sidebar")
         compose.onAllNodes(sidebarRow and hasText("UI Test List")).onFirst().performClick()
         compose.waitForIdle(); Thread.sleep(1500)

@@ -7,6 +7,7 @@ import com.gracefultools.astrid.core.CoreJson
 import com.gracefultools.astrid.core.command
 import com.gracefultools.astrid.model.ListSummary
 import com.gracefultools.astrid.ui.common.CoreViewModel
+import com.gracefultools.astrid.ui.publiclists.publicListPictures
 import com.gracefultools.astrid.ui.publiclists.publicLists
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -121,7 +122,10 @@ class SidebarViewModel(
         }.mapNotNull { (id, source) -> source?.let { id to it } }.toMap()
         _state.update { it.copy(images = images) }
         // Online-only: offline, the public sections stay as they were (iOS shows none).
-        runCatching { core.publicLists() }.getOrNull()?.let { lists -> _state.update { it.copy(publicLists = lists) } }
+        val public = runCatching { core.publicLists() }.getOrNull() ?: return
+        _state.update { it.copy(publicLists = public) }
+        val publicImages = core.publicListPictures(public)
+        _state.update { it.copy(images = it.images + publicImages) }
     }
 
     /** iOS's long press on a list row: favourite or unfavourite it. */

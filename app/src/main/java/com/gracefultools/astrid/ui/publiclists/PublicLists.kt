@@ -82,8 +82,22 @@ suspend fun Core.publicLists(): List<PublicListSummary> {
     return CoreJson.decodeFromJsonElement(ListSerializer(PublicListSummary.serializer()), raw)
 }
 
+/**
+ * Where each public list's picture can be drawn from, by id. A public list is not in the store, but
+ * its picture is a secure file all the same: the core fetches it by address with the session
+ * (core `listImage` with `imageUrl`, AATD-39). One that will not come is simply left out.
+ */
+suspend fun Core.publicListPictures(lists: List<PublicListSummary>): Map<String, String> = lists.mapNotNull { list ->
+    val address = list.imageUrl ?: return@mapNotNull null
+    runCatching {
+        ((run(command("listImage", "listId" to list.id, "imageUrl" to address)) as? JsonObject)?.get("source") as? JsonPrimitive)?.content
+    }.getOrNull()?.let { list.id to it }
+}.toMap()
+
 data class PublicListsState(
     val lists: List<PublicListSummary> = emptyList(),
+    /** Each list's picture, by id (`publicListPictures`). */
+    val images: Map<String, String> = emptyMap(),
     val loading: Boolean = false,
     val refreshing: Boolean = false,
     /** The lists being copied now: their row says "Copying...". */
@@ -116,7 +130,11 @@ class PublicListsViewModel(
     private suspend fun fetch() {
         val lists = try { core.publicLists() } catch (_: CoreFailure) { null }
         // iOS falls back to what it holds; a failed fetch keeps what was showing.
-        if (lists != null) _state.update { it.copy(lists = lists) }
+        if (lists != null) {
+            _state.update { it.copy(lists = lists) }
+            val images = core.publicListPictures(lists)
+            _state.update { it.copy(images = it.images + images) }
+        }
     }
 
     /** Copy a list with its tasks into this account (core `copyList`); the sidebar hears of it. */

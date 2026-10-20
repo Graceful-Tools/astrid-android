@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hand-translated strings iOS does not have (AATD-65). scripts/port-ios-strings.py leaves these names alone. -->
+<resources>
+    <string name="auth_waiting_for_browser">ブラウザでサインインを完了してください。</string>
+    <string name="auth_open_browser_again">ブラウザをもう一度開く</string>
+    <string name="navigation_open_sidebar">サイドバーを開く</string>
+    <string name="tasks_reopen_a11y">%1$s を未完了にする</string>
+    <string name="tasks_unassigned_glyph">未</string>
+    <string name="tasks_waiting_to_send">送信待ち</string>
+    <string name="common_dismiss">閉じる</string>
+    <string name="detail_more">その他</string>
+    <string name="board_move_to">移動先</string>
+    <string name="board_show_board">ボードで表示</string>
+    <string name="board_show_list">リストで表示</string>
+    <string name="priority_a11y">優先度 %1$s</string>
+    <string name="chat_placeholder">メッセージ</string>
+    <string name="quick_add_picker_a11y">新しいタスクの優先度と担当者</string>
+    <string name="picker_search_lists">リストを検索…</string>
+    <string name="comments_delete_confirm">このコメントを削除してもよろしいですか？</string>
+    <string name="comments_replying_to">%1$s に返信中</string>
+    <string name="comments_system_on">%1$s %2$s</string>
+    <string name="search_clear">検索をクリア</string>
+    <string name="settings_outbox">送信トレイ</string>
+    <string name="settings_outbox_summary">同期済み %1$d · 送信中 %2$d · 破棄 %3$d</string>
+    <string name="settings_outbox_retry">破棄された変更を再試行</string>
+    <string name="settings_outbox_load">送信トレイの統計を読み込む</string>
+    <string name="settings_outbox_unknown_error">不明なエラー</string>
+    <string name="settings_core_label">Core</string>
+    <string name="settings_reminders_permission_denied">通知が許可されていません。設定で通知を有効にしてください。</string>
+    <string name="settings_reminders_test_body">これは %1$s からのテスト通知です</string>
+    <string name="profile_enter_name">名前を入力</string>
+    <string name="account_edit_passkey">パスキー名を変更</string>
+    <string name="account_save_passkey_name">名前を保存</string>
+    <string name="account_change_photo">写真を変更</string>
+    <string name="share_create_task">タスクを作成</string>
+    <string name="share_attachment">添付ファイル</string>
+    <string name="share_task_title">タスク名</string>
+    <string name="share_description_optional">説明（任意）</string>
+    <string name="share_default_list_note">タスクはデフォルトのリストに作成されます</string>
+    <string name="share_upload_note">ファイルはバックグラウンドでアップロードされます</string>
+    <string name="reminders_task_due_soon">まもなく期限のタスク</string>
+    <string name="notifications_exact_alarms">アラームとリマインダー</string>
+    <string name="notifications_exact_alarms_hint">リマインダーが時間どおりに届くよう、正確なアラームを許可してください</string>
+    <string name="agents_model_screen_title">%1$s の AI モデル</string>
+    <string name="agents_model_none_subtitle">%1$s は自動応答しません</string>
+    <string name="agents_model_key_required">%1$s · API キーが必要です</string>
+    <string name="lists_ai_coding_agent">AI コーディングエージェント</string>
+    <string name="lists_project_board">プロジェクトボード</string>
+    <string name="lists_create_board">ボードを作成</string>
+    <string name="lists_create_board_footer">プロジェクトを作成し、「準備完了 / 進行中 / 待機」のステータス列を追加します。受信箱と完了は仮想の列です。</string>
+    <string name="lists_disable_board_footer">プロジェクトとそのステータス列を削除します。リストは切り離されますが、タスクは残ります。</string>
+    <string name="lists_disable_board_title">ボードを無効にしますか？</string>
+    <string name="lists_disable_board_message">プロジェクトとそのステータス列が削除されます。リストのタスクは残りますが、完了したタスクは完了のまま、進行中のタスクはステータスがなくなります。</string>
+    <string name="lists_disable">無効にする</string>
+    <string name="lists_board_create_failed">ボードを作成できませんでした: %1$s</string>
+    <string name="lists_board_disable_failed">ボードを無効にできませんでした: %1$s</string>
+    <string name="lists_advanced">詳細設定</string>
+    <string name="lists_recently_completed_footer">デフォルトのフィルタとボードの「完了」列に表示し続ける完了済みタスクを設定します。</string>
+    <string name="lists_recent_default_24h">過去24時間（デフォルト）</string>
+    <string name="lists_recent_last_7_days">過去7日間</string>
+    <string name="lists_recent_last_14_days">過去14日間</string>
+    <string name="lists_recent_last_28_days">過去28日間</string>
+    <string name="lists_recent_last_30_days">過去30日間</string>
+    <string name="lists_recent_since_sunday">先週の日曜日から（今週）</string>
+    <string name="lists_recent_since_monday">先週の月曜日から（今週）</string>
+    <string name="lists_recent_since_first">今月1日から</string>
+    <string name="lists_recent_since_date">指定した日付から…</string>
+    <string name="lists_pending">保留中</string>
+    <string name="members_role">役割</string>
+    <string name="lists_created_failed_to_add">リストを作成しましたが、追加できませんでした: %1$s</string>
+    <string name="lists_member_options">メンバーのオプション</string>
+    <string name="lists_cancel_invitation">%1$s への招待を取り消す</string>
+    <string name="lists_remove_invitee">%1$s を削除</string>
+    <string name="lists_color_hue">色相</string>
+    <string name="lists_color_saturation">彩度</string>
+    <string name="lists_color_brightness">明るさ</string>
+    <string name="tasks_nest_under_previous">上のタスクのサブタスクにする</string>
+    <string name="tasks_move_out_a_level">1階層上に移動</string>
+    <string name="tasks_move_up">上へ移動</string>
+    <string name="tasks_move_down">下へ移動</string>
+    <string name="lists_copy_list">リストをコピー</string>
+    <string name="review_loving_title">Astrid を気に入っていますか？</string>
+    <string name="review_loving_message">Astrid を楽しく使っていますか？ぜひご意見をお聞かせください！</string>
+    <string name="review_not_really">あまり</string>
+    <string name="review_love_it">はい、大好きです！</string>
+    <string name="review_help_us_improve">改善にご協力ください</string>
+    <string name="review_help_message">申し訳ありません。問題を報告するか、フィードバックを送信しますか？</string>
+    <string name="review_maybe_later">あとで</string>
+    <string name="review_report_issue">問題を報告</string>
+    <string name="review_send_feedback">フィードバックを送信</string>
+    <string name="repeating_mode_due_date">期限から繰り返す</string>
+    <string name="repeating_mode_completion_date">完了日から繰り返す</string>
+    <string name="repeating_decrease">%1$s を減らす</string>
+    <string name="repeating_increase">%1$s を増やす</string>
+    <string name="attachments_remove_a11y">%1$s を削除</string>
+    <string name="timer_start">タイマーを開始</string>
+    <string name="timer_stop">タイマーを停止</string>
+    <string name="comments_offline">オフライン</string>
+    <string name="chat_agent_thinking">%1$s が考えています…</string>
+    <string name="core_repeat_none" formatted="false">繰り返しなし</string>
+    <string name="core_repeat_every_day" formatted="false">毎日</string>
+    <string name="core_repeat_every_n_days" formatted="false">%1$s日ごと</string>
+    <string name="core_repeat_every_week" formatted="false">毎週</string>
+    <string name="core_repeat_every_n_weeks" formatted="false">%1$s週間ごと</string>
+    <string name="core_repeat_every_month" formatted="false">毎月</string>
+    <string name="core_repeat_every_n_months" formatted="false">%1$sか月ごと</string>
+    <string name="core_repeat_every_year" formatted="false">毎年</string>
+    <string name="core_repeat_every_n_years" formatted="false">%1$s年ごと</string>
+    <string name="core_repeat_on_weekdays" formatted="false">%1$s</string>
+    <string name="core_repeat_on_day_of_month" formatted="false">%1$s日</string>
+    <string name="core_repeat_on_nth_weekday" formatted="false">%1$s %2$s</string>
+    <string name="core_repeat_on_month_and_day" formatted="false">%1$s %2$s</string>
+    <string name="core_repeat_ends_after" formatted="false">(%1$s回)</string>
+    <string name="core_repeat_ends_on" formatted="false">%1$sまで</string>
+    <string name="core_repeat_from_due_date" formatted="false">期限から</string>
+    <string name="core_reminder_set" formatted="false">リマインダーを設定しました</string>
+    <string name="core_reminder_at_due_time" formatted="false">期限の時刻</string>
+    <string name="core_reminder_5_minutes_before" formatted="false">5分前</string>
+    <string name="core_reminder_15_minutes_before" formatted="false">15分前</string>
+    <string name="core_reminder_30_minutes_before" formatted="false">30分前</string>
+    <string name="core_reminder_hour_before" formatted="false">1時間前</string>
+    <string name="core_reminder_2_hours_before" formatted="false">2時間前</string>
+    <string name="core_reminder_day_before" formatted="false">1日前</string>
+    <string name="core_reminder_week_before" formatted="false">1週間前</string>
+    <string name="core_filter_any" formatted="false">すべて</string>
+    <string name="core_filter_button_active" formatted="false">フィルタ中</string>
+    <string name="core_filter_completion" formatted="false">完了したタスク</string>
+    <string name="core_filter_completion_recent" formatted="false">最近完了</string>
+    <string name="core_filter_completion_incomplete" formatted="false">非表示</string>
+    <string name="core_filter_completion_completed" formatted="false">完了したもののみ</string>
+    <string name="core_filter_completion_all" formatted="false">すべて表示</string>
+    <string name="core_filter_assignee" formatted="false">担当者</string>
+    <string name="core_filter_assignee_someone_else" formatted="false">他のユーザー</string>
+    <string name="core_filter_assignee_nobody" formatted="false">なし</string>
+    <string name="core_filter_repeat_never" formatted="false">繰り返しなし</string>
+    <string name="core_filter_assigned_by" formatted="false">割り当てた人</string>
+    <string name="core_filter_assigned_by_someone_else" formatted="false">他のユーザー</string>
+    <string name="core_filter_lists_in_a_list" formatted="false">リスト内</string>
+    <string name="core_filter_lists_not_in_a_list" formatted="false">リスト外</string>
+    <string name="core_filter_lists_public" formatted="false">公開リスト内</string>
+    <string name="core_reminder_toast_snooze" formatted="false">%1$s分スヌーズ</string>
+    <string name="tasks_complete_a11y">%1$s を完了</string>
+</resources>

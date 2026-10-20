@@ -89,7 +89,7 @@ fun PublicListsScreen(vm: PublicListsViewModel, onBack: () -> Unit, onView: (Pub
                             Box(Modifier.fillParentMaxHeight(0.8f)) { EmptyState(stringResource(R.string.empty_state_public_list)) }
                         }
                         else -> items(state.lists, key = { it.id }) { list ->
-                            PublicListRow(list, copying = list.id in state.copying, onView = { onView(list) }, onCopy = { vm.copy(list.id) })
+                            PublicListRow(list, state.images[list.id], copying = list.id in state.copying, onView = { onView(list) }, onCopy = { vm.copy(list.id) })
                         }
                     }
                 }
@@ -105,7 +105,7 @@ fun PublicListsScreen(vm: PublicListsViewModel, onBack: () -> Unit, onView: (Pub
 
 /** iOS PublicListRow: one rounded card (radius 8, padding 16), on the theme's card colour so it reads on Ocean. */
 @Composable
-private fun PublicListRow(list: PublicListSummary, copying: Boolean, onView: () -> Unit, onCopy: () -> Unit) {
+private fun PublicListRow(list: PublicListSummary, image: String?, copying: Boolean, onView: () -> Unit, onCopy: () -> Unit) {
     val colors = AstridTheme.colors
     Column(
         Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.floating).padding(Spacing.s16)
@@ -113,7 +113,7 @@ private fun PublicListRow(list: PublicListSummary, copying: Boolean, onView: () 
         verticalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12)) {
-            ListPicture(list.asListSummary(), list.imageUrl, 16.dp)
+            ListPicture(list.asListSummary(), image, 16.dp)
             Text(
                 list.name, style = TextStyles.headline, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f),

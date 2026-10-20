@@ -23,7 +23,6 @@
     <string name="time_yesterday">Yesterday</string>
     <string name="tasks_add_task">Add task</string>
     <string name="tasks_add_task_placeholder">Add a task</string>
-    <string name="tasks_empty">Nothing here yet.</string>
     <string name="tasks_complete_a11y">Complete %1$s</string>
     <string name="tasks_reopen_a11y">Mark %1$s not done</string>
     <string name="tasks_unassigned_glyph">U</string>
@@ -36,7 +35,6 @@
     <string name="detail_more">More</string>
     <string name="detail_title_label">Title</string>
     <string name="detail_description">Description</string>
-    <string name="detail_add_description">Add a description</string>
     <string name="detail_assignee">Who</string>
     <string name="detail_unassigned">Unassigned</string>
     <string name="detail_when">When</string>
@@ -45,11 +43,8 @@
     <string name="detail_repeat">Repeat</string>
     <string name="detail_subtasks">Subtasks</string>
     <string name="detail_comments">Comments</string>
-    <string name="detail_add_comment">Add a comment</string>
     <string name="detail_send">Send</string>
-    <string name="detail_pick_date">Pick a date</string>
     <string name="detail_clear_date">No due date</string>
-    <string name="detail_copy_link">Copy link</string>
     <string name="detail_done">Done</string>
     <string name="detail_save">Save</string>
     <string name="priority_none">None</string>
@@ -73,9 +68,6 @@
     <string name="settings_theme_auto">Auto</string>
     <string name="settings_sign_out">Sign Out</string>
     <string name="settings_about">About</string>
-    <string name="settings_version">Version %1$s · core %2$s</string>
-    <string name="settings_waiting_to_send">%1$d waiting to send</string>
-    <string name="settings_all_sent">Everything is sent</string>
     <string name="detail_reminder">Reminder</string>
     <!-- Reminders: iOS reminder.* -->
     <string name="reminders_channel">Reminders</string>
@@ -89,7 +81,6 @@
     <string name="navigation_add_list">Add List</string>
     <string name="lists_new_name">List name</string>
     <string name="lists_create">Create</string>
-    <string name="lists_settings">List settings</string>
     <string name="lists_name">Name</string>
     <string name="lists_color">Color</string>
     <string name="lists_privacy">Privacy</string>
@@ -98,31 +89,23 @@
     <string name="lists_privacy_public">Public</string>
     <string name="lists_favorite">Favorite</string>
     <string name="lists_members">Members</string>
-    <string name="lists_invite_email">Invite by email</string>
     <string name="lists_invite">Invite</string>
     <string name="lists_role_admin">Admin</string>
     <string name="lists_role_member">Member</string>
     <string name="lists_remove_member">Remove</string>
-    <string name="lists_leave">Leave list</string>
     <string name="lists_delete">Delete list</string>
     <string name="lists_delete_confirm">Delete this list? Its tasks stay in any other lists they are in.</string>
-    <string name="share_add_to">Add to %1$s</string>
     <string name="shortcut_new_task">New task</string>
     <string name="settings_reminders">Reminders</string>
-    <string name="settings_push_reminders">Push notifications</string>
     <string name="settings_email_reminders">Email reminders</string>
-    <string name="settings_daily_digest">Daily digest</string>
     <string name="settings_default_reminder">Default reminder</string>
     <string name="settings_tasks">Tasks</string>
-    <string name="settings_smart_tasks">Smart task creation</string>
-    <string name="settings_email_to_task">Email to task</string>
     <string name="priority_a11y">Priority %1$s</string>
     <string name="chat_title">Chat</string>
     <string name="chat_empty">No messages yet.</string>
     <string name="chat_placeholder">Message</string>
     <string name="detail_attach">Attach a file</string>
     <!-- Custom repeat: iOS repeat.* -->
-    <string name="repeat_custom_title">Custom repeat</string>
     <string name="repeat_every">Every</string>
     <string name="repeat_unit_days">Days</string>
     <string name="repeat_unit_weeks">Weeks</string>
@@ -130,11 +113,6 @@
     <string name="repeat_unit_years">Years</string>
     <string name="repeat_ends">Ends</string>
     <string name="repeat_ends_never">Never</string>
-    <string name="repeat_ends_after">After</string>
-    <string name="repeat_ends_on_date">On a date</string>
-    <string name="repeat_times">times</string>
-    <string name="detail_pick_time">Pick a time</string>
-    <string name="detail_select_a_task">Select a task</string>
     <!-- Account screens: iOS profile.* / stats.* -->
     <string name="profile_title">Profile</string>
     <string name="stats_completed">Completed</string>
@@ -143,15 +121,10 @@
     <string name="stats_completed_tagline">Getting it done!</string>
     <string name="stats_inspired_tagline">Motivating others!</string>
     <string name="stats_supported_tagline">Helping the team win!</string>
-    <string name="profile_export">Export your data</string>
     <string name="agents_title">AI Agents</string>
-    <string name="agents_mode_api">Astrid runs it</string>
-    <string name="agents_mode_polling">Polling</string>
-    <string name="agents_mode_webhook">Webhook</string>
     <string name="agents_mode_off">Off</string>
     <string name="connections_title">Connections</string>
     <string name="connections_revoke">Revoke</string>
-    <string name="settings_more">Account and agents</string>
     <string name="tasks_task_id_copy">Copy task id</string>
     <string name="common_back">Back</string>
     <string name="tasks_loading">Loading your tasks...</string>
