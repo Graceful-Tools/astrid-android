@@ -35,9 +35,6 @@ import com.gracefultools.astrid.ui.detail.TaskDetailScreen
 import com.gracefultools.astrid.ui.detail.TaskDetailViewModel
 import com.gracefultools.astrid.ui.lists.ListSettingsScreen
 import com.gracefultools.astrid.ui.lists.ListSettingsViewModel
-import com.gracefultools.astrid.ui.account.AccountViewModel
-import com.gracefultools.astrid.ui.account.AgentsScreen
-import com.gracefultools.astrid.ui.account.ConnectionsScreen
 import com.gracefultools.astrid.ui.account.ProfileScreen
 import com.gracefultools.astrid.ui.account.ProfileViewModel
 import com.gracefultools.astrid.ui.chat.ChatScreen
@@ -343,13 +340,34 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
             val vm: ProfileViewModel = viewModel(key = "profile", factory = factory { ProfileViewModel(graph.core) })
             com.gracefultools.astrid.ui.account.DeleteAccountScreen(vm, onBack = { nav.popBackStack() }, onSignedOut = onSignedOut)
         }
-        composable("agents") {
-            val vm: AccountViewModel = viewModel(key = "account", factory = factory { AccountViewModel(graph.core) })
-            AgentsScreen(vm, onBack = { nav.popBackStack() })
+        // AI Agents, Connections, and GitHub Issues / Google Tasks sync (AATD-57).
+        composable(com.gracefultools.astrid.ui.agents.AgentRoutes.HUB) {
+            val vm: com.gracefultools.astrid.ui.agents.AgentsViewModel = viewModel(factory = factory { com.gracefultools.astrid.ui.agents.AgentsViewModel(graph.core) })
+            com.gracefultools.astrid.ui.agents.AgentsScreen(vm, onBack = { nav.popBackStack() }, onOpen = { nav.navigate(it) })
         }
-        composable("connections") {
-            val vm: AccountViewModel = viewModel(key = "account", factory = factory { AccountViewModel(graph.core) })
-            ConnectionsScreen(vm, onBack = { nav.popBackStack() })
+        composable(com.gracefultools.astrid.ui.agents.AgentRoutes.WEBHOOK) {
+            val vm: com.gracefultools.astrid.ui.agents.WebhookViewModel = viewModel(factory = factory { com.gracefultools.astrid.ui.agents.WebhookViewModel(graph.core) })
+            com.gracefultools.astrid.ui.agents.WebhookSettingsScreen(vm, onBack = { nav.popBackStack() })
+        }
+        composable(com.gracefultools.astrid.ui.agents.AgentRoutes.CUSTOM) {
+            val vm: com.gracefultools.astrid.ui.agents.CustomAgentsViewModel = viewModel(factory = factory { com.gracefultools.astrid.ui.agents.CustomAgentsViewModel(graph.core) })
+            com.gracefultools.astrid.ui.agents.CustomAgentsScreen(vm, onBack = { nav.popBackStack() })
+        }
+        composable(com.gracefultools.astrid.ui.agents.AgentRoutes.MODEL) {
+            val vm: com.gracefultools.astrid.ui.agents.AstridModelViewModel = viewModel(factory = factory { com.gracefultools.astrid.ui.agents.AstridModelViewModel(graph.core) })
+            com.gracefultools.astrid.ui.agents.AstridModelScreen(vm, onBack = { nav.popBackStack() }, onAddKey = { nav.popBackStack() })
+        }
+        composable(com.gracefultools.astrid.ui.agents.AgentRoutes.CONNECTIONS) {
+            val vm: com.gracefultools.astrid.ui.connections.ConnectionsViewModel = viewModel(factory = factory { com.gracefultools.astrid.ui.connections.ConnectionsViewModel(graph.core) })
+            com.gracefultools.astrid.ui.connections.ConnectionsScreen(vm, graph.core, onBack = { nav.popBackStack() })
+        }
+        composable(com.gracefultools.astrid.ui.sync.SyncRoutes.GITHUB) {
+            val vm: com.gracefultools.astrid.ui.sync.ExternalSyncViewModel = viewModel(factory = factory { com.gracefultools.astrid.ui.sync.ExternalSyncViewModel(graph.core, com.gracefultools.astrid.ui.sync.SyncProvider.GITHUB) })
+            com.gracefultools.astrid.ui.sync.ExternalSyncScreen(vm, onBack = { nav.popBackStack() })
+        }
+        composable(com.gracefultools.astrid.ui.sync.SyncRoutes.GOOGLE) {
+            val vm: com.gracefultools.astrid.ui.sync.ExternalSyncViewModel = viewModel(factory = factory { com.gracefultools.astrid.ui.sync.ExternalSyncViewModel(graph.core, com.gracefultools.astrid.ui.sync.SyncProvider.GOOGLE) })
+            com.gracefultools.astrid.ui.sync.ExternalSyncScreen(vm, onBack = { nav.popBackStack() })
         }
     }
 }
