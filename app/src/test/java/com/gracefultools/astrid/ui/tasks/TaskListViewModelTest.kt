@@ -157,4 +157,29 @@ class TaskListViewModelTest {
         vm.open("l1")
         assertEquals("temp_1", vm.create("New"))
     }
+
+    @Test
+    fun `AATD-42 a drop on a row asks the core to nest, and a line drop in manual sort writes the order`() = runTest {
+        val core = FakeCore().apply { answer("rowsForList", """{"total":3,"offset":0,"sortBy":"manual","rows":[{"id":"a"},{"id":"b"},{"id":"c"}]}""") }
+        val vm = vm(core)
+        vm.open("l1")
+        vm.drop("c", "row", targetId = "a")
+        assertEquals(JsonPrimitive("a"), core.last("nestTask")!!["targetId"])
+        assertFalse(core.kinds().contains("setManualOrder"))
+        vm.drop("c", "line", insertAt = 0)
+        assertEquals(
+            JsonArray(listOf("c", "a", "b").map { JsonPrimitive(it) }),
+            core.last("setManualOrder")!!["order"],
+        )
+    }
+
+    @Test
+    fun `AATD-42 outside manual sort a line drop only promotes, it never reorders`() = runTest {
+        val core = FakeCore().apply { answer("rowsForList", """{"total":2,"offset":0,"sortBy":"auto","rows":[{"id":"a"},{"id":"b"}]}""") }
+        val vm = vm(core)
+        vm.open("l1")
+        vm.drop("b", "line", insertAt = 0)
+        assertTrue(core.kinds().contains("nestTask"))
+        assertFalse(core.kinds().contains("setManualOrder"))
+    }
 }

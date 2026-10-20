@@ -31,6 +31,8 @@ data class TaskListState(
     val error: String? = null,
     /** Open when a row's leading control asked for the status picker. */
     val statusPicker: com.gracefultools.astrid.ui.common.LeadingOutcome.PickStatus? = null,
+    /** The sort in force — `manual` lets a drag reorder (AATD-42). */
+    val sortBy: String? = null,
     /** What the quick-add bar's leading control shows and its picker offers (`quickAddDefaults`). */
     val quickAdd: QuickAddDefaults = QuickAddDefaults(),
 )
@@ -113,7 +115,7 @@ class TaskListViewModel(
                 core.run(command("rowsForList", "listId" to listId, "offset" to 0, "limit" to wanted)),
             )
             if (mine != generation) return@work
-            _state.update { it.copy(rows = window.rows, total = window.total, loading = false) }
+            _state.update { it.copy(rows = window.rows, total = window.total, loading = false, sortBy = window.sortBy) }
         } catch (failure: CoreFailure) {
             if (mine == generation) _state.update { it.copy(loading = false, error = failure.shown()) }
         }
@@ -193,6 +195,32 @@ class TaskListViewModel(
             _state.update { it.copy(error = failure.message) }
             null
         }
+    }
+
+    /**
+     * A row dragged and dropped (AATD-42). The core decides what the drop means (iOS's rules,
+     * `nestTask`); a drop on the line in a manually sorted list also writes the new order, the rows
+     * as they now stand on screen (`setManualOrder`).
+     */
+    fun drop(taskId: String, zone: String, targetId: String? = null, insertAt: Int? = null) = work {
+        val state = _state.value
+        val listId = state.listId ?: return@work
+        val rows = state.rows.map { it.id }
+        try {
+            core.run(
+                command(
+                    "nestTask", "taskId" to taskId, "zone" to zone,
+                    *listOfNotNull(targetId?.let { "targetId" to it }, ("rowIds" to rows).takeIf { zone == "indent" }).toTypedArray(),
+                ),
+            )
+            if (zone == "line" && insertAt != null && state.sortBy == "manual") {
+                val order = rows.filter { it != taskId }.toMutableList().apply { add(insertAt.coerceIn(0, size), taskId) }
+                core.run(command("setManualOrder", "listId" to listId, "order" to order))
+            }
+        } catch (failure: CoreFailure) {
+            if (!failure.isStillPending) _state.update { it.copy(error = failure.message) }
+        }
+        reload()
     }
 
     fun delete(taskId: String) = work {

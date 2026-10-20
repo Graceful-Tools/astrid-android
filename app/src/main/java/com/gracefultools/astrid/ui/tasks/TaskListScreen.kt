@@ -1,5 +1,17 @@
 package com.gracefultools.astrid.ui.tasks
 
+import androidx.compose.ui.zIndex
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.alpha
+import androidx.compose.material.icons.automirrored.filled.KeyboardTab
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -143,6 +155,8 @@ fun TaskListScreen(
     selectedTaskId: String? = null,
     /** My Tasks' active filters after the title (iOS: "My Tasks - Today !! !"). */
     titleSuffix: androidx.compose.ui.text.AnnotatedString? = null,
+    /** A row dropped (AATD-42): task, zone (`row`/`line`/`outdent`/`indent`), target row, insertion index. */
+    onDrop: (String, String, String?, Int?) -> Unit = { _, _, _, _ -> },
 ) {
     val colors = AstridTheme.colors
     Box(Modifier.fillMaxSize().background(colors.bgPrimary)) {
@@ -162,21 +176,7 @@ fun TaskListScreen(
                         state.rows.isEmpty() -> EmptyState(emptyMessage)
                     }
                     val focus = LocalFocusManager.current
-                    LazyColumn(
-                        state = listState,
-                        contentPadding = PaddingValues(start = Spacing.s8, end = Spacing.s8, top = Spacing.s8, bottom = Spacing.s8),
-                        verticalArrangement = Arrangement.spacedBy(Spacing.s8),
-                        modifier = Modifier.fillMaxSize().testTag("taskList").nestedScroll(dismissKeyboardOnDrag { focus.clearFocus() }),
-                    ) {
-                        items(state.rows, key = { it.id }) { row ->
-                            SwipeToDelete(onDelete = { onDelete(row) }) {
-                                TaskRowView(
-                                    row, onLeading = { onComplete(row) }, onOpen = { onOpenTask(row.id) },
-                                    isSelected = row.id == selectedTaskId, compact = selectedTaskId != null,
-                                )
-                            }
-                        }
-                    }
+                    RowDragArea(state, listState, onDrop, onDelete, onComplete, onOpenTask, selectedTaskId, focus)
                 }
             }
             if (viewMode == ViewMode.LIST && canAdd) {
@@ -443,3 +443,172 @@ private fun AssigneeChoice(id: String?, image: String?, initials: String, name: 
         if (selected) Icon(Icons.Filled.Check, null, tint = colors.accent, modifier = Modifier.size(18.dp))
     }
 }
+
+
+/** A row being carried: which, where the finger is (in the list), how far it has gone sideways. */
+private data class RowDrag(val row: TaskRow, val pointer: androidx.compose.ui.geometry.Offset, val startX: Float, val grabY: Float)
+
+/** Where a carried row would land — iOS's three targets. */
+private sealed interface DropTarget {
+    data class OnRow(val id: String) : DropTarget
+    data class Line(val index: Int) : DropTarget
+    data object Outdent : DropTarget
+}
+
+/**
+ * The rows, with iOS's drag (AATD-42): press and hold a row, then drop it ON a row to make it that
+ * row's subtask (an accent ring), on the LINE between rows to promote a subtask or — sorted by hand
+ * — to reorder (an accent line), or pull it left past 40dp into the gutter to move it out a level
+ * (the band with its arrow). The list follows the finger itself; TalkBack gets the same moves as
+ * actions.
+ */
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
+@Composable
+private fun RowDragArea(
+    state: TaskListState,
+    listState: androidx.compose.foundation.lazy.LazyListState,
+    onDrop: (String, String, String?, Int?) -> Unit,
+    onDelete: (TaskRow) -> Unit,
+    onComplete: (TaskRow) -> Unit,
+    onOpenTask: (String) -> Unit,
+    selectedTaskId: String?,
+    focus: androidx.compose.ui.focus.FocusManager,
+) {
+    val colors = AstridTheme.colors
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    val bounds = remember { androidx.compose.runtime.mutableStateMapOf<String, androidx.compose.ui.geometry.Rect>() }
+    var origin by remember { mutableStateOf(androidx.compose.ui.geometry.Offset.Zero) }
+    var drag by remember { mutableStateOf<RowDrag?>(null) }
+    val outdentPx = with(density) { 40.dp.toPx() }
+    val manual = state.sortBy == "manual"
+    fun target(d: RowDrag): DropTarget? {
+        if (d.pointer.x - d.startX <= -outdentPx) return DropTarget.Outdent
+        val y = d.pointer.y
+        val rows = state.rows.withIndex().mapNotNull { (i, r) -> bounds[r.id]?.let { Triple(i, r, it) } }
+        val hit = rows.firstOrNull { (_, _, b) -> y >= b.top && y <= b.bottom } ?: return null
+        val (index, row, b) = hit
+        val band = minOf(with(density) { 12.dp.toPx() }, b.height * 0.3f)
+        return when {
+            y < b.top + band -> DropTarget.Line(index)
+            y > b.bottom - band -> DropTarget.Line(index + 1)
+            row.id == d.row.id -> null
+            else -> DropTarget.OnRow(row.id)
+        }
+    }
+    val current = drag?.let(::target)
+    fun finish() {
+        val d = drag ?: return
+        drag = null
+        when (val t = target(d)) {
+            is DropTarget.OnRow -> onDrop(d.row.id, "row", t.id, null)
+            is DropTarget.Line -> {
+                // The index among the other rows: the carried one leaves its old place first.
+                val from = state.rows.indexOfFirst { it.id == d.row.id }
+                onDrop(d.row.id, "line", null, if (from in 0 until t.index) t.index - 1 else t.index)
+            }
+            DropTarget.Outdent -> onDrop(d.row.id, "outdent", null, null)
+            null -> Unit
+        }
+    }
+    Box(
+        Modifier.fillMaxSize()
+            .reportOrigin { origin = it }
+            .pointerInput(Unit) {
+                awaitPointerEventScope {
+                    while (true) {
+                        val event = awaitPointerEvent(androidx.compose.ui.input.pointer.PointerEventPass.Initial)
+                        val d = drag ?: continue
+                        val change = event.changes.firstOrNull() ?: continue
+                        if (change.pressed) { drag = d.copy(pointer = change.position); change.consume() } else finish()
+                    }
+                }
+            },
+    ) {
+        LazyColumn(
+            state = listState,
+            contentPadding = PaddingValues(start = Spacing.s8, end = Spacing.s8, top = Spacing.s8, bottom = Spacing.s8),
+            verticalArrangement = Arrangement.spacedBy(Spacing.s8),
+            modifier = Modifier.fillMaxSize().testTag("taskList").nestedScroll(dismissKeyboardOnDrag { focus.clearFocus() }),
+        ) {
+            itemsIndexed(state.rows, key = { _, it -> it.id }) { index, row ->
+                val indentLabel = stringResource(R.string.tasks_nest_under_previous)
+                val outdentLabel = stringResource(R.string.tasks_move_out_a_level)
+                val upLabel = stringResource(R.string.tasks_move_up)
+                val downLabel = stringResource(R.string.tasks_move_down)
+                Box(
+                    Modifier
+                        .onGloballyPositionedCompat(relativeTo = origin) { bounds[row.id] = it }
+                        .alpha(if (drag?.row?.id == row.id) 0.3f else 1f)
+                        .pointerInput(row.id) {
+                            detectDragGesturesAfterLongPress(
+                                onDragStart = { at ->
+                                    val b = bounds[row.id] ?: return@detectDragGesturesAfterLongPress
+                                    val p = androidx.compose.ui.geometry.Offset(b.left + at.x, b.top + at.y)
+                                    drag = RowDrag(row, p, p.x, at.y)
+                                },
+                                onDrag = { change, _ -> change.consume() },
+                            )
+                        }
+                        .semantics {
+                            customActions = buildList {
+                                add(androidx.compose.ui.semantics.CustomAccessibilityAction(indentLabel) { onDrop(row.id, "indent", null, null); true })
+                                if (row.depth > 0) add(androidx.compose.ui.semantics.CustomAccessibilityAction(outdentLabel) { onDrop(row.id, "outdent", null, null); true })
+                                if (manual && index > 0) add(androidx.compose.ui.semantics.CustomAccessibilityAction(upLabel) { onDrop(row.id, "line", null, index - 1); true })
+                                if (manual && index < state.rows.lastIndex) add(androidx.compose.ui.semantics.CustomAccessibilityAction(downLabel) { onDrop(row.id, "line", null, index + 1); true })
+                            }
+                        },
+                ) {
+                    SwipeToDelete(onDelete = { onDelete(row) }) {
+                        TaskRowView(
+                            row, onLeading = { onComplete(row) }, onOpen = { onOpenTask(row.id) },
+                            isSelected = row.id == selectedTaskId, compact = selectedTaskId != null,
+                        )
+                    }
+                    if (current == DropTarget.OnRow(row.id)) {
+                        Box(Modifier.matchParentSize().border(2.dp, colors.accent, RoundedCornerShape(8.dp)))
+                    }
+                }
+            }
+        }
+        val d = drag
+        if (d != null) {
+            // The insertion line, the outdent band, and the lifted row under the finger.
+            when (val t = current) {
+                is DropTarget.Line -> {
+                    val y = state.rows.getOrNull(t.index)?.let { bounds[it.id]?.top?.minus(with(density) { 4.dp.toPx() }) }
+                        ?: state.rows.lastOrNull()?.let { bounds[it.id]?.bottom?.plus(with(density) { 4.dp.toPx() }) } ?: 0f
+                    Box(
+                        Modifier.offset { androidx.compose.ui.unit.IntOffset(0, y.toInt()) }.padding(horizontal = Spacing.s8)
+                            .fillMaxWidth().heightIn(min = 3.dp).clip(RoundedCornerShape(2.dp)).background(colors.accent),
+                    )
+                }
+                DropTarget.Outdent -> Row(
+                    Modifier.fillMaxHeight().width(56.dp).background(colors.accent.copy(alpha = 0.12f)),
+                    verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center,
+                ) { Icon(Icons.AutoMirrored.Filled.KeyboardTab, null, tint = colors.accent, modifier = Modifier.graphicsLayerRotate180()) }
+                else -> Unit
+            }
+            val height = bounds[d.row.id]?.height ?: 0f
+            Box(
+                Modifier.zIndex(1f).offset { androidx.compose.ui.unit.IntOffset(0, (d.pointer.y - d.grabY).toInt()) }
+                    .padding(horizontal = Spacing.s8).fillMaxWidth().heightIn(min = with(density) { height.toDp() })
+                    .shadow(8.dp, RoundedCornerShape(8.dp)),
+            ) { TaskRowView(d.row, onLeading = {}, onOpen = {}) }
+        }
+    }
+}
+
+/** Bounds relative to [relativeTo] (the drag area's window position). */
+private fun Modifier.onGloballyPositionedCompat(
+    relativeTo: androidx.compose.ui.geometry.Offset = androidx.compose.ui.geometry.Offset.Zero,
+    onBounds: (androidx.compose.ui.geometry.Rect) -> Unit,
+) = this.then(Modifier.onGloballyPositioned { coords ->
+    val b = coords.boundsInWindow()
+    onBounds(b.translate(-relativeTo))
+})
+
+private fun Modifier.reportOrigin(onOrigin: (androidx.compose.ui.geometry.Offset) -> Unit) =
+    this.then(Modifier.onGloballyPositioned { onOrigin(it.boundsInWindow().topLeft) })
+
+/** The outdent arrow points left: KeyboardTab mirrored. */
+private fun Modifier.graphicsLayerRotate180() = this.then(Modifier.graphicsLayer { rotationZ = 180f })

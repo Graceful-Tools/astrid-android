@@ -252,6 +252,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onDismissError = tasks::dismissError,
                     onPickPriority = tasks::choosePriority,
                     onPickAssignee = tasks::chooseAssignee,
+                    onDrop = { id, zone, target, at -> tasks.drop(id, zone, target, at) },
                     selectedTaskId = paneTaskId,
                 )
             })

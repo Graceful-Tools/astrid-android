@@ -815,4 +815,8 @@
     <string name="lists_show_subtasks_footer">Subtasks appear indented under their parent in this list. Turn this off for a list you want to read as a flat inbox. Your account-wide Sub-tasks display setting still applies — a list cannot show subtasks inline if you have chosen detail view only.</string>
     <string name="lists_saved_filter">Saved Filter</string>
     <string name="lists_saved_filter_description">This list shows tasks based on filters above, not list membership</string>
+    <string name="tasks_nest_under_previous">Make a sub task of the task above</string>
+    <string name="tasks_move_out_a_level">Move out a level</string>
+    <string name="tasks_move_up">Move up</string>
+    <string name="tasks_move_down">Move down</string>
 </resources>
