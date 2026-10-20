@@ -256,4 +256,163 @@
     <string name="core_repeat_monthly">Monthly</string>
     <string name="core_repeat_yearly">Yearly</string>
     <string name="core_repeat_custom">Custom</string>
+
+    <!-- AATD-55: Settings as iOS's SettingsView and its pages (iOS English, verbatim). -->
+    <string name="settings_profile_row">Profile</string>
+    <string name="settings_sync">Sync</string>
+    <string name="settings_last_sync">Last Sync</string>
+    <string name="settings_never">Never</string>
+    <string name="settings_sync_now">Sync Now</string>
+    <string name="settings_features">Features</string>
+    <string name="settings_exploratory_features">Exploratory Features</string>
+    <string name="settings_agents_title">AI Agents</string>
+    <string name="settings_connections_title">Connections</string>
+    <string name="settings_github_issues" translatable="false">GitHub Issues</string>
+    <string name="settings_google_tasks" translatable="false">Google Tasks</string>
+    <string name="settings_preferences">Preferences</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_automatic">Automatic</string>
+    <string name="settings_smart_task_creation">Smart Task Creation</string>
+    <string name="settings_smart_task_creation_description">Parse dates, priorities, hashtags from titles</string>
+    <string name="settings_subtasks_title">Sub tasks</string>
+    <string name="settings_subtasks_display">Show sub tasks</string>
+    <string name="core_smart_subtasks_indented">In lists, indented</string>
+    <string name="core_smart_subtasks_under_parent">Inside parent task only</string>
+    <string name="settings_outbox">Outbox</string>
+    <string name="settings_outbox_summary">%1$d synced · %2$d in-flight · %3$d dropped</string>
+    <string name="settings_outbox_refresh">Refresh</string>
+    <string name="settings_outbox_retry">Retry dropped writes</string>
+    <string name="settings_outbox_load">Load Outbox stats</string>
+    <string name="settings_outbox_unknown_error">unknown error</string>
+    <string name="settings_account_access">Account &amp; Access</string>
+    <string name="settings_account_access_desc">Profile, email, passkeys, data export</string>
+    <string name="settings_version_label">Version</string>
+    <string name="settings_build_label">Build</string>
+    <string name="settings_core_label">Core</string>
+    <string name="settings_are_you_sure_sign_out">Are you sure you want to sign out?</string>
+    <string name="settings_reminders_push_notifications">Push Notifications</string>
+    <string name="settings_reminders_enable_push">Enable Push Notifications</string>
+    <string name="settings_reminders_open_settings">Open Settings to Enable Notifications</string>
+    <string name="settings_reminders_email_notifications">Email Notifications</string>
+    <string name="settings_reminders_send_email">Send Email Reminders</string>
+    <string name="settings_reminders_default_time">Default Reminder Time</string>
+    <string name="settings_reminders_when_to_remind">When to remind</string>
+    <string name="settings_reminders_daily_digest">Daily Digest</string>
+    <string name="settings_reminders_send_daily_digest">Send Daily Digest</string>
+    <string name="settings_reminders_digest_time">Digest Time</string>
+    <string name="settings_reminders_timezone">Timezone</string>
+    <string name="settings_reminders_quiet_hours">Quiet Hours (Optional)</string>
+    <string name="settings_reminders_enable_quiet_hours">Enable Quiet Hours</string>
+    <string name="settings_reminders_start">Start</string>
+    <string name="settings_reminders_end">End</string>
+    <string name="settings_reminders_test">Test</string>
+    <string name="settings_reminders_send_test">Send Test Reminder</string>
+    <string name="settings_reminders_test_reminder">Test Reminder</string>
+    <string name="settings_reminders_test_message">A test notification will appear in 5 seconds</string>
+    <string name="settings_reminders_permission_denied">Notification permission not granted. Please enable notifications in Settings.</string>
+    <string name="settings_reminders_test_body">This is a test notification from %1$s</string>
+    <string name="settings_appearance_theme">Theme</string>
+    <string name="settings_appearance_task_details">Task Details</string>
+    <string name="settings_appearance_task_details_footer">Choose how task details are laid out. List gives priority and assignee their own rows. Project is compact, and the checkbox opens a picker instead of completing the task.</string>
+    <string name="core_smart_layout_list">List</string>
+    <string name="core_smart_layout_project">Project</string>
+    <string name="settings_appearance_list_images_title">List images</string>
+    <string name="settings_appearance_list_images_off_description">When off, each list shows its color instead.</string>
+    <string name="settings_appearance_list_images_label">Show list images</string>
+    <string name="settings_appearance_email_to_task">Email-to-Task</string>
+    <string name="settings_appearance_email_to_task_footer">Create tasks by sending emails to remindme@astrid.cc</string>
+    <string name="settings_appearance_email_to_task_self">Self-task: Send TO remindme@astrid.cc</string>
+    <string name="settings_appearance_email_to_task_assigned">Assigned task: CC remindme@astrid.cc with one recipient</string>
+    <string name="settings_appearance_email_to_task_group">Group task: CC remindme@astrid.cc with multiple recipients</string>
+    <string name="settings_appearance_email_to_task_subject">Subject becomes task title</string>
+    <string name="settings_appearance_email_to_task_body">Body becomes task description</string>
+    <string name="settings_inbound_task_email" translatable="false">remindme@astrid.cc</string>
+    <string name="settings_device_language">Device Language</string>
+    <string name="settings_language_restart_note">Language changes may require an app restart to take full effect.</string>
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_spanish" translatable="false">Español</string>
+    <string name="language_french" translatable="false">Français</string>
+    <string name="language_german" translatable="false">Deutsch</string>
+    <string name="language_italian" translatable="false">Italiano</string>
+    <string name="language_japanese" translatable="false">日本語</string>
+    <string name="language_korean" translatable="false">한국어</string>
+    <string name="language_dutch" translatable="false">Nederlands</string>
+    <string name="language_portuguese" translatable="false">Português</string>
+    <string name="language_russian" translatable="false">Русский</string>
+    <string name="language_chinese_simplified" translatable="false">简体中文</string>
+    <string name="language_chinese_traditional" translatable="false">繁體中文</string>
+    <string name="actions_ok">OK</string>
+    <string name="messages_error">Error</string>
+    <string name="messages_success">Success!</string>
+    <string name="messages_saving">Saving...</string>
+    <string name="messages_deleting">Deleting...</string>
+
+    <!-- AATD-56: Profile, Edit Profile, Account & Access, Delete Account (iOS English, verbatim). -->
+    <string name="profile_loading">Loading profile...</string>
+    <string name="profile_joined">Joined %1$s</string>
+    <string name="profile_edit_title">Edit Profile</string>
+    <string name="profile_change_photo">Tap to change photo</string>
+    <string name="profile_uploading_photo">Uploading photo...</string>
+    <string name="profile_display_name">Display Name</string>
+    <string name="profile_email_address">Email Address</string>
+    <string name="profile_enter_name">Enter your name</string>
+    <string name="profile_save_changes">Save Changes</string>
+    <string name="profile_saving">Saving...</string>
+    <string name="profile_updated_success">Your profile has been updated successfully!</string>
+    <string name="account_loading">Loading account...</string>
+    <string name="account_display_name">Display Name</string>
+    <string name="account_name_placeholder">Name</string>
+    <string name="account_email">Email</string>
+    <string name="account_save_changes">Save Changes</string>
+    <string name="account_oauth_footer">Signed in with Google. Some fields may be managed by your Google account.</string>
+    <string name="account_pending_email">Pending Email Change</string>
+    <string name="account_resend_verification">Resend Verification</string>
+    <string name="account_email_not_verified">Email Not Verified</string>
+    <string name="account_send_verification">Send Verification Email</string>
+    <string name="account_email_verification">Email Verification</string>
+    <string name="account_pending_email_footer">Check your email inbox to verify the new address. The change won\'t take effect until verified.</string>
+    <string name="account_verify_email_footer">Verify your email to access all features and receive notifications.</string>
+    <string name="account_info">Account Information</string>
+    <string name="account_id">Account ID</string>
+    <string name="account_created">Created</string>
+    <string name="account_auth_method">Auth Method</string>
+    <string name="account_google">Google</string>
+    <string name="account_passkey">Passkey</string>
+    <string name="account_loading_passkeys">Loading passkeys...</string>
+    <string name="account_no_passkeys_registered">No passkeys registered</string>
+    <string name="account_add_passkey_description">Add a passkey for faster, passwordless sign-in</string>
+    <string name="account_add_passkey_button">Add a Passkey</string>
+    <string name="account_passkeys">Passkeys</string>
+    <string name="account_passkeys_footer">Passkeys use biometrics or device PIN for secure, passwordless authentication. They sync across your devices automatically.</string>
+    <string name="account_passkey_name_placeholder">Passkey name</string>
+    <string name="account_synced">Synced</string>
+    <string name="account_added_on">Added %1$s</string>
+    <string name="account_added_recently">Added recently</string>
+    <string name="account_export_json">Export Data (JSON)</string>
+    <string name="account_export_csv">Export Data (CSV)</string>
+    <string name="account_your_data">Your Data</string>
+    <string name="account_your_data_footer">Download all your tasks, lists, and account data.</string>
+    <string name="account_delete_account">Delete Account</string>
+    <string name="account_danger_zone">Danger Zone</string>
+    <string name="account_delete_account_footer">Permanently delete your account and all associated data. This action cannot be undone.</string>
+    <string name="account_delete_warning">This action cannot be undone</string>
+    <string name="account_delete_remove_list_header">Deleting your account will permanently remove:</string>
+    <string name="account_delete_remove_tasks">All your tasks and their history</string>
+    <string name="account_delete_remove_lists">All lists you own</string>
+    <string name="account_delete_remove_comments">All your comments</string>
+    <string name="account_delete_remove_profile">Your profile and settings</string>
+    <string name="account_delete_remove_files">All uploaded files</string>
+    <string name="account_delete_confirm_prompt">To confirm, type \"DELETE MY ACCOUNT\" below:</string>
+    <string name="account_delete_confirm_placeholder">Type confirmation</string>
+    <string name="account_delete_confirmation">Confirmation</string>
+    <string name="account_delete_confirm_instruction">You must type \"DELETE MY ACCOUNT\" exactly to proceed.</string>
+    <string name="account_delete_confirm_mismatch">Confirmation text does not match</string>
+    <string name="account_delete_confirm_match">Confirmation text matches</string>
+    <string name="account_delete_my_account_button">Delete My Account</string>
+    <string name="account_delete_final_confirmation">Final Confirmation</string>
+    <string name="account_delete_forever">Delete Forever</string>
+    <string name="account_delete_final_warning">Are you absolutely sure? This will permanently delete your account and ALL your data. This action CANNOT be undone.</string>
+    <string name="account_edit_passkey">Rename passkey</string>
+    <string name="account_save_passkey_name">Save name</string>
+    <string name="account_change_photo">Change photo</string>
 </resources>

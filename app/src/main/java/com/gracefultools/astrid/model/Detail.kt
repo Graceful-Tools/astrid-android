@@ -170,13 +170,28 @@ data class ReminderSettingsModel(
     val defaultReminderTime: Int = 0,
     val enableDailyDigest: Boolean = false,
     val dailyDigestTime: String? = null,
+    val dailyDigestTimezone: String? = null,
+    /** `HH:mm`; both null when quiet hours are off (iOS ReminderSettings.serverChanges). */
+    val quietHoursStart: String? = null,
+    val quietHoursEnd: String? = null,
 )
 
 @Serializable
 data class ReminderOffset(val titleKey: String = "", val minutes: Int = 0)
 
 @Serializable
-data class SmartTasks(val smartTaskCreationEnabled: Boolean = true, val emailToTaskEnabled: Boolean = false)
+data class SmartTasks(
+    val smartTaskCreationEnabled: Boolean = true,
+    val emailToTaskEnabled: Boolean = false,
+    val taskDisplayMode: String = "list",
+    val subtaskDisplay: String = "indented",
+    /** The person's own choice; null when they never made one (the experiment's arm applies). */
+    val showListImages: Boolean? = null,
+)
+
+/** One entry a settings combo offers (`astrid_rules::smart_tasks::Choice`). */
+@Serializable
+data class SettingChoice(val value: String = "", val titleKey: String = "", val descriptionKey: String? = null)
 
 /** `settings`: the account's settings as the core holds them, with the choices to offer. */
 @Serializable
@@ -185,6 +200,10 @@ data class AccountSettings(
     val reminderSettings: ReminderSettingsModel = ReminderSettingsModel(),
     val offsets: List<ReminderOffset> = emptyList(),
     val smartTasks: SmartTasks = SmartTasks(),
+    /** The reader's UTC offset, from the core's clock. */
+    val timezone: String? = null,
+    val layoutChoices: List<SettingChoice> = emptyList(),
+    val subtaskChoices: List<SettingChoice> = emptyList(),
 )
 
 @Serializable
