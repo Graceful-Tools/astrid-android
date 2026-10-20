@@ -189,33 +189,3 @@ data class AccountSettings(
 
 @Serializable
 data class ProfileStats(val completed: Int = 0, val inspired: Int = 0, val supported: Int = 0)
-
-@Serializable
-data class AgentRow(
-    val id: String = "",
-    val name: String = "",
-    val description: String? = null,
-    val email: String? = null,
-    val mode: String = "off",
-    val locked: Boolean = false,
-    val modes: List<String> = listOf("api", "polling", "webhook", "off"),
-)
-
-@Serializable
-data class AgentHub(val agents: List<AgentRow> = emptyList())
-
-@Serializable
-data class ConnectionRow(
-    val id: String = "",
-    val kind: String = "unknown",
-    val name: String = "",
-    val owner: String? = null,
-    val actsAs: String? = null,
-    val scopes: List<String> = emptyList(),
-    val lastUsedAt: String? = null,
-    val status: String = "unknown",
-    val revocable: Boolean = false,
-)
-
-@Serializable
-data class ConnectionsPanel(val connections: List<ConnectionRow> = emptyList(), val reviewCount: Int = 0)
