@@ -29,6 +29,9 @@ Diverge only for Android interaction or capability, and say why in Notes. Update
 | Chat | ✅ | ✅ | AATD-17 | |
 | iPad two-column layout | ✅ | ⏳ | | Tablets and foldables get the phone layout today |
 | Agent Hub, Connections, Profile stats, data export | ✅ | ⏳ | | The core has every command; screens not built |
+| AI Agents hub | ✅ | 🟡 | AATD-57 | Ownership segmented control, transport menu, key editor, Copilot connect (Custom Tab, status polled on return), webhook server, Custom Agents, Astrid's model. Rows are the core's `agents` (server order and names, incl. a locked Codex row) rather than iOS's fixed five. **Not built (no core command):** stored-key preview and validity, Copilot cloud-agent token screen, GitHub App connected/repository count, Custom Agent photo. Custom Agent names are validated by the server, not as you type |
+| Connections | ✅ | ✅ | AATD-57 | The core's sections and owner badges; Revoke confirmed in an AlertDialog (iOS confirmationDialog); New connection / Edit in a bottom sheet. No pull-to-refresh |
+| GitHub Issues / Google Tasks sync | ✅ | 🟡 | AATD-57 | Connect in a Custom Tab, link a list, Google sync mode and Sync now. **Not built (no core command):** the account-wide "Linked lists" with Unlink (Android shows the links made on the screen; per-list Unlink lives in list settings), "Connected as", and Google "New List" create-and-link. GitHub has no Sync now: the core says a server cron syncs it |
 | Apple Reminders sync | ✅ | ➖ | | Apple framework |
 | On-device Apple Foundation Models | ✅ | ➖ | | Apple framework; server agents are the cross-platform path |
 | Sign in with Apple (native) | ✅ | ➖ | | The web has no Apple provider for the hand-off |
