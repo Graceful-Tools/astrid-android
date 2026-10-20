@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.core.concernsTask
 import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
 import com.gracefultools.astrid.core.CoreJson
@@ -50,8 +51,7 @@ class TaskDetailViewModel(
         load()
         work {
             core.changes.collect { change ->
-                val about = (change.raw["id"] as? JsonPrimitive)?.contentOrNull
-                if (change.kind == "synced" || about == id || change.kind == "comment") load()
+                if (change.concernsTask(id)) load()
             }
         }
     }

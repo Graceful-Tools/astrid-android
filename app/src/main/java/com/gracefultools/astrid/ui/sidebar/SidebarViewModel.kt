@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.sidebar
 
+import com.gracefultools.astrid.core.movesLists
 import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
 import com.gracefultools.astrid.core.CoreJson
@@ -39,7 +40,7 @@ class SidebarViewModel(
     val state: StateFlow<SidebarState> = _state.asStateFlow()
 
     init {
-        work { core.changes.collect { if (it.kind in RELOAD_ON) load() } }
+        work { core.changes.collect { if (it.movesLists) load() } }
     }
 
     fun load() = work { reload() }
@@ -81,10 +82,5 @@ class SidebarViewModel(
         } catch (failure: CoreFailure) {
             _state.update { it.copy(error = if (failure.isStillPending) null else failure.message) }
         }
-    }
-
-    private companion object {
-        /** Changes that can add, rename or remove a list. */
-        val RELOAD_ON = setOf("list", "lists", "synced", "listDeleted")
     }
 }

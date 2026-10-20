@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.chat
 
+import com.gracefultools.astrid.core.concernsChat
 import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
 import com.gracefultools.astrid.core.CoreJson
@@ -31,7 +32,7 @@ class ChatViewModel(private val core: Core, private val listId: String, dispatch
     init {
         load()
         work { runCatching { core.run(command("refreshChat", "listId" to listId)) }; load() }
-        work { core.changes.collect { if (it.kind.startsWith("chat") || it.kind == "synced") load() } }
+        work { core.changes.collect { if (it.concernsChat()) load() } }
     }
 
     fun load() = work {

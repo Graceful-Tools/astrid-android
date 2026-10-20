@@ -1,5 +1,7 @@
 package com.gracefultools.astrid.platform
 
+import com.gracefultools.astrid.core.movesTasks
+import com.gracefultools.astrid.core.ChangeKind
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -43,7 +45,7 @@ class ReminderAlarm(private val core: Core, private val alarms: Alarms) {
             val alarm = ReminderAlarm(core, SystemAlarms(context))
             scope.launch { alarm.reschedule() }
             scope.launch {
-                core.changes.collect { if (it.kind in setOf("task", "tasks", "synced", "remindersDue", "taskDeleted")) alarm.reschedule() }
+                core.changes.collect { if (it.movesTasks || it.kind == ChangeKind.REMINDERS_DUE) alarm.reschedule() }
             }
         }
     }

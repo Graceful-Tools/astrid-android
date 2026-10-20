@@ -1,5 +1,7 @@
 package com.gracefultools.astrid.ui.settings
 
+import com.gracefultools.astrid.core.movesOutbox
+import com.gracefultools.astrid.core.movesSettings
 import com.gracefultools.astrid.Preferences
 import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreJson
@@ -38,6 +40,7 @@ class SettingsViewModel(
         load()
         // The cache opens the screen; the server corrects it.
         work { runCatching { core.run(command("refreshSettings")) }; load() }
+        work { core.changes.collect { if (it.movesOutbox || it.movesSettings) load() } }
     }
 
     fun load() = work {

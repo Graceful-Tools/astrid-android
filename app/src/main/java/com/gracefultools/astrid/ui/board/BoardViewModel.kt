@@ -1,5 +1,7 @@
 package com.gracefultools.astrid.ui.board
 
+import com.gracefultools.astrid.core.movesTasks
+import com.gracefultools.astrid.core.ChangeKind
 import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
 import com.gracefultools.astrid.core.CoreJson
@@ -29,7 +31,7 @@ class BoardViewModel(private val core: Core, dispatcher: CoroutineDispatcher = D
     val state: StateFlow<BoardState> = _state.asStateFlow()
 
     init {
-        work { core.changes.collect { if (it.kind in RELOAD_ON && _state.value.listId != null) reload() } }
+        work { core.changes.collect { if ((it.movesTasks || it.kind == ChangeKind.LIST) && _state.value.listId != null) reload() } }
     }
 
     fun open(listId: String) {
@@ -100,5 +102,4 @@ class BoardViewModel(private val core: Core, dispatcher: CoroutineDispatcher = D
 
     fun dismissError() = _state.update { it.copy(error = null) }
 
-    private companion object { val RELOAD_ON = setOf("task", "tasks", "synced", "list", "project", "taskDeleted") }
 }

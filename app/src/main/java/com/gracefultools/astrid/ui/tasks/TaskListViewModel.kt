@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.core.movesTasks
 import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
 import com.gracefultools.astrid.core.CoreJson
@@ -47,7 +48,7 @@ class TaskListViewModel(
 
     init {
         // A colleague's edit, a sync pass, a write landing: re-read what is on screen.
-        work { core.changes.collect { if (it.kind in RELOAD_ON && _state.value.listId != null) reload() } }
+        work { core.changes.collect { if (it.movesTasks && _state.value.listId != null) reload() } }
     }
 
     fun open(listId: String, isVirtual: Boolean = false) {
@@ -187,7 +188,6 @@ class TaskListViewModel(
 
     companion object {
         const val PAGE = 200
-        private val RELOAD_ON = setOf("task", "tasks", "synced", "list", "taskDeleted", "outbox")
     }
 }
 

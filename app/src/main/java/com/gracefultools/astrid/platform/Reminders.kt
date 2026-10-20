@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.platform
 
+import com.gracefultools.astrid.core.ChangeKind
 import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -64,7 +65,7 @@ class ReminderNotifier(private val core: Core, private val post: (DueReminder) -
         fun start(context: Context, core: Core, scope: CoroutineScope) {
             createChannel(context)
             val notifier = forContext(context, core)
-            scope.launch { core.changes.collect { if (it.kind == "remindersDue") notifier.postDue() } }
+            scope.launch { core.changes.collect { if (it.kind == ChangeKind.REMINDERS_DUE) notifier.postDue() } }
             scope.launch { notifier.postDue() }
         }
 
