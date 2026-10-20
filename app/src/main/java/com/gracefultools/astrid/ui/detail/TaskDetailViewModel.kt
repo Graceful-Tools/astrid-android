@@ -106,7 +106,10 @@ class TaskDetailViewModel(
         try {
             val detail = CoreJson.decodeFromJsonElement(TaskDetail.serializer(), core.run(command("taskDetail", "taskId" to id)))
             id = detail.task.id.ifEmpty { id }
-            _state.update { it.copy(detail = detail, error = null) }
+            // An agent's reply ends its "is thinking..." (iOS clears it on the answer too).
+            val replied = _state.value.typingAgent != null && detail.comments.lastOrNull()?.authorIsAgent == true &&
+                detail.comments.size > (_state.value.detail?.comments?.size ?: 0)
+            _state.update { it.copy(detail = detail, error = null, typingAgent = if (replied) null else it.typingAgent) }
             loadAttachments()
         } catch (failure: CoreFailure) {
             // A task opened by the id it had before the server named it: follow it to its real one.

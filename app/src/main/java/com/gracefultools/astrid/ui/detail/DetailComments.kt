@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Reply
 import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
@@ -94,12 +95,37 @@ internal fun CommentsSection(
             }
         }
         if (people.isEmpty()) Text(stringResource(R.string.comments_empty), style = TextStyles.caption, color = colors.textMuted)
+        val folded = detail.streaks.associateBy { it.ids.first() }
+        val inStreak = detail.streaks.flatMap { it.ids.drop(1) }.toSet()
         shown.forEach { comment ->
-            if (comment.isSystem) SystemNote(comment)
+            val streak = folded[comment.id]
+            if (comment.id in inStreak) return@forEach
+            if (streak != null) StreakRow(streak)
+            else if (comment.isSystem) SystemNote(comment)
             else CommentBubble(comment, onOpenFile, fetch, onReply, onEdit, onDelete, onOpenTask, onOpenList)
         }
         // iOS's AgentTypingIndicator under the thread, while an agent works on this task (AATD-53).
         typingAgent?.let { com.gracefultools.astrid.ui.common.AgentTypingIndicator(it.name) }
+    }
+}
+
+/** iOS's CompletionStreakRow: a flame and "Completed 5 times in 12 days"; tap for the dates. */
+@Composable
+private fun StreakRow(streak: com.gracefultools.astrid.model.CompletionStreak) {
+    val colors = AstridTheme.colors
+    var open by remember { mutableStateOf(false) }
+    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).clickable { open = !open }.padding(vertical = 4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            Icon(Icons.Filled.LocalFireDepartment, null, tint = Color(0xFFF97316), modifier = Modifier.size(16.dp))
+            Text(
+                if (streak.spanDays != null) stringResource(R.string.comments_streak_summary, streak.count, streak.spanDays)
+                else stringResource(R.string.comments_streak_summary_no_span, streak.count),
+                style = TextStyles.caption, color = colors.textSecondary,
+            )
+        }
+        if (open) streak.dates.forEach { iso ->
+            formatCommentDay(iso)?.let { Text(it, style = TextStyles.caption2, color = colors.textMuted) }
+        }
     }
 }
 

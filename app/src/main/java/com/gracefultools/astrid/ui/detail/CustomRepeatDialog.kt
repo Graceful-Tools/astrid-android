@@ -81,8 +81,8 @@ private val END_CONDITIONS = listOf("never" to R.string.repeating_never, "after_
  * After X occurrences, Until a date); then Cancel and Close, which saves. It builds the pattern;
  * the core alone interprets it.
  *
- * iOS's wheels are steppers here (Android has no wheel picker), and its live "Preview" line is not
- * drawn: iOS words it in Swift, and the core has no rule yet that words an unsaved pattern.
+ * iOS's wheels are steppers here (Android has no wheel picker). The live "Preview" is worded by the
+ * core's rules door (`repeatSummary`, core 4c7fdb6), the same words a saved repeat gets.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -236,6 +236,22 @@ fun CustomRepeatDialog(
                 }
                 if (pattern.endCondition == "until_date") {
                     Section(stringResource(R.string.repeating_end_date)) { EndDatePicker(pattern.endUntilDate) { pattern = pattern.copy(endUntilDate = it) } }
+                }
+            }
+
+            val context = androidx.compose.ui.platform.LocalContext.current
+            val preview = remember(pattern, repeatFrom) {
+                runCatching {
+                    val data = (com.gracefultools.astrid.core.CoreJson.encodeToJsonElement(com.gracefultools.astrid.model.RepeatPattern.serializer(), pattern)
+                        as kotlinx.serialization.json.JsonObject).let { kotlinx.serialization.json.JsonObject(it + ("type" to kotlinx.serialization.json.JsonPrimitive("custom"))) }
+                    com.gracefultools.astrid.core.CoreRules.ask(
+                        com.gracefultools.astrid.core.command("repeatSummary", "repeating" to "custom", "repeatingData" to data, "repeatFrom" to repeatFrom),
+                    )
+                }.getOrNull()
+            }
+            com.gracefultools.astrid.ui.common.CoreLabels.summary(context, preview)?.let { words ->
+                Section(stringResource(R.string.repeating_preview)) {
+                    Text(words, style = TextStyles.body, color = colors.textPrimary)
                 }
             }
 

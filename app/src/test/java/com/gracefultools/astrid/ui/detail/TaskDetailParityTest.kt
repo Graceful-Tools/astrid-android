@@ -71,4 +71,15 @@ class TaskDetailParityTest {
         vm(core).postComment("Agreed", replyTo = "c7")
         assertEquals(JsonPrimitive("c7"), core.last("postComment")!!["parentCommentId"])
     }
+
+    @Test
+    fun `AATD-53 an agent's reply ends its typing indicator`() = runTest {
+        val core = FakeCore().apply { answer("taskDetail", detail()) }
+        val vm = vm(core)
+        core.emit("agentTyping", """{"change":"agentTyping","taskId":"t1","agentName":"Claude","active":true}""")
+        assertEquals("Claude", vm.state.value.typingAgent?.name)
+        core.answer("taskDetail", detail().replace("\"comments\":[]", "\"comments\":[{\"id\":\"c1\",\"content\":\"Done\",\"authorIsAgent\":true}]"))
+        core.emit("comments", """{"change":"comments","taskId":"t1"}""")
+        assertEquals(null, vm.state.value.typingAgent)
+    }
 }

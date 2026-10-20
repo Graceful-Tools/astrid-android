@@ -101,4 +101,14 @@ class CoreSessionTest {
             .map { (it.jsonObject["key"] as JsonPrimitive).content }
         assertEquals(listOf("repeat.every_n_weeks", "repeat.on_weekdays", "repeat.ends_after"), summary)
     }
+
+    @Test
+    fun `AATD-50 the rules door words a repeat that is still being edited`() {
+        val parts = CoreRules.ask(
+            CoreJson.parseToJsonElement(
+                """{"kind":"repeatSummary","repeating":"custom","repeatingData":{"type":"custom","unit":"weeks","interval":2,"weekdays":["monday"]}}""",
+            ).jsonObject,
+        ) as JsonArray
+        assertTrue("$parts", parts.isNotEmpty())
+    }
 }

@@ -31,6 +31,8 @@ data class TaskDetail(
     val timer: TimerState? = null,
     /** The task this is a subtask of. */
     val parent: ParentLink? = null,
+    /** Runs of completion notes folded into one line (core `streaks`, iOS CompletionStreak). */
+    val streaks: List<CompletionStreak> = emptyList(),
 )
 
 @Serializable
@@ -50,6 +52,9 @@ data class BlockerCandidates(val candidates: List<Blocker> = emptyList())
 
 @Serializable
 data class TimerState(val isRunning: Boolean = false, val startedAt: String? = null, val loggedMinutes: Long = 0, val lastValue: String? = null)
+
+@Serializable
+data class CompletionStreak(val ids: List<String> = emptyList(), val count: Int = 0, val spanDays: Int? = null, val dates: List<String> = emptyList())
 
 @Serializable
 data class ParentLink(val id: String = "", val title: String = "")
@@ -96,6 +101,8 @@ data class CommentRow(
     val authorId: String? = null,
     val authorImage: String? = null,
     val authorInitials: String? = null,
+    /** An AI agent wrote it: its reply ends that agent's typing indicator. */
+    val authorIsAgent: Boolean = false,
     /** The text as markdown blocks (mentions, bold), as a description renders. */
     val blocks: List<JsonObject> = emptyList(),
 )

@@ -901,4 +901,7 @@
     <string name="comments_offline">Offline</string>
     <string name="chat_agent_thinking">%1$s is thinking...</string>
     <string name="chat_agent_fallback">Agent</string>
+    <string name="repeating_preview">Preview</string>
+    <string name="comments_streak_summary">Completed %1$d times in %2$d days</string>
+    <string name="comments_streak_summary_no_span">Completed %1$d times</string>
 </resources>
