@@ -141,7 +141,74 @@ data class ListSettings(
     val canLeave: Boolean = false,
     val currentUserId: String? = null,
     val members: List<Member> = emptyList(),
+    /** The list's picture as stored; where to draw it from is `listImage`. */
+    val imageUrl: String? = null,
+    /** The coding agent's repository (`owner/repo`), or null. */
+    val githubRepositoryId: String? = null,
+    /** What a task added to this list starts as (core task c4102c67). */
+    val defaults: ListDefaults = ListDefaults(),
+    /** The owner is offered a handover instead of Leave (Apple AITD-392). */
+    val canTransferOwnership: Boolean = false,
+    /** What the list's backend can do; the defaults section offers only what it supports. */
+    val supports: ListSupportFlags = ListSupportFlags(),
 )
+
+/** The `supports` keys the list settings read. Absent means classic: everything on. */
+@Serializable
+data class ListSupportFlags(val priority: Boolean = true, val dueDate: Boolean = true)
+
+/**
+ * A list's default task settings as the core answers them in `listMembers.defaults`: an absent
+ * assignee is the task's creator, `"unassigned"` is nobody, an id is that member.
+ */
+@Serializable
+data class ListDefaults(
+    val assigneeId: String? = null,
+    val priority: Int = 0,
+    val repeating: String = "never",
+    val dueDate: String = "none",
+    val dueTime: String? = null,
+)
+
+/** An invitation nobody has accepted yet (`TaskList.invitations`). */
+@Serializable
+data class ListInvite(val id: String = "", val email: String = "", val role: String = "member")
+
+/**
+ * The parts of the cached list (`list`) the settings screen needs that `listMembers` leaves out:
+ * the description, the owner as a person, the invitations and the recently-completed window.
+ */
+@Serializable
+data class ListDetail(
+    val id: String = "",
+    val description: String? = null,
+    val owner: UserSummary? = null,
+    val invitations: List<ListInvite> = emptyList(),
+    val recentlyCompletedWindow: kotlinx.serialization.json.JsonObject? = null,
+)
+
+/** `listAgentOptions`: the agents this account may put on a list, and the repositories it reaches. */
+@Serializable
+data class ListAgentOptions(
+    val githubRepositoryId: String? = null,
+    val agents: List<AgentOption> = emptyList(),
+    val repositories: List<RepositoryOption> = emptyList(),
+    val githubConnected: Boolean = false,
+)
+
+/** One agent; `email` is what an invitation needs, and the core does not answer it yet. */
+@Serializable
+data class AgentOption(val id: String = "", val name: String = "", val email: String? = null, val image: String? = null)
+
+@Serializable
+data class RepositoryOption(val fullName: String = "", val name: String = "")
+
+/**
+ * `eligibleNewOwners`: one of `unavailable`, `notPermitted`, `noEligibleOwners` or `available`
+ * (with [owners]) — `services::list::TransferAvailability`.
+ */
+@Serializable
+data class TransferAvailability(val availability: String = "unavailable", val owners: List<UserSummary> = emptyList())
 
 /** One chat message, projected by the core (`rows::chat::MessageRow`). */
 @Serializable
