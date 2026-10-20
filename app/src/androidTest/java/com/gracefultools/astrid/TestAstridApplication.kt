@@ -23,6 +23,7 @@ import uniffi.astrid_android.CredentialStore
  */
 class TestAstridApplication : AstridApplication() {
     override val schedulesBackgroundWork = false
+    override val suppressesInterruptingPrompts = true
 
     override fun makeGraph(): AppGraph = liveCookie()?.let(::liveGraph) ?: seededGraph()
 

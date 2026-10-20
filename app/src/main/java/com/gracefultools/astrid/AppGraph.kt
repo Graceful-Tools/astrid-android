@@ -20,6 +20,9 @@ class AppGraph(
     /** iOS NotificationPromptManager: one for the app, so a due date set anywhere can ask. */
     val notificationPrompt = com.gracefultools.astrid.platform.NotificationPrompt(preferences)
 
+    /** iOS ReviewPromptManager: "Loving Astrid?" (AATD-63). */
+    val reviewPrompt = com.gracefultools.astrid.platform.ReviewPrompt(preferences, core)
+
     companion object {
         fun start(context: Context): AppGraph {
             val dir = context.filesDir

@@ -35,6 +35,12 @@ data class TaskListState(
     val sortBy: String? = null,
     /** What the quick-add bar's leading control shows and its picker offers (`quickAddDefaults`). */
     val quickAdd: QuickAddDefaults = QuickAddDefaults(),
+    /** A featured public list the reader is not in (AATD-46): Copy List in the header, no rotator. */
+    val featured: Boolean = false,
+    /** iOS isCopyingList: the Copy List button's spinner. */
+    val copyingList: Boolean = false,
+    /** iOS lists.copy_failed: "Couldn't copy that list. Please try again." */
+    val copyListFailed: Boolean = false,
 )
 
 /** The core's answer for a new task's starting priority and assignee, and who may be chosen. */
@@ -64,15 +70,28 @@ class TaskListViewModel(
         work { core.changes.collect { if (it.movesTasks && _state.value.listId != null) reload() } }
     }
 
-    fun open(listId: String, isVirtual: Boolean = false) {
-        if (_state.value.listId == listId) return
+    /**
+     * Open a list. [featured] is a public list the reader is not in, which the cache does not hold:
+     * it travels with every `rowsForList` as the core's `list` input (iOS's featured mode).
+     */
+    fun open(listId: String, isVirtual: Boolean = false, featured: com.gracefultools.astrid.ui.publiclists.PublicListSummary? = null) {
+        if (_state.value.listId == listId && (featured != null) == _state.value.featured) return
         generation++
         chosenPriority = null
         chosenAssignee = null
-        _state.value = TaskListState(listId = listId, isVirtual = isVirtual, loading = true)
+        featuredList = featured?.asTaskList()
+        _state.value = TaskListState(listId = listId, isVirtual = isVirtual, loading = true, featured = featured != null)
         reload()
         loadQuickAdd()
     }
+
+    private var featuredList: JsonObject? = null
+
+    /** `rowsForList` for the open list, a featured one carrying its own shape. */
+    private fun rowsCommand(listId: String, offset: Int, limit: Int) = command(
+        "rowsForList", "listId" to listId, "offset" to offset, "limit" to limit,
+        *listOfNotNull(featuredList?.let { "list" to it }).toTypedArray(),
+    )
 
     // What the person picked in the quick-add picker; null = not said, so the list's default stands.
     private var chosenPriority: Int? = null
@@ -112,7 +131,7 @@ class TaskListViewModel(
         try {
             val window = CoreJson.decodeFromJsonElement(
                 RowWindow.serializer(),
-                core.run(command("rowsForList", "listId" to listId, "offset" to 0, "limit" to wanted)),
+                core.run(rowsCommand(listId, 0, wanted)),
             )
             if (mine != generation) return@work
             _state.update { it.copy(rows = window.rows, total = window.total, loading = false, sortBy = window.sortBy) }
@@ -130,7 +149,7 @@ class TaskListViewModel(
         runCatching {
             CoreJson.decodeFromJsonElement(
                 RowWindow.serializer(),
-                core.run(command("rowsForList", "listId" to listId, "offset" to state.rows.size, "limit" to PAGE)),
+                core.run(rowsCommand(listId, state.rows.size, PAGE)),
             )
         }.onSuccess { window ->
             if (mine == generation) _state.update { it.copy(rows = it.rows + window.rows, total = window.total) }
@@ -253,7 +272,21 @@ class TaskListViewModel(
 
     fun dismissStatusPicker() = _state.update { it.copy(statusPicker = null) }
 
-    fun dismissError() = _state.update { it.copy(error = null) }
+    fun dismissError() = _state.update { it.copy(error = null, copyListFailed = false) }
+
+    /**
+     * iOS's Copy List (TaskListView.copyList): the featured list, with its tasks, into this account
+     * through the core's `copyList`. Answers whether it was copied, so the sidebar can re-read.
+     */
+    suspend fun copyList(): Boolean {
+        val state = _state.value
+        val listId = state.listId?.takeIf { state.featured } ?: return false
+        if (state.copyingList) return false
+        _state.update { it.copy(copyingList = true, copyListFailed = false) }
+        val copied = try { core.run(command("copyList", "listId" to listId)); true } catch (_: CoreFailure) { false }
+        _state.update { it.copy(copyingList = false, copyListFailed = !copied) }
+        return copied
+    }
 
     private fun flip(taskId: String, completed: Boolean) =
         _state.update { s -> s.copy(rows = s.rows.map { if (it.id == taskId) it.copy(completed = completed) else it }) }

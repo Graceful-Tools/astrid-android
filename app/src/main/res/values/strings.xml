@@ -819,4 +819,30 @@
     <string name="tasks_move_out_a_level">Move out a level</string>
     <string name="tasks_move_up">Move up</string>
     <string name="tasks_move_down">Move down</string>
+    <!-- Public lists (AATD-46) -->
+    <string name="navigation_public_shared_lists">Public Shared Lists</string>
+    <string name="navigation_public_lists">Public Lists</string>
+    <string name="navigation_see_all_collaborative">See all collaborative lists →</string>
+    <string name="navigation_see_all_suggested">See all suggested lists →</string>
+    <string name="filters_featured_lists">Featured Lists</string>
+    <string name="filters_view_add">View &amp; Add</string>
+    <string name="filters_tasks_count">%d tasks</string>
+    <string name="lists_copying">Copying...</string>
+    <string name="lists_copy_list">Copy List</string>
+    <string name="lists_copy_failed">Couldn\'t copy that list. Please try again.</string>
+    <!-- Tablets (AATD-61) -->
+    <string name="board_full_screen">Full Screen</string>
+    <string name="board_exit_full_screen">Exit Full Screen</string>
+    <string name="chat_hide_messages">Hide messages</string>
+    <string name="chat_show_messages_pane">Show messages</string>
+    <!-- Review prompt and feedback (AATD-63) -->
+    <string name="review_loving_title">Loving Astrid?</string>
+    <string name="review_loving_message">Do you love using Astrid? We\'d love to hear from you!</string>
+    <string name="review_not_really">Not really</string>
+    <string name="review_love_it">Yes, I love it!</string>
+    <string name="review_help_us_improve">Help Us Improve</string>
+    <string name="review_help_message">We\'re sorry to hear that. Would you like to report an issue or send us feedback?</string>
+    <string name="review_maybe_later">Maybe Later</string>
+    <string name="review_report_issue">Report an Issue</string>
+    <string name="review_send_feedback">Send Feedback</string>
 </resources>

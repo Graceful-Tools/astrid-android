@@ -87,6 +87,10 @@ fun SidebarDrawer(
     onProfile: () -> Unit = {},
     onToggleFavorite: (ListSummary) -> Unit = {},
     onAddList: (() -> Unit)? = null,
+    /** A public list from the two featured sections (AATD-46). */
+    onSelectPublic: (com.gracefultools.astrid.ui.publiclists.PublicListSummary) -> Unit = {},
+    /** "See all … lists →": the Featured Lists browser. */
+    onSeeAllPublic: () -> Unit = {},
 ) {
     val colors = AstridTheme.colors
     val addingFallback = androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
@@ -117,12 +121,62 @@ fun SidebarDrawer(
                             Entry(list, state.selectedId == list.id, state.counts[list.id], state.images[list.id], state.showListImages, { onSelect(list) }, { onToggleFavorite(list) })
                         }
                     }
+                    publicSection(
+                        "pc", R.string.navigation_public_shared_lists, R.string.navigation_see_all_collaborative,
+                        state.collaborativeLists, state, onSelectPublic, onSeeAllPublic,
+                    )
+                    publicSection(
+                        "ps", R.string.navigation_public_lists, R.string.navigation_see_all_suggested,
+                        state.suggestedLists, state, onSelectPublic, onSeeAllPublic,
+                    )
                 }
             }
             AccountCard(state.user, onProfile, onSettings, Modifier.align(Alignment.BottomCenter))
         }
     }
     if (addingFallback.value) CreateListDialog(onDismiss = { addingFallback.value = false }) { addingFallback.value = false; onCreate(it) }
+}
+
+/**
+ * iOS's featuredCollaborativeSection / featuredSuggestedSection: one card holding an uppercase
+ * caption header, at most two lists, then "See all … lists →" in accent when there are more.
+ */
+private fun androidx.compose.foundation.lazy.LazyListScope.publicSection(
+    key: String,
+    title: Int,
+    seeAll: Int,
+    section: List<com.gracefultools.astrid.ui.publiclists.PublicListSummary>,
+    state: SidebarState,
+    onSelect: (com.gracefultools.astrid.ui.publiclists.PublicListSummary) -> Unit,
+    onSeeAll: () -> Unit,
+) {
+    if (section.isEmpty()) return
+    val shown = com.gracefultools.astrid.ui.publiclists.PublicListSections.sidebarRows(section)
+    val more = com.gracefultools.astrid.ui.publiclists.PublicListSections.hasMore(section)
+    item(key = "$key-header") {
+        Group(Position.First) {
+            Text(
+                stringResource(title).uppercase(), style = TextStyles.caption, color = AstridTheme.colors.textSecondary,
+                modifier = Modifier.padding(start = Spacing.s12 + Spacing.s8, end = Spacing.s12, top = Spacing.s4, bottom = Spacing.s4).semantics { heading() },
+            )
+        }
+    }
+    itemsIndexed(shown, key = { _, it -> "$key-" + it.id }) { index, list ->
+        Group(if (!more && index == shown.lastIndex) Position.Last else Position.Middle) {
+            val summary = list.asListSummary()
+            Entry(summary, state.selectedId == list.id, list.taskCount, list.imageUrl, state.showListImages, { onSelect(list) }, null)
+        }
+    }
+    if (more) item(key = "$key-more") {
+        Group(Position.Last) {
+            Text(
+                stringResource(seeAll), style = TextStyles.caption, color = AstridTheme.colors.accent,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s8).clip(RoundedCornerShape(8.dp))
+                    .clickable(role = androidx.compose.ui.semantics.Role.Button, onClick = onSeeAll)
+                    .testTag("sidebar:$key-see-all").padding(start = Spacing.s12, top = 13.dp, bottom = 13.dp),
+            )
+        }
+    }
 }
 
 @Composable
@@ -250,10 +304,10 @@ private fun AddListEntry(onClick: () -> Unit) {
 
 /** iOS ListRowView: the list's picture (12, radius 2.4) in the logo column, name, privacy, count. Long press favourites. */
 @Composable
-private fun Entry(list: ListSummary, selected: Boolean, count: Int?, image: String?, showImages: Boolean, onClick: () -> Unit, onFavorite: () -> Unit) {
+private fun Entry(list: ListSummary, selected: Boolean, count: Int?, image: String?, showImages: Boolean, onClick: () -> Unit, onFavorite: (() -> Unit)?) {
     val colors = AstridTheme.colors
     val haptics = LocalHapticFeedback.current
-    RowShell(selected, "sidebar:${list.id}", onClick, onLongClick = { haptics.performHapticFeedback(HapticFeedbackType.LongPress); onFavorite() }) {
+    RowShell(selected, "sidebar:${list.id}", onClick, onLongClick = onFavorite?.let { { haptics.performHapticFeedback(HapticFeedbackType.LongPress); it() } }) {
         Box(Modifier.width(LogoColumn), contentAlignment = Alignment.Center) {
             if (showImages) ListPicture(list, image, 12.dp)
             else Icon(Icons.Filled.Tag, null, tint = parseColor(list.color), modifier = Modifier.size(12.dp))
