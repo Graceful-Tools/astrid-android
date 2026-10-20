@@ -51,6 +51,28 @@ import com.gracefultools.astrid.ui.tasks.TaskListScreen
 import com.gracefultools.astrid.ui.tasks.TaskListViewModel
 import kotlinx.coroutines.launch
 
+/** The core's id for My Tasks' filters (astrid_rules::filters::my_tasks::VIRTUAL_ID). */
+private const val MY_TASKS_FILTER_ID = "virtual:my-tasks"
+
+/** iOS's My Tasks title: " - Today !! !" for the due filter and priorities chosen, marks in their colours. */
+@Composable
+private fun myTasksSuffix(state: com.gracefultools.astrid.ui.filters.FiltersState): androidx.compose.ui.text.AnnotatedString? {
+    val due = state.groups.firstOrNull { it.field == "filterDueDate" }?.picks?.firstOrNull { it.isSelected && it.value != "all" }
+    val priority = state.groups.firstOrNull { it.field == "filterPriority" }?.picks?.firstOrNull { it.isSelected && it.value != "all" }
+    if (due == null && priority == null) return null
+    val dueWord = due?.let { com.gracefultools.astrid.ui.common.coreLabel(it.titleKey) }
+    return androidx.compose.ui.text.buildAnnotatedString {
+        append(" - ")
+        if (dueWord != null) append(dueWord)
+        priority?.value?.toIntOrNull()?.let { p ->
+            if (dueWord != null) append(" ")
+            pushStyle(androidx.compose.ui.text.SpanStyle(color = com.gracefultools.astrid.ui.theme.PriorityColors[p.coerceIn(0, 3)]))
+            append(if (p == 0) "○" else "!".repeat(p))
+            pop()
+        }
+    }
+}
+
 /** iOS's getEmptyStateMessage: what an empty list says, by what kind of list it is. */
 @Composable
 private fun emptyMessage(list: com.gracefultools.astrid.model.ListSummary?, isMyTasks: Boolean): String = when {
@@ -131,8 +153,9 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                 val isMyTasks = selected != null && selected.id == side.myTasks?.id
                 val title = selected?.let { if (isMyTasks) stringResource(R.string.navigation_my_tasks) else it.name } ?: ""
                 val hasBoard = selected?.projectId != null
-                // Messages for a real list; My Tasks' virtual channel is AATD-62.
-                val includesMessages = selected != null && selected.isVirtual != true
+                // Messages for a list, and for My Tasks through the reader's virtual channel (AATD-62);
+                // a saved filter has none.
+                val includesMessages = selected != null && (selected.isVirtual != true || isMyTasks)
                 val mode = selected?.let { viewModes[it.id] }
                     ?: if (hasBoard) com.gracefultools.astrid.ui.tasks.ViewMode.BOARD else com.gracefultools.astrid.ui.tasks.ViewMode.LIST
                 if (mode == com.gracefultools.astrid.ui.tasks.ViewMode.BOARD) LaunchedEffect(selected!!.id) { boardVm.open(selected.id) }
@@ -144,8 +167,18 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                         onDismiss = { if (fromBoard) boardVm.dismissStatusPicker() else tasks.dismissStatusPicker() },
                     )
                 }
+                var filtering by remember { mutableStateOf(false) }
+                val myFilters: com.gracefultools.astrid.ui.filters.FiltersViewModel? = if (isMyTasks) viewModel(
+                    key = "filters-my-tasks", factory = factory { com.gracefultools.astrid.ui.filters.FiltersViewModel(graph.core, MY_TASKS_FILTER_ID) },
+                ) else null
+                val myFilterState = myFilters?.state?.collectAsStateWithLifecycle()?.value
+                if (filtering && myFilters != null) {
+                    com.gracefultools.astrid.ui.filters.MyTasksFilterSheet(myFilters, onDismiss = { filtering = false; tasks.reload() })
+                }
                 TaskListScreen(
                     title = title,
+                    titleSuffix = myFilterState?.let { myTasksSuffix(it) },
+                    onFilter = if (isMyTasks) ({ myFilters?.load(); filtering = true }) else null,
                     viewMode = mode,
                     hasBoard = hasBoard,
                     includesMessages = includesMessages,

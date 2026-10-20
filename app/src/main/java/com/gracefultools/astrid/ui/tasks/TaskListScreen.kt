@@ -141,11 +141,13 @@ fun TaskListScreen(
     onPickPriority: (Int) -> Unit = {},
     onPickAssignee: (String?) -> Unit = {},
     selectedTaskId: String? = null,
+    /** My Tasks' active filters after the title (iOS: "My Tasks - Today !! !"). */
+    titleSuffix: androidx.compose.ui.text.AnnotatedString? = null,
 ) {
     val colors = AstridTheme.colors
     Box(Modifier.fillMaxSize().background(colors.bgPrimary)) {
         Column(Modifier.fillMaxSize()) {
-            ListHeader(title, onMenu, viewMode, hasBoard, includesMessages, onViewMode, onFilter, onListSettings)
+            ListHeader(title, titleSuffix, onMenu, viewMode, hasBoard, includesMessages, onViewMode, onFilter, onListSettings)
             when (viewMode) {
                 ViewMode.BOARD -> Box(Modifier.weight(1f)) { board() }
                 ViewMode.MESSAGES -> Box(Modifier.weight(1f)) { messages() }
@@ -205,6 +207,7 @@ private fun dismissKeyboardOnDrag(dismiss: () -> Unit) = object : NestedScrollCo
 @Composable
 private fun ListHeader(
     title: String,
+    titleSuffix: androidx.compose.ui.text.AnnotatedString?,
     onMenu: (() -> Unit)?,
     mode: ViewMode,
     hasBoard: Boolean,
@@ -226,7 +229,8 @@ private fun ListHeader(
                 Spacer(Modifier.width(10.dp))
             }
             Text(
-                title, style = TextStyles.headline, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                if (titleSuffix == null) androidx.compose.ui.text.AnnotatedString(title) else androidx.compose.ui.text.AnnotatedString(title) + titleSuffix,
+                style = TextStyles.headline, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.semantics { heading() },
             )
         }

@@ -238,4 +238,22 @@
     <string name="share_link_failed">Failed to generate share link. Please try again.</string>
     <string name="tasks_search_tasks_placeholder">Search tasks...</string>
     <string name="search_clear">Clear search</string>
+    <string name="filters_sort_by">Sort By</string>
+    <string name="lists_filters">Filters</string>
+    <string name="lists_clear_all_filters">Clear All Filters</string>
+    <string name="core_lists_highest_priority">!!! Highest</string>
+    <string name="core_lists_high_priority">!! High</string>
+    <string name="core_lists_medium_priority">! Medium</string>
+    <string name="core_lists_low_priority">○ Low</string>
+    <string name="core_sort">Sort</string>
+    <string name="core_sort_auto">Auto</string>
+    <string name="core_sort_priority">Priority</string>
+    <string name="core_sort_when">Due Date</string>
+    <string name="core_sort_created">Created Date</string>
+    <string name="core_sort_manual">Manual</string>
+    <string name="core_repeat_daily">Daily</string>
+    <string name="core_repeat_weekly">Weekly</string>
+    <string name="core_repeat_monthly">Monthly</string>
+    <string name="core_repeat_yearly">Yearly</string>
+    <string name="core_repeat_custom">Custom</string>
 </resources>
