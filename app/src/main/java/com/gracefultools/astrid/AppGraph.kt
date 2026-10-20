@@ -31,6 +31,9 @@ class AppGraph(
                 credentials = KeystoreCredentialStore(dir.resolve("astrid.credentials")),
                 background = true,
                 baseUrl = Brand.baseUrl,
+                // Only a partner's: unset, the core is Astrid and its config JSON is unchanged (AATD-72).
+                urlScheme = Brand.coreUrlScheme,
+                handoffClientId = Brand.handoffClientId,
             )
             return AppGraph(
                 core = core,

@@ -41,28 +41,30 @@
                 <data android:mimeType="image/*" />
                 <data android:mimeType="*/*" />
             </intent-filter>
-            <!-- Web links (iOS DeepLinkManager, AATD-59). Not autoVerify until astrid.cc serves
-                 assetlinks.json for the release key. -->
+            <!-- Web links (iOS DeepLinkManager, AATD-59) on the brand's hosts (AATD-72): astrid.cc and
+                 www.astrid.cc for Astrid. Not autoVerify until the site serves assetlinks.json for
+                 the release key. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" />
-                <data android:host="astrid.cc" />
-                <data android:host="www.astrid.cc" />
+                <data android:host="${astridLinkHost}" />
+                <data android:host="${astridLinkHostAlt}" />
                 <data android:pathPrefix="/t/" />
                 <data android:pathPrefix="/tasks/" />
                 <data android:pathPrefix="/lists/" />
                 <data android:pathPrefix="/settings" />
                 <data android:pathPrefix="/s/" />
             </intent-filter>
-            <!-- astrid://tasks|lists|users|settings|s/…, the older astrid://task/…, and astrid://new
-                 (the launcher shortcut). Any other host opens its page on the site. -->
+            <!-- <scheme>://tasks|lists|users|settings|s/…, the older <scheme>://task/…, and <scheme>://new
+                 (the launcher shortcut); the brand's scheme, astrid for Astrid (AATD-72). Any other
+                 host opens its page on the site. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="astrid" />
+                <data android:scheme="${astridUrlScheme}" />
                 <data android:host="tasks" />
                 <data android:host="task" />
                 <data android:host="lists" />
@@ -71,12 +73,13 @@
                 <data android:host="s" />
                 <data android:host="new" />
             </intent-filter>
-            <!-- The browser hand-off's fixed callback (astrid-web lib/auth/desktop-handoff.ts). -->
+            <!-- The browser hand-off's callback (astrid-web lib/auth/desktop-handoff.ts), on the scheme
+                 the core is told to accept (CoreSession.start's urlScheme). -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="astrid" android:host="auth" android:path="/callback" />
+                <data android:scheme="${astridUrlScheme}" android:host="auth" android:path="/callback" />
             </intent-filter>
         </activity>
         <!-- Opens a downloaded attachment in another app; only the attachment cache is shared. -->

@@ -26,6 +26,10 @@ step "gradle: unit tests"
 if [[ "$mode" != "--quick" ]]; then
   step "gradle: lint and debug APK"
   ./gradlew --console=plain lintDebug assembleDebug
+  # A white-label brand still merges: its manifest placeholders, resources and generated shortcut
+  # (AATD-72, brands/README.md). Stops short of packaging, so the APK above stays the Astrid one.
+  step "gradle: the example brand's manifest and resources"
+  ./gradlew --console=plain -PastridBrand=example :app:processDebugResources
 fi
 if [[ "$mode" == "--full" ]]; then
   step "gradle: instrumented smoke tests (needs a device or emulator)"

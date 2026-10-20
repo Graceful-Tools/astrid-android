@@ -37,8 +37,6 @@ class DeepLinks {
     fun take(): Arrival? = _pending.value.also { _pending.value = null }
 
     companion object {
-        private val WEB_HOSTS = setOf("astrid.cc", "www.astrid.cc")
-
         /**
          * The screen a settings page (iOS `SettingsPage`, the web's `/settings/<page>`) opens, or
          * null for a page iOS does not know. Pages without an Android screen yet open Settings.
@@ -58,14 +56,20 @@ class DeepLinks {
 
         /**
          * A link the app knows, or null — iOS's DeepLinkManager. Ids are checked as iOS's
-         * APIPathSafety does before they are routed on: a link is attacker-supplied input.
+         * APIPathSafety does before they are routed on: a link is attacker-supplied input. The
+         * scheme, the hosts and the server are the brand's (AATD-72).
          */
-        fun parse(link: String): Arrival? {
-            if (link == "astrid://new") return Arrival.NewTask("")
+        fun parse(
+            link: String,
+            scheme: String = Brand.urlScheme,
+            hosts: Set<String> = Brand.linkHosts,
+            base: String = Brand.baseUrl,
+        ): Arrival? {
+            if (link == "$scheme://new") return Arrival.NewTask("")
             val uri = runCatching { java.net.URI(link) }.getOrNull() ?: return null
             return when {
-                uri.scheme == "astrid" -> custom(uri)
-                uri.scheme == "https" && uri.host in WEB_HOSTS -> web(link, uri)
+                uri.scheme == scheme -> custom(uri, base)
+                uri.scheme == "https" && uri.host?.lowercase() in hosts -> web(link, uri)
                 else -> null
             }
         }
@@ -73,7 +77,7 @@ class DeepLinks {
         private fun segments(path: String?): List<String> = path.orEmpty().split('/').filter { it.isNotEmpty() }
 
         /** `astrid://<host>/<id>`. */
-        private fun custom(uri: java.net.URI): Arrival? {
+        private fun custom(uri: java.net.URI, base: String): Arrival? {
             val host = uri.host ?: return null
             val id = segments(uri.rawPath).firstOrNull()?.takeIf(::isValidId)
             return when (host) {
@@ -85,7 +89,7 @@ class DeepLinks {
                 "s" -> id?.let(Arrival::Shortcode)
                 // The browser hand-off's callback is the sign-in screen's, never a page.
                 "auth", "new" -> null
-                else -> Arrival.OpenWeb(Brand.webUrl("$host${uri.rawPath.orEmpty()}"))
+                else -> Arrival.OpenWeb(Brand.webUrl("$host${uri.rawPath.orEmpty()}", base))
             }
         }
 

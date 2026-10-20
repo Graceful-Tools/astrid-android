@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Android only: iOS has no Home Screen quick action. Opens the share form empty (AATD-60). -->
+<!-- Android only: iOS has no Home Screen quick action. Opens the share form empty (AATD-60).
+     A template: the build fills in the brand's package and scheme as res/xml/shortcuts.xml (AATD-72). -->
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
         android:shortcutId="new_task"
@@ -8,8 +9,8 @@
         android:shortcutShortLabel="@string/shortcut_new_task">
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="astrid://new"
-            android:targetPackage="com.gracefultools.astrid"
+            android:data="@URL_SCHEME@://new"
+            android:targetPackage="@APPLICATION_ID@"
             android:targetClass="com.gracefultools.astrid.MainActivity" />
     </shortcut>
 </shortcuts>

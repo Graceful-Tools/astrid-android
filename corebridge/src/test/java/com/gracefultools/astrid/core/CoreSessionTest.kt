@@ -62,6 +62,26 @@ class CoreSessionTest {
     }
 
     @Test
+    fun `AATD-72 an Astrid build tells the core nothing new about its identity`() {
+        assertEquals(
+            """{"cachePath":":memory:","baseUrl":"https://astrid.cc","platform":"android-app"}""",
+            CoreSession.configJson(":memory:", "https://astrid.cc"),
+        )
+    }
+
+    @Test
+    fun `AATD-72 a partner build signs in on its own scheme as its own client`() = runBlocking {
+        assertEquals(
+            """{"cachePath":":memory:","platform":"android-app","urlScheme":"partner","handoffClientId":"partner-android"}""",
+            CoreSession.configJson(":memory:", urlScheme = "partner", handoffClientId = "partner-android"),
+        )
+        val core = CoreSession.start(":memory:", Memory(), background = false, urlScheme = "partner", handoffClientId = "partner-android")
+        val answer = core.run(command("beginSignIn", "provider" to "google")) as JsonObject
+        val url = (answer["authorizeUrl"] as JsonPrimitive).content
+        assertTrue(url, url.contains("client=partner-android"))
+    }
+
+    @Test
     fun `AATD-4 seeded rows come back in the shape the screens decode`() = runBlocking {
         val core = session()
         core.run(

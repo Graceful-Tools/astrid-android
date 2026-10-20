@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Astrid</string>
+    <!-- app_name and brand_wordmark are the brand's: resValue in app/build.gradle.kts (AATD-72). -->
     <!-- Sign-in: the iOS keys auth.* (Localizable.strings), word for word. -->
     <string name="auth_tagline">Get it done!</string>
     <string name="auth_sign_in_header">Sign in to get started!</string>
@@ -143,7 +143,6 @@
     <string name="my_tasks_filters_title">Sort &amp; Filters</string>
     <string name="quick_add_picker_a11y">Priority and assignee for the new task</string>
     <string name="lists_new_list">New list</string>
-    <string name="brand_wordmark" translatable="false">astrid</string>
     <string name="tasks_task_details">Task Details</string>
     <string name="tasks_when">When</string>
     <string name="navigation_lists_label">Lists</string>

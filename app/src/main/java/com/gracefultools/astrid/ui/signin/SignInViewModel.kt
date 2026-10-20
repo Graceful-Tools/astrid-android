@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.signin
 
+import com.gracefultools.astrid.Brand
 import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
 import com.gracefultools.astrid.core.command
@@ -141,7 +142,7 @@ class SignInViewModel(
     }
 
     companion object {
-        /** The fixed callback the server delivers to (astrid-web `desktop-handoff.ts`). */
-        fun isCallback(url: String): Boolean = url.startsWith("astrid://auth/callback")
+        /** The callback the server delivers to (astrid-web `desktop-handoff.ts`), on the brand's scheme. */
+        fun isCallback(url: String, scheme: String = Brand.urlScheme): Boolean = url.startsWith("$scheme://auth/callback")
     }
 }
