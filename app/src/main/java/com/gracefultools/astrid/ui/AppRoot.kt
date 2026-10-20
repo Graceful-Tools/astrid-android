@@ -35,6 +35,8 @@ import com.gracefultools.astrid.ui.detail.TaskDetailScreen
 import com.gracefultools.astrid.ui.detail.TaskDetailViewModel
 import com.gracefultools.astrid.ui.lists.ListSettingsScreen
 import com.gracefultools.astrid.ui.lists.ListSettingsViewModel
+import com.gracefultools.astrid.ui.lists.NewListScreen
+import com.gracefultools.astrid.ui.lists.NewListViewModel
 import com.gracefultools.astrid.ui.account.AccountViewModel
 import com.gracefultools.astrid.ui.account.AgentsScreen
 import com.gracefultools.astrid.ui.account.ConnectionsScreen
@@ -118,6 +120,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onProfile = { scope.launch { drawer.close() }; nav.navigate("profile") },
                     onToggleFavorite = sidebar::toggleFavorite,
                     onCreate = { sidebar.create(it); scope.launch { drawer.close() } },
+                    onAddList = { scope.launch { drawer.close() }; nav.navigate("new-list") },
                 )
             }
             val listContent: @Composable () -> Unit = if (searching) ({
@@ -229,6 +232,15 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
             ListSettingsScreen(vm, onBack = { nav.popBackStack() }, onGone = {
                 nav.popBackStack()
                 side.myTasks?.let { sidebar.select(it.id) }
+                sidebar.load()
+            })
+        }
+        composable("new-list") {
+            val vm: NewListViewModel = viewModel(key = "new-list", factory = factory { NewListViewModel(graph.core) })
+            // Android opens the new list once it is made; iOS's ListEditView only dismisses (PARITY).
+            NewListScreen(vm, onCancel = { nav.popBackStack() }, onCreated = { id ->
+                nav.popBackStack()
+                sidebar.select(id)
                 sidebar.load()
             })
         }
