@@ -27,3 +27,20 @@ avdmanager create avd -n astrid35 -k "system-images;android-35;google_apis;arm64
 emulator -avd astrid35 -no-window -no-audio -no-snapshot &   # headless
 adb wait-for-device && npm run predeploy:full
 ```
+
+## Live: signed in as the test account
+
+```bash
+scripts/live-test.sh        # emulator running; astrid-web checked out beside this repo
+```
+
+`LiveAccountTest` runs the real core against astrid.cc as **uitest@astrid.cc** — the iOS UI suite's
+dedicated account, minted by astrid-web `scripts/uitest-account.ts --cookie`. Minting also **resets
+that account's fixtures** (every task on it is deleted and `lib/uitest-fixtures.ts` recreated), so
+mint once per run and reuse the cookie. The credential lives in an in-memory store for the run only:
+the device's own sign-in is never read or replaced. Without the `astridLiveCookie` argument every
+live test skips, so `predeploy --full` stays offline.
+
+Traps: an emulator started with a stale `-dns-server` reaches nothing (`adb shell ping astrid.cc`);
+a process's first request can fail while it is still starting, which is why the harness retries
+fetching the user before it launches the activity.
