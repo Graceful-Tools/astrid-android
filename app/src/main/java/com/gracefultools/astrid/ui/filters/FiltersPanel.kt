@@ -2,6 +2,7 @@ package com.gracefultools.astrid.ui.filters
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -136,3 +137,32 @@ fun MyTasksFilterSheet(vm: FiltersViewModel, onDismiss: () -> Unit) {
         FiltersPanel(vm, Modifier.verticalScroll(rememberScrollState()).padding(horizontal = Spacing.s16).padding(bottom = Spacing.s24))
     }
 }
+
+/** iOS's list switches under the filters: "Show subtasks" (with its footer) and "Saved Filter". */
+@Composable
+fun ListSwitches(state: FiltersState, vm: FiltersViewModel) {
+    val colors = AstridTheme.colors
+    Card {
+        SwitchRow(stringResource(R.string.lists_show_subtasks), state.showSubtasks, vm::setShowSubtasks)
+        HorizontalDivider(Modifier.padding(start = Spacing.s16), color = colors.divider)
+        SwitchRow(stringResource(R.string.lists_saved_filter), state.isSavedFilter, vm::setSavedFilter)
+    }
+    Text(
+        stringResource(if (state.isSavedFilter) R.string.lists_saved_filter_description else R.string.lists_show_subtasks_footer),
+        style = TextStyles.caption, color = colors.textSecondary, modifier = Modifier.padding(horizontal = Spacing.s16),
+    )
+}
+
+@Composable
+private fun SwitchRow(label: String, on: Boolean, onChange: (Boolean) -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().toggleableRow(on, onChange).heightIn(min = 48.dp).padding(horizontal = Spacing.s16),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(label, style = TextStyles.body, color = AstridTheme.colors.textPrimary, modifier = Modifier.weight(1f))
+        androidx.compose.material3.Switch(checked = on, onCheckedChange = null)
+    }
+}
+
+private fun Modifier.toggleableRow(on: Boolean, onChange: (Boolean) -> Unit) =
+    this.toggleable(value = on, role = androidx.compose.ui.semantics.Role.Switch, onValueChange = onChange)

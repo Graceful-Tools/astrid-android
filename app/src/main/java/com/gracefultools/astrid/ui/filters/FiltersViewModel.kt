@@ -22,7 +22,14 @@ data class FilterGroup(val field: String = "", val titleKey: String = "", val pi
 @Serializable
 data class FilterOptions(val listId: String = "", val isFiltered: Boolean = false, val groups: List<FilterGroup> = emptyList())
 
-data class FiltersState(val groups: List<FilterGroup> = emptyList(), val isFiltered: Boolean = false, val error: String? = null)
+data class FiltersState(
+    val groups: List<FilterGroup> = emptyList(),
+    val isFiltered: Boolean = false,
+    val error: String? = null,
+    /** A list's own switches (not My Tasks'): subtasks inline, and a saved filter. */
+    val showSubtasks: Boolean = true,
+    val isSavedFilter: Boolean = false,
+)
 
 /**
  * iOS's ListSortFiltersTab and MyTasksFilterSheet, one model for both (AATD-41): the core answers
@@ -42,7 +49,28 @@ class FiltersViewModel(
     fun load() = work {
         runCatching { CoreJson.decodeFromJsonElement(FilterOptions.serializer(), core.run(command("filterOptions", "listId" to listId))) }
             .onSuccess { options -> _state.update { it.copy(groups = options.groups, isFiltered = options.isFiltered) } }
+        if (listId != MY_TASKS) runCatching { core.run(command("list", "listId" to listId)) as? kotlinx.serialization.json.JsonObject }.getOrNull()?.let { list ->
+            fun flag(name: String) = (list[name] as? kotlinx.serialization.json.JsonPrimitive)?.content
+            _state.update { it.copy(showSubtasks = flag("showSubtasks") != "false", isSavedFilter = flag("isVirtual") == "true") }
+        }
     }
+
+    /** iOS's "Show subtasks" for this list (updateList showSubtasks). */
+    fun setShowSubtasks(on: Boolean) = change("showSubtasks" to on)
+
+    /** iOS's "Saved Filter": the list shows what its filters keep, not its members (isVirtual). */
+    fun setSavedFilter(on: Boolean) = change("isVirtual" to on)
+
+    private fun change(vararg changes: Pair<String, Any?>) = work {
+        try {
+            core.run(command("updateList", "listId" to listId, "changes" to changes.toMap()))
+        } catch (failure: CoreFailure) {
+            if (!failure.isStillPending) _state.update { it.copy(error = failure.message) }
+        }
+        load()
+    }
+
+    private companion object { const val MY_TASKS = "virtual:my-tasks" }
 
     fun pick(field: String, value: String) = work {
         set(field, value)

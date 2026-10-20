@@ -49,7 +49,10 @@ class DeepLinksTest {
         assertEquals(Arrival.Shortcode("Xy7"), DeepLinks.parse("https://astrid.cc/s/Xy7"))
         assertEquals(Arrival.OpenSettings("connections"), DeepLinks.parse("https://astrid.cc/settings/api-access"))
         assertEquals(Arrival.OpenSettings("profile"), DeepLinks.parse("https://astrid.cc/settings/profile"))
-        assertEquals(Arrival.OpenSettings("settings"), DeepLinks.parse("https://astrid.cc/settings/reminders"))
+        // The pages with their own screen open it (AATD-59, after AATD-55/56).
+        assertEquals(Arrival.OpenSettings("settings/reminders"), DeepLinks.parse("https://astrid.cc/settings/reminders"))
+        assertEquals(Arrival.OpenSettings("settings/appearance"), DeepLinks.parse("astrid://settings/appearance"))
+        assertEquals(Arrival.OpenSettings("account"), DeepLinks.parse("astrid://settings/account"))
         assertEquals(Arrival.OpenSettings("settings"), DeepLinks.parse("https://astrid.cc/settings"))
         assertEquals(Arrival.OpenWeb("https://astrid.cc/settings/billing"), DeepLinks.parse("https://astrid.cc/settings/billing"))
         assertEquals(Arrival.OpenWeb("https://astrid.cc/pricing"), DeepLinks.parse("https://astrid.cc/pricing"))

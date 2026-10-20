@@ -49,7 +49,11 @@ class DeepLinks {
             "agents" -> "agents"
             // `api-access` is the retired name for Connections, kept for old links (iOS).
             "connections", "api-access" -> "connections"
-            "account", "reminders", "chatgpt", "contacts", "appearance", "debug", "language", "about" -> "settings"
+            "account" -> "account"
+            "reminders" -> "settings/reminders"
+            "appearance" -> "settings/appearance"
+            "language" -> "settings/language"
+            "chatgpt", "contacts", "debug", "about" -> "settings"
             else -> null
         }
 

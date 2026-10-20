@@ -186,8 +186,8 @@ fun SettingsScreen(
 }
 
 /** Where the GitHub Issues and Google Tasks pages will live (item 38's screens). */
-const val ROUTE_GITHUB = "settings/github"
-const val ROUTE_GOOGLE_TASKS = "settings/google-tasks"
+const val ROUTE_GITHUB = com.gracefultools.astrid.ui.sync.SyncRoutes.GITHUB
+const val ROUTE_GOOGLE_TASKS = com.gracefultools.astrid.ui.sync.SyncRoutes.GOOGLE
 
 /** iOS's Outbox section: the journal's health, why each refused write was refused, and a retry. */
 @Composable
