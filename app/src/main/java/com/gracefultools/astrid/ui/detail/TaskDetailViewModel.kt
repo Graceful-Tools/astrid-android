@@ -168,7 +168,16 @@ class TaskDetailViewModel(
 
     fun setPriority(priority: Int) = update("priority" to priority)
 
-    fun setDue(dueDateTime: String?, isAllDay: Boolean) = update("dueDateTime" to dueDateTime, "isAllDay" to isAllDay)
+    /**
+     * Told when a due date is set here — iOS asks for notification permission then
+     * (TaskDetailViewNew → NotificationPromptManager.checkAndPromptAfterDateSet, AATD-54).
+     */
+    var onDueDateSet: () -> Unit = {}
+
+    fun setDue(dueDateTime: String?, isAllDay: Boolean) {
+        update("dueDateTime" to dueDateTime, "isAllDay" to isAllDay)
+        if (dueDateTime != null) onDueDateSet()
+    }
 
     /** A day from the date picker: the core says which instant that day means for this task. */
     fun pickDay(isoDay: String) = work {
@@ -178,6 +187,7 @@ class TaskDetailViewModel(
             val allDay = (answer["isAllDay"] as? JsonPrimitive)?.contentOrNull == "true"
             core.run(command("updateTask", "taskId" to id, "changes" to mapOf("dueDateTime" to due, "isAllDay" to allDay)))
         }
+        onDueDateSet()
         load()
     }
 
@@ -188,6 +198,7 @@ class TaskDetailViewModel(
             val due = (answer["dueDateTime"] as? JsonPrimitive)?.contentOrNull
             core.run(command("updateTask", "taskId" to id, "changes" to mapOf("dueDateTime" to due, "isAllDay" to false)))
         }
+        onDueDateSet()
         load()
     }
 

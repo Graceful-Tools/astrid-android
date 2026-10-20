@@ -13,6 +13,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.gracefultools.astrid.ui.AppRoot
 import com.gracefultools.astrid.ui.signin.SignInScreen
 import com.gracefultools.astrid.ui.signin.SignInState
@@ -41,17 +45,19 @@ class MainActivity : ComponentActivity() {
     private fun Root() {
         val state by signIn.state.collectAsStateWithLifecycle()
         val url by signIn.openBrowser.collectAsStateWithLifecycle()
+        val look by signIn.look.collectAsStateWithLifecycle()
         LaunchedEffect(url) {
             url?.let { open(it); signIn.browserOpened() }
         }
         if (state == SignInState.Checking) {
             com.gracefultools.astrid.ui.common.SplashLookalike()
         } else if (state == SignInState.SignedIn) {
-            NotificationPermission()
+            com.gracefultools.astrid.platform.NotificationPrompting(graph.notificationPrompt, graph.preferences)
             AppRoot(graph = graph, onSignedOut = signIn::signedOut, onDeepLink = deepLinks)
         } else {
             SignInScreen(
                 state = state,
+                look = look,
                 onProvider = signIn::begin,
                 onOpenAgain = { signIn.begin(null) },
                 onCancel = signIn::cancel,
@@ -76,19 +82,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /** Reminders need it on Android 13+; asked once, when there is first something to remind about. */
-    @Composable
-    private fun NotificationPermission() {
-        if (android.os.Build.VERSION.SDK_INT < 33) return
-        val launcher = androidx.activity.compose.rememberLauncherForActivityResult(
-            androidx.activity.result.contract.ActivityResultContracts.RequestPermission(),
-        ) { }
-        LaunchedEffect(Unit) {
-            val granted = checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) == android.content.pm.PackageManager.PERMISSION_GRANTED
-            if (!granted) launcher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
-        }
-    }
-
     private val deepLinks = DeepLinks()
 
     override fun onNewIntent(intent: Intent) {
@@ -96,16 +89,45 @@ class MainActivity : ComponentActivity() {
         handle(intent)
     }
 
-    /** The hand-off's callback, a shared text, the New task shortcut, or a task link. */
+    /**
+     * The hand-off's callback; a share (a file, or text — an Android extra); the New task
+     * shortcut; a tapped reminder; or a link.
+     */
     private fun handle(intent: Intent?) {
         intent ?: return
-        if (intent.action == Intent.ACTION_SEND) {
-            val text = DeepLinks.shared(intent.getStringExtra(Intent.EXTRA_SUBJECT), intent.getStringExtra(Intent.EXTRA_TEXT))
-            deepLinks.offer(Arrival.NewTask(text))
-            return
+        when (intent.action) {
+            Intent.ACTION_SEND, Intent.ACTION_SEND_MULTIPLE -> { shared(intent); return }
+            com.gracefultools.astrid.platform.ReminderNotifier.ACTION_OPEN -> {
+                val ids = intent.getStringArrayExtra(com.gracefultools.astrid.platform.ReminderNotifier.EXTRA_TASKS)
+                    ?.filter(DeepLinks::isValidId).orEmpty()
+                if (ids.isNotEmpty()) deepLinks.offer(Arrival.Reminder(ids))
+                return
+            }
         }
         val data = intent.data?.toString() ?: return
         if (SignInViewModel.isCallback(data)) signIn.callback(data) else DeepLinks.parse(data)?.let(deepLinks::offer)
+    }
+
+    /**
+     * iOS's share extension takes one file; so does this (the first of several). The file is
+     * copied into app storage at once, while the sender's grant lasts, off the main thread.
+     */
+    private fun shared(intent: Intent) {
+        val text = DeepLinks.shared(intent.getStringExtra(Intent.EXTRA_SUBJECT), intent.getStringExtra(Intent.EXTRA_TEXT))
+        val stream: Uri? = if (intent.action == Intent.ACTION_SEND_MULTIPLE) {
+            androidx.core.content.IntentCompat.getParcelableArrayListExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)?.firstOrNull()
+        } else {
+            androidx.core.content.IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
+        }
+        if (stream == null) { deepLinks.offer(Arrival.NewTask(text)); return }
+        lifecycleScope.launch {
+            val file = withContext(Dispatchers.IO) {
+                com.gracefultools.astrid.ui.detail.copyIntoApp(this@MainActivity, stream)?.let { (path, name, mime) ->
+                    SharedFile(path, name, mime, java.io.File(path).length())
+                }
+            }
+            deepLinks.offer(Arrival.NewTask(text, file))
+        }
     }
 
     private fun open(url: String) {

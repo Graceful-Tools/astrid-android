@@ -118,6 +118,8 @@ fun ReminderSettingsScreen(vm: SettingsViewModel, onBack: () -> Unit) {
                     )
                 }
             }
+            // Android: reminders at their minute need exact alarms; shown only while not allowed.
+            com.gracefultools.astrid.platform.ExactAlarmRow()
         }
 
         FormSection(stringResource(R.string.settings_reminders_email_notifications)) {

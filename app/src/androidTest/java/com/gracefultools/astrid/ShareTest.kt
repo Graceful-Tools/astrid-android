@@ -13,7 +13,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Rule
 import org.junit.Test
 
-/** AATD-16: text shared from another app opens the add sheet, prefilled, and becomes a task. */
+/** AATD-16/60: text shared from another app opens the share form, prefilled, and becomes a task of yours. */
 class ShareTest {
     @get:Rule(order = 0) val notifications: androidx.test.rule.GrantPermissionRule =
         androidx.test.rule.GrantPermissionRule.grant(android.Manifest.permission.POST_NOTIFICATIONS)
@@ -28,7 +28,7 @@ class ShareTest {
             .putExtra(Intent.EXTRA_TEXT, "https://example.com/launch")
         ActivityScenario.launch<MainActivity>(share).use {
             compose.waitUntil(10_000) { compose.onAllNodesWithText("Read the launch post", substring = true).fetchSemanticsNodes().isNotEmpty() }
-            compose.onNode(hasText("Add task") and androidx.compose.ui.test.hasClickAction()).performClick()
+            compose.onNode(hasText("Save") and androidx.compose.ui.test.hasClickAction()).performClick()
             compose.waitUntil(10_000) {
                 runCatching {
                     compose.onNode(hasTestTag("taskList"))
