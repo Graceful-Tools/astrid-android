@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.chat
 
+import com.gracefultools.astrid.core.agentTyping
 import com.gracefultools.astrid.core.concernsChat
 import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
@@ -17,7 +18,12 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 
-data class ChatState(val chat: Chat = Chat(), val error: String? = null)
+data class ChatState(
+    val chat: Chat = Chat(),
+    val error: String? = null,
+    /** An agent thinking in this channel, from the live stream (`agentTyping`, AATD-62). */
+    val typingAgent: com.gracefultools.astrid.ui.detail.TypingAgent? = null,
+)
 
 /**
  * A list's chat (iOS's ChatView): the core holds the channel, the messages and their order, and
@@ -32,7 +38,17 @@ class ChatViewModel(private val core: Core, private val listId: String, dispatch
     init {
         load()
         work { runCatching { core.run(command("refreshChat", "listId" to listId)) }; load() }
-        work { core.changes.collect { if (it.concernsChat()) load() } }
+        work {
+            core.changes.collect { change ->
+                change.agentTyping?.let { typing ->
+                    val channel = _state.value.chat.channelId
+                    if (channel != null && typing.channelId == channel) {
+                        _state.update { it.copy(typingAgent = if (typing.active) com.gracefultools.astrid.ui.detail.TypingAgent(typing.agentName) else null) }
+                    }
+                }
+                if (change.concernsChat()) load()
+            }
+        }
     }
 
     fun load() = work {

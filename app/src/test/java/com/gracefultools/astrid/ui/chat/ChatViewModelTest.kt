@@ -34,4 +34,16 @@ class ChatViewModelTest {
         assertEquals(JsonPrimitive("l1"), core.last("resolveChatChannel")!!["listId"])
         assertEquals(JsonPrimitive("c-new"), core.last("sendChatMessage")!!["channelId"])
     }
+
+    @Test
+    fun `AATD-62 an agent thinking in this list's channel shows under the chat, and only this channel's`() = runTest {
+        val core = FakeCore().apply { answer("chat", """{"channelId":"c1","messages":[]}""") }
+        val vm = ChatViewModel(core, "l1", UnconfinedTestDispatcher())
+        core.emit("agentTyping", """{"change":"agentTyping","channelId":"c2","agentName":"Claude","active":true}""")
+        assertEquals(null, vm.state.value.typingAgent)
+        core.emit("agentTyping", """{"change":"agentTyping","channelId":"c1","agentName":"Claude","active":true}""")
+        assertEquals("Claude", vm.state.value.typingAgent?.name)
+        core.emit("agentTyping", """{"change":"agentTyping","channelId":"c1","agentName":"Claude","active":false}""")
+        assertEquals(null, vm.state.value.typingAgent)
+    }
 }

@@ -31,6 +31,13 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.material.icons.outlined.PhotoLibrary
+import androidx.compose.material.icons.outlined.SmartToy
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
@@ -144,6 +151,8 @@ fun TaskDetailScreen(
     LaunchedEffect(state.copiedId) { state.copiedId?.let { vm.copyOpened(); onOpenTask(it) } }
     var replyTo by remember { mutableStateOf<com.gracefultools.astrid.model.CommentRow?>(null) }
     var refreshing by remember { mutableStateOf(false) }
+    var showTimer by rememberSaveable { mutableStateOf(false) }
+    val online by com.gracefultools.astrid.ui.common.rememberIsOnline()
     Box(Modifier.fillMaxSize().background(colors.pageBg)) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
             DetailHeader(state.detail, vm, onBack, onTitleTap = { scope.launch { scroll.animateScrollTo(0) } })
@@ -168,10 +177,13 @@ fun TaskDetailScreen(
                         if (detail.task.identifier != null && detail.offersCopyIdentifier) TaskIdRow(detail.task.identifier)
                         detail.boardState?.let { ProjectStateRow(it, enabled = !detail.isCopyOnly, onPick = vm::setStatus) }
                         detail.blockers?.let { WaitingOnRow(it, state, vm, onOpenTask) }
+                        OccurrencesRow(detail, onOpenTask)
+                        ProjectFieldsRows(state, readOnly = detail.isCopyOnly, onSet = vm::setProjectField)
                         Spacer(Modifier.height(Spacing.s4))
                         HorizontalDivider(color = colors.divider)
                         DescriptionBlock(detail, vm::setDescription, onOpenTask, onOpenList)
-                        detail.task.lastTimerValue?.let { value ->
+                        AttachmentsSection(state.attachments, vm)
+                        (detail.timer?.lastValue ?: detail.task.lastTimerValue)?.let { value ->
                             Text(
                                 stringResource(R.string.task_edit_last_timer, value), fontSize = 14.sp, color = colors.textMuted,
                                 modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s16, vertical = Spacing.s4),
@@ -196,19 +208,21 @@ fun TaskDetailScreen(
                             onEdit = vm::editComment,
                             onDelete = vm::deleteComment,
                             onOpenTask = onOpenTask, onOpenList = onOpenList,
+                            typingAgent = state.typingAgent,
+                            offline = !online,
                         )
                         Spacer(Modifier.height(Spacing.s24))
                     }
                 }
-                val picker = androidx.activity.compose.rememberLauncherForActivityResult(
-                    androidx.activity.result.contract.ActivityResultContracts.GetContent(),
-                ) { uri -> uri?.let { copyIntoApp(context, it) }?.let { (path, name, mime) -> vm.attach(path, name, mime) } }
                 CommentComposer(
+                    state = state,
+                    vm = vm,
                     replyTo = replyTo,
                     onCancelReply = { replyTo = null },
                     onSend = { text -> vm.postComment(text, replyTo?.id); replyTo = null },
-                    onAttach = { picker.launch("*/*") },
+                    onTimer = if (detail.isCopyOnly) null else ({ showTimer = true }),
                 )
+                if (showTimer) TaskTimerScreen(detail, vm, onClose = { showTimer = false })
             }
         }
         state.error?.let { message ->
@@ -403,7 +417,7 @@ private fun WhoRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailVie
             Icon(Icons.Outlined.ChevronRight, null, tint = colors.textMuted, modifier = Modifier.size(18.dp))
         }
     }
-    if (picking) AssigneeSheet(state, onPick = { picking = false; vm.setAssignee(it) }, onDismiss = { picking = false })
+    if (picking) AssigneeSheet(state, vm, onPick = { picking = false; vm.setAssignee(it) }, onDismiss = { picking = false })
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -692,25 +706,49 @@ private fun SubtasksSection(detail: TaskDetail, vm: TaskDetailViewModel, onOpenT
 }
 
 /**
- * iOS's comment composer: a floating card with a white bordered field ("Add a comment..."), the
- * paperclip, and the paper plane once there is something to send. A reply shows who it answers.
+ * iOS's RichTextInput in the detail: a floating card with a white bordered field ("Add a
+ * comment..."), the paperclip menu (From Photos / From Documents / From Camera) whose files queue
+ * as thumbnails with × until Send, and the paper plane — or, while there is nothing to send, the
+ * timer. Typing @, # or ! opens the core's suggestions above the field. A reply shows who it answers.
  */
 @Composable
 private fun CommentComposer(
+    state: TaskDetailState,
+    vm: TaskDetailViewModel,
     replyTo: com.gracefultools.astrid.model.CommentRow?,
     onCancelReply: () -> Unit,
     onSend: (String) -> Unit,
-    onAttach: () -> Unit,
+    onTimer: (() -> Unit)?,
 ) {
     val colors = AstridTheme.colors
-    var text by rememberSaveable { mutableStateOf("") }
+    val context = LocalContext.current
+    var text by rememberSaveable(stateSaver = androidx.compose.ui.text.input.TextFieldValue.Saver) { mutableStateOf(androidx.compose.ui.text.input.TextFieldValue("")) }
     val shape = RoundedCornerShape(Radius.large)
     val commentLabel = stringResource(R.string.comments_add_placeholder)
+    val canSend = text.text.isNotBlank() || state.queued.isNotEmpty()
+    fun queue(uri: android.net.Uri) { copyIntoApp(context, uri)?.let { (path, name, mime) -> vm.queueFile(path, name, mime) } }
+    val photos = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia(MAX_QUEUED),
+    ) { uris -> uris.forEach(::queue) }
+    val documents = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.OpenMultipleDocuments(),
+    ) { uris -> uris.forEach(::queue) }
+    var cameraPath by rememberSaveable { mutableStateOf<String?>(null) }
+    val camera = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.TakePicture(),
+    ) { taken -> cameraPath?.let { path -> if (taken) vm.queueFile(path, java.io.File(path).name, "image/jpeg") }; cameraPath = null }
+    val hasCamera = remember { context.packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_CAMERA_ANY) }
+    var attachMenu by remember { mutableStateOf(false) }
     Column(
         Modifier.navigationBarsPadding().imePadding().padding(start = Spacing.s8, end = Spacing.s8, bottom = Spacing.s8).fillMaxWidth()
             .shadow(6.dp, shape, ambientColor = Color.Black.copy(alpha = 0.1f), spotColor = Color.Black.copy(alpha = 0.1f))
             .clip(shape).background(colors.floatingBar).padding(horizontal = Spacing.s12, vertical = Spacing.s8),
     ) {
+        if (state.suggestions.isNotEmpty()) SuggestionList(state.suggestions) { item ->
+            vm.applySuggestion(text.text, text.selection.start, item) { newText, caret ->
+                text = androidx.compose.ui.text.input.TextFieldValue(newText, androidx.compose.ui.text.TextRange(caret))
+            }
+        }
         if (replyTo != null) Row(Modifier.fillMaxWidth().padding(bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
             Text(
                 stringResource(R.string.comments_replying_to, replyTo.authorName ?: ""), style = TextStyles.caption, color = colors.textSecondary,
@@ -718,24 +756,130 @@ private fun CommentComposer(
             )
             Text(stringResource(R.string.common_cancel), style = TextStyles.caption, color = colors.accent, modifier = Modifier.clickable(onClick = onCancelReply))
         }
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+        if (state.queued.isNotEmpty()) QueuedFiles(state.queued, vm::unqueueFile)
+        Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
             Box(
                 Modifier.weight(1f).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
-                    .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = 40.dp).padding(horizontal = 12.dp, vertical = 9.dp),
+                    .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = 40.dp, max = 200.dp).padding(horizontal = 12.dp, vertical = 9.dp),
                 contentAlignment = Alignment.CenterStart,
             ) {
-                if (text.isEmpty()) Text(stringResource(R.string.comments_add_placeholder), style = TextStyles.body, color = colors.inputPlaceholder)
+                if (text.text.isEmpty()) Text(stringResource(R.string.comments_add_placeholder), style = TextStyles.body, color = colors.inputPlaceholder)
                 BasicTextField(
-                    value = text, onValueChange = { text = it }, maxLines = 8,
+                    value = text,
+                    onValueChange = { value ->
+                        val moved = value.text != text.text || value.selection != text.selection
+                        text = value
+                        if (moved) vm.commentChanged(value.text, value.selection.start)
+                    },
                     textStyle = TextStyles.body.copy(color = colors.textPrimary), cursorBrush = SolidColor(colors.accent),
                     modifier = Modifier.fillMaxWidth().testTag("detail:comment").semantics { contentDescription = commentLabel },
                 )
             }
-            ComposerButton(Icons.Filled.AttachFile, stringResource(R.string.detail_attach), colors.accent, onAttach)
-            if (text.isNotBlank()) ComposerButton(Icons.AutoMirrored.Filled.Send, stringResource(R.string.detail_send), tint = colors.accent) { onSend(text); text = "" }
+            Box {
+                ComposerButton(Icons.Filled.AttachFile, stringResource(R.string.detail_attach), colors.accent) { attachMenu = true }
+                DropdownMenu(attachMenu, onDismissRequest = { attachMenu = false }) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.attachments_from_photos)) }, leadingIcon = { Icon(Icons.Outlined.PhotoLibrary, null) },
+                        onClick = {
+                            attachMenu = false
+                            photos.launch(androidx.activity.result.PickVisualMediaRequest(androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+                        },
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.attachments_from_documents)) }, leadingIcon = { Icon(Icons.Outlined.Description, null) },
+                        onClick = { attachMenu = false; documents.launch(arrayOf("*/*")) },
+                    )
+                    if (hasCamera) DropdownMenuItem(
+                        text = { Text(stringResource(R.string.attachments_from_camera)) }, leadingIcon = { Icon(Icons.Outlined.PhotoCamera, null) },
+                        onClick = {
+                            attachMenu = false
+                            val dir = java.io.File(context.cacheDir, "camera").apply { mkdirs() }
+                            val file = java.io.File(dir, "photo-${System.currentTimeMillis()}.jpg")
+                            cameraPath = file.absolutePath
+                            camera.launch(androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.files", file))
+                        },
+                    )
+                }
+            }
+            if (canSend) {
+                ComposerButton(Icons.AutoMirrored.Filled.Send, stringResource(R.string.detail_send), tint = colors.accent) {
+                    onSend(text.text); text = androidx.compose.ui.text.input.TextFieldValue("")
+                }
+            } else if (onTimer != null) {
+                ComposerButton(Icons.Outlined.Timer, stringResource(R.string.timer_open), tint = colors.accent, onClick = onTimer)
+            }
         }
     }
 }
+
+/** iOS's staged files: 56dp thumbnails over the field, each with × to take it back out. */
+@Composable
+private fun QueuedFiles(files: List<QueuedFile>, onRemove: (String) -> Unit) {
+    val colors = AstridTheme.colors
+    Row(
+        Modifier.fillMaxWidth().horizontalScroll(androidx.compose.foundation.rememberScrollState()).padding(top = 6.dp, bottom = Spacing.s8),
+        horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
+    ) {
+        files.forEach { file ->
+            Box(Modifier.size(62.dp)) {
+                Box(
+                    Modifier.align(Alignment.BottomStart).size(56.dp).clip(RoundedCornerShape(Radius.small)).background(colors.field),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    if (file.mimeType?.startsWith("image/") == true) {
+                        coil.compose.AsyncImage(
+                            model = java.io.File(file.path), contentDescription = file.name,
+                            contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.fillMaxSize(),
+                        )
+                    } else Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(Icons.Outlined.Description, file.name, tint = colors.textMuted, modifier = Modifier.size(18.dp))
+                        Text(file.name.substringAfterLast('.', "").uppercase().take(5), fontSize = 9.sp, fontWeight = FontWeight.Medium, color = colors.textMuted)
+                    }
+                }
+                Icon(
+                    Icons.Filled.Cancel, stringResource(R.string.attachments_remove_a11y, file.name), tint = Color.White,
+                    modifier = Modifier.align(Alignment.TopEnd).size(22.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.6f))
+                        .clickable { onRemove(file.path) },
+                )
+            }
+        }
+    }
+}
+
+/** iOS's autocomplete popup: people (and agents), lists or tasks the core found for the trigger. */
+@Composable
+private fun SuggestionList(items: List<com.gracefultools.astrid.model.CommentSuggestion>, onPick: (com.gracefultools.astrid.model.CommentSuggestion) -> Unit) {
+    val colors = AstridTheme.colors
+    Column(
+        Modifier.fillMaxWidth().padding(bottom = Spacing.s8).heightIn(max = 220.dp).clip(RoundedCornerShape(Radius.medium))
+            .background(colors.field).border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).verticalScroll(rememberScrollState()),
+    ) {
+        items.forEach { item ->
+            Row(
+                Modifier.fillMaxWidth().clickable { onPick(item) }.heightIn(min = 44.dp).padding(horizontal = Spacing.s12, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
+            ) {
+                when {
+                    item.kind == "list" -> Text("#", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(20.dp))
+                    item.kind == "task" -> Text("!", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(20.dp))
+                    item.isAgent -> Icon(Icons.Outlined.SmartToy, null, tint = colors.accent, modifier = Modifier.size(20.dp))
+                    else -> Icon(Icons.Outlined.AccountCircle, null, tint = colors.textMuted, modifier = Modifier.size(20.dp))
+                }
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        item.label, style = TextStyles.body, color = if (item.completed) colors.textMuted else colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                        textDecoration = if (item.completed) TextDecoration.LineThrough else null,
+                    )
+                    val secondary = if (item.isAgent) stringResource(R.string.profile_ai_agent) else item.secondary
+                    if (!secondary.isNullOrBlank()) Text(secondary, style = TextStyles.caption2, color = colors.textMuted, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+            }
+        }
+    }
+}
+
+/** At most this many files wait for one comment — iOS's photo picker limit, which its queue shares. */
+private const val MAX_QUEUED = 10
 
 @Composable
 private fun ComposerButton(icon: ImageVector, label: String, onClick: () -> Unit) = ComposerButton(icon, label, AstridTheme.colors.textSecondary, onClick)

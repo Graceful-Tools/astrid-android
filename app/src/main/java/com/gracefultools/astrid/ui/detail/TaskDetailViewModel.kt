@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.core.agentTyping
 import com.gracefultools.astrid.core.concernsTask
 import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
@@ -37,7 +38,42 @@ data class TaskDetailState(
     val shareFailed: Boolean = false,
     /** A copy made by copyTask: open it. */
     val copiedId: String? = null,
+    /** Every file on the task (`attachments`), for the Attachments strip and its gallery. */
+    val attachments: List<com.gracefultools.astrid.model.AttachmentFile> = emptyList(),
+    /** A GitHub board's fields for this task (`taskProjectFields`); empty off a GitHub board. */
+    val projectFields: List<com.gracefultools.astrid.model.ProjectFieldRow> = emptyList(),
+    val projectFieldError: ProjectFieldError? = null,
+    /** The Who picker's "Someone else" section. */
+    val someoneElse: SomeoneElse = SomeoneElse(),
+    /** An agent thinking about this task, from the live stream (`agentTyping`). */
+    val typingAgent: TypingAgent? = null,
+    /** The comment box's popup: the core's suggestions for the trigger the caret is in. */
+    val suggestions: List<com.gracefultools.astrid.model.CommentSuggestion> = emptyList(),
+    /** Files picked for the next comment, sent with its text when Send is pressed. */
+    val queued: List<QueuedFile> = emptyList(),
 )
+
+/** iOS's "Someone else": people found as you type, and what assigning by email came to. */
+data class SomeoneElse(
+    val suggestions: List<com.gracefultools.astrid.model.UserSummary> = emptyList(),
+    /** The task is in no list, so nobody new can be given access to it. */
+    val needsList: Boolean = false,
+    /** The server's refusal, shown rather than swallowed. */
+    val error: String? = null,
+    /** Assigned: the sheet can close. */
+    val assigned: Boolean = false,
+)
+
+/** An agent at work; [name] is null when the stream did not say which. */
+data class TypingAgent(val name: String?)
+
+/** A file copied into app storage, waiting to go with the next comment. */
+data class QueuedFile(val path: String, val name: String, val mimeType: String?)
+
+/** A project field the server would not take, and iOS's reason for it (ProjectFieldErrors). */
+data class ProjectFieldError(val fieldId: String, val reason: Reason) {
+    enum class Reason { AUTH_REQUIRED, SSO_REQUIRED, SAVE_FAILED }
+}
 
 /**
  * One task's detail. Every edit is a core command (`updateTask`, `completeTask`, `setTaskLists`,
@@ -55,8 +91,12 @@ class TaskDetailViewModel(
 
     init {
         load()
+        loadProjectFields()
         work {
             core.changes.collect { change ->
+                change.agentTyping?.let { typing ->
+                    if (typing.taskId == id) _state.update { it.copy(typingAgent = if (typing.active) TypingAgent(typing.agentName) else null) }
+                }
                 if (change.concernsTask(id)) load()
             }
         }
@@ -67,6 +107,7 @@ class TaskDetailViewModel(
             val detail = CoreJson.decodeFromJsonElement(TaskDetail.serializer(), core.run(command("taskDetail", "taskId" to id)))
             id = detail.task.id.ifEmpty { id }
             _state.update { it.copy(detail = detail, error = null) }
+            loadAttachments()
         } catch (failure: CoreFailure) {
             // A task opened by the id it had before the server named it: follow it to its real one.
             if (failure.kind == com.gracefultools.astrid.core.FailureKind.NOT_FOUND && id.startsWith("temp")) {
@@ -247,19 +288,52 @@ class TaskDetailViewModel(
         endCondition: String? = null,
         endAfterOccurrences: Int? = null,
         endUntilDate: String? = null,
-    ) {
-        val pattern = buildMap<String, Any?> {
+    ) = setCustomRepeat(
+        com.gracefultools.astrid.model.RepeatPattern(
+            unit = unit, interval = interval, weekdays = weekdays, endCondition = endCondition,
+            endAfterOccurrences = endAfterOccurrences, endUntilDate = endUntilDate,
+        ),
+        repeatFrom = null,
+    )
+
+    /**
+     * iOS's CustomRepeatingPatternEditor saved (AATD-50): the pattern for its unit — weekdays for
+     * weeks, a date or a weekday-of-a-week for months, a month and day for years — and the Repeat
+     * Mode as the task's `repeatFrom` (`DUE_DATE` / `COMPLETION_DATE`; null leaves it alone).
+     * Numbers stay in the editor's 1–99 (a day 1–31, a month 1–12, a week 1–5).
+     */
+    fun setCustomRepeat(pattern: com.gracefultools.astrid.model.RepeatPattern, repeatFrom: String?) {
+        val unit = pattern.unit ?: "days"
+        val data = buildMap<String, Any?> {
             put("type", "custom")
             put("unit", unit)
-            put("interval", interval.coerceAtLeast(1))
-            if (unit == "weeks" && weekdays.isNotEmpty()) put("weekdays", weekdays)
-            if (endCondition != null) {
-                put("endCondition", endCondition)
-                if (endCondition == "after_occurrences" && (endAfterOccurrences ?: 0) > 0) put("endAfterOccurrences", endAfterOccurrences)
-                if (endCondition == "until_date" && endUntilDate != null) put("endUntilDate", endUntilDate)
+            put("interval", (pattern.interval ?: 1).coerceIn(1, 99))
+            when (unit) {
+                "weeks" -> pattern.weekdays?.takeIf { it.isNotEmpty() }?.let { put("weekdays", it) }
+                "months" -> when (pattern.monthRepeatType) {
+                    "same_weekday" -> pattern.monthWeekday?.let { weekday ->
+                        put("monthRepeatType", "same_weekday")
+                        put("monthWeekday", mapOf("weekday" to weekday.weekday, "weekOfMonth" to weekday.weekOfMonth.coerceIn(1, 5)))
+                    }
+                    "same_date" -> {
+                        put("monthRepeatType", "same_date")
+                        put("monthDay", (pattern.monthDay ?: 1).coerceIn(1, 31))
+                    }
+                }
+                "years" -> {
+                    put("month", (pattern.month ?: 1).coerceIn(1, 12))
+                    put("day", (pattern.day ?: 1).coerceIn(1, 31))
+                }
+            }
+            val end = pattern.endCondition
+            if (end != null) {
+                put("endCondition", end)
+                if (end == "after_occurrences") put("endAfterOccurrences", (pattern.endAfterOccurrences ?: 1).coerceIn(1, 99))
+                if (end == "until_date" && pattern.endUntilDate != null) put("endUntilDate", pattern.endUntilDate)
             }
         }
-        update("repeating" to "custom", "repeatingData" to pattern)
+        if (repeatFrom != null) update("repeating" to "custom", "repeatingData" to data, "repeatFrom" to repeatFrom)
+        else update("repeating" to "custom", "repeatingData" to data)
     }
 
     fun loadReminders() = work {
@@ -280,9 +354,33 @@ class TaskDetailViewModel(
         load()
     }
 
+    /**
+     * Send the comment box: the text alone (`postComment`), or with the queued files — each one an
+     * `attachFile`, the text riding the first, as iOS sends text and files together (AATD-53).
+     */
     fun postComment(text: String, replyTo: String? = null) = work {
         val trimmed = text.trim()
+        val files = _state.value.queued
+        if (files.isNotEmpty()) {
+            _state.update { it.copy(queued = emptyList(), suggestions = emptyList()) }
+            files.forEachIndexed { index, file ->
+                runCommand {
+                    core.run(
+                        command(
+                            "attachFile", "taskId" to id, "path" to file.path, "name" to file.name, "mimeType" to file.mimeType,
+                            *listOfNotNull(
+                                trimmed.takeIf { index == 0 && it.isNotEmpty() }?.let { "content" to it },
+                                replyTo?.takeIf { index == 0 }?.let { "parentCommentId" to it },
+                            ).toTypedArray(),
+                        ),
+                    )
+                }
+            }
+            load()
+            return@work
+        }
         if (trimmed.isEmpty()) return@work
+        _state.update { it.copy(suggestions = emptyList()) }
         runCommand {
             core.run(command("postComment", "taskId" to id, "content" to trimmed, *listOfNotNull(replyTo?.let { "parentCommentId" to it }).toTypedArray()))
         }
@@ -324,12 +422,172 @@ class TaskDetailViewModel(
         }
     }
 
+    // ── Who: someone else (AATD-51) ────────────────────────────────────────────────────────────
+
+    private var peopleSearch: kotlinx.coroutines.Job? = null
+
+    /** "Invite by Email" suggestions: the server's people for this task, from two characters. */
+    fun searchPeople(query: String) {
+        peopleSearch?.cancel()
+        val trimmed = query.trim()
+        _state.update { it.copy(someoneElse = it.someoneElse.copy(error = null, needsList = false)) }
+        if (trimmed.length < 2 || trimmed.contains('@')) {
+            _state.update { it.copy(someoneElse = it.someoneElse.copy(suggestions = emptyList())) }
+            return
+        }
+        peopleSearch = work {
+            kotlinx.coroutines.delay(SEARCH_DEBOUNCE_MS)
+            val found = runCatching {
+                CoreJson.decodeFromJsonElement(
+                    kotlinx.serialization.builtins.ListSerializer(com.gracefultools.astrid.model.UserSummary.serializer()),
+                    core.run(command("searchUsers", "query" to trimmed, "taskId" to id)) as? kotlinx.serialization.json.JsonArray
+                        ?: kotlinx.serialization.json.JsonArray(emptyList()),
+                )
+            }.getOrDefault(emptyList())
+            val people = found.filter { !it.email.isNullOrBlank() }.take(5)
+            _state.update { it.copy(someoneElse = it.someoneElse.copy(suggestions = people)) }
+        }
+    }
+
+    /**
+     * iOS's assignByEmail: a task cannot be assigned to someone with no access to it, so they join
+     * the task's list first (`inviteToList`), then the member is assigned. A task in no list says
+     * so; a refusal is shown, because silently not assigning is the worst outcome here.
+     */
+    fun assignByEmail(email: String) = work {
+        val address = email.trim()
+        if (address.isEmpty()) return@work
+        val listId = _state.value.detail?.listChips?.firstOrNull()?.id
+        if (listId == null) {
+            _state.update { it.copy(someoneElse = it.someoneElse.copy(needsList = true, error = null)) }
+            return@work
+        }
+        _state.update { it.copy(someoneElse = it.someoneElse.copy(needsList = false, error = null)) }
+        try {
+            val answer = core.run(command("inviteToList", "listId" to listId, "email" to address, "role" to "member")) as? JsonObject
+            val userId = ((answer?.get("member") as? JsonObject)?.get("userId") as? JsonPrimitive)?.contentOrNull
+            if (userId != null) {
+                runCommand { core.run(command("updateTask", "taskId" to id, "changes" to mapOf("assigneeId" to userId))) }
+                load()
+            }
+            _state.update { it.copy(someoneElse = SomeoneElse(assigned = true)) }
+        } catch (failure: CoreFailure) {
+            _state.update { it.copy(someoneElse = it.someoneElse.copy(error = failure.message)) }
+        }
+    }
+
+    /** The Who sheet opened or closed: start "Someone else" afresh. */
+    fun resetSomeoneElse() {
+        peopleSearch?.cancel()
+        _state.update { it.copy(someoneElse = SomeoneElse()) }
+    }
+
+    // ── Attachments, project fields, timer (AATD-52) ───────────────────────────────────────────
+
+    /** Every file on the task, from the cache — the Attachments strip. */
+    fun loadAttachments() = work {
+        runCatching { CoreJson.decodeFromJsonElement(com.gracefultools.astrid.model.Attachments.serializer(), core.run(command("attachments", "taskId" to id))) }
+            .onSuccess { found -> _state.update { it.copy(attachments = found.files) } }
+    }
+
+    /** A GitHub board's field rows: the server's, or the cache's offline. */
+    fun loadProjectFields() = work {
+        runCatching {
+            CoreJson.decodeFromJsonElement(com.gracefultools.astrid.model.TaskProjectFields.serializer(), core.run(command("taskProjectFields", "taskId" to id)))
+        }.onSuccess { fields -> _state.update { it.copy(projectFields = fields.rows) } }
+    }
+
+    /** Set one field; `null` clears it. A refusal is kept beside the field, in iOS's words. */
+    fun setProjectField(fieldId: String, value: kotlinx.serialization.json.JsonElement?) = work {
+        _state.update { it.copy(projectFieldError = null) }
+        try {
+            val rows = CoreJson.decodeFromJsonElement(
+                com.gracefultools.astrid.model.TaskProjectFields.serializer(),
+                core.run(command("setTaskProjectField", "taskId" to id, "fieldId" to fieldId, "value" to (value ?: kotlinx.serialization.json.JsonNull))),
+            )
+            _state.update { it.copy(projectFields = rows.rows) }
+        } catch (failure: CoreFailure) {
+            if (failure.isStillPending) return@work
+            val reason = when {
+                failure.message.contains("sso_required") -> ProjectFieldError.Reason.SSO_REQUIRED
+                failure.message.contains("auth_required") -> ProjectFieldError.Reason.AUTH_REQUIRED
+                else -> ProjectFieldError.Reason.SAVE_FAILED
+            }
+            _state.update { it.copy(projectFieldError = ProjectFieldError(fieldId, reason)) }
+        }
+    }
+
+    fun startTimer() = work {
+        runCommand { core.run(command("startTimer", "taskId" to id)) }
+        load()
+    }
+
+    /** Stop timing: the core records the session on the task and leaves its "Last:" caption. */
+    fun stopTimer() = work {
+        runCommand { core.run(command("stopTimer", "taskId" to id)) }
+        load()
+    }
+
+    /** The timer's COMPLETE TASK: the session is recorded first, then the task completes. */
+    fun completeFromTimer() = work {
+        runCommand { core.run(command("stopTimer", "taskId" to id)) }
+        runCommand { core.run(command("completeTask", "taskId" to id, "completed" to true, "source" to "android")) }
+        load()
+    }
+
+    // ── The comment box (AATD-53) ──────────────────────────────────────────────────────────────
+
+    private var suggesting: kotlinx.coroutines.Job? = null
+
+    /** The text or caret moved: ask the core which popup rows the caret's trigger offers. */
+    fun commentChanged(text: String, caret: Int) {
+        suggesting?.cancel()
+        suggesting = work {
+            val found = runCatching {
+                CoreJson.decodeFromJsonElement(
+                    com.gracefultools.astrid.model.CommentSuggestions.serializer(),
+                    core.run(command("commentSuggestions", "taskId" to id, "text" to text, "caret" to caret)),
+                )
+            }.getOrNull()
+            _state.update { it.copy(suggestions = if (found?.trigger == null) emptyList() else found.items) }
+        }
+    }
+
+    /** A row picked: the core writes it into the text the way the server reads it back. */
+    fun applySuggestion(text: String, caret: Int, item: com.gracefultools.astrid.model.CommentSuggestion, onApplied: (String, Int) -> Unit) = work {
+        suggesting?.cancel()
+        _state.update { it.copy(suggestions = emptyList()) }
+        runCatching {
+            core.run(command("applyCommentSuggestion", "text" to text, "caret" to caret, "triggerKind" to item.kind, "id" to item.id, "label" to item.label)) as JsonObject
+        }.getOrNull()?.let { answer ->
+            val newText = (answer["text"] as? JsonPrimitive)?.contentOrNull ?: return@let
+            val newCaret = (answer["caret"] as? JsonPrimitive)?.contentOrNull?.toIntOrNull() ?: newText.length
+            onApplied(newText, newCaret)
+        }
+    }
+
+    fun dismissSuggestions() {
+        suggesting?.cancel()
+        _state.update { it.copy(suggestions = emptyList()) }
+    }
+
+    /** A picked file joins the next comment; the same file twice is one. */
+    fun queueFile(path: String, name: String, mimeType: String?) = _state.update { state ->
+        if (state.queued.any { it.path == path }) state else state.copy(queued = state.queued + QueuedFile(path, name, mimeType))
+    }
+
+    fun unqueueFile(path: String) = _state.update { state -> state.copy(queued = state.queued.filterNot { it.path == path }) }
+
     fun delete() = work {
         runCommand { core.run(command("deleteTask", "taskId" to id)) }
         _state.update { it.copy(deleted = true) }
     }
 
     fun dismissError() = _state.update { it.copy(error = null) }
+
+    companion object {
+        const val SEARCH_DEBOUNCE_MS = 300L
+    }
 
     private fun update(vararg changes: Pair<String, Any?>) = work {
         runCommand { core.run(command("updateTask", "taskId" to id, "changes" to changes.toMap())) }
