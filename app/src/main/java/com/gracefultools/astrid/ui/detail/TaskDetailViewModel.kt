@@ -31,6 +31,12 @@ data class TaskDetailState(
     val listPicks: ListPicks? = null,
     val deleted: Boolean = false,
     val error: String? = null,
+    val blockerCandidates: List<com.gracefultools.astrid.model.Blocker> = emptyList(),
+    /** A link minted by shareTask, for the share sheet. */
+    val shareLink: String? = null,
+    val shareFailed: Boolean = false,
+    /** A copy made by copyTask: open it. */
+    val copiedId: String? = null,
 )
 
 /**
@@ -56,14 +62,97 @@ class TaskDetailViewModel(
         }
     }
 
-    fun load() = work {
+    fun load(): kotlinx.coroutines.Job = work {
         try {
             val detail = CoreJson.decodeFromJsonElement(TaskDetail.serializer(), core.run(command("taskDetail", "taskId" to id)))
             id = detail.task.id.ifEmpty { id }
             _state.update { it.copy(detail = detail, error = null) }
         } catch (failure: CoreFailure) {
+            // A task opened by the id it had before the server named it: follow it to its real one.
+            if (failure.kind == com.gracefultools.astrid.core.FailureKind.NOT_FOUND && id.startsWith("temp")) {
+                val real = runCatching {
+                    ((core.run(command("resolveIds", "ids" to listOf(id))) as? JsonObject)?.get(id) as? JsonPrimitive)?.contentOrNull
+                }.getOrNull()
+                if (real != null) { id = real; load(); return@work }
+            }
             _state.update { it.copy(error = if (failure.isStillPending) null else failure.message) }
         }
+    }
+
+    /** iOS's menu: Won't do, or Reopen a task closed that way (setClosedReason). */
+    fun toggleWontDo() = work {
+        val canceled = _state.value.detail?.isCanceled == true
+        runCommand { core.run(command("setClosedReason", "taskId" to id, "closedReason" to if (canceled) null else "canceled")) }
+        load()
+    }
+
+    /** iOS's Copy sheet: into a list (null = My Tasks only), with or without the comments. */
+    fun copy(targetListId: String?, includeComments: Boolean) = work {
+        runCommand {
+            val made = core.run(command("copyTask", "taskId" to id, "targetListId" to targetListId, "includeComments" to includeComments))
+            val copyId = ((made as? JsonObject)?.get("id") as? JsonPrimitive)?.contentOrNull
+            _state.update { it.copy(copiedId = copyId) }
+        }
+    }
+
+    fun copyOpened() = _state.update { it.copy(copiedId = null) }
+
+    /** iOS's Share sheet: a link minted by the server (online only). */
+    fun share() = work {
+        _state.update { it.copy(shareLink = null, shareFailed = false) }
+        try {
+            val answer = core.run(command("shareTask", "taskId" to id)) as JsonObject
+            _state.update { it.copy(shareLink = (answer["url"] as? JsonPrimitive)?.contentOrNull) }
+        } catch (failure: CoreFailure) {
+            _state.update { it.copy(shareFailed = true) }
+        }
+    }
+
+    /** The project state chips: the core moves the task to that column. */
+    fun setStatus(columnId: String) = work {
+        runCommand { core.run(command("setTaskStatus", "taskId" to id, "columnId" to columnId)) }
+        load()
+    }
+
+    fun searchBlockers(query: String) = work {
+        runCatching {
+            CoreJson.decodeFromJsonElement(
+                com.gracefultools.astrid.model.BlockerCandidates.serializer(),
+                core.run(command("taskBlockerCandidates", "taskId" to id, "query" to query, "limit" to 30)),
+            )
+        }.onSuccess { found -> _state.update { it.copy(blockerCandidates = found.candidates) } }
+    }
+
+    fun addBlocker(blockingTaskId: String) = work {
+        runCommand { core.run(command("addTaskBlocker", "taskId" to id, "blockingTaskId" to blockingTaskId)) }
+        load()
+    }
+
+    fun removeBlocker(blockingTaskId: String) = work {
+        runCommand { core.run(command("removeTaskBlocker", "taskId" to id, "blockingTaskId" to blockingTaskId)) }
+        load()
+    }
+
+    /** iOS's "Add a sub task": a task under this one, in this one's lists. */
+    fun addSubtask(title: String) = work {
+        val trimmed = title.trim()
+        if (trimmed.isEmpty()) return@work
+        val lists = _state.value.detail?.task?.listIds.orEmpty()
+        runCommand { core.run(command("createTask", "title" to trimmed, "parentTaskId" to id, "listIds" to lists)) }
+        load()
+    }
+
+    fun setSubtaskCompleted(subtaskId: String, completed: Boolean) = work {
+        runCommand { core.run(command("completeTask", "taskId" to subtaskId, "completed" to completed, "source" to "android")) }
+        load()
+    }
+
+    /** iOS's "Complete sub-tasks?": the open subtasks first, then this task. */
+    fun completeWithSubtasks(alsoSubtasks: Boolean) = work {
+        val open = _state.value.detail?.subtasks?.filterNot { it.completed }.orEmpty()
+        if (alsoSubtasks) for (sub in open) runCommand { core.run(command("completeTask", "taskId" to sub.id, "completed" to true, "source" to "android")) }
+        runCommand { core.run(command("completeTask", "taskId" to id, "completed" to true, "source" to "android")) }
+        load()
     }
 
     fun setTitle(title: String) {
@@ -180,10 +269,31 @@ class TaskDetailViewModel(
         load()
     }
 
-    fun postComment(text: String) = work {
+    fun postComment(text: String, replyTo: String? = null) = work {
         val trimmed = text.trim()
         if (trimmed.isEmpty()) return@work
-        runCommand { core.run(command("postComment", "taskId" to id, "content" to trimmed)) }
+        runCommand {
+            core.run(command("postComment", "taskId" to id, "content" to trimmed, *listOfNotNull(replyTo?.let { "parentCommentId" to it }).toTypedArray()))
+        }
+        load()
+    }
+
+    fun editComment(commentId: String, text: String) = work {
+        val trimmed = text.trim()
+        if (trimmed.isEmpty()) return@work
+        runCommand { core.run(command("editComment", "commentId" to commentId, "content" to trimmed)) }
+        load()
+    }
+
+    fun deleteComment(commentId: String) = work {
+        runCommand { core.run(command("deleteComment", "commentId" to commentId)) }
+        load()
+    }
+
+    /** iOS's pull to refresh on detail: send what is waiting, then fetch this task's thread. */
+    fun refresh() = work {
+        runCatching { core.run(command("drain")) }
+        runCatching { core.run(command("refreshComments", "taskId" to id)) }
         load()
     }
 

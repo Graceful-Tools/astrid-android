@@ -18,10 +18,41 @@ data class TaskDetail(
     val assignee: UserSummary? = null,
     val isCopyOnly: Boolean = false,
     val showsIdentifier: Boolean = false,
+    val offersCopyIdentifier: Boolean = false,
     val link: String? = null,
     val comments: List<CommentRow> = emptyList(),
     val subtasks: List<SubtaskRow> = emptyList(),
+    /** Closed as won't-do (setClosedReason). */
+    val isCanceled: Boolean = false,
+    /** The project state chips, when the task is on a board and the layout shows them. */
+    val boardState: BoardState? = null,
+    /** "Waiting on", when the task is on a board (or already waits on something). */
+    val blockers: BlockerSection? = null,
+    val timer: TimerState? = null,
+    /** The task this is a subtask of. */
+    val parent: ParentLink? = null,
 )
+
+@Serializable
+data class BoardState(val current: String? = null, val chips: List<BoardChip> = emptyList())
+
+@Serializable
+data class BoardChip(val id: String = "", val name: String = "", val kind: String = "", val isCurrent: Boolean = false)
+
+@Serializable
+data class BlockerSection(val chips: List<Blocker> = emptyList(), val canEdit: Boolean = false)
+
+@Serializable
+data class Blocker(val id: String = "", val title: String? = null, val identifier: String? = null, val completed: Boolean = false, val hidden: Boolean = false)
+
+@Serializable
+data class BlockerCandidates(val candidates: List<Blocker> = emptyList())
+
+@Serializable
+data class TimerState(val isRunning: Boolean = false, val startedAt: String? = null, val loggedMinutes: Long = 0, val lastValue: String? = null)
+
+@Serializable
+data class ParentLink(val id: String = "", val title: String = "")
 
 /** The task itself, in the v1 wire shape. Only what the screen reads; the rest stays in the core. */
 @Serializable
@@ -37,6 +68,11 @@ data class TaskFields(
     val identifier: String? = null,
     val listIds: List<String> = emptyList(),
     val isPrivate: Boolean = false,
+    val creator: UserSummary? = null,
+    val parentTaskId: String? = null,
+    /** Where it was completed — `google`, `github`, `apple` — when not here. */
+    val completedSource: String? = null,
+    val lastTimerValue: String? = null,
 )
 
 @Serializable
@@ -52,6 +88,11 @@ data class CommentRow(
     val parentId: String? = null,
     val isReply: Boolean = false,
     val files: List<FileRow> = emptyList(),
+    val authorId: String? = null,
+    val authorImage: String? = null,
+    val authorInitials: String? = null,
+    /** The text as markdown blocks (mentions, bold), as a description renders. */
+    val blocks: List<JsonObject> = emptyList(),
 )
 
 /** A file on a comment (`rows::comment::FileRow`); `localPath` once downloaded or attached here. */

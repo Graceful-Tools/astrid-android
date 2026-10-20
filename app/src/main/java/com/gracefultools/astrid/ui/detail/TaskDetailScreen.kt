@@ -1,18 +1,23 @@
 package com.gracefultools.astrid.ui.detail
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -20,321 +25,451 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
+import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.automirrored.filled.Undo
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AttachFile
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Tag
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.AddCircleOutline
+import androidx.compose.material.icons.outlined.Block
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.ContentCopy
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.GridView
+import androidx.compose.material.icons.outlined.HourglassEmpty
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.RadioButtonUnchecked
+import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.Repeat
+import androidx.compose.material.icons.outlined.TimerOff
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.TaskDetail
+import com.gracefultools.astrid.ui.common.AppErrorBanner
+import com.gracefultools.astrid.ui.common.Avatar
+import com.gracefultools.astrid.ui.common.CheckboxArt
 import com.gracefultools.astrid.ui.common.CoreLabels
-import com.gracefultools.astrid.ui.common.coreLabel
+import com.gracefultools.astrid.ui.common.RowFaceShape
+import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.markdown.MarkdownView
-import com.gracefultools.astrid.ui.tasks.dueText
 import com.gracefultools.astrid.ui.tasks.parseColor
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.PriorityColors
+import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.jsonObject
-import java.time.Instant
-import java.time.ZoneOffset
+import com.gracefultools.astrid.ui.theme.TextStyles
+import kotlinx.coroutines.launch
 
-/** iOS's TaskDetailView, pushed full-screen from the row: title, then the fields in the core's order. */
+/**
+ * iOS's TaskDetailViewNew (AATD-48): the "Task Details" header (tap the title to go back to the
+ * top), the leading control beside the title in its box, then — under a divider — one row per field
+ * with iOS's 34dp icon column instead of a label, the project state and "Waiting on", another
+ * divider, the description, the parent link, the sub tasks and the comments, with the comment
+ * composer floating at the bottom. The core decides which fields show and in what order.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskDetailScreen(vm: TaskDetailViewModel, onBack: () -> Unit) {
+fun TaskDetailScreen(
+    vm: TaskDetailViewModel,
+    onBack: () -> Unit,
+    onOpenTask: (String) -> Unit = {},
+    onOpenList: (String) -> Unit = {},
+) {
     val state by vm.state.collectAsStateWithLifecycle()
     val colors = AstridTheme.colors
-    val snackbar = remember { SnackbarHostState() }
-    val context = androidx.compose.ui.platform.LocalContext.current
+    val context = LocalContext.current
+    val scroll = rememberScrollState()
+    val scope = rememberCoroutineScope()
     BackHandler(onBack = onBack)
     LaunchedEffect(state.deleted) { if (state.deleted) onBack() }
-    LaunchedEffect(state.error) { state.error?.let { snackbar.showSnackbar(it); vm.dismissError() } }
-    Box(Modifier.fillMaxSize().background(colors.bgPrimary)) {
+    LaunchedEffect(state.copiedId) { state.copiedId?.let { vm.copyOpened(); onOpenTask(it) } }
+    var replyTo by remember { mutableStateOf<com.gracefultools.astrid.model.CommentRow?>(null) }
+    var refreshing by remember { mutableStateOf(false) }
+    Box(Modifier.fillMaxSize().background(colors.pageBg)) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
-            TopBar(state.detail, onBack, onDelete = vm::delete)
+            DetailHeader(state.detail, vm, onBack, onTitleTap = { scope.launch { scroll.animateScrollTo(0) } })
             val detail = state.detail
             if (detail != null) {
-                Column(
-                    Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = Spacing.s16),
-                    verticalArrangement = Arrangement.spacedBy(Spacing.s12),
+                PullToRefreshBox(
+                    isRefreshing = refreshing,
+                    onRefresh = { refreshing = true; vm.refresh(); scope.launch { kotlinx.coroutines.delay(600); refreshing = false } },
+                    modifier = Modifier.weight(1f),
                 ) {
-                    TitleRow(detail, vm)
-                    Card {
-                        detail.fieldOrder.forEachIndexed { index, field ->
-                            if (index > 0) HorizontalDivider(color = colors.border)
-                            when (field) {
-                                "assignee" -> AssigneeField(detail, state, vm)
-                                "when" -> WhenField(detail, state, vm)
-                                "priority" -> PriorityField(detail.task.priority, vm::setPriority)
-                                "lists" -> ListsField(detail, state, vm)
-                            }
+                    Column(Modifier.fillMaxSize().verticalScroll(scroll).testTag("taskDetail")) {
+                        TitleBlock(detail, vm)
+                        HorizontalDivider(color = colors.divider)
+                        Spacer(Modifier.height(Spacing.s4))
+                        for (field in detail.fieldOrder) when (field) {
+                            "assignee" -> if (!detail.isCopyOnly) WhoRow(detail, state, vm)
+                            "when" -> WhenRow(detail, state, vm)
+                            "priority" -> if (!detail.isCopyOnly) PriorityRow(detail.task.priority, vm::setPriority)
+                            "lists" -> ListsRow(detail, state, vm, onOpenList)
                         }
-                        HorizontalDivider(color = colors.border)
-                        RepeatField(detail, state, vm)
-                        if (detail.task.dueDateTime != null) {
-                            HorizontalDivider(color = colors.border)
-                            ReminderField(state, vm)
+                        if (detail.isCopyOnly) detail.task.creator?.let { CreatedByRow(it) }
+                        if (detail.task.identifier != null && detail.offersCopyIdentifier) TaskIdRow(detail.task.identifier)
+                        detail.boardState?.let { ProjectStateRow(it, enabled = !detail.isCopyOnly, onPick = vm::setStatus) }
+                        detail.blockers?.let { WaitingOnRow(it, state, vm, onOpenTask) }
+                        Spacer(Modifier.height(Spacing.s4))
+                        HorizontalDivider(color = colors.divider)
+                        DescriptionBlock(detail, vm::setDescription, onOpenTask, onOpenList)
+                        detail.task.lastTimerValue?.let { value ->
+                            Text(
+                                stringResource(R.string.task_edit_last_timer, value), fontSize = 14.sp, color = colors.textMuted,
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s16, vertical = Spacing.s4),
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                            )
                         }
+                        val source = detail.task.completedSource
+                        if (detail.task.completed && source != null && source != "astrid") {
+                            val provider = mapOf("google" to "Google Tasks", "github" to "GitHub", "apple" to "Apple Reminders")[source] ?: source
+                            Text(
+                                stringResource(R.string.task_detail_completed_via, provider), style = TextStyles.caption2, color = colors.textMuted,
+                                modifier = Modifier.padding(horizontal = Spacing.s16, vertical = Spacing.s4),
+                            )
+                        }
+                        detail.parent?.let { parent -> ParentLink(parent.title) { onOpenTask(parent.id) } }
+                        SubtasksSection(detail, vm, onOpenTask)
+                        CommentsSection(
+                            detail,
+                            onOpenFile = { file -> vm.open(file.id) { path -> openFile(context, path, file.mimeType) } },
+                            fetch = { id, done -> vm.open(id, done) },
+                            onReply = { replyTo = it },
+                            onEdit = vm::editComment,
+                            onDelete = vm::deleteComment,
+                            onOpenTask = onOpenTask, onOpenList = onOpenList,
+                        )
+                        Spacer(Modifier.height(Spacing.s24))
                     }
-                    DescriptionCard(detail, vm::setDescription)
-                    if (detail.subtasks.isNotEmpty()) {
-                        Section(stringResource(R.string.detail_subtasks))
-                        Card {
-                            detail.subtasks.forEach { sub ->
-                                Row(Modifier.fillMaxWidth().padding(Spacing.s12), verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(if (sub.completed) Icons.Filled.Check else Icons.Filled.Check, null,
-                                        tint = if (sub.completed) colors.accent else Color.Transparent, modifier = Modifier.size(18.dp))
-                                    Spacer(Modifier.width(Spacing.s8))
-                                    Text(sub.title, color = colors.textPrimary, fontSize = 16.sp)
-                                }
-                            }
-                        }
-                    }
-                    Section(stringResource(R.string.detail_comments))
-                    Comments(
-                        detail,
-                        onOpenFile = { file -> vm.open(file.id) { path -> openFile(context, path, file.mimeType) } },
-                        fetch = { id, done -> vm.open(id, done) },
-                    )
-                    Spacer(Modifier.size(Spacing.s24))
                 }
                 val picker = androidx.activity.compose.rememberLauncherForActivityResult(
                     androidx.activity.result.contract.ActivityResultContracts.GetContent(),
                 ) { uri -> uri?.let { copyIntoApp(context, it) }?.let { (path, name, mime) -> vm.attach(path, name, mime) } }
-                CommentComposer(vm::postComment, onAttach = { picker.launch("*/*") })
+                CommentComposer(
+                    replyTo = replyTo,
+                    onCancelReply = { replyTo = null },
+                    onSend = { text -> vm.postComment(text, replyTo?.id); replyTo = null },
+                    onAttach = { picker.launch("*/*") },
+                )
             }
         }
-        SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).padding(bottom = 80.dp))
+        state.error?.let { message ->
+            AppErrorBanner(message, vm::dismissError, Modifier.align(Alignment.BottomCenter).padding(bottom = 96.dp))
+            LaunchedEffect(message) { kotlinx.coroutines.delay(6_000); vm.dismissError() }
+        }
     }
 }
 
+/** iOS's TaskDetailHeaderBar: back chevron, "Task Details" (scrolls to the top), the vertical menu. */
 @Composable
-private fun TopBar(detail: TaskDetail?, onBack: () -> Unit, onDelete: () -> Unit) {
+private fun DetailHeader(detail: TaskDetail?, vm: TaskDetailViewModel, onBack: () -> Unit, onTitleTap: () -> Unit) {
     val colors = AstridTheme.colors
     var menu by remember { mutableStateOf(false) }
-    val clipboard = LocalClipboardManager.current
-    Row(Modifier.fillMaxWidth().padding(Spacing.s4), verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.detail_back), tint = colors.textPrimary) }
-        Spacer(Modifier.weight(1f))
-        if (detail?.showsIdentifier == true) detail.task.identifier?.let { Text(it, color = colors.textSecondary, fontSize = 15.sp) }
+    var copying by remember { mutableStateOf(false) }
+    var sharing by remember { mutableStateOf(false) }
+    var confirmingDelete by remember { mutableStateOf(false) }
+    Row(
+        Modifier.fillMaxWidth().background(colors.pageBg).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            Icons.AutoMirrored.Filled.ArrowBackIos, stringResource(R.string.common_back), tint = colors.textPrimary,
+            modifier = Modifier.size(44.dp).clip(CircleShape).clickable(onClick = onBack).padding(12.dp).testTag("detail:back"),
+        )
+        Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
+            Text(
+                stringResource(R.string.tasks_task_details), style = TextStyles.headline, color = colors.textPrimary,
+                modifier = Modifier.clip(RoundedCornerShape(Radius.small)).clickable(onClick = onTitleTap).padding(Spacing.s4).semantics { heading() },
+            )
+        }
         Box {
-            IconButton(onClick = { menu = true }) { Icon(Icons.Filled.MoreVert, stringResource(R.string.detail_more), tint = colors.textPrimary) }
+            if (detail != null && !detail.isCopyOnly) {
+                Icon(
+                    Icons.Filled.MoreVert, stringResource(R.string.detail_more), tint = colors.textPrimary,
+                    modifier = Modifier.size(44.dp).clip(CircleShape).clickable { menu = true }.padding(10.dp),
+                )
+            } else Spacer(Modifier.size(44.dp))
             DropdownMenu(menu, onDismissRequest = { menu = false }) {
-                detail?.link?.let { link ->
-                    DropdownMenuItem(text = { Text(stringResource(R.string.detail_copy_link)) }, onClick = { clipboard.setText(AnnotatedString(link)); menu = false })
-                }
-                if (detail?.isCopyOnly != true) {
-                    DropdownMenuItem(text = { Text(stringResource(R.string.tasks_delete), color = Error) }, onClick = { menu = false; onDelete() })
-                }
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.actions_copy)) }, leadingIcon = { Icon(Icons.Outlined.ContentCopy, null) },
+                    onClick = { menu = false; copying = true },
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.actions_share)) }, leadingIcon = { Icon(Icons.Outlined.Share, null) },
+                    onClick = { menu = false; vm.share(); sharing = true },
+                )
+                HorizontalDivider()
+                val canceled = detail?.isCanceled == true
+                DropdownMenuItem(
+                    text = { Text(stringResource(if (canceled) R.string.tasks_reopen else R.string.tasks_wont_do)) },
+                    leadingIcon = { Icon(if (canceled) Icons.AutoMirrored.Filled.Undo else Icons.Outlined.Block, null) },
+                    onClick = { menu = false; vm.toggleWontDo() },
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.tasks_delete_task), color = Error) },
+                    leadingIcon = { Icon(Icons.Outlined.Delete, null, tint = Error) },
+                    onClick = { menu = false; confirmingDelete = true },
+                )
             }
         }
     }
+    if (confirmingDelete) {
+        AlertDialog(
+            onDismissRequest = { confirmingDelete = false },
+            title = { Text(stringResource(R.string.tasks_delete_confirm)) },
+            confirmButton = { TextButton(onClick = { confirmingDelete = false; vm.delete() }) { Text(stringResource(R.string.actions_delete), color = Error) } },
+            dismissButton = { TextButton(onClick = { confirmingDelete = false }) { Text(stringResource(R.string.common_cancel)) } },
+        )
+    }
+    if (copying && detail != null) CopyTaskSheet(vm, onDismiss = { copying = false })
+    if (sharing && detail != null) ShareTaskSheet(vm, detail, onDismiss = { sharing = false })
 }
 
+/** The leading control (as the row's) beside the title in its box (19 medium, wraps). */
 @Composable
-private fun TitleRow(detail: TaskDetail, vm: TaskDetailViewModel) {
+private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
     val colors = AstridTheme.colors
-    val priority = PriorityColors.getOrElse(detail.task.priority) { PriorityColors[0] }
     var title by rememberSaveable(detail.task.id, detail.task.title) { mutableStateOf(detail.task.title) }
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        val square = RoundedCornerShape(8.dp)
-        Box(
-            Modifier.size(34.dp).clip(square)
-                .then(if (detail.task.completed) Modifier.background(priority) else Modifier.border(2.dp, priority, square))
-                .clickable(enabled = !detail.isCopyOnly) { vm.setCompleted(!detail.task.completed) }
-                .semantics { role = Role.Checkbox; contentDescription = detail.task.title },
-            contentAlignment = Alignment.Center,
-        ) { if (detail.task.completed) Icon(Icons.Filled.Check, null, tint = Color.White) }
-        Spacer(Modifier.width(Spacing.s12))
-        TextField(
-            value = title,
-            onValueChange = { title = it.replace("\n", "") },
-            readOnly = detail.isCopyOnly,
-            textStyle = androidx.compose.ui.text.TextStyle(fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.Transparent, unfocusedContainerColor = Color.Transparent,
-                focusedIndicatorColor = colors.accent, unfocusedIndicatorColor = Color.Transparent,
-            ),
-            modifier = Modifier.weight(1f).onFocusChanged { if (!it.isFocused) vm.setTitle(title) },
+    var askSubtasks by remember { mutableStateOf(false) }
+    val focus = LocalFocusManager.current
+    Row(
+        Modifier.fillMaxWidth().padding(start = Spacing.s16, end = Spacing.s16, top = Spacing.s8, bottom = Spacing.s12),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
+    ) {
+        val label = stringResource(if (detail.task.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, detail.task.title)
+        val tap = Modifier.size(34.dp).clip(RoundedCornerShape(8.dp))
+            .clickable(enabled = !detail.isCopyOnly) {
+                val openSubtasks = detail.subtasks.any { !it.completed }
+                if (!detail.task.completed && openSubtasks) askSubtasks = true else vm.setCompleted(!detail.task.completed)
+            }
+            .semantics { role = Role.Checkbox; contentDescription = label }
+        val assignee = detail.assignee
+        if (assignee != null && detail.fieldOrder.firstOrNull() != "assignee" && assignee.id.isNotEmpty()) {
+            Avatar(assignee.image, initialsOf(assignee.name, assignee.email), 34.dp, tap, shape = RowFaceShape,
+                border = PriorityColors.getOrElse(detail.task.priority) { PriorityColors[0] })
+        } else {
+            CheckboxArt(detail.task.priority, detail.task.repeating != null && detail.task.repeating != "never", detail.task.completed, tap)
+        }
+        val shape = RoundedCornerShape(Radius.medium)
+        Box(Modifier.weight(1f).clip(shape).background(colors.bgSecondary).padding(Spacing.s12)) {
+            if (detail.isCopyOnly) {
+                Text(title, style = TextStyles.rowTitle, color = colors.textPrimary)
+            } else {
+                BasicTextField(
+                    value = title,
+                    onValueChange = { value -> if (value.contains('\n')) { title = value.replace("\n", ""); focus.clearFocus() } else title = value },
+                    textStyle = TextStyles.rowTitle.copy(
+                        color = if (detail.task.completed) colors.textMuted else colors.textPrimary,
+                        textDecoration = if (detail.task.completed) TextDecoration.LineThrough else null,
+                    ),
+                    cursorBrush = SolidColor(colors.accent),
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { focus.clearFocus() }),
+                    modifier = Modifier.fillMaxWidth().onFocusChanged { if (!it.isFocused) vm.setTitle(title) }.testTag("detail:title"),
+                )
+            }
+        }
+    }
+    if (detail.isCanceled) {
+        Text(
+            stringResource(R.string.tasks_wont_do_chip), style = TextStyles.caption, color = colors.textSecondary,
+            modifier = Modifier.padding(start = 62.dp, bottom = Spacing.s8).border(1.dp, colors.border, RoundedCornerShape(4.dp)).padding(horizontal = 6.dp, vertical = 2.dp),
+        )
+    }
+    if (askSubtasks) {
+        AlertDialog(
+            onDismissRequest = { askSubtasks = false },
+            title = { Text(stringResource(R.string.task_detail_complete_subtasks_title)) },
+            text = {
+                Column {
+                    TextButton(onClick = { askSubtasks = false; vm.completeWithSubtasks(true) }) { Text(stringResource(R.string.task_detail_complete_all_subtasks)) }
+                    TextButton(onClick = { askSubtasks = false; vm.completeWithSubtasks(false) }) { Text(stringResource(R.string.task_detail_complete_only_this)) }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { askSubtasks = false }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
 }
 
+/** iOS's TwoColumnRow: a 34dp column with the field's icon (or glyph), 12 apart, padded 16 x 8. */
 @Composable
-private fun Card(content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit) {
-    val colors = AstridTheme.colors
-    Column(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
-            .background(if (colors.isDark) colors.bgSecondary else Color.White)
-            .border(0.5.dp, colors.border, RoundedCornerShape(12.dp)),
-    ) { content() }
-}
-
-@Composable
-private fun Section(title: String) =
-    Text(title, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = AstridTheme.colors.textSecondary, modifier = Modifier.padding(top = Spacing.s8))
-
-@Composable
-private fun FieldRow(label: String, onClick: (() -> Unit)? = null, value: @Composable () -> Unit) {
+internal fun IconRow(label: String, icon: ImageVector? = null, glyph: String? = null, content: @Composable RowScope.() -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .padding(horizontal = Spacing.s16, vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        Modifier.fillMaxWidth().padding(horizontal = Spacing.s16, vertical = Spacing.s8),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
-        Text(label, color = colors.textSecondary, fontSize = 15.sp, modifier = Modifier.width(96.dp))
-        Box(Modifier.weight(1f)) { value() }
+        Box(Modifier.width(34.dp).semantics { contentDescription = label }, contentAlignment = Alignment.Center) {
+            if (glyph != null) Text(glyph, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = colors.textSecondary)
+            else if (icon != null) Icon(icon, null, tint = colors.textSecondary, modifier = Modifier.size(19.dp))
+        }
+        Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically, content = content)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+/** A field's value box: bgSecondary, radius 8 — iOS's compact chip (8 x 4) or full box (12 x 10). */
 @Composable
-private fun WhenField(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailViewModel) {
-    val colors = AstridTheme.colors
-    var picking by remember { mutableStateOf(false) }
-    var calendar by remember { mutableStateOf(false) }
-    var clock by remember { mutableStateOf(false) }
-    val label = dueText(detail.due) ?: stringResource(R.string.tasks_no_due_date)
-    FieldRow(stringResource(R.string.detail_when), onClick = { vm.loadDueOptions(); picking = true }) {
-        Text(label, color = if (detail.isOverdue) Error else colors.textPrimary, fontSize = 16.sp)
-    }
-    if (picking) {
-        AlertDialog(
-            onDismissRequest = { picking = false },
-            confirmButton = {
-                Row {
-                    TextButton(onClick = { picking = false; clock = true }) { Text(stringResource(R.string.detail_pick_time)) }
-                    TextButton(onClick = { picking = false; calendar = true }) { Text(stringResource(R.string.detail_pick_date)) }
-                }
-            },
-            dismissButton = { TextButton(onClick = { picking = false; vm.setDue(null, false) }) { Text(stringResource(R.string.detail_clear_date)) } },
-            title = { Text(stringResource(R.string.detail_when)) },
-            text = {
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-                    state.dueOptions?.dates?.forEach { pick ->
-                        Chip(duePickLabel(pick.titleKey), pick.isSelected) { picking = false; vm.setDue(pick.dueDateTime, true) }
-                    }
-                    state.dueOptions?.times?.forEach { pick ->
-                        Chip(pick.hour?.let { java.time.LocalTime.of(it, 0).format(java.time.format.DateTimeFormatter.ofLocalizedTime(java.time.format.FormatStyle.SHORT)) } ?: pick.titleKey, pick.isSelected) {
-                            picking = false; vm.setDue(pick.dueDateTime, false)
-                        }
-                    }
-                }
-            },
-        )
-    }
-    if (clock) {
-        val now = detail.task.dueDateTime?.takeIf { !detail.task.isAllDay }
-            ?.let { runCatching { java.time.Instant.parse(it).atZone(java.time.ZoneId.systemDefault()) }.getOrNull() }
-        val time = androidx.compose.material3.rememberTimePickerState(
-            initialHour = now?.hour ?: 9, initialMinute = now?.minute ?: 0,
-            is24Hour = android.text.format.DateFormat.is24HourFormat(androidx.compose.ui.platform.LocalContext.current),
-        )
-        AlertDialog(
-            onDismissRequest = { clock = false },
-            confirmButton = { TextButton(onClick = { clock = false; vm.pickTime(time.hour, time.minute) }) { Text(stringResource(R.string.detail_done)) } },
-            dismissButton = { TextButton(onClick = { clock = false }) { Text(stringResource(R.string.common_cancel)) } },
-            text = { androidx.compose.material3.TimePicker(time) },
-        )
-    }
-    if (calendar) {
-        val initial = detail.task.dueDateTime?.let { runCatching { Instant.parse(it).toEpochMilli() }.getOrNull() }
-        val picker = rememberDatePickerState(initialSelectedDateMillis = initial)
-        DatePickerDialog(
-            onDismissRequest = { calendar = false },
-            confirmButton = {
-                TextButton(onClick = {
-                    calendar = false
-                    picker.selectedDateMillis?.let { vm.pickDay(Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC).toLocalDate().toString()) }
-                }) { Text(stringResource(R.string.detail_done)) }
-            },
-            dismissButton = { TextButton(onClick = { calendar = false }) { Text(stringResource(R.string.common_cancel)) } },
-        ) { DatePicker(picker) }
-    }
-}
-
-@Composable
-private fun duePickLabel(key: String): String = coreLabel(key)
-
-@Composable
-private fun Chip(text: String, selected: Boolean, onClick: () -> Unit) {
-    val colors = AstridTheme.colors
-    Text(
-        text, color = if (selected) colors.accentText else colors.textPrimary, fontSize = 15.sp,
-        modifier = Modifier.clip(RoundedCornerShape(12.dp))
-            .background(if (selected) colors.accent else colors.bgTertiary)
-            .clickable(onClick = onClick).semantics { this.selected = selected }
-            .padding(horizontal = 12.dp, vertical = 6.dp),
+internal fun ValueBox(
+    modifier: Modifier = Modifier,
+    compact: Boolean = false,
+    onClick: (() -> Unit)? = null,
+    content: @Composable RowScope.() -> Unit,
+) {
+    Row(
+        modifier.clip(RoundedCornerShape(Radius.medium)).background(AstridTheme.colors.bgSecondary)
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
+            .heightIn(min = if (compact) 32.dp else 44.dp)
+            .padding(horizontal = if (compact) Spacing.s8 else Spacing.s12, vertical = if (compact) Spacing.s4 else 6.dp),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
+        content = content,
     )
 }
 
 @Composable
-private fun PriorityField(current: Int, onPick: (Int) -> Unit) {
+private fun WhoRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailViewModel) {
+    val colors = AstridTheme.colors
+    var picking by remember { mutableStateOf(false) }
+    IconRow(stringResource(R.string.tasks_assignee), Icons.Outlined.AccountCircle) {
+        ValueBox(Modifier.fillMaxWidth(), onClick = { vm.loadAssignees(); picking = true }) {
+            val who = detail.assignee
+            if (who != null && who.id.isNotEmpty()) {
+                Avatar(who.image, initialsOf(who.name, who.email), 24.dp)
+                Text(who.display, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            } else {
+                Box(Modifier.size(24.dp).clip(CircleShape).border(1.5.dp, colors.textMuted, CircleShape), contentAlignment = Alignment.Center) {
+                    Text(stringResource(R.string.tasks_unassigned_glyph), fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = colors.textMuted)
+                }
+                Text(stringResource(R.string.assignee_unassigned), style = TextStyles.body, color = colors.textMuted, modifier = Modifier.weight(1f))
+            }
+            Icon(Icons.Outlined.ChevronRight, null, tint = colors.textMuted, modifier = Modifier.size(18.dp))
+        }
+    }
+    if (picking) AssigneeSheet(state, onPick = { picking = false; vm.setAssignee(it) }, onDismiss = { picking = false })
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun WhenRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailViewModel) {
+    val colors = AstridTheme.colors
+    val hasDate = detail.task.dueDateTime != null
+    var sheet by remember { mutableStateOf<String?>(null) }
+    IconRow(stringResource(R.string.tasks_when), Icons.Outlined.CalendarMonth) {
+        if (detail.isCopyOnly) {
+            Text(detailDateLabel(detail) ?: stringResource(R.string.picker_no_due_date), style = TextStyles.body, color = colors.textPrimary)
+            return@IconRow
+        }
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+            ValueBox(compact = true, onClick = { vm.loadDueOptions(); sheet = "date" }) {
+                val label = detailDateLabel(detail)
+                Text(
+                    label ?: stringResource(R.string.picker_no_due_date), style = TextStyles.body,
+                    color = if (label == null) colors.textMuted else if (detail.isOverdue) Error else colors.textPrimary, maxLines = 1,
+                )
+            }
+            if (hasDate) {
+                ValueBox(compact = true, onClick = { vm.loadDueOptions(); sheet = "time" }) {
+                    val time = detailTimeLabel(detail)
+                    if (time != null) Text(time, style = TextStyles.body, color = colors.textPrimary)
+                    else Icon(Icons.Outlined.TimerOff, stringResource(R.string.picker_add_time), tint = colors.textMuted, modifier = Modifier.size(18.dp))
+                }
+                ValueBox(compact = true, onClick = { vm.loadRepeats(); sheet = "repeat" }) {
+                    val summary = CoreLabels.summary(LocalContext.current, detail.repeatSummary)
+                    val repeats = detail.task.repeating != null && detail.task.repeating != "never"
+                    Icon(
+                        Icons.Outlined.Repeat,
+                        stringResource(R.string.repeating_title), tint = if (repeats) colors.accent else colors.textMuted, modifier = Modifier.size(18.dp),
+                    )
+                    if (repeats && summary != null) Text(summary, style = TextStyles.body, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+            }
+        }
+    }
+    when (sheet) {
+        "date" -> DateSheet(detail, state, vm, onDismiss = { sheet = null })
+        "time" -> TimeSheet(detail, state, vm, onDismiss = { sheet = null })
+        "repeat" -> RepeatSheet(state, vm, onDismiss = { sheet = null })
+    }
+}
+
+/** iOS's PriorityButtonPicker: ○ ! !! !!!, 40 x 40, radius 6, 12 apart; the row's mark is "!!!". */
+@Composable
+private fun PriorityRow(current: Int, onPick: (Int) -> Unit) {
     val names = listOf(R.string.priority_none, R.string.priority_low, R.string.priority_medium, R.string.priority_high)
-    FieldRow(stringResource(R.string.detail_priority)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    IconRow(stringResource(R.string.tasks_priority), glyph = "!!!") {
+        Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s12)) {
             for (level in 0..3) {
                 val tint = PriorityColors[level]
                 val selected = level == current
-                // Spoken as its name ("High"), never as the glyph ("!!!").
                 val spoken = stringResource(R.string.priority_a11y, stringResource(names[level]))
                 Box(
-                    Modifier.size(40.dp, 32.dp).clip(RoundedCornerShape(8.dp))
+                    Modifier.size(40.dp).clip(RoundedCornerShape(Radius.small))
                         .background(if (selected) tint else Color.Transparent)
-                        .border(1.5.dp, tint, RoundedCornerShape(8.dp))
-                        .clickable { onPick(level) }
+                        .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
+                        .clickable { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove); onPick(level) }
                         .semantics(mergeDescendants = true) { this.selected = selected; role = Role.RadioButton; contentDescription = spoken },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(if (level == 0) "–" else "!".repeat(level), color = if (selected) Color.White else tint, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                    Text(if (level == 0) "○" else "!".repeat(level), color = if (selected) Color.White else tint, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                 }
             }
         }
@@ -343,222 +478,304 @@ private fun PriorityField(current: Int, onPick: (Int) -> Unit) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ListsField(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailViewModel) {
+private fun ListsRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailViewModel, onOpenList: (String) -> Unit) {
     val colors = AstridTheme.colors
     var picking by remember { mutableStateOf(false) }
-    FieldRow(stringResource(R.string.detail_lists), onClick = { vm.loadListPicks(); picking = true }) {
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            if (detail.listChips.isEmpty()) Text("—", color = colors.textMuted)
-            detail.listChips.forEach { chip ->
-                Text(chip.name, fontSize = 14.sp, color = colors.textPrimary,
-                    modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(parseColor(chip.color).copy(alpha = 0.18f)).padding(horizontal = 10.dp, vertical = 4.dp))
+    IconRow(stringResource(R.string.navigation_lists), Icons.AutoMirrored.Filled.FormatListBulleted) {
+        ValueBox(onClick = if (detail.isCopyOnly) null else ({ vm.loadListPicks(); picking = true })) {
+            if (detail.listChips.isEmpty()) {
+                Text(stringResource(R.string.picker_add_to_lists), style = TextStyles.body, color = colors.textMuted)
+                Icon(Icons.Outlined.ChevronRight, null, tint = colors.textMuted, modifier = Modifier.size(18.dp))
+            } else {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    detail.listChips.forEach { chip -> ListBadge(chip.name, chip.color) }
+                }
             }
         }
     }
-    if (picking) {
-        val picks = state.listPicks
-        val chosen = remember(picks) { (picks?.selected?.map { it.id } ?: detail.task.listIds).toMutableSet() }
-        var tick by remember { mutableStateOf(0) }
-        AlertDialog(
-            onDismissRequest = { picking = false },
-            title = { Text(stringResource(R.string.detail_lists)) },
-            confirmButton = { TextButton(onClick = { picking = false; vm.setLists(chosen.toList()) }) { Text(stringResource(R.string.detail_save)) } },
-            dismissButton = { TextButton(onClick = { picking = false }) { Text(stringResource(R.string.common_cancel)) } },
-            text = {
-                Column(Modifier.verticalScroll(rememberScrollState())) {
-                    @Suppress("UNUSED_EXPRESSION") tick
-                    ((picks?.selected ?: emptyList()) + (picks?.options ?: emptyList())).distinctBy { it.id }.forEach { list ->
-                        Row(Modifier.fillMaxWidth().clickable {
-                            if (!chosen.remove(list.id)) chosen.add(list.id); tick++
-                        }, verticalAlignment = Alignment.CenterVertically) {
-                            Checkbox(checked = list.id in chosen, onCheckedChange = { if (!chosen.remove(list.id)) chosen.add(list.id); tick++ })
-                            Text(list.name, color = colors.textPrimary)
-                        }
-                    }
-                }
-            },
-        )
+    if (picking) ListsSheet(detail, state, vm, onDismiss = { picking = false })
+}
+
+/** iOS's ListBadge: the list's colour mark, its name in caption, on bgTertiary, radius 6. */
+@Composable
+internal fun ListBadge(name: String, color: String) {
+    val colors = AstridTheme.colors
+    Row(
+        Modifier.clip(RoundedCornerShape(Radius.small)).background(colors.bgTertiary).padding(horizontal = 8.dp, vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp),
+    ) {
+        Box(Modifier.size(8.dp).clip(RoundedCornerShape(2.dp)).background(parseColor(color)))
+        Text(name, style = TextStyles.caption, color = colors.textPrimary, maxLines = 1)
     }
 }
 
 @Composable
-private fun DescriptionCard(detail: TaskDetail, onSave: (String) -> Unit) {
+private fun CreatedByRow(creator: com.gracefultools.astrid.model.UserSummary) {
+    val colors = AstridTheme.colors
+    IconRow(stringResource(R.string.tasks_created_by), Icons.Outlined.AccountCircle) {
+        Avatar(creator.image, initialsOf(creator.name, creator.email), 28.dp)
+        Spacer(Modifier.width(Spacing.s8))
+        Text(creator.display, style = TextStyles.body, color = colors.textPrimary)
+    }
+}
+
+/** iOS's TaskDetailIdentifierRow: the id, long press copies it. */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun TaskIdRow(identifier: String) {
+    val colors = AstridTheme.colors
+    val clipboard = LocalClipboardManager.current
+    var menu by remember { mutableStateOf(false) }
+    IconRow(stringResource(R.string.tasks_task_id_label), Icons.Filled.Tag) {
+        Box {
+            Text(
+                identifier, style = TextStyles.body, color = colors.textSecondary,
+                modifier = Modifier.combinedClickable(onClick = {}, onLongClick = { menu = true }).padding(vertical = Spacing.s4),
+            )
+            DropdownMenu(menu, onDismissRequest = { menu = false }) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.tasks_task_id_copy)) }, leadingIcon = { Icon(Icons.Outlined.ContentCopy, null) },
+                    onClick = { clipboard.setText(AnnotatedString(identifier)); menu = false },
+                )
+            }
+        }
+    }
+}
+
+/** iOS's ProjectStateQuickPicker: the board's columns, the current one tinted accent. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun ProjectStateRow(state: com.gracefultools.astrid.model.BoardState, enabled: Boolean, onPick: (String) -> Unit) {
+    val colors = AstridTheme.colors
+    IconRow(stringResource(R.string.board_project_state), Icons.Outlined.GridView) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+            state.chips.forEach { chip ->
+                Text(
+                    chip.name, style = TextStyles.subheadline,
+                    color = if (chip.isCurrent) colors.accent else colors.textPrimary,
+                    modifier = Modifier.clip(RoundedCornerShape(Radius.medium))
+                        .background(if (chip.isCurrent) colors.accent.copy(alpha = 0.15f) else colors.bgSecondary)
+                        .clickable(enabled = enabled && !chip.isCurrent) { onPick(chip.id) }
+                        .semantics { selected = chip.isCurrent }
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                )
+            }
+        }
+    }
+}
+
+/** iOS's "Waiting on": blocker chips (struck when done, locked when hidden, x to stop), + to add. */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun WaitingOnRow(section: com.gracefultools.astrid.model.BlockerSection, state: TaskDetailState, vm: TaskDetailViewModel, onOpenTask: (String) -> Unit) {
+    val colors = AstridTheme.colors
+    var adding by remember { mutableStateOf(false) }
+    IconRow(stringResource(R.string.tasks_waiting_on_label), Icons.Outlined.HourglassEmpty) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s8), modifier = Modifier.weight(1f)) {
+            if (section.chips.isEmpty()) {
+                ValueBox(compact = true, onClick = if (section.canEdit) ({ vm.searchBlockers(""); adding = true }) else null) {
+                    Text(stringResource(R.string.tasks_waiting_on_empty), style = TextStyles.body, color = colors.textMuted)
+                }
+            }
+            section.chips.forEach { blocker ->
+                ValueBox(compact = true, onClick = if (blocker.hidden) null else ({ onOpenTask(blocker.id) })) {
+                    if (blocker.hidden) Icon(Icons.Outlined.Lock, null, tint = colors.textMuted, modifier = Modifier.size(14.dp))
+                    Text(
+                        if (blocker.hidden) stringResource(R.string.tasks_waiting_on_hidden) else (blocker.title ?: blocker.identifier ?: ""),
+                        style = TextStyles.subheadline, color = if (blocker.completed) colors.textMuted else colors.textPrimary,
+                        textDecoration = if (blocker.completed) TextDecoration.LineThrough else null, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                    )
+                    if (section.canEdit) Icon(
+                        Icons.Filled.Close, stringResource(R.string.tasks_waiting_on_remove), tint = colors.textMuted,
+                        modifier = Modifier.size(16.dp).clip(CircleShape).clickable { vm.removeBlocker(blocker.id) },
+                    )
+                }
+            }
+            if (section.canEdit && section.chips.isNotEmpty()) {
+                ValueBox(compact = true, onClick = { vm.searchBlockers(""); adding = true }) {
+                    Icon(Icons.Filled.Add, stringResource(R.string.tasks_waiting_on_add), tint = colors.textMuted, modifier = Modifier.size(18.dp))
+                }
+            }
+        }
+    }
+    if (adding) BlockerSheet(state, vm, onDismiss = { adding = false })
+}
+
+/** iOS's InlineTextAreaEditor: a caption label, the description in a box; tap to edit. */
+@Composable
+private fun DescriptionBlock(detail: TaskDetail, onSave: (String) -> Unit, onOpenTask: (String) -> Unit, onOpenList: (String) -> Unit) {
     val colors = AstridTheme.colors
     var editing by remember { mutableStateOf(false) }
     var text by rememberSaveable(detail.task.id, detail.task.description) { mutableStateOf(detail.task.description) }
-    Section(stringResource(R.string.detail_description))
-    Card {
+    val focus = remember { androidx.compose.ui.focus.FocusRequester() }
+    Column(Modifier.fillMaxWidth().padding(horizontal = Spacing.s16, vertical = Spacing.s12), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text(stringResource(R.string.detail_description), style = TextStyles.caption, color = colors.textSecondary)
+        val shape = RoundedCornerShape(Radius.medium)
         if (editing && !detail.isCopyOnly) {
-            OutlinedTextField(
-                value = text, onValueChange = { text = it }, minLines = 3,
-                modifier = Modifier.fillMaxWidth().padding(Spacing.s8).onFocusChanged { if (!it.isFocused && editing) { editing = false; onSave(text) } },
+            LaunchedEffect(Unit) { focus.requestFocus() }
+            BasicTextField(
+                value = text, onValueChange = { text = it },
+                textStyle = TextStyles.body.copy(color = colors.textPrimary), cursorBrush = SolidColor(colors.accent),
+                modifier = Modifier.fillMaxWidth().heightIn(min = 100.dp).clip(shape).background(colors.bgTertiary).padding(Spacing.s12)
+                    .focusRequester(focus).onFocusChanged { if (!it.isFocused && editing) { editing = false; onSave(text) } },
             )
-            TextButton(onClick = { editing = false; onSave(text) }, modifier = Modifier.align(Alignment.End)) { Text(stringResource(R.string.detail_done)) }
+            TextButton(onClick = { editing = false; onSave(text) }, modifier = Modifier.align(Alignment.End)) { Text(stringResource(R.string.actions_done)) }
         } else {
-            Box(Modifier.fillMaxWidth().clickable(enabled = !detail.isCopyOnly) { editing = true }.padding(Spacing.s16)) {
-                if (detail.descriptionBlocks.isEmpty()) {
-                    Text(stringResource(R.string.detail_add_description), color = colors.textMuted, fontSize = 16.sp)
-                } else {
-                    MarkdownView(detail.descriptionBlocks)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun Comments(
-    detail: TaskDetail,
-    onOpenFile: (com.gracefultools.astrid.model.FileRow) -> Unit,
-    fetch: (String, (String) -> Unit) -> Unit,
-) {
-    val colors = AstridTheme.colors
-    Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-        detail.comments.filter { it.showsText }.forEach { comment ->
-            Column(
-                Modifier.fillMaxWidth().padding(start = if (comment.isReply) 24.dp else 0.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(if (comment.isMine) colors.bgSelected else if (colors.isDark) colors.bgSecondary else Color.White)
-                    .padding(Spacing.s12),
+            Box(
+                Modifier.fillMaxWidth().clip(shape).background(colors.bgSecondary).clickable(enabled = !detail.isCopyOnly) { editing = true }
+                    .heightIn(min = 44.dp).padding(Spacing.s12),
             ) {
-                Text(comment.authorName ?: "", fontWeight = FontWeight.SemiBold, fontSize = 14.sp, color = colors.textSecondary)
-                Text(comment.content, fontSize = 16.sp, color = if (comment.isSystem) colors.textMuted else colors.textPrimary)
-                comment.files.filter { it.rendersInline }.forEach { file -> InlineImage(file, fetch) { onOpenFile(file) } }
-                comment.files.filterNot { it.rendersInline }.forEach { file ->
-                    Row(
-                        Modifier.padding(top = 6.dp).clip(RoundedCornerShape(8.dp)).background(colors.bgTertiary)
-                            .clickable { onOpenFile(file) }.padding(horizontal = 10.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(Icons.Filled.AttachFile, null, tint = colors.textSecondary, modifier = Modifier.size(16.dp))
-                        Spacer(Modifier.width(6.dp))
-                        Text(file.name, fontSize = 14.sp, color = colors.textPrimary)
-                    }
-                }
-                if (comment.isPending) Text(stringResource(R.string.tasks_waiting_to_send), fontSize = 12.sp, color = colors.textMuted)
+                if (detail.descriptionBlocks.isEmpty()) Text(stringResource(R.string.task_edit_add_description), style = TextStyles.body, color = colors.textMuted)
+                else MarkdownView(detail.descriptionBlocks, onReference = { kind, id -> if (kind == "list") onOpenList(id) else onOpenTask(id) })
             }
         }
     }
 }
 
+/** iOS's "Parent task:" link. */
 @Composable
-private fun CommentComposer(onSend: (String) -> Unit, onAttach: () -> Unit) {
-    val colors = AstridTheme.colors
-    var text by rememberSaveable { mutableStateOf("") }
-    Row(Modifier.fillMaxWidth().background(colors.headerBg).navigationBarsPadding().imePadding().padding(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = onAttach) { Icon(Icons.Filled.AttachFile, stringResource(R.string.detail_attach), tint = colors.textSecondary) }
-        TextField(
-            value = text, onValueChange = { text = it }, placeholder = { Text(stringResource(R.string.detail_add_comment)) },
-            shape = RoundedCornerShape(12.dp), maxLines = 4,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = colors.inputBg, unfocusedContainerColor = colors.inputBg,
-                focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent,
-            ),
-            modifier = Modifier.weight(1f),
-        )
-        IconButton(onClick = { onSend(text); text = "" }, enabled = text.isNotBlank()) {
-            Icon(Icons.AutoMirrored.Filled.Send, stringResource(R.string.detail_send), tint = colors.accent)
-        }
-    }
-}
-
-
-/** Who: the core's assignee options, first of them "nobody". */
-@Composable
-private fun AssigneeField(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailViewModel) {
-    val colors = AstridTheme.colors
-    var picking by remember { mutableStateOf(false) }
-    FieldRow(stringResource(R.string.detail_assignee), onClick = if (detail.isCopyOnly) null else ({ vm.loadAssignees(); picking = true })) {
-        Text(detail.assignee?.display ?: stringResource(R.string.detail_unassigned), color = colors.textPrimary, fontSize = 16.sp)
-    }
-    if (picking) {
-        PickerDialog(stringResource(R.string.detail_assignee), onDismiss = { picking = false }) {
-            state.assignees?.options?.forEach { option ->
-                val label = option.name ?: if (option.userId == null) stringResource(R.string.detail_unassigned) else option.userId
-                PickerRow(label, selected = option.userId == state.assignees.assigneeId) { picking = false; vm.setAssignee(option.userId) }
-            }
-        }
-    }
-}
-
-/** Repeat: the core's presets, worded by its keys; the summary row says what is set now. */
-@Composable
-private fun RepeatField(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailViewModel) {
-    val colors = AstridTheme.colors
-    val context = androidx.compose.ui.platform.LocalContext.current
-    var picking by remember { mutableStateOf(false) }
-    val summary = CoreLabels.summary(context, detail.repeatSummary) ?: coreLabel("repeat.none")
-    FieldRow(stringResource(R.string.detail_repeat), onClick = if (detail.isCopyOnly) null else ({ vm.loadRepeats(); picking = true })) {
-        Text(summary, color = colors.textPrimary, fontSize = 16.sp)
-    }
-    var custom by remember { mutableStateOf(false) }
-    if (picking) {
-        PickerDialog(stringResource(R.string.detail_repeat), onDismiss = { picking = false }) {
-            state.repeats?.presets?.forEach { preset ->
-                PickerRow(coreLabel(preset.titleKey), preset.isSelected) {
-                    picking = false
-                    if (preset.value == "custom") custom = true else vm.setRepeating(preset.value)
-                }
-            }
-        }
-    }
-    if (custom) {
-        CustomRepeatDialog(
-            initial = state.repeats?.pattern,
-            onSave = { unit, interval, weekdays, end, after, until ->
-                custom = false
-                vm.setCustomRepeat(unit, interval, weekdays, end, after, until)
-            },
-            onDismiss = { custom = false },
-        )
-    }
-}
-
-/** Reminder: the core's offsets from the due time. */
-@Composable
-private fun ReminderField(state: TaskDetailState, vm: TaskDetailViewModel) {
-    val colors = AstridTheme.colors
-    var picking by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { vm.loadReminders() }
-    val current = state.reminders?.picks?.firstOrNull { it.isSelected }?.titleKey ?: "reminder.none"
-    FieldRow(stringResource(R.string.detail_reminder), onClick = { vm.loadReminders(); picking = true }) {
-        Text(coreLabel(current), color = colors.textPrimary, fontSize = 16.sp)
-    }
-    if (picking) {
-        PickerDialog(stringResource(R.string.detail_reminder), onDismiss = { picking = false }) {
-            state.reminders?.picks?.forEach { pick ->
-                PickerRow(coreLabel(pick.titleKey), pick.isSelected) { picking = false; vm.setReminder(pick.reminderTime) }
-            }
-        }
-    }
-}
-
-@Composable
-private fun PickerDialog(title: String, onDismiss: () -> Unit, content: @Composable () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(title) },
-        confirmButton = {},
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
-        text = { Column(Modifier.verticalScroll(rememberScrollState())) { content() } },
-    )
-}
-
-@Composable
-private fun PickerRow(label: String, selected: Boolean, onClick: () -> Unit) {
+private fun ParentLink(title: String, onClick: () -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).clickable(onClick = onClick)
-            .semantics { this.selected = selected }.padding(vertical = 12.dp, horizontal = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = Spacing.s16, vertical = Spacing.s8),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        Text(label, color = colors.textPrimary, fontSize = 17.sp, modifier = Modifier.weight(1f))
-        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accent)
+        Icon(Icons.AutoMirrored.Filled.Undo, null, tint = colors.textSecondary, modifier = Modifier.size(14.dp))
+        Text(stringResource(R.string.task_detail_parent_task), style = TextStyles.caption, color = colors.textSecondary)
+        Text(title, style = TextStyles.caption, fontWeight = FontWeight.Medium, color = colors.textSecondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
+}
+
+/** iOS's SubtasksSectionView: "Sub tasks" and done/total, round checks, a title to open, "+ Add a sub task". */
+@Composable
+private fun SubtasksSection(detail: TaskDetail, vm: TaskDetailViewModel, onOpenTask: (String) -> Unit) {
+    val colors = AstridTheme.colors
+    var adding by rememberSaveable(detail.task.id) { mutableStateOf("") }
+    val focus = LocalFocusManager.current
+    val addSubtaskLabel = stringResource(R.string.task_detail_add_subtask)
+    Column(Modifier.fillMaxWidth().padding(horizontal = Spacing.s16, vertical = Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+            Text(stringResource(R.string.task_detail_subtasks), style = TextStyles.caption, color = colors.textSecondary)
+            if (detail.subtasks.isNotEmpty()) {
+                Text("${detail.subtasks.count { it.completed }}/${detail.subtasks.size}", style = TextStyles.caption, color = colors.textMuted)
+            }
+        }
+        detail.subtasks.forEach { sub ->
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+                Icon(
+                    if (sub.completed) Icons.Outlined.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
+                    stringResource(if (sub.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, sub.title),
+                    tint = if (sub.completed) colors.accent else colors.textMuted,
+                    modifier = Modifier.size(22.dp).clip(CircleShape).clickable(enabled = !detail.isCopyOnly) { vm.setSubtaskCompleted(sub.id, !sub.completed) },
+                )
+                Text(
+                    sub.title, style = TextStyles.body, color = if (sub.completed) colors.textMuted else colors.textPrimary,
+                    textDecoration = if (sub.completed) TextDecoration.LineThrough else null,
+                    modifier = Modifier.weight(1f).clickable { onOpenTask(sub.id) }.padding(vertical = 2.dp),
+                )
+            }
+        }
+        if (!detail.isCopyOnly) Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+            Icon(Icons.Outlined.AddCircleOutline, null, tint = colors.textMuted, modifier = Modifier.size(22.dp))
+            Box(Modifier.weight(1f)) {
+                if (adding.isEmpty()) Text(stringResource(R.string.task_detail_add_subtask), style = TextStyles.body, color = colors.textMuted.copy(alpha = 0.6f))
+                BasicTextField(
+                    value = adding, onValueChange = { adding = it.replace("\n", "") },
+                    textStyle = TextStyles.body.copy(color = colors.textPrimary), cursorBrush = SolidColor(colors.accent), singleLine = true,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = { if (adding.isBlank()) focus.clearFocus() else { vm.addSubtask(adding); adding = "" } }),
+                    modifier = Modifier.fillMaxWidth().testTag("detail:addSubtask").semantics { contentDescription = addSubtaskLabel },
+                )
+            }
+        }
+    }
+}
+
+/**
+ * iOS's comment composer: a floating card with a white bordered field ("Add a comment..."), the
+ * paperclip, and the paper plane once there is something to send. A reply shows who it answers.
+ */
+@Composable
+private fun CommentComposer(
+    replyTo: com.gracefultools.astrid.model.CommentRow?,
+    onCancelReply: () -> Unit,
+    onSend: (String) -> Unit,
+    onAttach: () -> Unit,
+) {
+    val colors = AstridTheme.colors
+    var text by rememberSaveable { mutableStateOf("") }
+    val shape = RoundedCornerShape(Radius.large)
+    val commentLabel = stringResource(R.string.comments_add_placeholder)
+    Column(
+        Modifier.navigationBarsPadding().imePadding().padding(start = Spacing.s8, end = Spacing.s8, bottom = Spacing.s8).fillMaxWidth()
+            .shadow(6.dp, shape, ambientColor = Color.Black.copy(alpha = 0.1f), spotColor = Color.Black.copy(alpha = 0.1f))
+            .clip(shape).background(colors.floatingBar).padding(horizontal = Spacing.s12, vertical = Spacing.s8),
+    ) {
+        if (replyTo != null) Row(Modifier.fillMaxWidth().padding(bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                stringResource(R.string.comments_replying_to, replyTo.authorName ?: ""), style = TextStyles.caption, color = colors.textSecondary,
+                modifier = Modifier.weight(1f),
+            )
+            Text(stringResource(R.string.common_cancel), style = TextStyles.caption, color = colors.accent, modifier = Modifier.clickable(onClick = onCancelReply))
+        }
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+            Box(
+                Modifier.weight(1f).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
+                    .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = 40.dp).padding(horizontal = 12.dp, vertical = 9.dp),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                if (text.isEmpty()) Text(stringResource(R.string.comments_add_placeholder), style = TextStyles.body, color = colors.inputPlaceholder)
+                BasicTextField(
+                    value = text, onValueChange = { text = it }, maxLines = 8,
+                    textStyle = TextStyles.body.copy(color = colors.textPrimary), cursorBrush = SolidColor(colors.accent),
+                    modifier = Modifier.fillMaxWidth().testTag("detail:comment").semantics { contentDescription = commentLabel },
+                )
+            }
+            ComposerButton(Icons.Filled.AttachFile, stringResource(R.string.detail_attach), colors.accent, onAttach)
+            if (text.isNotBlank()) ComposerButton(Icons.AutoMirrored.Filled.Send, stringResource(R.string.detail_send), tint = colors.accent) { onSend(text); text = "" }
+        }
+    }
+}
+
+@Composable
+private fun ComposerButton(icon: ImageVector, label: String, onClick: () -> Unit) = ComposerButton(icon, label, AstridTheme.colors.textSecondary, onClick)
+
+@Composable
+private fun ComposerButton(icon: ImageVector, label: String, tint: Color, onClick: () -> Unit) {
+    val colors = AstridTheme.colors
+    Box(
+        Modifier.size(40.dp).clip(CircleShape).background(colors.field).border(1.dp, colors.fieldBorder, CircleShape).clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) { Icon(icon, label, tint = tint, modifier = Modifier.size(20.dp)) }
+}
+
+/** iOS's date chip: Today / Tomorrow / Yesterday, else "Mon Oct 20 2026". */
+@Composable
+internal fun detailDateLabel(detail: TaskDetail): String? {
+    val iso = detail.task.dueDateTime ?: return null
+    when (detail.due.key) {
+        "today" -> return stringResource(R.string.time_today)
+        "tomorrow" -> return stringResource(R.string.time_tomorrow)
+        "yesterday" -> return stringResource(R.string.time_yesterday)
+    }
+    val instant = runCatching { java.time.Instant.parse(iso) }.getOrNull() ?: return null
+    val zone = if (detail.task.isAllDay) java.time.ZoneOffset.UTC else java.time.ZoneId.systemDefault()
+    val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
+    val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "EEEMMMdyyyy")
+    return instant.atZone(zone).format(java.time.format.DateTimeFormatter.ofPattern(pattern, locale))
+}
+
+/** The time chip's text: the reader's local time of a timed task; null for an all-day one. */
+@Composable
+internal fun detailTimeLabel(detail: TaskDetail): String? {
+    if (detail.task.isAllDay) return null
+    val instant = detail.task.dueDateTime?.let { runCatching { java.time.Instant.parse(it) }.getOrNull() } ?: return null
+    val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
+    return instant.atZone(java.time.ZoneId.systemDefault()).format(java.time.format.DateTimeFormatter.ofLocalizedTime(java.time.format.FormatStyle.SHORT).withLocale(locale))
 }
 
 /** Copy a picked document into app storage, where the core can read it: (path, name, MIME type). */
-private fun copyIntoApp(context: android.content.Context, uri: android.net.Uri): Triple<String, String, String?>? = runCatching {
+internal fun copyIntoApp(context: android.content.Context, uri: android.net.Uri): Triple<String, String, String?>? = runCatching {
     val resolver = context.contentResolver
     val name = resolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
         if (cursor.moveToFirst()) cursor.getString(0) else null
@@ -570,7 +787,7 @@ private fun copyIntoApp(context: android.content.Context, uri: android.net.Uri):
 }.getOrNull()
 
 /** Hand a downloaded file to whatever opens its type, through the app's FileProvider. */
-private fun openFile(context: android.content.Context, path: String, mimeType: String) {
+internal fun openFile(context: android.content.Context, path: String, mimeType: String) {
     val uri = androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.files", java.io.File(path))
     val view = android.content.Intent(android.content.Intent.ACTION_VIEW).setDataAndType(uri, mimeType)
         .addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION or android.content.Intent.FLAG_ACTIVITY_NEW_TASK)

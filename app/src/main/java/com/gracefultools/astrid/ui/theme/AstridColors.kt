@@ -48,6 +48,8 @@ data class AstridColors(
     /** bgHover / buttonHover and the focus ring (Theme.swift). */
     val pressed: Color = bgActive,
     val borderFocus: Color = Accent,
+    /** iOS's Divider: neutral grey on every light theme (Ocean's border is cyan, its dividers are not). */
+    val divider: Color = if (isDark) border else Color(229, 231, 235),
 ) {
     val accent: Color get() = Accent
     val accentHover: Color get() = AccentHover

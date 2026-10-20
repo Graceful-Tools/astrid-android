@@ -183,7 +183,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     ) { Text(stringResource(R.string.detail_select_a_task), color = com.gracefultools.astrid.ui.theme.AstridTheme.colors.textSecondary) }
                 } else {
                     val detail: TaskDetailViewModel = viewModel(key = "pane-$id", factory = factory { TaskDetailViewModel(graph.core, id) })
-                    TaskDetailScreen(detail, onBack = { paneTaskId = null })
+                    TaskDetailScreen(detail, onBack = { paneTaskId = null }, onOpenTask = { paneTaskId = it }, onOpenList = { sidebar.select(it) })
                 }
             }
             val panes: @Composable () -> Unit = {
@@ -206,7 +206,11 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
         composable("task/{id}") { entry ->
             val id = entry.arguments?.getString("id").orEmpty()
             val detail: TaskDetailViewModel = viewModel(key = "detail-$id", factory = factory { TaskDetailViewModel(graph.core, id) })
-            TaskDetailScreen(detail, onBack = { nav.popBackStack() })
+            TaskDetailScreen(
+                detail, onBack = { nav.popBackStack() },
+                onOpenTask = { nav.navigate("task/$it") },
+                onOpenList = { sidebar.select(it); nav.popBackStack("list", inclusive = false) },
+            )
         }
         composable("list/{id}") { entry ->
             val id = entry.arguments?.getString("id").orEmpty()

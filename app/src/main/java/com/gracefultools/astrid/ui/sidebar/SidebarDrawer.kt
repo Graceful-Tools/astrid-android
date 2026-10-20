@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -96,21 +97,25 @@ fun SidebarDrawer(
     ) {
         Box(Modifier.fillMaxHeight().statusBarsPadding()) {
             Column(Modifier.fillMaxHeight()) {
-                BrandHeader(onSearch)
+                Group(Position.Only, Modifier.padding(top = Spacing.s8)) { BrandHeader(onSearch) }
                 LazyColumn(Modifier.weight(1f), contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 96.dp)) {
                     state.myTasks?.let { mine ->
-                        item { MyTasksEntry(mine, state.selectedId == mine.id, state.counts[mine.id] ?: 0) { onSelect(mine) } }
+                        item { Group(Position.Only) { MyTasksEntry(mine, state.selectedId == mine.id, state.counts[mine.id] ?: 0) { onSelect(mine) } } }
                     }
                     if (state.favorites.isNotEmpty()) {
                         item { Section(stringResource(R.string.navigation_favorites)) }
-                        items(state.favorites, key = { "f" + it.id }) { list ->
-                            Entry(list, state.selectedId == list.id, state.counts[list.id], state.images[list.id], state.showListImages, { onSelect(list) }, { onToggleFavorite(list) })
+                        itemsIndexed(state.favorites, key = { _, it -> "f" + it.id }) { index, list ->
+                            Group(Position.of(index, state.favorites.size)) {
+                                Entry(list, state.selectedId == list.id, state.counts[list.id], state.images[list.id], state.showListImages, { onSelect(list) }, { onToggleFavorite(list) })
+                            }
                         }
                     }
                     item { Section(stringResource(R.string.navigation_lists)) }
-                    item { AddListEntry { onAddList?.invoke() ?: run { addingFallback.value = true } } }
-                    items(state.lists, key = { "l" + it.id }) { list ->
-                        Entry(list, state.selectedId == list.id, state.counts[list.id], state.images[list.id], state.showListImages, { onSelect(list) }, { onToggleFavorite(list) })
+                    item { Group(if (state.lists.isEmpty()) Position.Only else Position.First) { AddListEntry { onAddList?.invoke() ?: run { addingFallback.value = true } } } }
+                    itemsIndexed(state.lists, key = { _, it -> "l" + it.id }) { index, list ->
+                        Group(if (index == state.lists.lastIndex) Position.Last else Position.Middle) {
+                            Entry(list, state.selectedId == list.id, state.counts[list.id], state.images[list.id], state.showListImages, { onSelect(list) }, { onToggleFavorite(list) })
+                        }
                     }
                 }
             }
@@ -137,7 +142,7 @@ private fun CreateListDialog(onDismiss: () -> Unit, onCreate: (String) -> Unit) 
 private fun BrandHeader(onSearch: () -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().padding(start = 20.dp, end = Spacing.s12, top = Spacing.s12, bottom = Spacing.s8),
+        Modifier.fillMaxWidth().padding(start = Spacing.s16, end = Spacing.s8, top = 4.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(painterResource(R.drawable.astrid_character), null, Modifier.size(LogoColumn).clip(RoundedCornerShape(6.dp)))
@@ -153,12 +158,45 @@ private fun BrandHeader(onSearch: () -> Unit) {
     }
 }
 
+/** Where a row sits in its group: the card's corners round only at its ends, dividers between. */
+private enum class Position {
+    First, Middle, Last, Only;
+    companion object { fun of(index: Int, size: Int) = when { size == 1 -> Only; index == 0 -> First; index == size - 1 -> Last; else -> Middle } }
+}
+
+/**
+ * iOS 26's sidebar: each group is a rounded card (white on Ocean and Light, headerBg on Dark),
+ * inset 12 from the edges, its rows divided by a hairline that starts after the icon column.
+ */
+@Composable
+private fun Group(position: Position, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    val colors = AstridTheme.colors
+    val r = 22.dp
+    val shape = when (position) {
+        Position.Only -> RoundedCornerShape(r)
+        Position.First -> RoundedCornerShape(topStart = r, topEnd = r)
+        Position.Last -> RoundedCornerShape(bottomStart = r, bottomEnd = r)
+        Position.Middle -> RoundedCornerShape(0.dp)
+    }
+    Column(
+        modifier.padding(horizontal = Spacing.s12).padding(bottom = if (position == Position.Only || position == Position.Last) Spacing.s12 else 0.dp)
+            .fillMaxWidth().clip(shape).background(colors.floating)
+            .padding(top = if (position == Position.Only || position == Position.First) 6.dp else 0.dp,
+                bottom = if (position == Position.Only || position == Position.Last) 6.dp else 0.dp),
+    ) {
+        if (position == Position.Middle || position == Position.Last) {
+            androidx.compose.material3.HorizontalDivider(Modifier.padding(start = 56.dp, end = Spacing.s16), color = colors.divider)
+        }
+        content()
+    }
+}
+
 /** Title-case, as iOS's sidebar list style draws "Favorites" and "Lists". */
 @Composable
 private fun Section(title: String) {
     Text(
-        title, style = TextStyles.footnote, fontWeight = FontWeight.SemiBold, color = AstridTheme.colors.textSecondary,
-        modifier = Modifier.padding(start = 20.dp, top = Spacing.s16, bottom = Spacing.s4).semantics { heading() },
+        title, style = TextStyles.headline, color = AstridTheme.colors.textSecondary,
+        modifier = Modifier.padding(start = 28.dp, top = Spacing.s8, bottom = Spacing.s8).semantics { heading() },
     )
 }
 
@@ -180,7 +218,7 @@ private fun RowShell(
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
             .testTag(tag)
             .semantics { this.selected = selected }
-            .padding(start = Spacing.s12, end = Spacing.s4, top = Spacing.s8, bottom = Spacing.s8),
+            .padding(start = Spacing.s12, end = Spacing.s4, top = 13.dp, bottom = 13.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(LogoGap),
         content = content,
@@ -246,9 +284,11 @@ fun ListPicture(list: ListSummary, image: String?, size: androidx.compose.ui.uni
 /** iOS ListImageHelper.simpleHash → /icons/default_list_<0-3>.png on the API's host. */
 fun defaultListImage(listId: String, base: String = "https://astrid.cc"): String {
     if (listId.isEmpty()) return "$base/icons/default_list_0.png"
-    var hash = 0
-    for (ch in listId) hash = (hash shl 5) - hash + ch.code
-    return "$base/icons/default_list_${Math.floorMod(kotlin.math.abs(hash.toLong()), 4L)}.png"
+    // Swift's Int is 64-bit and its &- / &+ wrap: Kotlin's Long does the same, so the same id picks
+    // the same picture on both.
+    var hash = 0L
+    for (ch in listId) hash = (hash shl 5) - hash + ch.code.toLong()
+    return "$base/icons/default_list_${kotlin.math.abs(hash) % 4}.png"
 }
 
 /** iOS's count: callout, textSecondary, in a capsule of gray 0.1 (bgTertiary on Dark), shown at 0 too. */
