@@ -1,6 +1,5 @@
 package com.gracefultools.astrid.ui.account
 
-import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
@@ -74,49 +72,6 @@ private fun Card(content: @Composable () -> Unit) {
             .border(0.5.dp, colors.border, RoundedCornerShape(12.dp)).padding(Spacing.s16),
         verticalArrangement = Arrangement.spacedBy(Spacing.s4),
     ) { content() }
-}
-
-/** iOS's profile numbers: completed, inspired, supported — and data export. */
-@Composable
-fun ProfileScreen(vm: AccountViewModel, onBack: () -> Unit) {
-    val state by vm.state.collectAsStateWithLifecycle()
-    val colors = AstridTheme.colors
-    val context = LocalContext.current
-    LaunchedEffect(Unit) { vm.loadProfile() }
-    LaunchedEffect(state.exported) {
-        val path = state.exported ?: return@LaunchedEffect
-        val uri = androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.files", java.io.File(path))
-        val send = Intent(Intent.ACTION_SEND).setType(if (path.endsWith(".csv")) "text/csv" else "application/json")
-            .putExtra(Intent.EXTRA_STREAM, uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        context.startActivity(Intent.createChooser(send, null))
-        vm.exportShared()
-    }
-    Page(stringResource(R.string.profile_title), vm, onBack) {
-        state.stats?.let { stats ->
-            listOf(
-                Triple(R.string.stats_completed, R.string.stats_completed_tagline, stats.completed),
-                Triple(R.string.stats_inspired, R.string.stats_inspired_tagline, stats.inspired),
-                Triple(R.string.stats_supported, R.string.stats_supported_tagline, stats.supported),
-            ).forEach { (label, tagline, value) ->
-                Card {
-                    Text(value.toString(), fontSize = 34.sp, fontWeight = FontWeight.Bold, color = colors.accent)
-                    Text(stringResource(label), fontSize = 17.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
-                    Text(stringResource(tagline), fontSize = 15.sp, color = colors.textSecondary)
-                }
-            }
-        }
-        Text(stringResource(R.string.profile_export).uppercase(), fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = colors.textMuted)
-        Card {
-            Row {
-                for (format in listOf("json", "csv")) {
-                    TextButton(onClick = {
-                        val dir = java.io.File(context.filesDir, "attachments").apply { mkdirs() }
-                        vm.export(format, java.io.File(dir, "astrid-export.$format").absolutePath)
-                    }) { Text(format.uppercase()) }
-                }
-            }
-        }
-    }
 }
 
 /** Agent Hub: who does work here and how each runs — the core's modes, a locked agent left alone. */
