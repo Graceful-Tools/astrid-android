@@ -264,10 +264,6 @@
     <string name="lists_daily">Daily</string>
     <string name="lists_weekly">Weekly</string>
     <string name="lists_monthly">Monthly</string>
-    <string name="lists_ai_coding_agent">AI Coding Agent</string>
-    <string name="lists_link_repo_description">Link repository for AI coding agents</string>
-    <string name="lists_github_repository">GitHub Repository</string>
-    <string name="lists_no_repositories_found">No repositories found. Make sure your GitHub account is connected.</string>
     <string name="lists_project_board">Project board</string>
     <string name="lists_create_board">Create Board</string>
     <string name="lists_disable_board">Disable Board</string>
@@ -336,7 +332,6 @@
     <string name="lists_member_options">Member options</string>
     <string name="lists_cancel_invitation">Cancel invitation for %1$s</string>
     <string name="lists_remove_invitee">Remove %1$s</string>
-    <string name="lists_refresh_data">Refresh Data</string>
     <string name="lists_color_hue">Hue</string>
     <string name="lists_color_saturation">Saturation</string>
     <string name="lists_color_brightness">Brightness</string>

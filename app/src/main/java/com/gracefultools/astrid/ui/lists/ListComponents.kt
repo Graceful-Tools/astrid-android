@@ -224,12 +224,11 @@ internal fun AddMemberSheet(
 }
 
 /**
- * iOS ShareTargetView for a list: the privacy notice, the link, Copy to Clipboard and the system
- * share sheet. The link is the list's address on the web; iOS mints a shortcode instead, which the
- * core can only do for tasks today (`shareTask`).
+ * iOS ShareTargetView for a list: the privacy notice, the minted link (core `shareList`), Copy to
+ * Clipboard and the system share sheet; "Failed to generate share link" when minting fails.
  */
 @Composable
-internal fun ShareListSheet(name: String, privacy: String?, link: String, onDismiss: () -> Unit) {
+internal fun ShareListSheet(name: String, privacy: String?, link: String?, failed: Boolean, onDismiss: () -> Unit) {
     val colors = AstridTheme.colors
     val clipboard = LocalClipboardManager.current
     val context = LocalContext.current
@@ -237,15 +236,24 @@ internal fun ShareListSheet(name: String, privacy: String?, link: String, onDism
     PickerSheet(stringResource(R.string.lists_share_list), onDismiss) {
         val note = if (privacy.equals("PUBLIC", ignoreCase = true)) R.string.share_public_list_message else R.string.share_private_list_message
         Text(stringResource(note), style = TextStyles.subheadline, color = colors.textSecondary)
-        Text(link, style = TextStyles.subheadline, color = colors.textPrimary, modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgSecondary).padding(Spacing.s12))
-        Text(stringResource(R.string.share_share_list_link_hint), style = TextStyles.caption, color = colors.textMuted)
-        PickRow(stringResource(if (copied) R.string.share_link_copied else R.string.share_copy_link), copied, leading = { Icon(Icons.Outlined.ContentCopy, null, tint = colors.accent) }) {
-            clipboard.setText(AnnotatedString(link)); copied = true
-        }
-        PickRow(stringResource(R.string.actions_share), false, leading = { Icon(Icons.Outlined.Share, null, tint = colors.accent) }) {
-            val send = android.content.Intent(android.content.Intent.ACTION_SEND).setType("text/plain")
-                .putExtra(android.content.Intent.EXTRA_SUBJECT, name).putExtra(android.content.Intent.EXTRA_TEXT, link)
-            context.startActivity(android.content.Intent.createChooser(send, null))
+        when {
+            failed -> Text(stringResource(R.string.share_link_failed), style = TextStyles.body, color = Error)
+            link == null -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+                CircularProgressIndicator(Modifier.size(18.dp), color = colors.accent, strokeWidth = 2.dp)
+                Text(stringResource(R.string.share_generating_link), style = TextStyles.body, color = colors.textSecondary)
+            }
+            else -> {
+                Text(link, style = TextStyles.subheadline, color = colors.textPrimary, modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgSecondary).padding(Spacing.s12))
+                Text(stringResource(R.string.share_share_list_link_hint), style = TextStyles.caption, color = colors.textMuted)
+                PickRow(stringResource(if (copied) R.string.share_link_copied else R.string.share_copy_link), copied, leading = { Icon(Icons.Outlined.ContentCopy, null, tint = colors.accent) }) {
+                    clipboard.setText(AnnotatedString(link)); copied = true
+                }
+                PickRow(stringResource(R.string.actions_share), false, leading = { Icon(Icons.Outlined.Share, null, tint = colors.accent) }) {
+                    val send = android.content.Intent(android.content.Intent.ACTION_SEND).setType("text/plain")
+                        .putExtra(android.content.Intent.EXTRA_SUBJECT, name).putExtra(android.content.Intent.EXTRA_TEXT, link)
+                    context.startActivity(android.content.Intent.createChooser(send, null))
+                }
+            }
         }
     }
 }
@@ -258,6 +266,3 @@ internal fun ErrorBox(message: String, modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(Error.copy(alpha = 0.1f)).padding(Spacing.s12),
     )
 }
-
-/** The web address of a list, for sharing until the core mints list shortcodes. */
-internal fun listLink(listId: String): String = "https://astrid.cc/lists/$listId"

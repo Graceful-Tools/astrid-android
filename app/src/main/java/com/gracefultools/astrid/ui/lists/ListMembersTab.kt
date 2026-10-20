@@ -115,7 +115,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel)
         }
 
         FormSection(stringResource(R.string.actions_share), footer = stringResource(R.string.lists_share_list_description)) {
-            FormButtonRow(Icons.Outlined.IosShare, stringResource(R.string.lists_share_list), colors.accent) { sharing = true }
+            FormButtonRow(Icons.Outlined.IosShare, stringResource(R.string.lists_share_list), colors.accent) { sharing = true; vm.requestShareLink() }
         }
 
         // AI Agents — admins, when the account has agents (listAgentOptions).
@@ -181,7 +181,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel)
             onDismiss = { vm.clearSuggestions(); adding = false },
         )
     }
-    if (sharing) ShareListSheet(settings.name, settings.privacy, listLink(settings.listId)) { sharing = false }
+    if (sharing) ShareListSheet(settings.name, settings.privacy, state.shareLink, state.shareFailed) { sharing = false }
     if (confirmLeave) {
         ConfirmAlert(
             stringResource(R.string.lists_leave_list), stringResource(R.string.lists_leave_confirm), stringResource(R.string.lists_leave_list),

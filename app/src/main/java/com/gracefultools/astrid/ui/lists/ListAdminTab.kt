@@ -57,7 +57,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 /** Which of the Admin tab's pickers is open. */
-private enum class AdminPicker { ASSIGNEE, DUE_DATE, DUE_TIME, REPEATING, REPOSITORY, RECENTLY_COMPLETED, SINCE_DATE, CUSTOM_COLOR }
+private enum class AdminPicker { ASSIGNEE, DUE_DATE, DUE_TIME, REPEATING, RECENTLY_COMPLETED, SINCE_DATE, CUSTOM_COLOR }
 
 /** iOS's default due-date choices: stored value to label. */
 private val DUE_DATES = listOf(
@@ -74,7 +74,7 @@ private val REPEATS = listOf(
 
 /**
  * iOS ListAdminTab, section for section: List Information, List Appearance, Default Task Settings,
- * AI Coding Agent, Project board, Advanced, Danger Zone.
+ * [integrations slot], Project board, Advanced, Danger Zone.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,7 +85,6 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel) {
     var confirmDelete by remember { mutableStateOf(false) }
     var confirmDisableBoard by remember { mutableStateOf(false) }
     val pickImage = rememberImagePicker(vm::setImage)
-    LaunchedEffect(Unit) { vm.loadAgentOptions() }
     val locale = LocalConfiguration.current.locales[0]
     val timeLabel: (String) -> String = { hhmm ->
         runCatching { LocalTime.parse(hhmm).format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(locale)) }.getOrDefault(hhmm)
@@ -157,31 +156,9 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel) {
             FormPickerRow(stringResource(R.string.lists_repeating), stringResource(REPEATS.firstOrNull { it.first == defaults.repeating }?.second ?: R.string.lists_never)) { picker = AdminPicker.REPEATING }
         }
 
-        // AI Coding Agent — only when this account has an agent (iOS: when AI providers exist).
-        val options = state.agentOptions
-        if (state.hasAgents && options != null) {
-            FormSection(stringResource(R.string.lists_ai_coding_agent)) {
-                Text(
-                    stringResource(R.string.lists_link_repo_description), style = TextStyles.caption, color = colors.textSecondary,
-                    modifier = Modifier.padding(start = Spacing.s16, end = Spacing.s16, top = Spacing.s12),
-                )
-                val repo = settings.githubRepositoryId ?: options.githubRepositoryId
-                FormPickerRow(
-                    stringResource(R.string.lists_github_repository),
-                    options.repositories.firstOrNull { it.fullName == repo }?.name ?: repo ?: stringResource(R.string.lists_none),
-                ) { picker = AdminPicker.REPOSITORY }
-                if (options.repositories.isEmpty()) {
-                    Text(
-                        stringResource(R.string.lists_no_repositories_found), style = TextStyles.caption2, color = colors.textMuted,
-                        modifier = Modifier.padding(horizontal = Spacing.s16),
-                    )
-                }
-                FormButtonRow(Icons.Outlined.Refresh, stringResource(R.string.lists_refresh_data), colors.accent) { vm.loadAgentOptions() }
-            }
-        }
-
-        // TODO(AATD external sync): the per-list GitHub Issues / Google Tasks rows (iOS "External
-        // sync", ListAdminTab 449-539) are being built by another agent; they go here.
+        // TODO(lead, after merge): ListIntegrationsSections(core, listId) from ui/sync/ExternalSyncScreens.kt
+        // goes HERE — it draws iOS's "AI Coding Agent" repository picker and "External sync" sections
+        // (ListAdminTab 365-539), which another branch owns. Nothing of either is drawn in this tab.
 
         // Project board.
         FormSection(
@@ -246,13 +223,6 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel) {
         }
         AdminPicker.REPEATING -> PickerSheet(stringResource(R.string.lists_repeating), close) {
             REPEATS.forEach { (value, label) -> PickRow(stringResource(label), settings.defaults.repeating == value) { vm.setDefaultRepeating(value); close() } }
-        }
-        AdminPicker.REPOSITORY -> PickerSheet(stringResource(R.string.lists_github_repository), close) {
-            val repo = settings.githubRepositoryId
-            PickRow(stringResource(R.string.lists_none), repo == null) { vm.setGithubRepository(null); close() }
-            state.agentOptions?.repositories.orEmpty().forEach { r ->
-                PickRow(r.name, repo == r.fullName, subtitle = r.fullName) { vm.setGithubRepository(r.fullName); close() }
-            }
         }
         AdminPicker.RECENTLY_COMPLETED -> PickerSheet(stringResource(R.string.lists_recently_completed), close) {
             RecentlyCompletedPreset.entries.forEach { preset ->

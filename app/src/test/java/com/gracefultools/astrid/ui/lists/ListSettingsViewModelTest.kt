@@ -337,4 +337,23 @@ class ListSettingsViewModelTest {
         assertEquals(JsonPrimitive("a1"), core.last("removeMember")!!["userId"])
         assertNull(vm.state.value.error)
     }
+
+    @Test
+    fun `AATD-44 Share List mints a link with shareList`() = runTest {
+        val core = ownedCore().apply { answer("shareList", """{"url":"https://astrid.cc/s/abc"}""") }
+        val vm = vm(core)
+        vm.requestShareLink()
+        assertEquals(JsonPrimitive("l1"), core.last("shareList")!!["listId"])
+        assertEquals("https://astrid.cc/s/abc", vm.state.value.shareLink)
+        assertFalse(vm.state.value.shareFailed)
+    }
+
+    @Test
+    fun `AATD-44 a share link that cannot be minted says so`() = runTest {
+        val core = ownedCore().apply { answer("shareList") { throw CoreFailure(FailureKind.OFFLINE, "offline") } }
+        val vm = vm(core)
+        vm.requestShareLink()
+        assertTrue(vm.state.value.shareFailed)
+        assertNull(vm.state.value.shareLink)
+    }
 }

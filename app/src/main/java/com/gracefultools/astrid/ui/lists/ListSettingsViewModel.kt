@@ -47,6 +47,9 @@ data class ListSettingsState(
     val boardBusy: Boolean = false,
     /** iOS's inline "Couldn't create board: …" / "Couldn't disable board: …". */
     val boardError: BoardFailure? = null,
+    /** The Share List sheet's minted link (`shareList`), and whether minting it failed. */
+    val shareLink: String? = null,
+    val shareFailed: Boolean = false,
     /** People found for the Add Member sheet (`searchUsers`). */
     val suggestions: List<UserSummary> = emptyList(),
     val searching: Boolean = false,
@@ -342,6 +345,19 @@ class ListSettingsViewModel(
     fun clearSuggestions() {
         searchJob?.cancel()
         _state.update { it.copy(suggestions = emptyList(), searching = false) }
+    }
+
+    // ---- Members: Share List ----
+
+    /** Mint a share link for the list, as iOS's ShareTargetView does. Online-only. */
+    fun requestShareLink() = work {
+        _state.update { it.copy(shareLink = null, shareFailed = false) }
+        try {
+            val url = ((core.run(command("shareList", "listId" to listId)) as? JsonObject)?.get("url") as? JsonPrimitive)?.content
+            _state.update { it.copy(shareLink = url, shareFailed = url == null) }
+        } catch (failure: CoreFailure) {
+            _state.update { it.copy(shareFailed = true) }
+        }
     }
 
     // ---- Members: AI agents ----
