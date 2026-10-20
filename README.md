@@ -43,6 +43,7 @@ npm run install:debug        # onto a running emulator or device
 | [docs/PLAN.md](./docs/PLAN.md) | The build plan, milestone by milestone, and the board tasks behind it |
 | [docs/PARITY.md](./docs/PARITY.md) | What this app does against iOS, row by row |
 | [docs/TESTING.md](./docs/TESTING.md) | Toolchain, test layers, emulator |
+| [brands/README.md](./brands/README.md) | Building a white-label brand: package, name, scheme, hosts, icons |
 
 ## License
 

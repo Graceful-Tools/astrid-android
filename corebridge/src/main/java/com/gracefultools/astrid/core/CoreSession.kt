@@ -60,27 +60,44 @@ class CoreSession private constructor(private val client: CoreClient) : Core {
     /** Ask the background loops to stop. Commands still run afterwards. */
     fun stop() = client.stop()
 
+    /** The core's `Config`; a null field is left out, so the core takes its own default (CoreJson). */
     @Serializable
-    private data class Config(val cachePath: String, val baseUrl: String? = null, val platform: String)
+    private data class Config(
+        val cachePath: String,
+        val baseUrl: String? = null,
+        val platform: String,
+        val urlScheme: String? = null,
+        val handoffClientId: String? = null,
+    )
 
     companion object {
         /**
          * @param cachePath the SQLite file the cache lives in, or `":memory:"` for a test.
          * @param baseUrl the server; the core's default (astrid.cc) when null.
          * @param background start the loops that keep the app current. Tests pass `false`.
+         * @param urlScheme the scheme the sign-in callback arrives on; the core's (`astrid`) when null.
+         * @param handoffClientId the server's id for this app; the core's (`android`) when null.
          */
         fun start(
             cachePath: String,
             credentials: CredentialStore,
             background: Boolean,
             baseUrl: String? = null,
-        ): CoreSession {
-            val config = CoreJson.encodeToString(
-                Config.serializer(),
-                Config(cachePath, baseUrl, CorePlatform.ANDROID.wire),
-            )
-            return CoreSession(CoreClient.start(config, credentials, background))
-        }
+            urlScheme: String? = null,
+            handoffClientId: String? = null,
+        ): CoreSession =
+            CoreSession(CoreClient.start(configJson(cachePath, baseUrl, urlScheme, handoffClientId), credentials, background))
+
+        /** What [start] hands the core (astrid-core `Config`, AWTD2-95's `urlScheme` / `handoffClientId`). */
+        internal fun configJson(
+            cachePath: String,
+            baseUrl: String? = null,
+            urlScheme: String? = null,
+            handoffClientId: String? = null,
+        ): String = CoreJson.encodeToString(
+            Config.serializer(),
+            Config(cachePath, baseUrl, CorePlatform.ANDROID.wire, urlScheme, handoffClientId),
+        )
 
         /** The version of astrid-core this build links. */
         val coreVersion: String get() = uniffi.astrid_android.coreVersion()
