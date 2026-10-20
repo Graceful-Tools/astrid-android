@@ -7,6 +7,7 @@ import com.gracefultools.astrid.core.CoreJson
 import com.gracefultools.astrid.core.command
 import com.gracefultools.astrid.model.ListSummary
 import com.gracefultools.astrid.ui.common.CoreViewModel
+import com.gracefultools.astrid.ui.publiclists.publicLists
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,8 +30,19 @@ data class SidebarState(
     val images: Map<String, String> = emptyMap(),
     /** iOS ListImagesVisibility: pictures, or a `#` in the list's colour (core `features`). */
     val showListImages: Boolean = true,
+    /** The core's `publicLists`: the sidebar's two public sections (iOS ListSidebarView 349-429). */
+    val publicLists: List<com.gracefultools.astrid.ui.publiclists.PublicListSummary> = emptyList(),
+    /** A public list being viewed from the featured sections or the browser (iOS isViewingFromFeatured). */
+    val featured: com.gracefultools.astrid.ui.publiclists.PublicListSummary? = null,
 ) {
     val selected: ListSummary? get() = (listOfNotNull(myTasks) + favorites + lists).firstOrNull { it.id == selectedId }
+        ?: featured?.takeIf { it.id == selectedId }?.asListSummary()
+
+    /** Whether the open list is a featured public one: read-only rows, Copy List, no rotator. */
+    val isViewingFeatured: Boolean get() = featured != null && featured.id == selectedId
+
+    val collaborativeLists get() = com.gracefultools.astrid.ui.publiclists.PublicListSections.collaborative(publicLists)
+    val suggestedLists get() = com.gracefultools.astrid.ui.publiclists.PublicListSections.browsable(publicLists)
 }
 
 /** A board column is a state and a label is a tag: neither is somewhere to go (web's list flavours). */
@@ -68,8 +80,11 @@ class SidebarViewModel(
                 val everything = listOfNotNull(mine) + favorites + others
                 SidebarState(
                     myTasks = mine, favorites = favorites, lists = others,
-                    selectedId = old.selectedId?.takeIf { id -> everything.any { it.id == id } }
+                    selectedId = old.selectedId?.takeIf { id -> everything.any { it.id == id } || old.featured?.id == id }
                         ?: everything.firstOrNull()?.id,
+                    publicLists = old.publicLists,
+                    featured = old.featured,
+                    counts = old.counts, user = old.user, images = old.images, showListImages = old.showListImages,
                 )
             }
             loadDecorations(raw, mineRaw, all)
@@ -105,6 +120,8 @@ class SidebarViewModel(
             }.getOrNull()
         }.mapNotNull { (id, source) -> source?.let { id to it } }.toMap()
         _state.update { it.copy(images = images) }
+        // Online-only: offline, the public sections stay as they were (iOS shows none).
+        runCatching { core.publicLists() }.getOrNull()?.let { lists -> _state.update { it.copy(publicLists = lists) } }
     }
 
     /** iOS's long press on a list row: favourite or unfavourite it. */
@@ -117,7 +134,11 @@ class SidebarViewModel(
         reload()
     }
 
-    fun select(id: String) = _state.update { it.copy(selectedId = id) }
+    fun select(id: String) = _state.update { it.copy(selectedId = id, featured = it.featured?.takeIf { f -> f.id == id }) }
+
+    /** Open a public list from the featured sections or the browser (iOS isViewingFromFeatured). */
+    fun selectFeatured(list: com.gracefultools.astrid.ui.publiclists.PublicListSummary) =
+        _state.update { it.copy(selectedId = list.id, featured = list) }
 
     /** A new private list, opened once made — iOS's "Add List". */
     fun create(name: String) = work {

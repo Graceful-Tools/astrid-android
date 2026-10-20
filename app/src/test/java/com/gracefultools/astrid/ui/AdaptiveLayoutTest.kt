@@ -6,6 +6,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
@@ -24,7 +25,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 
-/** AATD-26: the iPad's columns on a tablet; the iPhone's pushed detail on a phone. */
+/** AATD-26 / AATD-61: the iPad's panes on a tablet; the iPhone's pushed detail on a phone. */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(application = android.app.Application::class)
@@ -54,6 +55,39 @@ class AdaptiveLayoutTest {
         compose.onNode(hasTestTag("detailPane")).assertIsDisplayed()
         // Both columns at once: the row in the list, and the title in the detail.
         assertEquals(true, compose.onAllNodes(hasText("Water plants")).fetchSemanticsNodes().size >= 2)
+    }
+
+    @Test
+    @Config(qualifiers = "w700dp-h1000dp")
+    fun `AATD-61 the list keeps its full width until a task is picked, and a second tap closes the pane`() {
+        show(core())
+        // No "Select a task" pane held open beside an untouched list (iPadTaskManagerView 380-436).
+        assertEquals(0, compose.onAllNodes(hasTestTag("detailPane")).fetchSemanticsNodes().size)
+        compose.onAllNodesWithText("Water plants")[0].performClick()
+        compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag("detailPane")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodesWithText("Water plants")[0].performClick()
+        compose.waitUntil(5_000) { compose.onAllNodes(hasTestTag("detailPane")).fetchSemanticsNodes().isEmpty() }
+    }
+
+    @Test
+    @Config(qualifiers = "w1200dp-h800dp")
+    fun `AATD-61 a wide landscape window pins the list's messages at the right, out of the rotator`() {
+        show(core())
+        compose.onNode(hasTestTag("messagesPane")).assertIsDisplayed()
+        // Messages beside the list are not a view of the main pane: no "Switch to messages".
+        assertEquals(0, compose.onAllNodesWithContentDescription("Switch to messages").fetchSemanticsNodes().size)
+        // Folded to its rail and back.
+        compose.onNodeWithContentDescription("Hide messages").performClick()
+        compose.waitUntil(5_000) { compose.onAllNodesWithContentDescription("Show messages").fetchSemanticsNodes().isNotEmpty() }
+        compose.onNodeWithContentDescription("Show messages").performClick()
+    }
+
+    @Test
+    @Config(qualifiers = "w900dp-h1200dp")
+    fun `AATD-61 a wide portrait window keeps messages in the rotator`() {
+        show(core())
+        assertEquals(0, compose.onAllNodes(hasTestTag("messagesPane")).fetchSemanticsNodes().size)
+        assertEquals(1, compose.onAllNodesWithContentDescription("Switch to messages").fetchSemanticsNodes().size)
     }
 
     @Test

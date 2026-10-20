@@ -30,7 +30,10 @@ import androidx.compose.material.icons.automirrored.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.outlined.CloseFullscreen
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.FilterList
+import androidx.compose.material.icons.outlined.OpenInFull
 import androidx.compose.material.icons.outlined.Forum
 import androidx.compose.material.icons.outlined.PersonOff
 import androidx.compose.material.icons.outlined.Settings
@@ -143,11 +146,21 @@ fun TaskListScreen(
     selectedTaskId: String? = null,
     /** My Tasks' active filters after the title (iOS: "My Tasks - Today !! !"). */
     titleSuffix: androidx.compose.ui.text.AnnotatedString? = null,
+    /** A featured public list (AATD-46): iOS's Copy List in the header; the rotator is hidden. */
+    onCopyList: (() -> Unit)? = null,
+    /** On a wide window, a board's full-screen state; null where it is not offered (AATD-61). */
+    boardFullScreen: Boolean? = null,
+    onToggleBoardFullScreen: () -> Unit = {},
 ) {
     val colors = AstridTheme.colors
+    val featured = onCopyList != null
     Box(Modifier.fillMaxSize().background(colors.bgPrimary)) {
         Column(Modifier.fillMaxSize()) {
-            ListHeader(title, titleSuffix, onMenu, viewMode, hasBoard, includesMessages, onViewMode, onFilter, onListSettings)
+            ListHeader(
+                title, titleSuffix, onMenu, viewMode, hasBoard, includesMessages, onViewMode, onFilter, onListSettings,
+                showsRotator = !featured, onCopyList = onCopyList, copyingList = state.copyingList,
+                boardFullScreen = boardFullScreen, onToggleBoardFullScreen = onToggleBoardFullScreen,
+            )
             when (viewMode) {
                 ViewMode.BOARD -> Box(Modifier.weight(1f)) { board() }
                 ViewMode.MESSAGES -> Box(Modifier.weight(1f)) { messages() }
@@ -169,12 +182,15 @@ fun TaskListScreen(
                         modifier = Modifier.fillMaxSize().testTag("taskList").nestedScroll(dismissKeyboardOnDrag { focus.clearFocus() }),
                     ) {
                         items(state.rows, key = { it.id }) { row ->
-                            SwipeToDelete(onDelete = { onDelete(row) }) {
+                            val face: @Composable () -> Unit = {
                                 TaskRowView(
                                     row, onLeading = { onComplete(row) }, onOpen = { onOpenTask(row.id) },
                                     isSelected = row.id == selectedTaskId, compact = selectedTaskId != null,
                                 )
                             }
+                            // Someone else's task in a public list is read-only: its control copies
+                            // it (the core's `copy`), and it cannot be swiped away (iOS 1227-1241).
+                            if (row.action == "copy") face() else SwipeToDelete(onDelete = { onDelete(row) }) { face() }
                         }
                     }
                 }
@@ -185,7 +201,7 @@ fun TaskListScreen(
                 Spacer(Modifier.navigationBarsPadding())
             }
         }
-        state.error?.let { message ->
+        (state.error ?: if (state.copyListFailed) stringResource(R.string.lists_copy_failed) else null)?.let { message ->
             AppErrorBanner(message, onDismissError, Modifier.align(Alignment.BottomCenter).padding(bottom = 96.dp))
             LaunchedEffect(message) { kotlinx.coroutines.delay(6_000); onDismissError() }
         }
@@ -215,6 +231,11 @@ private fun ListHeader(
     onViewMode: (ViewMode) -> Unit,
     onFilter: (() -> Unit)?,
     onListSettings: (() -> Unit)?,
+    showsRotator: Boolean = true,
+    onCopyList: (() -> Unit)? = null,
+    copyingList: Boolean = false,
+    boardFullScreen: Boolean? = null,
+    onToggleBoardFullScreen: () -> Unit = {},
 ) {
     val colors = AstridTheme.colors
     val openSidebar = stringResource(R.string.navigation_open_sidebar)
@@ -234,8 +255,21 @@ private fun ListHeader(
                 modifier = Modifier.semantics { heading() },
             )
         }
+        // iOS's Copy List for a featured public list: doc.on.doc in accent, a spinner while copying.
+        if (onCopyList != null) {
+            val copyLabel = stringResource(R.string.lists_copy_list)
+            Box(
+                Modifier.padding(start = Spacing.s8).size(32.dp).clip(CircleShape)
+                    .clickable(enabled = !copyingList, role = androidx.compose.ui.semantics.Role.Button, onClick = onCopyList)
+                    .semantics { contentDescription = copyLabel }.testTag("copyList"),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (copyingList) androidx.compose.material3.CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = colors.accent)
+                else Icon(Icons.Outlined.ContentCopy, null, tint = colors.accent, modifier = Modifier.size(22.dp))
+            }
+        }
         val next = nextViewMode(mode, hasBoard, includesMessages)
-        if (next != mode) {
+        if (showsRotator && next != mode) {
             HeaderButton(
                 when (next) {
                     ViewMode.LIST -> Icons.AutoMirrored.Filled.FormatListBulleted
@@ -250,6 +284,14 @@ private fun ListHeader(
                     },
                 ),
             ) { onViewMode(next) }
+        }
+        // iOS's board full screen (a34d0163): drops the sidebar and the messages pane.
+        if (boardFullScreen != null) {
+            HeaderButton(
+                if (boardFullScreen) Icons.Outlined.CloseFullscreen else Icons.Outlined.OpenInFull,
+                stringResource(if (boardFullScreen) R.string.board_exit_full_screen else R.string.board_full_screen),
+                onToggleBoardFullScreen,
+            )
         }
         if (onFilter != null) HeaderButton(Icons.Outlined.FilterList, stringResource(R.string.my_tasks_filters_title), onFilter)
         else if (onListSettings != null) HeaderButton(Icons.Outlined.Settings, stringResource(R.string.lists_settings), onListSettings)

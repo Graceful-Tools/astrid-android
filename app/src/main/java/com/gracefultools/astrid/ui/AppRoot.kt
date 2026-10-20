@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.ui.platform.testTag
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.setValue
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.factory
@@ -51,6 +53,9 @@ import com.gracefultools.astrid.ui.sidebar.SidebarViewModel
 import com.gracefultools.astrid.ui.tasks.TaskListScreen
 import com.gracefultools.astrid.ui.tasks.TaskListViewModel
 import kotlinx.coroutines.launch
+
+/** iOS PublicListBrowserView, "Featured Lists" (AATD-46). */
+const val PUBLIC_LISTS_ROUTE = "public-lists"
 
 /** The core's id for My Tasks' filters (astrid_rules::filters::my_tasks::VIRTUAL_ID). */
 private const val MY_TASKS_FILTER_ID = "virtual:my-tasks"
@@ -102,8 +107,8 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) { sidebar.load() }
-    LaunchedEffect(side.selectedId) {
-        side.selected?.let { tasks.open(it.id, isVirtual = it.isVirtual == true) }
+    LaunchedEffect(side.selectedId, side.isViewingFeatured) {
+        side.selected?.let { tasks.open(it.id, isVirtual = it.isVirtual == true, featured = side.featured?.takeIf { side.isViewingFeatured }) }
     }
     val pending by onDeepLink.pending.collectAsStateWithLifecycle()
     val context = androidx.compose.ui.platform.LocalContext.current
@@ -157,15 +162,36 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
 
     NavHost(nav, startDestination = "list") {
         composable("list") {
-            // iPhone, iPad portrait, iPad landscape — by width, as Android's window size classes cut it.
-            val width = androidx.compose.ui.platform.LocalConfiguration.current.screenWidthDp
-            val twoPane = width >= 600
-            val permanentSidebar = width >= 840
+            // iPhone, iPad portrait, iPad landscape — by width, as Android's window size classes cut
+            // it (AATD-61, iOS iPadPaneLayout): see PaneLayout.
+            val config = androidx.compose.ui.platform.LocalConfiguration.current
+            val width = config.screenWidthDp
+            val height = config.screenHeightDp
+            val twoPane = PaneLayout.showsDetailPane(width)
             var paneTaskId by rememberSaveable { mutableStateOf<String?>(null) }
+            var boardFullScreen by remember { mutableStateOf(graph.preferences.boardFullScreen) }
+            var messagesHidden by remember { mutableStateOf(graph.preferences.messagesPaneHidden) }
             // iOS's search is a mode of the main pane, entered from the sidebar's magnifier.
             var searching by rememberSaveable { mutableStateOf(false) }
-            val openTask: (String) -> Unit = { id -> if (twoPane) paneTaskId = id else nav.navigate("task/$id") }
+            // A second tap on the open task closes its pane (iOS TaskListView 871-872).
+            val openTask: (String) -> Unit = { id -> if (twoPane) paneTaskId = PaneLayout.toggle(paneTaskId, id) else nav.navigate("task/$id") }
             LaunchedEffect(side.selectedId) { paneTaskId = null }
+
+            val selected = side.selected
+            val featured = side.featured?.takeIf { side.isViewingFeatured }
+            val isMyTasks = selected != null && selected.id == side.myTasks?.id
+            val hasBoard = selected?.projectId != null && featured == null
+            // Messages for a list, and for My Tasks through the reader's virtual channel (AATD-62);
+            // a saved filter has none, nor a featured list the reader is not in.
+            val hasChannel = selected != null && (selected.isVirtual != true || isMyTasks) && featured == null
+            val pinned = PaneLayout.pinsMessages(width, height) && hasChannel && !searching
+            val storedMode = selected?.let { viewModes[it.id] }
+                ?: if (hasBoard) com.gracefultools.astrid.ui.tasks.ViewMode.BOARD else com.gracefultools.astrid.ui.tasks.ViewMode.LIST
+            val mode = if (featured != null) com.gracefultools.astrid.ui.tasks.ViewMode.LIST else PaneLayout.effectiveMode(storedMode, pinned)
+            val offersFullScreen = !searching && PaneLayout.offersFullScreen(width, mode)
+            val fullScreen = offersFullScreen && boardFullScreen
+            val permanentSidebar = PaneLayout.permanentSidebar(width, fullScreen)
+            val showsMessages = !searching && PaneLayout.showsMessagesPane(width, height, mode, hasChannel, fullScreen)
 
             val sidebarContent: @Composable () -> Unit = {
                 SidebarDrawer(
@@ -177,7 +203,15 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onToggleFavorite = sidebar::toggleFavorite,
                     onCreate = { sidebar.create(it); scope.launch { drawer.close() } },
                     onAddList = { scope.launch { drawer.close() }; nav.navigate("new-list") },
+                    onSelectPublic = { searching = false; sidebar.selectFeatured(it); scope.launch { drawer.close() } },
+                    onSeeAllPublic = { scope.launch { drawer.close() }; nav.navigate(PUBLIC_LISTS_ROUTE) },
                 )
+            }
+            val chat: @Composable () -> Unit = {
+                selected?.let { list ->
+                    val vm: ChatViewModel = viewModel(key = "chat-${list.id}", factory = factory { ChatViewModel(graph.core, list.id) })
+                    com.gracefultools.astrid.ui.chat.ChatPanel(vm)
+                }
             }
             val listContent: @Composable () -> Unit = if (searching) ({
                 val search: SearchViewModel = viewModel(factory = factory { SearchViewModel(graph.core) })
@@ -186,15 +220,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onMenu = if (permanentSidebar) null else ({ scope.launch { drawer.open() } }),
                 )
             }) else ({
-                val selected = side.selected
-                val isMyTasks = selected != null && selected.id == side.myTasks?.id
                 val title = selected?.let { if (isMyTasks) stringResource(R.string.navigation_my_tasks) else it.name } ?: ""
-                val hasBoard = selected?.projectId != null
-                // Messages for a list, and for My Tasks through the reader's virtual channel (AATD-62);
-                // a saved filter has none.
-                val includesMessages = selected != null && (selected.isVirtual != true || isMyTasks)
-                val mode = selected?.let { viewModes[it.id] }
-                    ?: if (hasBoard) com.gracefultools.astrid.ui.tasks.ViewMode.BOARD else com.gracefultools.astrid.ui.tasks.ViewMode.LIST
                 if (mode == com.gracefultools.astrid.ui.tasks.ViewMode.BOARD) LaunchedEffect(selected!!.id) { boardVm.open(selected.id) }
                 (list.statusPicker ?: boardState.statusPicker)?.let { picker ->
                     val fromBoard = boardState.statusPicker != null
@@ -218,9 +244,10 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onFilter = if (isMyTasks) ({ myFilters?.load(); filtering = true }) else null,
                     viewMode = mode,
                     hasBoard = hasBoard,
-                    includesMessages = includesMessages,
+                    // Pinned beside the list, messages are not a step of the rotator (iOS a34d0163).
+                    includesMessages = hasChannel && !pinned,
                     onViewMode = { next -> selected?.let { viewModes[it.id] = next } },
-                    onListSettings = selected?.takeIf { it.isVirtual != true }?.let { list -> { nav.navigate("list/${list.id}") } },
+                    onListSettings = selected?.takeIf { it.isVirtual != true && featured == null }?.let { list -> { nav.navigate("list/${list.id}") } },
                     board = {
                         BoardContent(
                             boardState,
@@ -233,12 +260,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                             selectedTaskId = paneTaskId,
                         )
                     },
-                    messages = {
-                        selected?.let { list ->
-                            val vm: ChatViewModel = viewModel(key = "chat-${list.id}", factory = factory { ChatViewModel(graph.core, list.id) })
-                            com.gracefultools.astrid.ui.chat.ChatPanel(vm)
-                        }
-                    },
+                    messages = chat,
                     emptyMessage = emptyMessage(selected, isMyTasks),
                     state = list,
                     // A permanent sidebar has nothing to open: no button that does nothing.
@@ -253,30 +275,43 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onPickPriority = tasks::choosePriority,
                     onPickAssignee = tasks::chooseAssignee,
                     selectedTaskId = paneTaskId,
+                    // iOS shows quick add where the reader may add: a collaborative public list, not a copy-only one.
+                    canAdd = featured?.isCollaborative ?: true,
+                    onCopyList = featured?.let { { scope.launch { if (tasks.copyList()) sidebar.load() } } },
+                    boardFullScreen = if (offersFullScreen) fullScreen else null,
+                    onToggleBoardFullScreen = { boardFullScreen = !boardFullScreen; graph.preferences.boardFullScreen = boardFullScreen },
                 )
             })
-            val detailPane: @Composable () -> Unit = {
-                val id = paneTaskId
-                if (id == null) {
-                    androidx.compose.foundation.layout.Box(
-                        androidx.compose.ui.Modifier.fillMaxSize().background(com.gracefultools.astrid.ui.theme.AstridTheme.colors.bgPrimary),
-                        contentAlignment = androidx.compose.ui.Alignment.Center,
-                    ) { Text(stringResource(R.string.detail_select_a_task), color = com.gracefultools.astrid.ui.theme.AstridTheme.colors.textSecondary) }
-                } else {
-                    val detail: TaskDetailViewModel = viewModel(key = "pane-$id", factory = factory { TaskDetailViewModel(graph.core, id) })
-                    detail.onDueDateSet = graph.notificationPrompt::request
-                    TaskDetailScreen(detail, onBack = { paneTaskId = null }, onOpenTask = { paneTaskId = it }, onOpenList = { sidebar.select(it) })
-                }
+            val detailPane: @Composable (String) -> Unit = { id ->
+                val detail: TaskDetailViewModel = viewModel(key = "pane-$id", factory = factory { TaskDetailViewModel(graph.core, id) })
+                detail.onDueDateSet = graph.notificationPrompt::request
+                TaskDetailScreen(detail, onBack = { paneTaskId = null }, onOpenTask = { paneTaskId = it }, onOpenList = { sidebar.select(it) })
             }
             val panes: @Composable () -> Unit = {
-                if (twoPane) {
+                androidx.compose.foundation.layout.BoxWithConstraints(androidx.compose.ui.Modifier.fillMaxSize()) {
+                    val openId = paneTaskId?.takeIf { twoPane }
+                    val layout = PaneLayout.widths(
+                        maxWidth, showsMessages, messagesHidden,
+                        besideBoard = mode == com.gracefultools.astrid.ui.tasks.ViewMode.BOARD, detailOpen = openId != null,
+                    )
+                    val divider = com.gracefultools.astrid.ui.theme.AstridTheme.colors.border
                     androidx.compose.foundation.layout.Row(androidx.compose.ui.Modifier.fillMaxSize()) {
+                        // The list keeps the width left over, so it never reflows for a divider.
                         androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.weight(1f)) { listContent() }
-                        androidx.compose.material3.VerticalDivider(color = com.gracefultools.astrid.ui.theme.AstridTheme.colors.border)
-                        androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.weight(1.2f).testTag("detailPane")) { detailPane() }
+                        if (layout.messages > 0.dp) {
+                            androidx.compose.material3.VerticalDivider(color = divider)
+                            MessagesPane(
+                                messagesHidden,
+                                onToggle = { messagesHidden = !messagesHidden; graph.preferences.messagesPaneHidden = messagesHidden },
+                                modifier = androidx.compose.ui.Modifier.width(layout.messages).testTag("messagesPane"),
+                                chat = chat,
+                            )
+                        }
+                        if (openId != null && layout.detail > 0.dp) {
+                            androidx.compose.material3.VerticalDivider(color = divider)
+                            androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.width(layout.detail).testTag("detailPane")) { detailPane(openId) }
+                        }
                     }
-                } else {
-                    listContent()
                 }
             }
             if (permanentSidebar) {
@@ -284,6 +319,14 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
             } else {
                 ModalNavigationDrawer(drawerState = drawer, drawerContent = sidebarContent) { panes() }
             }
+        }
+        composable(PUBLIC_LISTS_ROUTE) {
+            val vm: com.gracefultools.astrid.ui.publiclists.PublicListsViewModel =
+                viewModel(factory = factory { com.gracefultools.astrid.ui.publiclists.PublicListsViewModel(graph.core) })
+            com.gracefultools.astrid.ui.publiclists.PublicListsScreen(
+                vm, onBack = { nav.popBackStack() },
+                onView = { list -> nav.popBackStack("list", inclusive = false); sidebar.selectFeatured(list) },
+            )
         }
         composable("task/{id}") { entry ->
             val id = entry.arguments?.getString("id").orEmpty()
