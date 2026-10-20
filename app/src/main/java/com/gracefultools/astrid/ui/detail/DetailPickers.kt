@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.PersonOff
 import androidx.compose.material.icons.outlined.RadioButtonUnchecked
@@ -56,6 +57,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
@@ -119,10 +121,16 @@ internal fun PickRow(label: String, selected: Boolean, color: Color? = null, sub
     }
 }
 
-/** iOS's InlineAssigneePicker list: nobody first, then faces with "You" / "AI Agent". */
+/**
+ * iOS's InlineAssigneePicker: nobody first, then faces with "You" / "AI Agent", then "Someone
+ * else" — an email (or a person found by typing a name) is given access to the task's list and
+ * assigned (AATD-51).
+ */
 @Composable
-internal fun AssigneeSheet(state: TaskDetailState, onPick: (String?) -> Unit, onDismiss: () -> Unit) {
+internal fun AssigneeSheet(state: TaskDetailState, vm: TaskDetailViewModel, onPick: (String?) -> Unit, onDismiss: () -> Unit) {
     val colors = AstridTheme.colors
+    LaunchedEffect(Unit) { vm.resetSomeoneElse() }
+    LaunchedEffect(state.someoneElse.assigned) { if (state.someoneElse.assigned) { vm.resetSomeoneElse(); onDismiss() } }
     PickerSheet(stringResource(R.string.tasks_assignee), onDismiss) {
         val options = state.assignees?.options
         if (options == null) CircularProgressIndicator(Modifier.align(Alignment.CenterHorizontally), color = colors.accent)
@@ -145,7 +153,56 @@ internal fun AssigneeSheet(state: TaskDetailState, onPick: (String?) -> Unit, on
                 },
             ) { onPick(option.userId) }
         }
+        SomeoneElseSection(state.someoneElse, vm)
     }
+}
+
+/** iOS's "Someone else": "Invite by Email", Assign, up to five people found, and why it failed. */
+@Composable
+private fun SomeoneElseSection(section: SomeoneElse, vm: TaskDetailViewModel) {
+    val colors = AstridTheme.colors
+    var query by remember { mutableStateOf("") }
+    val email = query.trim()
+    // iOS's isAssignableEmail: enough to be worth asking the server about.
+    val assignable = email.contains('@') && email.contains('.')
+    Spacer(Modifier.size(Spacing.s4))
+    Text(stringResource(R.string.assignee_someone_else), style = TextStyles.caption, color = colors.textSecondary)
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+        val inviteLabel = stringResource(R.string.members_invite_email)
+        Box(
+            Modifier.weight(1f).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
+                .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = 40.dp).padding(horizontal = Spacing.s12),
+            contentAlignment = Alignment.CenterStart,
+        ) {
+            if (query.isEmpty()) Text(inviteLabel, style = TextStyles.body, color = colors.inputPlaceholder)
+            BasicTextField(
+                query, { query = it; vm.searchPeople(it) }, singleLine = true,
+                textStyle = TextStyles.body.copy(color = colors.textPrimary), cursorBrush = SolidColor(colors.accent),
+                keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
+                    keyboardType = androidx.compose.ui.text.input.KeyboardType.Email,
+                    imeAction = androidx.compose.ui.text.input.ImeAction.Done, autoCorrectEnabled = false,
+                ),
+                keyboardActions = androidx.compose.foundation.text.KeyboardActions(onDone = { if (assignable) vm.assignByEmail(email) }),
+                modifier = Modifier.fillMaxWidth().semantics { contentDescription = inviteLabel },
+            )
+        }
+        TextButton(onClick = { vm.assignByEmail(email) }, enabled = assignable) { Text(stringResource(R.string.actions_assign)) }
+    }
+    section.suggestions.forEach { person ->
+        Row(
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.small)).background(colors.bgSecondary)
+                .clickable { person.email?.let { query = it; vm.assignByEmail(it) } }.padding(horizontal = Spacing.s12, vertical = Spacing.s8),
+            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
+        ) {
+            Icon(Icons.Outlined.AccountCircle, null, tint = colors.textMuted)
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
+                Text(person.name?.takeIf { it.isNotBlank() } ?: person.email.orEmpty(), style = TextStyles.body, color = colors.textPrimary)
+                if (!person.name.isNullOrBlank()) Text(person.email.orEmpty(), style = TextStyles.caption, color = colors.textMuted)
+            }
+        }
+    }
+    val error = if (section.needsList) stringResource(R.string.assignee_needs_a_list) else section.error
+    if (error != null) Text(error, style = TextStyles.caption, color = Error)
 }
 
 /** iOS's InlineDatePicker sheet: "No due date" (red), the quick picks, and a calendar that saves on a tap. */
@@ -216,7 +273,8 @@ internal fun RepeatSheet(state: TaskDetailState, vm: TaskDetailViewModel, onDism
     if (custom) {
         CustomRepeatDialog(
             initial = state.repeats?.pattern,
-            onSave = { unit, interval, weekdays, end, after, until -> vm.setCustomRepeat(unit, interval, weekdays, end, after, until); onDismiss() },
+            initialRepeatFrom = state.repeats?.repeatFrom,
+            onSave = { pattern, repeatFrom -> vm.setCustomRepeat(pattern, repeatFrom); onDismiss() },
             onDismiss = onDismiss,
         )
     }

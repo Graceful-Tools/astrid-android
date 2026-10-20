@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -69,6 +70,8 @@ internal fun CommentsSection(
     onDelete: (String) -> Unit,
     onOpenTask: (String) -> Unit,
     onOpenList: (String) -> Unit,
+    typingAgent: TypingAgent? = null,
+    offline: Boolean = false,
 ) {
     val colors = AstridTheme.colors
     var showSystem by remember { mutableStateOf(false) }
@@ -84,12 +87,19 @@ internal fun CommentsSection(
                     modifier = Modifier.clip(RoundedCornerShape(6.dp)).clickable { showSystem = !showSystem }.padding(6.dp),
                 )
             }
+            // iOS's offline mark in the header: the thread is what this device last heard (AATD-62).
+            if (offline) Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4)) {
+                Icon(Icons.Outlined.WifiOff, null, tint = colors.textMuted, modifier = Modifier.size(12.dp))
+                Text(stringResource(R.string.comments_offline), style = TextStyles.caption2, color = colors.textMuted)
+            }
         }
         if (people.isEmpty()) Text(stringResource(R.string.comments_empty), style = TextStyles.caption, color = colors.textMuted)
         shown.forEach { comment ->
             if (comment.isSystem) SystemNote(comment)
             else CommentBubble(comment, onOpenFile, fetch, onReply, onEdit, onDelete, onOpenTask, onOpenList)
         }
+        // iOS's AgentTypingIndicator under the thread, while an agent works on this task (AATD-53).
+        typingAgent?.let { com.gracefultools.astrid.ui.common.AgentTypingIndicator(it.name) }
     }
 }
 

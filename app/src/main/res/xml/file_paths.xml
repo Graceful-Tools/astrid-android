@@ -2,4 +2,6 @@
 <!-- The core keeps downloaded attachments in attachments/ beside its database (filesDir). -->
 <paths>
     <files-path name="attachments" path="attachments/" />
+    <!-- A photo taken for a comment (TakePicture writes it here), AATD-53. -->
+    <cache-path name="camera" path="camera/" />
 </paths>

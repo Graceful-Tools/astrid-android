@@ -13,8 +13,8 @@ Diverge only for Android interaction or capability, and say why in Notes. Update
 | Quick add with smart parsing | ✅ | ✅ | AATD-8 | The reader's locale picks the keyword language |
 | Completion with repeat rollover | ✅ | ✅ | AATD-8 | `completeTask` only; the leading control does what the core's `action` says |
 | Swipe actions | ✅ | ✅ | AATD-8 | Right to complete, left to delete |
-| Task detail | ✅ | 🟡 | AATD-9 | Every field in the core's order; Material date picker. **Custom repeat patterns** and a free time-of-day picker are not built yet (presets and the core's quick hours are) |
-| Comments, attachments | ✅ | ✅ | AATD-9/17 | Attach from the system picker; open through a FileProvider. Inline image previews are polish |
+| Task detail | ✅ | 🟡 | AATD-9/48–53 | iOS's layout and pickers. Custom repeat (AATD-50): iOS's editor in a bottom sheet — steppers stand in for iOS's wheels; no live **Preview** line (iOS words it in Swift; the core has no rule that words an unsaved pattern); week of month is 1st–5th (the core cannot read "last"). Who (AATD-51): "Someone else" invites to the task's first list then assigns; **several assignees** not built (the core accepts `assigneeIds` but has no toggle rule). Lists picker offers no create (iOS does not either). Occurrences, GitHub project fields, Attachments strip with a full-screen pager (non-images open in another app). **Timer** is the core's count-up stopwatch on iOS's black screen (iOS counts down from a chosen duration and rings) |
+| Comments, attachments | ✅ | 🟡 | AATD-9/17/53 | iOS's thread. Paperclip menu From Photos (system photo picker) / From Documents / From Camera (TakePicture into the FileProvider); files queue as thumbnails and go with the text, the text on the first file's comment (the core attaches one file per comment). @ / # / ! suggestions are the core's, inserted as the server reads them (`@[Name](id)`), shown in the composer card above the field. Agent typing indicator; "Offline" in the header. **Completion streak** row not built (the core does not fold completions) |
 | Offline with the Outbox | ✅ | ✅ | AATD-10 | Offline is never an error; rows say "Waiting to send" |
 | Live updates | ✅ | ✅ | AATD-10 | One change stream from the core |
 | Background refresh | ✅ | ✅ | AATD-10 | WorkManager every 15 min (iOS: BGTask) |
@@ -28,7 +28,7 @@ Diverge only for Android interaction or capability, and say why in Notes. Update
 | Share extension | ✅ | ✅ | AATD-16/60 | `ACTION_SEND` (one image or file; the first of `SEND_MULTIPLE`) → iOS's form: title from the file name, description, priority, attachment, created in your default list and assigned to you, the file attached through the core. Shared text is an Android extra (iOS takes files only) |
 | Home Screen quick action | ➖ | ✅ | AATD-16/60 | Android extra — iOS has none. The launcher shortcut "New task" opens the share form empty |
 | Universal links, deep links | ✅ | 🟡 | AATD-16/19/59 | iOS's set: `astrid://tasks/`, `lists/`, `users/`, `settings/`, `s/` (and Android's older `astrid://task/`), astrid.cc `/t/`, `/tasks/`, `/lists/`, `/settings/<page>`, `/s/<code>`; other pages open in a Custom Tab. Settings pages without an Android screen open Settings; `users/<id>` opens your own profile. `/s/` asks the core's `resolveShortcode` (not in the core yet — falls back to the web, as iOS does on failure). Links go via a chooser until assetlinks.json is published for the release key |
-| Chat | ✅ | ✅ | AATD-17 | |
+| Chat | ✅ | ✅ | AATD-17/62 | Offline strip and agent typing indicator as iOS's ChatPanelView |
 | iPad two-column layout | ✅ | ⏳ | | Tablets and foldables get the phone layout today |
 | Agent Hub, Connections | ✅ | 🟡 | AATD-27 | Lists and modes; the depth of iOS's hub is item 35 |
 | Agent Hub, Connections, Profile stats, data export | ✅ | ⏳ | | The core has every command; screens not built |
