@@ -37,7 +37,6 @@ class DeepLinks {
     fun take(): Arrival? = _pending.value.also { _pending.value = null }
 
     companion object {
-        const val WEB_ORIGIN = "https://astrid.cc"
         private val WEB_HOSTS = setOf("astrid.cc", "www.astrid.cc")
 
         /**
@@ -86,11 +85,11 @@ class DeepLinks {
                 "s" -> id?.let(Arrival::Shortcode)
                 // The browser hand-off's callback is the sign-in screen's, never a page.
                 "auth", "new" -> null
-                else -> Arrival.OpenWeb("$WEB_ORIGIN/$host${uri.rawPath.orEmpty()}")
+                else -> Arrival.OpenWeb(Brand.webUrl("$host${uri.rawPath.orEmpty()}"))
             }
         }
 
-        /** `https://astrid.cc/<what>/<id>`; anything else on the site opens in a Custom Tab. */
+        /** `astrid.cc/<what>/<id>` over https; anything else on the site opens in a Custom Tab. */
         private fun web(link: String, uri: java.net.URI): Arrival? {
             val parts = segments(uri.rawPath)
             val first = parts.firstOrNull() ?: return null
@@ -125,7 +124,7 @@ class DeepLinks {
                 "task" -> id?.let(Arrival::OpenTask)
                 "list" -> id?.let(Arrival::OpenList)
                 else -> null
-            } ?: Arrival.OpenWeb("$WEB_ORIGIN/s/$code")
+            } ?: Arrival.OpenWeb(Brand.webUrl("s/$code"))
         }
 
         /** What a share carries, as one line for the title: subject, then text (often a URL). */

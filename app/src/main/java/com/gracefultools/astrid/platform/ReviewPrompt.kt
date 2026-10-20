@@ -69,10 +69,10 @@ class ReviewPrompt(
         const val MIN_DAYS_BETWEEN_PROMPTS = 30
         const val MIN_COMPLETED_TASKS = 5
         /** iOS Brand.supportEmail and its "<app> App Feedback" subject. */
-        const val SUPPORT_EMAIL = "support@astrid.cc"
+        val SUPPORT_EMAIL: String get() = com.gracefultools.astrid.Brand.supportEmail
         const val FEEDBACK_SUBJECT = "Astrid App Feedback"
         /** Where Report an Issue goes until the core names the Bugs & Feedback list (see PARITY). */
-        const val REPORT_ISSUE_URL = "https://astrid.cc"
+        val REPORT_ISSUE_URL: String get() = com.gracefultools.astrid.Brand.baseUrl
         private const val DAY_MILLIS = 24L * 60 * 60 * 1000
 
         /** iOS openSupportEmail's address, subject percent-encoded. */

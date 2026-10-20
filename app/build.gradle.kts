@@ -16,6 +16,12 @@ android {
         versionCode = 1
         versionName = "0.1.0"
         testInstrumentationRunner = "com.gracefultools.astrid.AstridTestRunner"
+
+        // The brand's identity (iOS Brand.swift's Info.plist keys), set per build with Gradle
+        // properties — `./gradlew assembleDebug -PastridBaseUrl=https://tasks.example.com`. Unset,
+        // every value is hosted Astrid's, so the default build is unchanged (AATD-71).
+        brandField("ASTRID_BASE_URL", "astridBaseUrl", "https://astrid.cc")
+        brandField("ASTRID_SUPPORT_EMAIL", "astridSupportEmail", "support@astrid.cc")
     }
 
     // A real key comes from the environment (CI secrets, or keystore.properties kept out of git).
@@ -55,6 +61,12 @@ android {
         warning += "MissingTranslation"
     }
     packaging { resources.excludes += "/META-INF/{AL2.0,LGPL2.1}" }
+}
+
+/** A `String` BuildConfig field from Gradle property [property], or [default] when it is unset or blank. */
+fun com.android.build.api.dsl.DefaultConfig.brandField(field: String, property: String, default: String) {
+    val value = providers.gradleProperty(property).orNull?.trim()?.takeIf { it.isNotEmpty() } ?: default
+    buildConfigField("String", field, "\"" + value.replace("\\", "\\\\").replace("\"", "\\\"") + "\"")
 }
 
 kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }

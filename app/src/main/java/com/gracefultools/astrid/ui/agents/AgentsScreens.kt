@@ -76,6 +76,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.gracefultools.astrid.Brand
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
@@ -165,10 +166,10 @@ fun AgentsScreen(vm: AgentsViewModel, onBack: () -> Unit, onOpen: (String) -> Un
             Caption(stringResource(R.string.settings_agents_description, app))
             if (state.mcpOffered) {
                 ActionRow(stringResource(R.string.settings_agents_guide_link), Icons.AutoMirrored.Filled.MenuBook) {
-                    openInCustomTab(context, "$WEB_ORIGIN/docs/loops")
+                    openInCustomTab(context, Brand.webUrl("docs/loops"))
                 }
                 ActionRow(stringResource(R.string.settings_agents_download_skill), Icons.Filled.Download) {
-                    openInCustomTab(context, "$WEB_ORIGIN/api/downloads/ASTRID_WORKFLOW.md")
+                    openInCustomTab(context, Brand.webUrl("api/downloads/ASTRID_WORKFLOW.md"))
                 }
             }
         }
@@ -413,7 +414,7 @@ private fun GitHubConnectionSection() {
         footer = stringResource(R.string.settings_agents_github_description, app),
     ) {
         ActionRow(stringResource(R.string.settings_agents_github_manage), Icons.Filled.Public) {
-            openInCustomTab(context, "$WEB_ORIGIN/settings/agents")
+            openInCustomTab(context, Brand.webUrl("settings/agents"))
         }
     }
 }
@@ -667,7 +668,7 @@ private fun CustomAgentRow(agent: CustomAgent, busy: Boolean, onDelete: () -> Un
     Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(Spacing.s12), modifier = Modifier.padding(vertical = 4.dp)) {
         val image = agent.image?.takeIf { it.isNotBlank() }?.let { path ->
             val png = if (path.endsWith(".svg")) path.removeSuffix(".svg") + ".png" else path
-            if (png.startsWith("http")) png else WEB_ORIGIN.trimEnd('/') + png
+            if (png.startsWith("http")) png else Brand.webUrl(png)
         }
         if (image != null) {
             AsyncImage(

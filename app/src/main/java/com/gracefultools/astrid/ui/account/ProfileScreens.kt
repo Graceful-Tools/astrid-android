@@ -343,7 +343,7 @@ private fun ProfileField(value: String, placeholder: String, enabled: Boolean = 
 // ── Account & Access ─────────────────────────────────────────────────────────────────────────
 
 /** Where a passkey is added: the web's account page (registering one is the browser's, per the core). */
-private const val WEB_ACCOUNT_SETTINGS = "https://astrid.cc/settings/account"
+private val WEB_ACCOUNT_SETTINGS: String get() = com.gracefultools.astrid.Brand.webUrl("/settings/account")
 
 /**
  * iOS's AccountSettingsView: profile (photo, name), email verification, account information,

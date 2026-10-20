@@ -88,7 +88,7 @@ private fun openPlayListing(context: Context) {
     }
 }
 
-/** iOS openSupportEmail: a mail to support@astrid.cc, "Astrid App Feedback". */
+/** iOS openSupportEmail: a mail to Brand.supportEmail (support@astrid.cc), "Astrid App Feedback". */
 fun sendFeedback(context: Context) {
     runCatching {
         context.startActivity(Intent(Intent.ACTION_SENDTO, Uri.parse(ReviewPrompt.feedbackMailto())).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))

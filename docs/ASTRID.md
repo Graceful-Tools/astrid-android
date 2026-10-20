@@ -85,6 +85,7 @@ app/Astrid (Compose)  ──  corebridge (Kotlin facade + UniFFI bindings)  ─�
 | Screens | `app/.../ui/<feature>/` — one `*Screen.kt` + `*ViewModel.kt` per feature |
 | Theme | `app/.../ui/theme/` — colours ported from iOS `Theme.swift` |
 | Strings | `app/src/main/res/values/strings.xml` |
+| Brand values (server, support address) | `app/.../Brand.kt`, from BuildConfig fields that Gradle properties set (`-PastridBaseUrl=…`, `-PastridSupportEmail=…`); unset, hosted Astrid's. iOS `Brand.swift`. Web links are `Brand.webUrl(path)`, never a literal origin |
 
 ## 4. Change order for shared behaviour
 

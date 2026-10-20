@@ -338,7 +338,7 @@ fun ListPicture(list: ListSummary, image: String?, size: androidx.compose.ui.uni
 }
 
 /** iOS ListImageHelper.simpleHash → /icons/default_list_<0-3>.png on the API's host. */
-fun defaultListImage(listId: String, base: String = "https://astrid.cc"): String {
+fun defaultListImage(listId: String, base: String = com.gracefultools.astrid.Brand.baseUrl): String {
     if (listId.isEmpty()) return "$base/icons/default_list_0.png"
     // Swift's Int is 64-bit and its &- / &+ wrap: Kotlin's Long does the same, so the same id picks
     // the same picture on both.

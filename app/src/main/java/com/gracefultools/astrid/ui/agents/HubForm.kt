@@ -60,6 +60,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.gracefultools.astrid.Brand
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.common.FloatingTextHeader
 import com.gracefultools.astrid.ui.theme.AstridTheme
@@ -70,12 +71,6 @@ import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.Warning
 import kotlinx.coroutines.delay
-
-/**
- * The server this build talks to — the core's default (`CoreSession`'s `baseUrl` is not overridden on
- * Android). iOS's `AgentHubLinks` builds its web links from `Constants.API.baseURL` the same way.
- */
-internal const val WEB_ORIGIN = "https://astrid.cc"
 
 /** iOS opens these in-app; Android's equivalent is a Custom Tab (ASTRID.md §2). */
 internal fun openInCustomTab(context: Context, url: String) {
@@ -348,7 +343,7 @@ internal fun WebSessionRequiredRow() {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
         Caption(stringResource(R.string.settings_agents_session_required))
         ActionRow(stringResource(R.string.settings_agents_open_web), Icons.Filled.Public, small = true) {
-            openInCustomTab(context, "$WEB_ORIGIN/settings/agents")
+            openInCustomTab(context, Brand.webUrl("settings/agents"))
         }
     }
 }

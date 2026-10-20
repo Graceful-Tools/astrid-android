@@ -30,6 +30,7 @@ class AppGraph(
                 cachePath = dir.resolve("astrid.sqlite").absolutePath,
                 credentials = KeystoreCredentialStore(dir.resolve("astrid.credentials")),
                 background = true,
+                baseUrl = Brand.baseUrl,
             )
             return AppGraph(
                 core = core,

@@ -55,7 +55,7 @@ import com.gracefultools.astrid.ui.agents.ProblemLabel
 import com.gracefultools.astrid.ui.agents.SmallSpinner
 import com.gracefultools.astrid.ui.agents.ToggleRow
 import com.gracefultools.astrid.ui.agents.TransportCredentialsSheet
-import com.gracefultools.astrid.ui.agents.WEB_ORIGIN
+import com.gracefultools.astrid.Brand
 import com.gracefultools.astrid.ui.agents.WebSessionRequiredRow
 import com.gracefultools.astrid.ui.agents.displayDate
 import com.gracefultools.astrid.ui.agents.openInCustomTab
@@ -179,7 +179,7 @@ fun ConnectionsScreen(vm: ConnectionsViewModel, core: Core, onBack: () -> Unit) 
 
         FormSection {
             ActionRow(stringResource(R.string.settings_connections_developer_web), Icons.Filled.Public) {
-                openInCustomTab(context, "$WEB_ORIGIN/settings/connections")
+                openInCustomTab(context, Brand.webUrl("settings/connections"))
             }
         }
     }
