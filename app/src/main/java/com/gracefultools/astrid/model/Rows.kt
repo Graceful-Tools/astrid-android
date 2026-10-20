@@ -196,9 +196,9 @@ data class ListAgentOptions(
     val githubConnected: Boolean = false,
 )
 
-/** One agent; `email` is what an invitation needs, and the core does not answer it yet. */
+/** One agent; `email` is what an invitation needs, `aiAgentType` picks its description. */
 @Serializable
-data class AgentOption(val id: String = "", val name: String = "", val email: String? = null, val image: String? = null)
+data class AgentOption(val id: String = "", val name: String = "", val email: String? = null, val image: String? = null, val aiAgentType: String? = null)
 
 @Serializable
 data class RepositoryOption(val fullName: String = "", val name: String = "")

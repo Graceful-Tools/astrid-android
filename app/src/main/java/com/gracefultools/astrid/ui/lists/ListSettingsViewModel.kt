@@ -64,18 +64,9 @@ data class ListSettingsState(
     val otherMembers: List<Member>
         get() = settings?.let { s -> s.members.filter { it.who != null && it.who != (s.ownerId ?: detail?.owner?.id) } }.orEmpty()
 
-    /**
-     * Invitations nobody has accepted yet: iOS ListMembershipRoster.pendingInvitations, which leaves
-     * out an address already on the roster. Moves to the core with `listMembers.invitations`.
-     */
+    /** Invitations nobody has accepted yet — the core's roster leaves out anyone already a member. */
     val pendingInvitations: List<ListInvite>
-        get() {
-            val joined = buildSet {
-                settings?.members?.forEach { m -> (m.user?.email ?: m.email)?.let { add(it.lowercase()) } }
-                owner?.email?.let { add(it.lowercase()) }
-            }
-            return detail?.invitations.orEmpty().filter { it.email.lowercase() !in joined }
-        }
+        get() = detail?.invitations.orEmpty()
 
     val tabs: List<ListSettingsTab>
         get() = listOf(ListSettingsTab.FILTERS, ListSettingsTab.MEMBERS) + if (settings?.canManageList == true) listOf(ListSettingsTab.ADMIN) else emptyList()
@@ -126,10 +117,12 @@ class ListSettingsViewModel(
         work { runCatching { core.run(command("refreshListMembers", "listId" to listId)) }; load() }
     }
 
+    /** One answer, the core's `listMembers`: settings, roster, description and window (AATD-44). */
     fun load() = work {
-        runCatching { CoreJson.decodeFromJsonElement(ListSettings.serializer(), core.run(command("listMembers", "listId" to listId))) }
+        val answer = runCatching { core.run(command("listMembers", "listId" to listId)) }.getOrNull() ?: return@work
+        runCatching { CoreJson.decodeFromJsonElement(ListSettings.serializer(), answer) }
             .onSuccess { settings -> _state.update { it.copy(settings = settings) } }
-        runCatching { CoreJson.decodeFromJsonElement(ListDetail.serializer(), core.run(command("list", "listId" to listId))) }
+        runCatching { CoreJson.decodeFromJsonElement(ListDetail.serializer(), answer) }
             .onSuccess { detail -> _state.update { it.copy(detail = detail) } }
     }
 

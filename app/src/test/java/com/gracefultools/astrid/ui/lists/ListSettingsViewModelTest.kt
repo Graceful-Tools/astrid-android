@@ -33,12 +33,14 @@ class ListSettingsViewModelTest {
         "privacy":"SHARED","canManageMembers":true,"canManageList":true,"canDeleteList":true,"canLeave":false,"canTransferOwnership":true,
         "currentUserId":"u-me","defaults":{"assigneeId":null,"priority":2,"repeating":"weekly","dueDate":"tomorrow","dueTime":"09:00"},
         "members":[{"userId":"u-me","role":"admin","user":{"id":"u-me","name":"Me","email":"me@example.com"}},
-                   {"userId":"u-bo","role":"member","user":{"id":"u-bo","name":"Bo","email":"bo@example.com"}}]}"""
-    private val detail = """{"id":"l1","name":"Home","description":"Our house","owner":{"id":"u-me","name":"Me","email":"me@example.com"},
-        "invitations":[{"id":"i1","email":"cy@example.com","role":"admin"},{"id":"i2","email":"BO@example.com","role":"member"}],
+                   {"userId":"u-bo","role":"member","user":{"id":"u-bo","name":"Bo","email":"bo@example.com"}}],
+        "description":"Our house","owner":{"id":"u-me","name":"Me","email":"me@example.com"},
+        "invitations":[{"id":"i1","email":"cy@example.com","role":"admin"}],
         "recentlyCompletedWindow":{"kind":"duration","amount":7,"unit":"day"}}"""
+    // The roster's rules (an invitation already accepted is left out) are the core's: AATD-44 in
+    // astrid-core's dispatch tests. listMembers answers them; the app draws what it is given.
 
-    private fun ownedCore() = FakeCore().apply { answer("listMembers", owned); answer("list", detail) }
+    private fun ownedCore() = FakeCore().apply { answer("listMembers", owned) }
 
     @Test
     fun `AATD-15 the screen opens from the cache and refreshes from the server`() = runTest {
