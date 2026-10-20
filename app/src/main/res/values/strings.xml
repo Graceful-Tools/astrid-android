@@ -904,4 +904,5 @@
     <string name="repeating_preview">Preview</string>
     <string name="comments_streak_summary">Completed %1$d times in %2$d days</string>
     <string name="comments_streak_summary_no_span">Completed %1$d times</string>
+    <string name="reminders_triage_assign_to">Assign to %1$s</string>
 </resources>

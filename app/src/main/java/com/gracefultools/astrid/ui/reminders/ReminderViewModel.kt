@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.update
 import java.time.Instant
 import java.time.LocalDate
 
-/** iOS triage's four decisions (ReminderTriage.Action). Assign-to-assistant needs the core's deck. */
-enum class TriageAction { COMPLETE, POSTPONE, KEEP }
+/** iOS triage's four decisions (ReminderTriage.Action). */
+enum class TriageAction { COMPLETE, POSTPONE, KEEP, ASSIGN }
 
 data class ReminderState(
     val loading: Boolean = true,
@@ -30,6 +30,9 @@ data class ReminderState(
     val countingOnYou: List<UserSummary> = emptyList(),
     /** Set when the screen has done its work and should close. */
     val finished: Boolean = false,
+    /** Who an up-swipe hands a task to (the account's assistant), from the core's deck. */
+    val assistantId: String? = null,
+    val assistantName: String? = null,
 ) {
     val current: TaskDetail? get() = deck.getOrNull(index)
     /** One task is iOS's ReminderView; several are its ReminderTriageView. */
@@ -57,10 +60,25 @@ class ReminderViewModel(
     init { load() }
 
     private fun load() = work {
-        val deck = taskIds.distinct().mapNotNull { id ->
+        // Several reminders: iOS's triage deck, which the core builds (reminderTriageDeck, core
+        // 0a3998e): the reminded task, then everything of mine due today or overdue.
+        val triage = if (taskIds.distinct().size > 1) {
+            runCatching { core.run(command("reminderTriageDeck", "remindedTaskId" to taskIds.first())) as? kotlinx.serialization.json.JsonObject }.getOrNull()
+        } else null
+        val ids = triage?.get("rows")?.let { rows ->
+            (rows as? kotlinx.serialization.json.JsonArray)?.mapNotNull { ((it as? kotlinx.serialization.json.JsonObject)?.get("id") as? kotlinx.serialization.json.JsonPrimitive)?.content }
+        }?.takeIf { it.isNotEmpty() } ?: taskIds.distinct()
+        val assistant = triage?.get("assistant") as? kotlinx.serialization.json.JsonObject
+        val deck = ids.mapNotNull { id ->
             runCatching { CoreJson.decodeFromJsonElement(TaskDetail.serializer(), core.run(command("taskDetail", "taskId" to id))) }.getOrNull()
         }.filterNot { it.task.completed }
-        _state.update { it.copy(loading = false, deck = deck, finished = deck.isEmpty()) }
+        _state.update {
+            it.copy(
+                loading = false, deck = deck, finished = deck.isEmpty(),
+                assistantId = (assistant?.get("id") as? kotlinx.serialization.json.JsonPrimitive)?.content,
+                assistantName = (assistant?.get("name") as? kotlinx.serialization.json.JsonPrimitive)?.content,
+            )
+        }
         deck.firstOrNull()?.takeIf { deck.size == 1 }?.let { loadCollaborators(it) }
     }
 
@@ -101,6 +119,10 @@ class ReminderViewModel(
             TriageAction.COMPLETE -> ReminderActions.complete(core, task.task.id)
             TriageAction.POSTPONE -> ReminderActions.postpone(core, task.task.id, today())
             TriageAction.KEEP -> Unit
+            // iOS's up-swipe: the assistant takes it.
+            TriageAction.ASSIGN -> _state.value.assistantId?.let { assistant ->
+                runCatching { core.run(command("updateTask", "taskId" to task.task.id, "changes" to mapOf("assigneeId" to assistant))) }
+            }
         }
         handled += task.task.id
     }
@@ -113,13 +135,13 @@ class ReminderViewModel(
 
         /**
          * iOS ReminderTriage.action(forDragX:y:): far enough along one axis and clearly more along
-         * it than the other. Left completes, right is tomorrow, down keeps. Up (the assistant) is
-         * not offered here — see [TriageAction].
+         * it than the other. Left completes, right is tomorrow, down keeps, up hands it to the
+         * assistant — only when there is one ([hasAssistant]).
          */
-        fun swipe(dx: Float, dy: Float): TriageAction? {
+        fun swipe(dx: Float, dy: Float, hasAssistant: Boolean = false): TriageAction? {
             val ax = kotlin.math.abs(dx); val ay = kotlin.math.abs(dy)
             if (ax >= COMMIT_DISTANCE && ax > ay * 1.5f) return if (dx < 0) TriageAction.COMPLETE else TriageAction.POSTPONE
-            if (ay >= COMMIT_DISTANCE && ay > ax * 1.5f && dy > 0) return TriageAction.KEEP
+            if (ay >= COMMIT_DISTANCE && ay > ax * 1.5f) return if (dy > 0) TriageAction.KEEP else if (hasAssistant) TriageAction.ASSIGN else null
             return null
         }
     }

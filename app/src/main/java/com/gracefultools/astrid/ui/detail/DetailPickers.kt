@@ -140,9 +140,13 @@ internal fun AssigneeSheet(state: TaskDetailState, vm: TaskDetailViewModel, onPi
                 option.isAgent -> stringResource(R.string.profile_ai_agent)
                 else -> null
             }
+            // Several at once where the list allows it (a GitHub board): each tap toggles, and the
+            // sheet stays open (iOS AssigneeSelection, AATD-51).
+            val multiple = state.assignees.allowsMultiple
             PickRow(
                 label = option.name ?: if (option.userId == null) stringResource(R.string.assignee_unassigned) else "",
-                selected = option.userId == state.assignees.assigneeId,
+                selected = if (multiple) option.userId?.let { it in state.assignees.assigneeIds } ?: state.assignees.assigneeIds.isEmpty()
+                else option.userId == state.assignees.assigneeId,
                 subtitle = caption,
                 leading = {
                     if (option.userId == null) {
@@ -151,7 +155,7 @@ internal fun AssigneeSheet(state: TaskDetailState, vm: TaskDetailViewModel, onPi
                         }
                     } else Avatar(option.image, option.initials, 32.dp)
                 },
-            ) { onPick(option.userId) }
+            ) { if (multiple) vm.toggleAssignee(option.userId) else onPick(option.userId) }
         }
         SomeoneElseSection(state.someoneElse, vm)
     }

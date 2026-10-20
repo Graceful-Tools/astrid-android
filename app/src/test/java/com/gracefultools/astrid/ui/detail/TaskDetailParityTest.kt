@@ -82,4 +82,12 @@ class TaskDetailParityTest {
         core.emit("comments", """{"change":"comments","taskId":"t1"}""")
         assertEquals(null, vm.state.value.typingAgent)
     }
+
+    @Test
+    fun `AATD-51 a tap in a multi-assignee picker is the core's toggle`() = runTest {
+        val core = FakeCore().apply { answer("taskDetail", detail()) }
+        vm(core).toggleAssignee("bo")
+        assertEquals(JsonPrimitive("bo"), core.last("toggleAssignee")!!["userId"])
+        assertTrue(core.kinds().contains("assigneeOptions"))
+    }
 }

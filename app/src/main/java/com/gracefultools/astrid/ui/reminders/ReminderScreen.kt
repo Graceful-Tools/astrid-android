@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.West
 import androidx.compose.material.icons.filled.South
+import androidx.compose.material.icons.filled.North
 import androidx.compose.material.icons.filled.East
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Cancel
@@ -253,20 +254,26 @@ private fun TriageDeck(state: ReminderState, vm: ReminderViewModel, onOpenTask: 
             } else {
                 var pending by remember(task.task.id) { mutableStateOf<TriageAction?>(null) }
                 Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    SwipeCard(task, onPending = { pending = it }, onDecide = vm::decide, onOpen = { onOpenTask(task.task.id) }, pending = pending)
+                    SwipeCard(task, onPending = { pending = it }, onDecide = vm::decide, onOpen = { onOpenTask(task.task.id) }, pending = pending, hasAssistant = state.assistantId != null)
                 }
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                     TriageButton(TriageAction.COMPLETE, pending, Modifier.weight(1f)) { vm.decide(TriageAction.COMPLETE) }
                     TriageButton(TriageAction.POSTPONE, pending, Modifier.weight(1f)) { vm.decide(TriageAction.POSTPONE) }
                 }
-                TriageButton(TriageAction.KEEP, pending, Modifier.fillMaxWidth()) { vm.decide(TriageAction.KEEP) }
+                Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+                    // iOS's up-swipe: hand it to the account's assistant, when there is one.
+                    if (state.assistantId != null) {
+                        TriageButton(TriageAction.ASSIGN, pending, Modifier.weight(1f), state.assistantName) { vm.decide(TriageAction.ASSIGN) }
+                    }
+                    TriageButton(TriageAction.KEEP, pending, Modifier.weight(1f)) { vm.decide(TriageAction.KEEP) }
+                }
             }
         }
     }
 }
 
 @Composable
-private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (TriageAction?) -> Unit, onDecide: (TriageAction) -> Unit, onOpen: () -> Unit) {
+private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (TriageAction?) -> Unit, onDecide: (TriageAction) -> Unit, onOpen: () -> Unit, hasAssistant: Boolean = false) {
     val colors = AstridTheme.colors
     val scope = rememberCoroutineScope()
     val drag = remember(task.task.id) { Animatable(Offset.Zero, Offset.VectorConverter) }
@@ -283,7 +290,7 @@ private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (Tria
                 detectDragGestures(
                     onDragEnd = {
                         val dp = inDp(drag.value)
-                        val action = ReminderViewModel.swipe(dp.x, dp.y)
+                        val action = ReminderViewModel.swipe(dp.x, dp.y, hasAssistant)
                         onPending(null)
                         if (action != null) onDecide(action) else scope.launch { drag.animateTo(Offset.Zero) }
                     },
@@ -292,7 +299,7 @@ private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (Tria
                     change.consume()
                     scope.launch { drag.snapTo(drag.value + amount) }
                     val dp = inDp(drag.value + amount)
-                    onPending(ReminderViewModel.swipe(dp.x, dp.y))
+                    onPending(ReminderViewModel.swipe(dp.x, dp.y, hasAssistant))
                 }
             }
             .clickable(onClickLabel = openLabel, onClick = onOpen)
@@ -316,10 +323,11 @@ private fun triageColor(action: TriageAction, muted: Color): Color = when (actio
     TriageAction.COMPLETE -> Success
     TriageAction.POSTPONE -> Orange
     TriageAction.KEEP -> muted
+    TriageAction.ASSIGN -> com.gracefultools.astrid.ui.theme.Accent
 }
 
 @Composable
-private fun TriageButton(action: TriageAction, pending: TriageAction?, modifier: Modifier, onClick: () -> Unit) {
+private fun TriageButton(action: TriageAction, pending: TriageAction?, modifier: Modifier, assistantName: String? = null, onClick: () -> Unit) {
     val colors = AstridTheme.colors
     val color = triageColor(action, colors.textMuted)
     val highlighted = pending == action
@@ -327,6 +335,7 @@ private fun TriageButton(action: TriageAction, pending: TriageAction?, modifier:
         TriageAction.COMPLETE -> stringResource(R.string.reminders_complete) to Icons.Filled.West
         TriageAction.POSTPONE -> stringResource(R.string.time_tomorrow) to Icons.Filled.East
         TriageAction.KEEP -> stringResource(R.string.reminders_triage_keep) to Icons.Filled.South
+        TriageAction.ASSIGN -> stringResource(R.string.reminders_triage_assign_to, assistantName ?: stringResource(R.string.app_name)) to Icons.Filled.North
     }
     Row(
         modifier.clip(RoundedCornerShape(12.dp)).background(if (highlighted) color else colors.bgSecondary)

@@ -262,6 +262,13 @@ class TaskDetailViewModel(
             .onSuccess { options -> _state.update { it.copy(assignees = options) } }
     }
 
+    /** iOS's multi-assignee picker (AATD-51): the core toggles this person in or out. */
+    fun toggleAssignee(userId: String?) = work {
+        runCommand { core.run(command("toggleAssignee", "taskId" to id, "userId" to userId)) }
+        loadAssignees()
+        load()
+    }
+
     /** `null` is nobody: the core's first option, and an explicit unassign on the wire. */
     fun setAssignee(userId: String?) = update("assigneeId" to userId)
 

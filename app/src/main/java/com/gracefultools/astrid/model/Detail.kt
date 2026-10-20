@@ -146,7 +146,14 @@ data class AssigneeOption(
 
 /** `assigneeOptions`: who the picker offers, in the core's order, first entry "nobody". */
 @Serializable
-data class AssigneeOptions(val assigneeId: String? = null, val options: List<AssigneeOption> = emptyList())
+data class AssigneeOptions(
+    val assigneeId: String? = null,
+    val options: List<AssigneeOption> = emptyList(),
+    /** Everyone it is given to, primary first, and whether the list allows several (AATD-51). */
+    val assigneeIds: List<String> = emptyList(),
+    val allowsMultiple: Boolean = false,
+    val maximum: Int = 10,
+)
 
 @Serializable
 data class RepeatPreset(val value: String = "", val titleKey: String = "", val isSelected: Boolean = false)
