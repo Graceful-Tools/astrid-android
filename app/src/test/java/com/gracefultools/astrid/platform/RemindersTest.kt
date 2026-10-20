@@ -29,4 +29,16 @@ class RemindersTest {
         ReminderActions.handle(core, ReminderNotifier.ACTION_SNOOZE, "t1")
         assertEquals(JsonPrimitive(60), core.last("snoozeReminder")!!["minutes"])
     }
+
+    @Test
+    fun `AATD-54 a batch is summarised once after its reminders are posted, and nothing due is no batch`() = runTest {
+        val core = FakeCore().apply { answer("remindersDue", """{"reminders":[{"taskId":"t1","title":"A"},{"taskId":"t2","title":"B"}]}""") }
+        val batches = mutableListOf<List<String>>()
+        ReminderNotifier(core, onBatch = { due -> batches += due.map { it.taskId } }) { }.postDue()
+        assertEquals(listOf(listOf("t1", "t2")), batches)
+
+        core.answer("remindersDue", """{"reminders":[]}""")
+        ReminderNotifier(core, onBatch = { due -> batches += due.map { it.taskId } }) { }.postDue()
+        assertEquals(1, batches.size)
+    }
 }

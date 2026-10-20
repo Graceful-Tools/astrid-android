@@ -68,6 +68,7 @@ fun SettingsScreen(vm: SettingsViewModel, onBack: () -> Unit, onSignedOut: () ->
                 val r = account.reminderSettings
                 Group(stringResource(R.string.settings_reminders)) {
                     Toggle(stringResource(R.string.settings_push_reminders), r.enablePushReminders) { vm.setReminder("enablePushReminders", it) }
+                    com.gracefultools.astrid.platform.ExactAlarmRow()
                     Toggle(stringResource(R.string.settings_email_reminders), r.enableEmailReminders) { vm.setReminder("enableEmailReminders", it) }
                     Toggle(stringResource(R.string.settings_daily_digest), r.enableDailyDigest) { vm.setReminder("enableDailyDigest", it) }
                     Text(stringResource(R.string.settings_default_reminder), color = colors.textSecondary, fontSize = 15.sp)

@@ -83,18 +83,53 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
         side.selected?.let { tasks.open(it.id, isVirtual = it.isVirtual == true) }
     }
     val pending by onDeepLink.pending.collectAsStateWithLifecycle()
-    var newTask by remember { mutableStateOf<String?>(null) }
-    LaunchedEffect(pending) {
-        when (val arrival = onDeepLink.take()) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    var newTask by remember { mutableStateOf<Arrival.NewTask?>(null) }
+    var reminder by remember { mutableStateOf<Arrival.Reminder?>(null) }
+    // Each arrival gets its own view model, even one identical to the last.
+    var serial by remember { androidx.compose.runtime.mutableIntStateOf(0) }
+    // A link, a share or a reminder: the screen it names (iOS DeepLinkManager / presenters, AATD-59).
+    suspend fun arrive(arrival: Arrival) {
+        when (arrival) {
             is Arrival.OpenTask -> nav.navigate("task/${arrival.ref}")
-            is Arrival.NewTask -> newTask = arrival.text
-            null -> Unit
+            is Arrival.OpenList -> { nav.popBackStack("list", inclusive = false); sidebar.select(arrival.id) }
+            // Only the reader's own profile has a screen yet; another person's opens it too.
+            is Arrival.OpenProfile -> nav.navigate("profile")
+            is Arrival.OpenSettings -> nav.navigate(arrival.route)
+            is Arrival.Shortcode -> arrive(DeepLinks.resolveShortcode(graph.core, arrival.code))
+            is Arrival.OpenWeb -> runCatching {
+                androidx.browser.customtabs.CustomTabsIntent.Builder().setShowTitle(true).build()
+                    .launchUrl(context, android.net.Uri.parse(arrival.url))
+            }
+            is Arrival.NewTask -> { serial++; newTask = arrival }
+            is Arrival.Reminder -> { serial++; reminder = arrival }
         }
     }
-    newTask?.let { text ->
-        NewTaskSheet(initial = text, listName = side.selected?.name, onDismiss = { newTask = null }) { title ->
-            scope.launch { if (tasks.create(title) != null) newTask = null }
-        }
+    LaunchedEffect(pending) { onDeepLink.take()?.let { arrive(it) } }
+    newTask?.let { arrival ->
+        val share: com.gracefultools.astrid.ui.share.ShareTaskViewModel =
+            viewModel(key = "share-$serial", factory = factory { com.gracefultools.astrid.ui.share.ShareTaskViewModel(graph.core) })
+        val shareState by share.state.collectAsStateWithLifecycle()
+        LaunchedEffect(shareState.done) { if (shareState.done) { newTask = null; tasks.refresh() } }
+        NewTaskSheet(
+            initial = arrival.text, file = arrival.file, saving = shareState.saving, error = shareState.error,
+            onDismiss = { newTask = null },
+            onSave = { title, description, priority -> share.save(title, description, priority, arrival.file) },
+        )
+    }
+    reminder?.let { arrival ->
+        val vm: com.gracefultools.astrid.ui.reminders.ReminderViewModel = viewModel(
+            key = "reminder-$serial",
+            factory = factory { com.gracefultools.astrid.ui.reminders.ReminderViewModel(graph.core, arrival.taskIds) },
+        )
+        com.gracefultools.astrid.ui.reminders.ReminderOverlay(
+            vm,
+            onOpenTask = { nav.navigate("task/$it") },
+            onFinished = { handled ->
+                com.gracefultools.astrid.platform.ReminderNotifier.dismiss(context, handled)
+                reminder = null
+            },
+        )
     }
 
     NavHost(nav, startDestination = "list") {
@@ -183,6 +218,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     ) { Text(stringResource(R.string.detail_select_a_task), color = com.gracefultools.astrid.ui.theme.AstridTheme.colors.textSecondary) }
                 } else {
                     val detail: TaskDetailViewModel = viewModel(key = "pane-$id", factory = factory { TaskDetailViewModel(graph.core, id) })
+                    detail.onDueDateSet = graph.notificationPrompt::request
                     TaskDetailScreen(detail, onBack = { paneTaskId = null }, onOpenTask = { paneTaskId = it }, onOpenList = { sidebar.select(it) })
                 }
             }
@@ -206,6 +242,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
         composable("task/{id}") { entry ->
             val id = entry.arguments?.getString("id").orEmpty()
             val detail: TaskDetailViewModel = viewModel(key = "detail-$id", factory = factory { TaskDetailViewModel(graph.core, id) })
+            detail.onDueDateSet = graph.notificationPrompt::request
             TaskDetailScreen(
                 detail, onBack = { nav.popBackStack() },
                 onOpenTask = { nav.navigate("task/$it") },

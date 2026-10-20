@@ -25,25 +25,50 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
-            <!-- Share-to-Astrid: iOS's share extension. -->
+            <!-- Share-to-Astrid: iOS's share extension takes one image or file (AATD-60). Text is an
+                 Android extra; several files are taken as their first, as iOS's limit of one. -->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="*/*" />
             </intent-filter>
-            <!-- Task links. Not autoVerify until astrid.cc serves assetlinks.json for the release key. -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+            <!-- Web links (iOS DeepLinkManager, AATD-59). Not autoVerify until astrid.cc serves
+                 assetlinks.json for the release key. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="astrid.cc" android:pathPrefix="/t/" />
-                <data android:scheme="https" android:host="www.astrid.cc" android:pathPrefix="/t/" />
+                <data android:scheme="https" />
+                <data android:host="astrid.cc" />
+                <data android:host="www.astrid.cc" />
+                <data android:pathPrefix="/t/" />
+                <data android:pathPrefix="/tasks/" />
+                <data android:pathPrefix="/lists/" />
+                <data android:pathPrefix="/settings" />
+                <data android:pathPrefix="/s/" />
             </intent-filter>
+            <!-- astrid://tasks|lists|users|settings|s/…, the older astrid://task/…, and astrid://new
+                 (the launcher shortcut). Any other host opens its page on the site. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="astrid" android:host="task" />
-                <data android:scheme="astrid" android:host="new" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="astrid" />
+                <data android:host="tasks" />
+                <data android:host="task" />
+                <data android:host="lists" />
+                <data android:host="users" />
+                <data android:host="settings" />
+                <data android:host="s" />
+                <data android:host="new" />
             </intent-filter>
             <!-- The browser hand-off's fixed callback (astrid-web lib/auth/desktop-handoff.ts). -->
             <intent-filter>

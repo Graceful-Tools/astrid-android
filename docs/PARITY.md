@@ -5,7 +5,8 @@ Diverge only for Android interaction or capability, and say why in Notes. Update
 
 | What | iOS | Android | Task | Notes |
 |---|---|---|---|---|
-| Sign in | ✅ | ✅ | AATD-6 | Browser hand-off in a Custom Tab (Google, Passkey, GitHub, SSO); "Astrid for Android" on the page. Native Google sign-in through Credential Manager is later polish |
+| Sign in | ✅ | ✅ | AATD-6/58 | iOS LoginView's layout: character, server wordmark and slogan, buttons in the order `/api/v1/capabilities` lists them (core `refreshCapabilities`), the real error. Browser hand-off in a Custom Tab for every provider — Passkey opens the hand-off page rather than iOS's New/Returning sheet; Apple is not offered (no native flow). Native Google sign-in through Credential Manager is later polish |
+| Use without account, first-run welcome | ✅ | ➖ | AATD-58 | Not built: astrid-core has no local (no-account) user. Needs a core mode first |
 | Sidebar: lists, favourites, virtual lists | ✅ | ✅ | AATD-7 | Navigation drawer — Android's form of the iPhone overlay sidebar |
 | My Tasks | ✅ | ✅ | AATD-7/8 | Opens by default; a task added there is assigned to you (the core's quick-add default) |
 | Task list with subtasks | ✅ | ✅ | AATD-8 | Rows are the core's projection, drawn to iOS's TaskRowView metrics |
@@ -21,11 +22,11 @@ Diverge only for Android interaction or capability, and say why in Notes. Update
 | Board view | ✅ | 🟡 | AATD-12 | Columns, status picker, "Move to…" (long press and TalkBack). **Drag-and-drop** is AATD-20 |
 | Settings | ✅ | ✅ | AATD-13 | Account, reminders, tasks, appearance, about, sign out |
 | Themes (Ocean, Light, Dark, Auto) | ✅ | ✅ | AATD-5 | Per device, as iOS's @AppStorage |
-| Reminders | ✅ | ✅ | AATD-14/21 | Notifications with Complete and Snooze 1 h; one AlarmManager alarm at the core's `nextReminder` (iOS schedules each ahead) |
+| Reminders | ✅ | ✅ | AATD-14/21/54 | "Task Due Soon" with the title beneath; Complete and Snooze 1 h with icons — Complete runs in the background (iOS opens the app). Several due fold under a group summary. Tapping opens iOS's reminder card (Astrid's phrase, who is counting on you, Complete, Snooze 15 min / 1 day / 1 week) or, from the summary, the triage deck of those reminders (complete, tomorrow, keep). iOS deals the deck from every task of yours due today or overdue and offers "Assign to Astrid" — both need a core command. One AlarmManager alarm at the core's `nextReminder`; exact alarms through Settings → Alarms & reminders (a Settings row while not allowed). Permission: iOS's explain-first alert after sign-in and after a due date is set, three times then monthly, Open Settings once refused |
 | List settings, sharing, members | ✅ | ✅ | AATD-15 | Permissions are the core's `can*` answers |
-| Share extension | ✅ | ✅ | AATD-16 | `ACTION_SEND` → the add sheet |
-| Home Screen quick action | ✅ | ✅ | AATD-16 | Launcher shortcut "New task" |
-| Universal links | ✅ | 🟡 | AATD-16/19 | astrid.cc/t/… opens the task via a chooser until assetlinks.json is published for the release key |
+| Share extension | ✅ | ✅ | AATD-16/60 | `ACTION_SEND` (one image or file; the first of `SEND_MULTIPLE`) → iOS's form: title from the file name, description, priority, attachment, created in your default list and assigned to you, the file attached through the core. Shared text is an Android extra (iOS takes files only) |
+| Home Screen quick action | ➖ | ✅ | AATD-16/60 | Android extra — iOS has none. The launcher shortcut "New task" opens the share form empty |
+| Universal links, deep links | ✅ | 🟡 | AATD-16/19/59 | iOS's set: `astrid://tasks/`, `lists/`, `users/`, `settings/`, `s/` (and Android's older `astrid://task/`), astrid.cc `/t/`, `/tasks/`, `/lists/`, `/settings/<page>`, `/s/<code>`; other pages open in a Custom Tab. Settings pages without an Android screen open Settings; `users/<id>` opens your own profile. `/s/` asks the core's `resolveShortcode` (not in the core yet — falls back to the web, as iOS does on failure). Links go via a chooser until assetlinks.json is published for the release key |
 | Chat | ✅ | ✅ | AATD-17 | |
 | iPad two-column layout | ✅ | ⏳ | | Tablets and foldables get the phone layout today |
 | Agent Hub, Connections, Profile stats, data export | ✅ | ⏳ | | The core has every command; screens not built |

@@ -17,6 +17,9 @@ class AppGraph(
     val scope: CoroutineScope,
     val preferences: Preferences,
 ) {
+    /** iOS NotificationPromptManager: one for the app, so a due date set anywhere can ask. */
+    val notificationPrompt = com.gracefultools.astrid.platform.NotificationPrompt(preferences)
+
     companion object {
         fun start(context: Context): AppGraph {
             val dir = context.filesDir

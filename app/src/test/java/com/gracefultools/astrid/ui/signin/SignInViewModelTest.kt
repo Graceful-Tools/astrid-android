@@ -83,4 +83,36 @@ class SignInViewModelTest {
         assertTrue(!SignInViewModel.isCallback("astrid://task/AATD-1"))
         assertTrue(!SignInViewModel.isCallback("https://astrid.cc/auth/callback?code=a"))
     }
+
+    @Test
+    fun `AATD-58 the buttons come in the order the deployment lists them`() = runTest {
+        val core = FakeCore().apply {
+            answer("isSignedIn", """{"signedIn":false}""")
+            answer("refreshCapabilities", """{"auth":{"google":true,"passkey":true,"github":true,"sso":false,
+                "providers":[{"id":"github","kind":"oauth"},{"id":"passkey","kind":"webauthn"},{"id":"apple","kind":"oauth"},{"id":"google","kind":"oauth"}]},
+                "brand":{"appName":"Astrid","wordmark":"astrid","slogan":"Get it done!"}}""")
+        }
+        val vm = vm(core)
+        vm.load()
+        assertEquals(listOf("github", "passkey", "google"), vm.look.value.providers)
+        assertEquals("astrid", vm.look.value.wordmark)
+        assertEquals("Get it done!", vm.look.value.slogan)
+    }
+
+    @Test
+    fun `AATD-58 a server without the list is read from its booleans, and no answer keeps iOS's default`() {
+        assertEquals(
+            listOf("google", "sso"),
+            SignInMethods.offered(kotlinx.serialization.json.Json.parseToJsonElement("""{"auth":{"passkey":false,"sso":true}}""") as kotlinx.serialization.json.JsonObject),
+        )
+        assertEquals(listOf("google", "passkey"), SignInMethods.offered(null))
+        assertEquals("acme", SignInMethods.look(kotlinx.serialization.json.Json.parseToJsonElement("""{"brand":{"appName":"Acme"}}""") as kotlinx.serialization.json.JsonObject).wordmark)
+    }
+
+    @Test
+    fun `AATD-58 a signed-in launch does not wait on the capabilities`() = runTest {
+        val core = FakeCore().apply { answer("isSignedIn", """{"signedIn":true}""") }
+        vm(core).load()
+        assertTrue("refreshCapabilities" !in core.kinds())
+    }
 }
