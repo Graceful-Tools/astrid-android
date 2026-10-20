@@ -63,7 +63,10 @@ fun ChatPanel(vm: ChatViewModel, modifier: Modifier = Modifier) {
     val colors = AstridTheme.colors
     val list = rememberLazyListState()
     LaunchedEffect(state.chat.messages.size) { if (state.chat.messages.isNotEmpty()) list.animateScrollToItem(state.chat.messages.lastIndex) }
+    val online by com.gracefultools.astrid.ui.common.rememberIsOnline()
     Column(modifier.fillMaxSize()) {
+        // iOS's ChatPanelView: the offline strip over the messages (AATD-62).
+        if (!online) com.gracefultools.astrid.ui.common.OfflineStrip()
         if (state.chat.messages.isEmpty()) {
             Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text(stringResource(R.string.chat_empty), color = colors.textSecondary)
@@ -88,6 +91,8 @@ fun ChatPanel(vm: ChatViewModel, modifier: Modifier = Modifier) {
                 }
             }
         }
+        // iOS's AgentTypingIndicator above the input, while an agent works in this channel (AATD-62).
+        state.typingAgent?.let { com.gracefultools.astrid.ui.common.AgentTypingIndicator(it.name) }
         var text by rememberSaveable { mutableStateOf("") }
         Row(Modifier.fillMaxWidth().background(colors.headerBg).navigationBarsPadding().imePadding().padding(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
             TextField(
