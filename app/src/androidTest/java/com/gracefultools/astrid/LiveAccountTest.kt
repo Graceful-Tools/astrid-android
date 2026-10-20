@@ -5,6 +5,7 @@ import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -43,6 +44,11 @@ class LiveAccountTest {
     }
 
     @org.junit.After fun close() { scenario?.close() }
+
+    /** A sidebar entry (tagged `sidebar:<id>`), not a task row whose chip says the same name. */
+    private val sidebarRow = androidx.compose.ui.test.SemanticsMatcher("a sidebar row") {
+        it.config.getOrElseNullable(androidx.compose.ui.semantics.SemanticsProperties.TestTag) { null }?.startsWith("sidebar:") == true
+    }
 
     private fun shot(name: String) {
         compose.waitForIdle()
@@ -88,5 +94,42 @@ class LiveAccountTest {
         compose.onNodeWithText("UITEST Fixture — open task 2").performClick()
         waitFor("Description")
         shot("02-detail")
+    }
+
+    /** Every main screen, captured for a person to set beside iOS's (scripts/live-test.sh --tour). */
+    @Test
+    fun tour() {
+        waitForRow("UITEST Fixture — open task 1")
+        shot("tour-01-my-tasks")
+        compose.onNodeWithContentDescription("Open the sidebar").performClick()
+        waitFor("UI Test List")
+        shot("tour-02-sidebar")
+        compose.onAllNodes(sidebarRow and hasText("UI Test List")).onFirst().performClick()
+        compose.waitForIdle(); Thread.sleep(1500)
+        shot("tour-03-board")
+        // A list with a board opens on it, as iOS's does; the rotator turns to the list.
+        runCatching { compose.onNodeWithContentDescription("Show as list").performClick() }
+        compose.waitForIdle(); Thread.sleep(800)
+        shot("tour-03b-list")
+        compose.onNode(hasTestTag("taskList")).performScrollToNode(hasText("UITEST Fixture — open task 2"))
+        compose.onNodeWithText("UITEST Fixture — open task 2").performClick()
+        waitFor("Description")
+        shot("tour-04-detail")
+        androidx.test.espresso.Espresso.pressBack()
+        compose.onNodeWithContentDescription("Open the sidebar").performClick()
+        compose.onNode(hasTestTag("sidebar:search")).performClick()
+        compose.waitForIdle(); Thread.sleep(800)
+        shot("tour-05-search")
+        androidx.test.espresso.Espresso.closeSoftKeyboard()
+        androidx.test.espresso.Espresso.pressBack()
+        compose.onNodeWithContentDescription("Open the sidebar").performClick()
+        compose.onNode(hasTestTag("sidebar:settings")).performClick()
+        compose.waitForIdle(); Thread.sleep(1500)
+        shot("tour-06-settings")
+        androidx.test.espresso.Espresso.pressBack()
+        compose.onNodeWithContentDescription("Open the sidebar").performClick()
+        compose.onNode(hasTestTag("sidebar:profile")).performClick()
+        compose.waitForIdle(); Thread.sleep(2000)
+        shot("tour-07-profile")
     }
 }

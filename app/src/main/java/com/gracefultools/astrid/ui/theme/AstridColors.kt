@@ -29,6 +29,25 @@ data class AstridColors(
     val buttonBg: Color,
     val buttonBorder: Color,
     val isDark: Boolean,
+    /** A task row's card: Ocean white 0.8 (1.0 selected), Light glass, Dark bgPrimary (TaskRowView.getCardBackground). */
+    val card: Color = bgPrimary,
+    val cardSelected: Color = card,
+    val cardBorder: Color = border,
+    /** Floating headers, the quick-add bar, the comment composer: white on Ocean (FloatingHeader). */
+    val floating: Color = headerBg,
+    /** The quick-add and composer bar behind its field (white 0.8 on Ocean). */
+    val floatingBar: Color = floating,
+    /** A text field inside a floating bar: white with a 1pt border on Ocean and Light, black on Dark. */
+    val field: Color = inputBg,
+    val fieldBorder: Color = inputBorder,
+    /** List chips on rows (getBadgeBackground / getBorderColor). */
+    val chipBg: Color = bgTertiary,
+    val chipBorder: Color = border,
+    /** Task detail's page: cyan under white 0.8 on Ocean (TaskDetailViewNew). */
+    val pageBg: Color = bgPrimary,
+    /** bgHover / buttonHover and the focus ring (Theme.swift). */
+    val pressed: Color = bgActive,
+    val borderFocus: Color = Accent,
 ) {
     val accent: Color get() = Accent
     val accentHover: Color get() = AccentHover
@@ -58,6 +77,12 @@ val LightColors = AstridColors(
     textPrimary = rgb(17, 24, 39), textSecondary = rgb(75, 85, 99), textMuted = rgb(107, 114, 128),
     textInverted = Color.White, headerBg = rgb(249, 250, 251), headerBorder = rgb(229, 231, 235),
     buttonBg = Color.White, buttonBorder = rgb(209, 213, 219), isDark = false,
+    // Liquid Glass on white: ultra-thin material reads as a faint grey card with a hairline edge.
+    card = rgb(249, 250, 251), cardSelected = Accent.copy(alpha = 0.12f), cardBorder = rgb(229, 231, 235),
+    floating = rgb(249, 250, 251).copy(alpha = 0.96f), floatingBar = rgb(249, 250, 251).copy(alpha = 0.96f),
+    field = Color.White, fieldBorder = rgb(180, 184, 188),
+    chipBg = rgb(243, 244, 246), chipBorder = rgb(229, 231, 235),
+    pageBg = Color.White, pressed = rgb(243, 244, 246),
 )
 
 val DarkColors = AstridColors(
@@ -68,6 +93,11 @@ val DarkColors = AstridColors(
     textPrimary = Color.White, textSecondary = rgb(209, 213, 219), textMuted = rgb(156, 163, 175),
     textInverted = rgb(17, 24, 39), headerBg = rgb(31, 41, 55), headerBorder = rgb(75, 85, 99),
     buttonBg = rgb(55, 65, 81), buttonBorder = rgb(75, 85, 99), isDark = true,
+    card = rgb(17, 24, 39), cardSelected = rgb(31, 41, 55), cardBorder = rgb(75, 85, 99),
+    floating = rgb(31, 41, 55), floatingBar = rgb(31, 41, 55),
+    field = Color.Black, fieldBorder = rgb(75, 85, 99),
+    chipBg = rgb(31, 41, 55), chipBorder = rgb(75, 85, 99),
+    pageBg = rgb(17, 24, 39), pressed = rgb(55, 65, 81),
 )
 
 /** iOS's default theme: cyan behind white cards, silver inputs. */
@@ -79,4 +109,10 @@ val OceanColors = AstridColors(
     textPrimary = rgb(17, 24, 39), textSecondary = rgb(75, 85, 99), textMuted = rgb(107, 114, 128),
     textInverted = Color.White, headerBg = rgb(136, 220, 248), headerBorder = rgb(136, 220, 248),
     buttonBg = rgb(220, 223, 228), buttonBorder = rgb(180, 184, 188), isDark = false,
+    card = Color.White.copy(alpha = 0.8f), cardSelected = Color.White, cardBorder = rgb(136, 220, 248),
+    floating = Color.White, floatingBar = Color.White.copy(alpha = 0.8f),
+    field = Color.White, fieldBorder = rgb(180, 184, 188),
+    chipBg = rgb(243, 244, 246), chipBorder = rgb(136, 220, 248),
+    // Cyan under white 0.8, flattened.
+    pageBg = rgb(231, 248, 254), pressed = rgb(200, 204, 209),
 )

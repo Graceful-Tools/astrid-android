@@ -17,7 +17,11 @@ data class TaskRow(
     val completed: Boolean = false,
     val priority: Int = 0,
     val due: DueLabel = DueLabel(),
+    /** A timed task's local date and time (core `dueAt`): drawn "Oct 19 6:00 PM" even today, as iOS. */
+    val dueAt: DueAt? = null,
     val isOverdue: Boolean = false,
+    /** Whether the long-press menu offers "Copy task id". */
+    val offersCopyIdentifier: Boolean = false,
     val leading: LeadingControl = LeadingControl(),
     /** What tapping the leading control does: `complete` or `openPicker`. */
     val action: String = "complete",
@@ -40,12 +44,22 @@ data class TaskRow(
 @Serializable
 data class DueLabel(val key: String = "none", val date: String? = null, val time: String? = null)
 
+@Serializable
+data class DueAt(val date: String = "", val time: String = "")
+
 /** The leading control's three states: your checkbox, someone else's initial, or unassigned. */
 @Serializable
 data class LeadingControl(val kind: String = "unassigned", val userId: String? = null, val initial: String? = null)
 
 @Serializable
-data class ListChip(val id: String = "", val name: String = "", val color: String = "#3b82f6", val isLabel: Boolean = false)
+data class ListChip(
+    val id: String = "",
+    val name: String = "",
+    val color: String = "#3b82f6",
+    val isLabel: Boolean = false,
+    /** iOS's symbol before the name: `tag`, `globe`, `people` or `hash` (core `ChipGlyph`). */
+    val glyph: String = "hash",
+)
 
 @Serializable
 data class UserSummary(val id: String = "", val name: String? = null, val email: String? = null, val image: String? = null) {
@@ -68,6 +82,10 @@ data class ListSummary(
     val taskCount: Int? = null,
     val isVirtual: Boolean? = null,
     val imageUrl: String? = null,
+    /** PRIVATE, SHARED or PUBLIC; absent from thinner answers, so never read absence as private. */
+    val privacy: String? = null,
+    /** For a virtual list: `my-tasks`, `today`, … */
+    val virtualListType: String? = null,
 )
 
 /** One board column — `app::dispatch::board`: its cards are the core's rows for the board surface. */

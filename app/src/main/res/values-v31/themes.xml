@@ -1,0 +1,11 @@
+<resources>
+    <!-- Android 12+ draws its own launch screen: the Astrid character on Ocean, as iOS's SplashIcon.
+         The in-app splash (ui/common/Splash.kt) takes over while the session is checked. -->
+    <style name="Theme.Astrid" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/ocean_bg</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowSplashScreenBackground">@color/ocean_bg</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+    </style>
+</resources>

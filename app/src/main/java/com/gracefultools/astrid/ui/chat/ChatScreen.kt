@@ -48,16 +48,22 @@ import com.gracefultools.astrid.ui.theme.Spacing
 
 @Composable
 fun ChatScreen(vm: ChatViewModel, title: String, onBack: () -> Unit) {
+    val colors = AstridTheme.colors
+    BackHandler(onBack = onBack)
+    Column(Modifier.fillMaxSize().background(colors.bgPrimary)) {
+        com.gracefultools.astrid.ui.common.FloatingTextHeader(title, onBack = onBack)
+        ChatPanel(vm, Modifier.weight(1f))
+    }
+}
+
+/** A list's messages, in place of its rows (iOS's ChatPanelView, chosen with the view rotator). */
+@Composable
+fun ChatPanel(vm: ChatViewModel, modifier: Modifier = Modifier) {
     val state by vm.state.collectAsStateWithLifecycle()
     val colors = AstridTheme.colors
     val list = rememberLazyListState()
-    BackHandler(onBack = onBack)
     LaunchedEffect(state.chat.messages.size) { if (state.chat.messages.isNotEmpty()) list.animateScrollToItem(state.chat.messages.lastIndex) }
-    Column(Modifier.fillMaxSize().background(colors.bgPrimary).statusBarsPadding()) {
-        Row(Modifier.fillMaxWidth().padding(Spacing.s4), verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.detail_back), tint = colors.textPrimary) }
-            Text(title, fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
-        }
+    Column(modifier.fillMaxSize()) {
         if (state.chat.messages.isEmpty()) {
             Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text(stringResource(R.string.chat_empty), color = colors.textSecondary)

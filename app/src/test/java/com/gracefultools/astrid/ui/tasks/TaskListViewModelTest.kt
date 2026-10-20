@@ -10,6 +10,7 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -74,7 +75,7 @@ class TaskListViewModelTest {
         val core = FakeCore().apply { answer("rowsForList", rows) }
         val vm = vm(core)
         vm.open("l1")
-        assertTrue(vm.create("  Call mum tomorrow #home  "))
+        assertNotNull(vm.create("  Call mum tomorrow #home  "))
         val sent = core.last("createTask")!!
         assertEquals(JsonPrimitive("Call mum tomorrow #home"), sent["title"])
         assertEquals(JsonArray(listOf(JsonPrimitive("l1"))), sent["listIds"])
@@ -87,7 +88,7 @@ class TaskListViewModelTest {
         val core = FakeCore().apply { answer("rowsForList", rows) }
         val vm = vm(core)
         vm.open("my-tasks", isVirtual = true)
-        assertFalse(vm.create("   "))
+        assertNull(vm.create("   "))
         assertFalse(core.kinds().contains("createTask"))
         vm.create("Something")
         assertEquals(JsonArray(emptyList()), core.last("createTask")!!["listIds"])
@@ -122,7 +123,38 @@ class TaskListViewModelTest {
         val vm = vm(core)
         vm.open("l1")
         vm.create("Buy milk")
-        assertFalse(core.kinds().contains("quickAddDefaults"))
+        // quickAddDefaults is asked for the control's face (AATD-37); the create still says nothing.
         assertNull(core.last("createTask")!!["assigneeId"])
+        assertNull(core.last("createTask")!!["priority"])
+    }
+
+    @Test
+    fun `AATD-37 a priority and an assignee picked in quick add are sent as chosen, the words decide otherwise`() = runTest {
+        val core = FakeCore().apply {
+            answer("rowsForList", rows)
+            answer("quickAddDefaults", """{"priority":0,"assigneeId":"u-me","leading":{"kind":"checkbox"},"options":[]}""")
+        }
+        val vm = vm(core)
+        vm.open("l1")
+        vm.create("Plain")
+        assertNull(core.last("createTask")!!["priority"])
+        vm.choosePriority(3)
+        vm.chooseAssignee(null)
+        assertEquals(JsonPrimitive(3), core.last("quickAddDefaults")!!["priority"])
+        vm.create("Urgent")
+        val sent = core.last("createTask")!!
+        assertEquals(JsonPrimitive(3), sent["priority"])
+        assertEquals(JsonPrimitive("unassigned"), sent["assigneeId"])
+    }
+
+    @Test
+    fun `AATD-37 the plus opens what it made - create answers the new task's id`() = runTest {
+        val core = FakeCore().apply {
+            answer("rowsForList", rows)
+            answer("createTask", """{"id":"temp_1","title":"New"}""")
+        }
+        val vm = vm(core)
+        vm.open("l1")
+        assertEquals("temp_1", vm.create("New"))
     }
 }

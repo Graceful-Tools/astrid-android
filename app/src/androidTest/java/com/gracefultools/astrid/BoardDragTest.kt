@@ -27,7 +27,7 @@ class BoardDragTest {
         compose.onNodeWithContentDescription("Open the sidebar").performClick()
         compose.onNode(hasTestTag("sidebar:l-launch")).performClick()
         compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag("listTitle") and hasText("Launch")).fetchSemanticsNodes().isNotEmpty() }
-        compose.onNodeWithContentDescription("Show as board").performClick()
+        // A list with a board opens on it, as iOS's does (TaskListView 742-746).
         waitFor("Plan launch")
         val columnWidth = with(compose.density) { 312.dp.toPx() }
 

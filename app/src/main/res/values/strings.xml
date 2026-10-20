@@ -152,4 +152,23 @@
     <string name="connections_title">Connections</string>
     <string name="connections_revoke">Revoke</string>
     <string name="settings_more">Account and agents</string>
+    <string name="tasks_task_id_copy">Copy task id</string>
+    <string name="common_back">Back</string>
+    <string name="tasks_loading">Loading your tasks...</string>
+    <string name="empty_state_my_tasks">Welcome to %1$s! Add your first task to get started.</string>
+    <string name="empty_state_today">Nothing scheduled for today! Enjoy the free time, or add something new.</string>
+    <string name="empty_state_public_list">Share your ideas with the world! Add tasks - anyone can see this public list.</string>
+    <string name="empty_state_shared_list">Start collaborating! Add a task to get this shared list going.</string>
+    <string name="empty_state_list_with_name">Let\'s fill up \"%1$s\"! Add your first task to get started.</string>
+    <string name="empty_state_default">Ready to capture your thoughts? Create your first task to get started!</string>
+    <string name="tasks_priority">Priority</string>
+    <string name="tasks_assignee">Who</string>
+    <string name="assignee_unassigned">Unassigned</string>
+    <string name="assignee_you">You</string>
+    <string name="profile_ai_agent">AI Agent</string>
+    <string name="chat_show_messages">Switch to messages</string>
+    <string name="my_tasks_filters_title">Sort &amp; Filters</string>
+    <string name="quick_add_picker_a11y">Priority and assignee for the new task</string>
+    <string name="lists_new_list">New list</string>
+    <string name="brand_wordmark" translatable="false">astrid</string>
 </resources>

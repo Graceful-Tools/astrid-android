@@ -43,6 +43,38 @@ object Radius {
     val small = 6.dp; val medium = 8.dp; val large = 12.dp; val xLarge = 16.dp
 }
 
+/**
+ * Material components (dialogs, date and time pickers, menus, snackbars, switches, chips, sheets)
+ * draw from this scheme. Every role is mapped from the iOS palette, so none of Material's stock
+ * lavender shows through in a picker or a switch track (AATD-33).
+ */
+fun materialScheme(c: AstridColors): androidx.compose.material3.ColorScheme {
+    val sheet = if (c.isDark) c.bgSecondary else androidx.compose.ui.graphics.Color.White
+    val base = if (c.isDark) darkColorScheme() else lightColorScheme()
+    return base.copy(
+        primary = c.accent, onPrimary = c.accentText,
+        primaryContainer = c.bgSelected, onPrimaryContainer = c.textPrimary,
+        inversePrimary = c.accent,
+        secondary = c.accent, onSecondary = c.accentText,
+        secondaryContainer = c.bgSelected, onSecondaryContainer = c.textPrimary,
+        tertiary = Info, onTertiary = androidx.compose.ui.graphics.Color.White,
+        tertiaryContainer = c.bgTertiary, onTertiaryContainer = c.textPrimary,
+        background = c.bgPrimary, onBackground = c.textPrimary,
+        surface = sheet, onSurface = c.textPrimary,
+        surfaceVariant = c.bgTertiary, onSurfaceVariant = c.textSecondary,
+        surfaceTint = androidx.compose.ui.graphics.Color.Transparent,
+        inverseSurface = c.textPrimary, inverseOnSurface = c.bgPrimary,
+        error = Error, onError = androidx.compose.ui.graphics.Color.White,
+        errorContainer = Error.copy(alpha = 0.12f), onErrorContainer = Error,
+        outline = c.borderHover, outlineVariant = c.border,
+        scrim = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.4f),
+        surfaceBright = sheet, surfaceDim = c.bgTertiary,
+        surfaceContainerLowest = sheet, surfaceContainerLow = sheet, surfaceContainer = sheet,
+        surfaceContainerHigh = if (c.isDark) c.bgTertiary else c.bgSecondary,
+        surfaceContainerHighest = c.bgTertiary,
+    )
+}
+
 /** iOS `Theme.Typography`: the system type scale at iOS's point sizes, as sp so it scales. */
 val AstridTypography = Typography(
     displaySmall = TextStyle(fontSize = 34.sp, fontWeight = FontWeight.Bold),
@@ -57,6 +89,26 @@ val AstridTypography = Typography(
     labelSmall = TextStyle(fontSize = 12.sp),
 )
 
+/** iOS's named styles, for text that is not a Material component's. */
+object TextStyles {
+    /** headline: list titles, header titles, section titles. */
+    val headline = TextStyle(fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
+    val body = TextStyle(fontSize = 17.sp)
+    val callout = TextStyle(fontSize = 16.sp)
+    /** subheadline: row metadata, list chips. */
+    val subheadline = TextStyle(fontSize = 15.sp)
+    val footnote = TextStyle(fontSize = 13.sp)
+    val caption = TextStyle(fontSize = 12.sp)
+    val caption2 = TextStyle(fontSize = 11.sp)
+    /** A row's title: 17 x 1.1. */
+    val rowTitle = TextStyle(fontSize = 19.sp, fontWeight = FontWeight.Medium)
+}
+
+/** iOS Theme.shadowSmall/Medium/Large as Compose elevations, and the floating header's own. */
+object Elevation {
+    val small = 1.dp; val medium = 3.dp; val large = 10.dp; val floating = 4.dp
+}
+
 val LocalAstridColors = staticCompositionLocalOf { OceanColors }
 
 /** The palette in force. Read colours from here, never from Material's scheme directly. */
@@ -69,23 +121,7 @@ fun AstridTheme(mode: ThemeMode = ThemeMode.OCEAN, content: @Composable () -> Un
     val colors = colorsFor(mode, isSystemInDarkTheme())
     // Material components (dialogs, pickers, menus) draw from this scheme, mapped from the iOS
     // palette so they sit in the same theme as everything else.
-    val scheme = if (colors.isDark) {
-        darkColorScheme(
-            primary = colors.accent, onPrimary = colors.accentText,
-            background = colors.bgPrimary, onBackground = colors.textPrimary,
-            surface = colors.bgSecondary, onSurface = colors.textPrimary,
-            surfaceVariant = colors.bgTertiary, onSurfaceVariant = colors.textSecondary,
-            outline = colors.border, error = Error,
-        )
-    } else {
-        lightColorScheme(
-            primary = colors.accent, onPrimary = colors.accentText,
-            background = colors.bgPrimary, onBackground = colors.textPrimary,
-            surface = colors.bgSecondary, onSurface = colors.textPrimary,
-            surfaceVariant = colors.bgTertiary, onSurfaceVariant = colors.textSecondary,
-            outline = colors.border, error = Error,
-        )
-    }
+    val scheme = materialScheme(colors)
     CompositionLocalProvider(LocalAstridColors provides colors) {
         MaterialTheme(colorScheme = scheme, typography = AstridTypography, content = content)
     }

@@ -31,6 +31,17 @@ data class TaskListState(
     val error: String? = null,
     /** Open when a row's leading control asked for the status picker. */
     val statusPicker: com.gracefultools.astrid.ui.common.LeadingOutcome.PickStatus? = null,
+    /** What the quick-add bar's leading control shows and its picker offers (`quickAddDefaults`). */
+    val quickAdd: QuickAddDefaults = QuickAddDefaults(),
+)
+
+/** The core's answer for a new task's starting priority and assignee, and who may be chosen. */
+@kotlinx.serialization.Serializable
+data class QuickAddDefaults(
+    val priority: Int = 0,
+    val assigneeId: String? = null,
+    val leading: com.gracefultools.astrid.model.LeadingControl = com.gracefultools.astrid.model.LeadingControl("checkbox"),
+    val options: List<com.gracefultools.astrid.model.AssigneeOption> = emptyList(),
 )
 
 /**
@@ -54,9 +65,43 @@ class TaskListViewModel(
     fun open(listId: String, isVirtual: Boolean = false) {
         if (_state.value.listId == listId) return
         generation++
+        chosenPriority = null
+        chosenAssignee = null
         _state.value = TaskListState(listId = listId, isVirtual = isVirtual, loading = true)
         reload()
+        loadQuickAdd()
     }
+
+    // What the person picked in the quick-add picker; null = not said, so the list's default stands.
+    private var chosenPriority: Int? = null
+    private var chosenAssignee: String? = null
+
+    /** The quick-add control's face and options, from the core: the list's defaults under what was chosen. */
+    fun loadQuickAdd() = work {
+        val listId = _state.value.listId
+        val answer = runCatching {
+            CoreJson.decodeFromJsonElement(
+                QuickAddDefaults.serializer(),
+                core.run(
+                    command(
+                        "quickAddDefaults",
+                        *listOfNotNull(
+                            listId?.let { "listId" to it },
+                            chosenAssignee?.let { "assigneeId" to it },
+                            chosenPriority?.let { "priority" to it },
+                        ).toTypedArray(),
+                    ),
+                ),
+            )
+        }.getOrNull() ?: return@work
+        _state.update { it.copy(quickAdd = answer) }
+    }
+
+    /** iOS's QuickAddPickerSheet: a priority for the next task. */
+    fun choosePriority(priority: Int) { chosenPriority = priority; loadQuickAdd() }
+
+    /** …and an assignee; null is "Unassigned", a choice the core spells `unassigned`. */
+    fun chooseAssignee(userId: String?) { chosenAssignee = userId ?: "unassigned"; loadQuickAdd() }
 
     fun reload() = work {
         val listId = _state.value.listId ?: return@work
@@ -117,35 +162,36 @@ class TaskListViewModel(
     /**
      * Add a task from the quick-add bar. `quickAdd` lets the core read `#list`, dates and priority
      * out of the words, as the account's smart parsing says; the reader's language decides which
-     * words those are. Answers whether a task was made.
+     * words those are. Answers the new task's id, or null when none was made.
      */
-    suspend fun create(title: String): Boolean {
+    suspend fun create(title: String): String? {
         val trimmed = title.trim()
-        if (trimmed.isEmpty()) return false
+        if (trimmed.isEmpty()) return null
         val state = _state.value
         val listIds = listOfNotNull(state.listId?.takeUnless { state.isVirtual })
         // In a real list the core applies that list's defaults itself. A virtual list has no row
         // for it to read them from, so the core's own quick-add answer for it is forwarded — in
         // My Tasks that is the reader, without whom the new task would leave the list it was
-        // added to (D25: My Tasks is only what is assigned to you).
-        val assigneeId = if (state.isVirtual && state.listId != null) {
+        // added to (D25: My Tasks is only what is assigned to you). A choice made in the picker
+        // is sent as said; an unchosen priority is left to the words ("!!") and the list.
+        val assigneeId = chosenAssignee ?: if (state.isVirtual && state.listId != null) {
             runCatching {
                 ((core.run(command("quickAddDefaults", "listId" to state.listId)) as? JsonObject)?.get("assigneeId") as? JsonPrimitive)?.contentOrNull
             }.getOrNull()
         } else null
         return try {
-            core.run(
+            val made = core.run(
                 command(
                     "createTask", "title" to trimmed, "listIds" to listIds, "quickAdd" to true, "locale" to locale(),
-                    *listOfNotNull(assigneeId?.let { "assigneeId" to it }).toTypedArray(),
+                    *listOfNotNull(assigneeId?.let { "assigneeId" to it }, chosenPriority?.let { "priority" to it }).toTypedArray(),
                 ),
             )
             reload()
-            true
+            ((made as? JsonObject)?.get("id") as? JsonPrimitive)?.contentOrNull ?: ""
         } catch (failure: CoreFailure) {
-            if (failure.isStillPending) { reload(); return true }
+            if (failure.isStillPending) { reload(); return "" }
             _state.update { it.copy(error = failure.message) }
-            false
+            null
         }
     }
 

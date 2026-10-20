@@ -99,7 +99,7 @@ class SmokeTest {
         compose.onNodeWithContentDescription("Open the sidebar").performClick()
         compose.onNode(hasTestTag("sidebar:l-launch")).performClick()
         compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag("listTitle") and hasText("Launch")).fetchSemanticsNodes().isNotEmpty() }
-        compose.onNodeWithContentDescription("Show as board").performClick()
+        // A list with a board opens on it, as iOS's does (TaskListView 742-746).
         // Columns are 300dp wide; the first two are on a phone's screen (Inbox, Ready).
         waitFor("Ready")
         shot("05-board")

@@ -51,6 +51,17 @@ import com.gracefultools.astrid.ui.tasks.TaskListScreen
 import com.gracefultools.astrid.ui.tasks.TaskListViewModel
 import kotlinx.coroutines.launch
 
+/** iOS's getEmptyStateMessage: what an empty list says, by what kind of list it is. */
+@Composable
+private fun emptyMessage(list: com.gracefultools.astrid.model.ListSummary?, isMyTasks: Boolean): String = when {
+    list == null -> stringResource(R.string.empty_state_default)
+    isMyTasks || list.virtualListType == "my-tasks" -> stringResource(R.string.empty_state_my_tasks, stringResource(R.string.app_name))
+    list.isVirtual == true -> if (list.virtualListType == "today") stringResource(R.string.empty_state_today) else stringResource(R.string.empty_state_default)
+    list.privacy == "PUBLIC" -> stringResource(R.string.empty_state_public_list)
+    list.privacy == "SHARED" -> stringResource(R.string.empty_state_shared_list)
+    else -> stringResource(R.string.empty_state_list_with_name, list.name)
+}
+
 /** The signed-in app: the sidebar drawer over a list, with detail, search and settings pushed on top. */
 @Composable
 fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
@@ -61,8 +72,9 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
     val list by tasks.state.collectAsStateWithLifecycle()
     val boardVm: BoardViewModel = viewModel(factory = factory { BoardViewModel(graph.core) })
     val boardState by boardVm.state.collectAsStateWithLifecycle()
-    // Board or list, per list, on this device — iOS keeps the choice per list too.
-    val boardLists = remember { mutableStateMapOf<String, Boolean>() }
+    // List, messages or board, per list, on this device. A list with a board opens on it, as iOS's
+    // does when a list with a project is selected (TaskListView 742-746).
+    val viewModes = remember { mutableStateMapOf<String, com.gracefultools.astrid.ui.tasks.ViewMode>() }
     val drawer = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -81,7 +93,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
     }
     newTask?.let { text ->
         NewTaskSheet(initial = text, listName = side.selected?.name, onDismiss = { newTask = null }) { title ->
-            scope.launch { if (tasks.create(title)) newTask = null }
+            scope.launch { if (tasks.create(title) != null) newTask = null }
         }
     }
 
@@ -100,15 +112,22 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     side,
                     onSelect = { sidebar.select(it.id); scope.launch { drawer.close() } },
                     onSettings = { scope.launch { drawer.close() }; nav.navigate("settings") },
+                    onSearch = { scope.launch { drawer.close() }; nav.navigate("search") },
+                    onProfile = { scope.launch { drawer.close() }; nav.navigate("profile") },
+                    onToggleFavorite = sidebar::toggleFavorite,
                     onCreate = { sidebar.create(it); scope.launch { drawer.close() } },
                 )
             }
             val listContent: @Composable () -> Unit = {
-                val title = side.selected?.let { if (it.id == side.myTasks?.id) stringResource(R.string.navigation_my_tasks) else it.name } ?: ""
                 val selected = side.selected
-                val onBoard = selected?.projectId != null
-                val showingBoard = onBoard && boardLists[selected!!.id] == true
-                if (showingBoard) LaunchedEffect(selected!!.id) { boardVm.open(selected.id) }
+                val isMyTasks = selected != null && selected.id == side.myTasks?.id
+                val title = selected?.let { if (isMyTasks) stringResource(R.string.navigation_my_tasks) else it.name } ?: ""
+                val hasBoard = selected?.projectId != null
+                // Messages for a real list; My Tasks' virtual channel is AATD-62.
+                val includesMessages = selected != null && selected.isVirtual != true
+                val mode = selected?.let { viewModes[it.id] }
+                    ?: if (hasBoard) com.gracefultools.astrid.ui.tasks.ViewMode.BOARD else com.gracefultools.astrid.ui.tasks.ViewMode.LIST
+                if (mode == com.gracefultools.astrid.ui.tasks.ViewMode.BOARD) LaunchedEffect(selected!!.id) { boardVm.open(selected.id) }
                 (list.statusPicker ?: boardState.statusPicker)?.let { picker ->
                     val fromBoard = boardState.statusPicker != null
                     StatusPicker(
@@ -119,10 +138,11 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                 }
                 TaskListScreen(
                     title = title,
-                    onToggleBoard = if (onBoard) ({ boardLists[selected!!.id] = !showingBoard }) else null,
-                    showingBoard = showingBoard,
+                    viewMode = mode,
+                    hasBoard = hasBoard,
+                    includesMessages = includesMessages,
+                    onViewMode = { next -> selected?.let { viewModes[it.id] = next } },
                     onListSettings = selected?.takeIf { it.isVirtual != true }?.let { list -> { nav.navigate("list/${list.id}") } },
-                    onChat = selected?.takeIf { it.isVirtual != true }?.let { list -> { nav.navigate("chat/${list.id}") } },
                     board = {
                         BoardContent(
                             boardState,
@@ -132,10 +152,16 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                             onDrop = boardVm::drop,
                         )
                     },
+                    messages = {
+                        selected?.let { list ->
+                            val vm: ChatViewModel = viewModel(key = "chat-${list.id}", factory = factory { ChatViewModel(graph.core, list.id) })
+                            com.gracefultools.astrid.ui.chat.ChatPanel(vm)
+                        }
+                    },
+                    emptyMessage = emptyMessage(selected, isMyTasks),
                     state = list,
                     // A permanent sidebar has nothing to open: no button that does nothing.
                     onMenu = if (permanentSidebar) null else ({ scope.launch { drawer.open() } }),
-                    onSearch = { nav.navigate("search") },
                     onOpenTask = openTask,
                     onComplete = { row -> if (row.action == "complete") tasks.setCompleted(row.id, !row.completed) else tasks.leading(row) },
                     onDelete = { tasks.delete(it.id) },
@@ -143,6 +169,9 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onRefresh = tasks::refresh,
                     onLoadMore = tasks::loadMore,
                     onDismissError = tasks::dismissError,
+                    onPickPriority = tasks::choosePriority,
+                    onPickAssignee = tasks::chooseAssignee,
+                    selectedTaskId = paneTaskId,
                 )
             }
             val detailPane: @Composable () -> Unit = {

@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.ui.AppRoot
@@ -29,7 +30,10 @@ class MainActivity : ComponentActivity() {
         handle(intent)
         setContent {
             val theme by graph.preferences.theme.collectAsStateWithLifecycle()
-            AstridTheme(theme) { Root() }
+            AstridTheme(theme) {
+                SystemBars()
+                Root()
+            }
         }
     }
 
@@ -40,7 +44,9 @@ class MainActivity : ComponentActivity() {
         LaunchedEffect(url) {
             url?.let { open(it); signIn.browserOpened() }
         }
-        if (state == SignInState.SignedIn) {
+        if (state == SignInState.Checking) {
+            com.gracefultools.astrid.ui.common.SplashLookalike()
+        } else if (state == SignInState.SignedIn) {
             NotificationPermission()
             AppRoot(graph = graph, onSignedOut = signIn::signedOut, onDeepLink = deepLinks)
         } else {
@@ -50,6 +56,23 @@ class MainActivity : ComponentActivity() {
                 onOpenAgain = { signIn.begin(null) },
                 onCancel = signIn::cancel,
             )
+        }
+    }
+
+    /**
+     * Status and navigation bar icons follow the APP's theme, not the system's, as iOS forces the
+     * interface style to match the theme: dark icons on Ocean and Light, light icons on Dark. The
+     * window behind Compose takes the theme's background too, so Dark never flashes Ocean (AATD-33).
+     */
+    @Composable
+    private fun SystemBars() {
+        val colors = com.gracefultools.astrid.ui.theme.AstridTheme.colors
+        LaunchedEffect(colors.isDark, colors.bgPrimary) {
+            val clear = android.graphics.Color.TRANSPARENT
+            val style = if (colors.isDark) androidx.activity.SystemBarStyle.dark(clear)
+            else androidx.activity.SystemBarStyle.light(clear, clear)
+            enableEdgeToEdge(statusBarStyle = style, navigationBarStyle = style)
+            window.setBackgroundDrawable(android.graphics.drawable.ColorDrawable(colors.bgPrimary.toArgb()))
         }
     }
 
