@@ -17,7 +17,12 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 
-data class SearchState(val query: String = "", val rows: List<TaskRow> = emptyList(), val searched: Boolean = false)
+data class SearchState(
+    val query: String = "",
+    val rows: List<TaskRow> = emptyList(),
+    val searched: Boolean = false,
+    val statusPicker: com.gracefultools.astrid.ui.common.LeadingOutcome.PickStatus? = null,
+)
 
 /**
  * Search over the cache with the web's grammar (`assignee:me priority:high due:week AST-142`) — the
@@ -38,10 +43,35 @@ class SearchViewModel(
         if (query.isBlank()) { _state.value = SearchState(query = query); return }
         pending = work {
             if (debounceMs > 0) delay(debounceMs)
-            val answer = runCatching { core.run(command("searchTasks", "query" to query.trim(), "limit" to 100)) }.getOrNull()
-            if (_state.value.query == query) _state.value = _state.value.copy(rows = rowsOf(answer), searched = true)
+            run(query)
         }
     }
+
+    /** iOS splices each result's subtasks under it (AITD-460); the core does the splice. */
+    private suspend fun run(query: String) {
+        val answer = runCatching { core.run(command("searchTasks", "query" to query.trim(), "limit" to 100, "showSubtasks" to true)) }.getOrNull()
+        if (_state.value.query == query) _state.value = _state.value.copy(rows = rowsOf(answer), searched = true)
+    }
+
+    private val rowActions = com.gracefultools.astrid.ui.common.RowActions(core)
+
+    /** A result's leading control does what it does in the list — complete, pick a status, copy (AATD-31). */
+    fun leading(row: TaskRow) = work {
+        when (val outcome = rowActions.leading(row)) {
+            is com.gracefultools.astrid.ui.common.LeadingOutcome.PickStatus -> _state.value = _state.value.copy(statusPicker = outcome)
+            else -> Unit
+        }
+        if (_state.value.query.isNotBlank()) run(_state.value.query)
+    }
+
+    fun pickStatus(columnId: String) = work {
+        val picker = _state.value.statusPicker ?: return@work
+        _state.value = _state.value.copy(statusPicker = null)
+        rowActions.setStatus(picker.taskId, columnId)
+        if (_state.value.query.isNotBlank()) run(_state.value.query)
+    }
+
+    fun dismissStatusPicker() { _state.value = _state.value.copy(statusPicker = null) }
 
     companion object {
         /** Search answers a window of rows, or a bare array of them. */

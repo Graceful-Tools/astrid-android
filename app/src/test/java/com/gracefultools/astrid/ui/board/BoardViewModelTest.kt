@@ -45,4 +45,16 @@ class BoardViewModelTest {
         assertEquals(JsonPrimitive(0), sent["index"])
         assertEquals(JsonPrimitive("l1"), sent["listId"])
     }
+
+    @Test
+    fun `AATD-45 a column's quick add makes the card in that column of this board`() = kotlinx.coroutines.test.runTest {
+        val core = com.gracefultools.astrid.FakeCore().apply { answer("board", """{"columns":[]}""") }
+        val vm = BoardViewModel(core, kotlinx.coroutines.test.UnconfinedTestDispatcher())
+        vm.open("l-launch")
+        org.junit.Assert.assertTrue(vm.addCard("doing", "  Ship it "))
+        val sent = core.last("addBoardCard")!!
+        org.junit.Assert.assertEquals(kotlinx.serialization.json.JsonPrimitive("l-launch"), sent["listId"])
+        org.junit.Assert.assertEquals(kotlinx.serialization.json.JsonPrimitive("doing"), sent["columnId"])
+        org.junit.Assert.assertEquals(kotlinx.serialization.json.JsonPrimitive("Ship it"), sent["title"])
+    }
 }

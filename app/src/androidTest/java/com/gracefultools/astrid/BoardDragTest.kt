@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeLeft
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -27,21 +28,26 @@ class BoardDragTest {
         compose.onNodeWithContentDescription("Open the sidebar").performClick()
         compose.onNode(hasTestTag("sidebar:l-launch")).performClick()
         compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag("listTitle") and hasText("Launch")).fetchSemanticsNodes().isNotEmpty() }
-        // A list with a board opens on it, as iOS's does (TaskListView 742-746).
+        // A list with a board opens on it, as iOS's does, one column to a phone's screen (iOS's
+        // boardColumnsVisible): Inbox first. Page to Ready, where "Plan launch" sits.
+        compose.onNode(hasTestTag("board")).performTouchInput { swipeLeft() }
         waitFor("Plan launch")
-        val columnWidth = with(compose.density) { 312.dp.toPx() }
+        val width = compose.onNode(hasTestTag("board")).fetchSemanticsNode().boundsInRoot.width
 
-        val before = compose.onNode(hasText("Plan launch")).fetchSemanticsNode().boundsInRoot
-        assertTrue("starts in Ready, the second column", before.left > columnWidth / 2)
-
+        // Press, hold, carry it to the left edge and keep it there: the board pages back to Inbox
+        // under the finger, and the drop lands the card there.
         compose.onNode(hasText("Plan launch")).performTouchInput {
             down(center)
             advanceEventTime(viewConfiguration.longPressTimeoutMillis + 200)
-            repeat(10) { moveBy(Offset(-columnWidth / 10, 0f)); advanceEventTime(16) }
-            up()
+            repeat(12) { moveBy(Offset(-(center.x - 8f) / 12, 0f)); advanceEventTime(16) }
         }
+        compose.mainClock.advanceTimeBy(2_500)
+        compose.onNode(hasTestTag("board")).performTouchInput { up() }
+
+        // Inbox is on screen again, holding the card.
         compose.waitUntil(10_000) {
-            compose.onAllNodes(hasText("Plan launch")).fetchSemanticsNodes().any { it.boundsInRoot.left < columnWidth / 2 }
+            compose.onAllNodes(hasText("Inbox")).fetchSemanticsNodes().any { it.boundsInRoot.left in 0f..(width / 2) } &&
+                compose.onAllNodes(hasText("Plan launch")).fetchSemanticsNodes().isNotEmpty()
         }
     }
 }

@@ -102,4 +102,18 @@ class BoardViewModel(private val core: Core, dispatcher: CoroutineDispatcher = D
 
     fun dismissError() = _state.update { it.copy(error = null) }
 
+    /** iOS's quick add at the foot of a column: a card made straight into that column (addBoardCard). */
+    suspend fun addCard(columnId: String, title: String): Boolean {
+        val listId = _state.value.listId ?: return false
+        val trimmed = title.trim()
+        if (trimmed.isEmpty()) return false
+        return try {
+            core.run(command("addBoardCard", "listId" to listId, "columnId" to columnId, "title" to trimmed))
+            reload()
+            true
+        } catch (failure: com.gracefultools.astrid.core.CoreFailure) {
+            if (failure.isStillPending) { reload(); true } else { _state.update { it.copy(error = failure.message) }; false }
+        }
+    }
+
 }

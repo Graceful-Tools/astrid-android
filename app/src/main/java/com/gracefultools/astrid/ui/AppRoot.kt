@@ -104,21 +104,29 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
             val twoPane = width >= 600
             val permanentSidebar = width >= 840
             var paneTaskId by rememberSaveable { mutableStateOf<String?>(null) }
+            // iOS's search is a mode of the main pane, entered from the sidebar's magnifier.
+            var searching by rememberSaveable { mutableStateOf(false) }
             val openTask: (String) -> Unit = { id -> if (twoPane) paneTaskId = id else nav.navigate("task/$id") }
             LaunchedEffect(side.selectedId) { paneTaskId = null }
 
             val sidebarContent: @Composable () -> Unit = {
                 SidebarDrawer(
                     side,
-                    onSelect = { sidebar.select(it.id); scope.launch { drawer.close() } },
+                    onSelect = { searching = false; sidebar.select(it.id); scope.launch { drawer.close() } },
                     onSettings = { scope.launch { drawer.close() }; nav.navigate("settings") },
-                    onSearch = { scope.launch { drawer.close() }; nav.navigate("search") },
+                    onSearch = { scope.launch { drawer.close() }; searching = true },
                     onProfile = { scope.launch { drawer.close() }; nav.navigate("profile") },
                     onToggleFavorite = sidebar::toggleFavorite,
                     onCreate = { sidebar.create(it); scope.launch { drawer.close() } },
                 )
             }
-            val listContent: @Composable () -> Unit = {
+            val listContent: @Composable () -> Unit = if (searching) ({
+                val search: SearchViewModel = viewModel(factory = factory { SearchViewModel(graph.core) })
+                SearchScreen(
+                    search, onBack = { searching = false }, onOpenTask = openTask,
+                    onMenu = if (permanentSidebar) null else ({ scope.launch { drawer.open() } }),
+                )
+            }) else ({
                 val selected = side.selected
                 val isMyTasks = selected != null && selected.id == side.myTasks?.id
                 val title = selected?.let { if (isMyTasks) stringResource(R.string.navigation_my_tasks) else it.name } ?: ""
@@ -150,6 +158,9 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                             onMove = boardVm::moveTo,
                             onComplete = boardVm::leading,
                             onDrop = boardVm::drop,
+                            onAddCard = boardVm::addCard,
+                            onDismissError = boardVm::dismissError,
+                            selectedTaskId = paneTaskId,
                         )
                     },
                     messages = {
@@ -173,7 +184,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onPickAssignee = tasks::chooseAssignee,
                     selectedTaskId = paneTaskId,
                 )
-            }
+            })
             val detailPane: @Composable () -> Unit = {
                 val id = paneTaskId
                 if (id == null) {

@@ -15,6 +15,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeLeft
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Rule
 import org.junit.Test
@@ -100,8 +102,11 @@ class SmokeTest {
         compose.onNode(hasTestTag("sidebar:l-launch")).performClick()
         compose.waitUntil(10_000) { compose.onAllNodes(hasTestTag("listTitle") and hasText("Launch")).fetchSemanticsNodes().isNotEmpty() }
         // A list with a board opens on it, as iOS's does (TaskListView 742-746).
-        // Columns are 300dp wide; the first two are on a phone's screen (Inbox, Ready).
-        waitFor("Ready")
+        // One column to a phone's screen, as iOS: Inbox first, then page to Ready.
+        waitFor("Inbox")
+        compose.onNode(hasTestTag("board")).performTouchInput { swipeLeft() }
+        shot("05a-board-paged")
+        waitFor("Write copy")
         shot("05-board")
         // A board card's leading control opens the status picker (the core's `openPicker`).
         compose.onNodeWithContentDescription("Complete Write copy").performClick()
