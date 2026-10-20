@@ -53,6 +53,9 @@ class MainActivity : ComponentActivity() {
             com.gracefultools.astrid.ui.common.SplashLookalike()
         } else if (state == SignInState.SignedIn) {
             com.gracefultools.astrid.platform.NotificationPrompting(graph.notificationPrompt, graph.preferences)
+            if (!(application as AstridApplication).suppressesInterruptingPrompts) {
+                com.gracefultools.astrid.platform.ReviewPrompting(graph.reviewPrompt)
+            }
             AppRoot(graph = graph, onSignedOut = signIn::signedOut, onDeepLink = deepLinks)
         } else {
             SignInScreen(

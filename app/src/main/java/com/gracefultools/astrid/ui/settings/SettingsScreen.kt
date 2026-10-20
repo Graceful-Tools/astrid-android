@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Brush
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.Language
@@ -165,6 +166,12 @@ fun SettingsScreen(
             ValueRow(stringResource(R.string.settings_build_label), BuildConfig.VERSION_CODE.toString())
             FormDivider(inset = false)
             ValueRow(stringResource(R.string.settings_core_label), vm.coreVersion)
+            FormDivider(inset = false)
+            // iOS's "Send Feedback" route (ReviewPromptManager.openSupportEmail), reachable here too (AATD-63).
+            val context = androidx.compose.ui.platform.LocalContext.current
+            ButtonRow(stringResource(R.string.review_send_feedback), icon = Icons.Filled.Email) {
+                com.gracefultools.astrid.platform.sendFeedback(context)
+            }
         }
 
         FormSection {

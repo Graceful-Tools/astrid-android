@@ -23,6 +23,12 @@ open class AstridApplication : Application() {
     /** The real graph. The instrumented tests replace it with an offline, seeded one. */
     protected open fun makeGraph(): AppGraph = AppGraph.start(this)
 
+    /**
+     * Whether prompts that cover the screen unasked (the review ask) stay away — a UI-test run, as
+     * iOS's UITestSession.suppressesInterruptingPrompts: an alert over the app makes it untappable.
+     */
+    open val suppressesInterruptingPrompts: Boolean = false
+
     /** A UI-test build never reaches the network, so it schedules nothing. */
     protected open val schedulesBackgroundWork: Boolean = true
 }
