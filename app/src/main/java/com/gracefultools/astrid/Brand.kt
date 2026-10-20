@@ -22,6 +22,16 @@ object Brand {
     /** iOS `Brand.supportEmail`: where feedback mail goes. */
     val supportEmail: String = BuildConfig.ASTRID_SUPPORT_EMAIL.trim().ifEmpty { "support@astrid.cc" }
 
+    /** iOS `Brand.inboundTaskEmail`: the address users email to create a task (AATD-73). */
+    val inboundTaskEmail: String = BuildConfig.ASTRID_INBOUND_TASK_EMAIL.trim().ifEmpty { "remindme@astrid.cc" }
+
+    /**
+     * iOS `Brand.agentEmailDomain`: the domain of agent identities (`claude@astrid.cc`), separate from
+     * the host because the server lets them differ. Only for display; an agent's real address is
+     * whatever the server returned (AATD-73).
+     */
+    val agentEmailDomain: String = BuildConfig.ASTRID_AGENT_EMAIL_DOMAIN.trim().trimStart('@').ifEmpty { "astrid.cc" }
+
     /** A page on the server: `webUrl("/settings/account")` → `https://astrid.cc/settings/account`. */
     fun webUrl(path: String, base: String = baseUrl): String = base + "/" + path.trimStart('/')
 

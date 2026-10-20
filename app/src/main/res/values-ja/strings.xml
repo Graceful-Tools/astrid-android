@@ -253,10 +253,10 @@
     <string name="settings_appearance_list_images_off_description">オフにすると、各リストは代わりに色で表示されます。</string>
     <string name="settings_appearance_list_images_label">リストの画像を表示</string>
     <string name="settings_appearance_email_to_task">メールからタスク作成</string>
-    <string name="settings_appearance_email_to_task_footer">remindme@astrid.cc にメールを送信してタスクを作成します</string>
-    <string name="settings_appearance_email_to_task_self">自分へのタスク: remindme@astrid.cc 宛に送信</string>
-    <string name="settings_appearance_email_to_task_assigned">割り当てられたタスク: 1人の受信者と remindme@astrid.cc をCCに含める</string>
-    <string name="settings_appearance_email_to_task_group">グループタスク: 複数の受信者と remindme@astrid.cc をCCに含める</string>
+    <string name="settings_appearance_email_to_task_footer">%1$s にメールを送信してタスクを作成します</string>
+    <string name="settings_appearance_email_to_task_self">自分へのタスク: %1$s 宛に送信</string>
+    <string name="settings_appearance_email_to_task_assigned">割り当てられたタスク: 1人の受信者と %1$s をCCに含める</string>
+    <string name="settings_appearance_email_to_task_group">グループタスク: 複数の受信者と %1$s をCCに含める</string>
     <string name="settings_appearance_email_to_task_subject">件名がタスクのタイトルになります</string>
     <string name="settings_appearance_email_to_task_body">本文がタスクの説明になります</string>
     <string name="settings_device_language">デバイスの言語</string>
@@ -437,7 +437,7 @@
     <string name="settings_openclaw_agent_name">エージェント名</string>
     <string name="settings_openclaw_agent_name_placeholder">buddy</string>
     <string name="settings_openclaw_agent_name_hint">エージェントの名前を選択（例：buddy、helper、dev-bot）</string>
-    <string name="settings_openclaw_agent_name_preview">%1$s.oc@astrid.cc</string>
+    <string name="settings_openclaw_agent_name_preview">%1$s.oc@%2$s</string>
     <string name="settings_openclaw_create_agent">エージェントを作成</string>
     <string name="settings_openclaw_credentials_title">エージェント作成完了</string>
     <string name="settings_openclaw_credentials_warning">この認証情報を今すぐ保存してください。クライアントシークレットは再表示されません。</string>

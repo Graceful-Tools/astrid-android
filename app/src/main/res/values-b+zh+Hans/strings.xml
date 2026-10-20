@@ -253,10 +253,10 @@
     <string name="settings_appearance_list_images_off_description">关闭后，每个列表改为显示其颜色。</string>
     <string name="settings_appearance_list_images_label">显示列表图片</string>
     <string name="settings_appearance_email_to_task">邮件转任务</string>
-    <string name="settings_appearance_email_to_task_footer">通过发送邮件到 remindme@astrid.cc 来创建任务</string>
-    <string name="settings_appearance_email_to_task_self">个人任务：发送到 remindme@astrid.cc</string>
-    <string name="settings_appearance_email_to_task_assigned">指派任务：抄送 remindme@astrid.cc 并包含一名收件人</string>
-    <string name="settings_appearance_email_to_task_group">团队任务：抄送 remindme@astrid.cc 并包含多名收件人</string>
+    <string name="settings_appearance_email_to_task_footer">通过发送邮件到 %1$s 来创建任务</string>
+    <string name="settings_appearance_email_to_task_self">个人任务：发送到 %1$s</string>
+    <string name="settings_appearance_email_to_task_assigned">指派任务：抄送 %1$s 并包含一名收件人</string>
+    <string name="settings_appearance_email_to_task_group">团队任务：抄送 %1$s 并包含多名收件人</string>
     <string name="settings_appearance_email_to_task_subject">邮件主题将成为任务标题</string>
     <string name="settings_appearance_email_to_task_body">邮件正文将成为任务描述</string>
     <string name="settings_device_language">设备语言</string>
@@ -437,7 +437,7 @@
     <string name="settings_openclaw_agent_name">代理名称</string>
     <string name="settings_openclaw_agent_name_placeholder">buddy</string>
     <string name="settings_openclaw_agent_name_hint">为代理选择一个名称（例如 buddy、helper、dev-bot）</string>
-    <string name="settings_openclaw_agent_name_preview">%1$s.oc@astrid.cc</string>
+    <string name="settings_openclaw_agent_name_preview">%1$s.oc@%2$s</string>
     <string name="settings_openclaw_create_agent">创建代理</string>
     <string name="settings_openclaw_credentials_title">代理已创建</string>
     <string name="settings_openclaw_credentials_warning">请立即保存这些凭证。客户端密钥将不会再次显示。</string>

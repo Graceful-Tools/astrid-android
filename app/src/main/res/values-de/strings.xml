@@ -253,10 +253,10 @@
     <string name="settings_appearance_list_images_off_description">Wenn aus, zeigt jede Liste stattdessen ihre Farbe.</string>
     <string name="settings_appearance_list_images_label">Listenbilder anzeigen</string>
     <string name="settings_appearance_email_to_task">E-Mail-zu-Aufgabe</string>
-    <string name="settings_appearance_email_to_task_footer">Erstellen Sie Aufgaben, indem Sie E-Mails an remindme@astrid.cc senden</string>
-    <string name="settings_appearance_email_to_task_self">Eigene Aufgabe: Senden AN remindme@astrid.cc</string>
-    <string name="settings_appearance_email_to_task_assigned">Zugewiesene Aufgabe: CC an remindme@astrid.cc mit einem Empfänger</string>
-    <string name="settings_appearance_email_to_task_group">Gruppenaufgabe: CC an remindme@astrid.cc mit mehreren Empfängern</string>
+    <string name="settings_appearance_email_to_task_footer">Erstellen Sie Aufgaben, indem Sie E-Mails an %1$s senden</string>
+    <string name="settings_appearance_email_to_task_self">Eigene Aufgabe: Senden AN %1$s</string>
+    <string name="settings_appearance_email_to_task_assigned">Zugewiesene Aufgabe: CC an %1$s mit einem Empfänger</string>
+    <string name="settings_appearance_email_to_task_group">Gruppenaufgabe: CC an %1$s mit mehreren Empfängern</string>
     <string name="settings_appearance_email_to_task_subject">Betreff wird zum Aufgabentitel</string>
     <string name="settings_appearance_email_to_task_body">Inhalt wird zur Aufgabenbeschreibung</string>
     <string name="settings_device_language">Gerätesprache</string>
@@ -437,7 +437,7 @@
     <string name="settings_openclaw_agent_name">Agentenname</string>
     <string name="settings_openclaw_agent_name_placeholder">buddy</string>
     <string name="settings_openclaw_agent_name_hint">Wählen Sie einen Namen für Ihren Agenten (z.B. buddy, helper, dev-bot)</string>
-    <string name="settings_openclaw_agent_name_preview">%1$s.oc@astrid.cc</string>
+    <string name="settings_openclaw_agent_name_preview">%1$s.oc@%2$s</string>
     <string name="settings_openclaw_create_agent">Agent erstellen</string>
     <string name="settings_openclaw_credentials_title">Agent erstellt</string>
     <string name="settings_openclaw_credentials_warning">Speichern Sie diese Zugangsdaten jetzt. Das Client-Secret wird nicht erneut angezeigt.</string>

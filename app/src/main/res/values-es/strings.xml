@@ -253,10 +253,10 @@
     <string name="settings_appearance_list_images_off_description">Si está desactivado, cada lista muestra su color.</string>
     <string name="settings_appearance_list_images_label">Mostrar imágenes de listas</string>
     <string name="settings_appearance_email_to_task">Email-a-Tarea</string>
-    <string name="settings_appearance_email_to_task_footer">Crea tareas enviando correos a remindme@astrid.cc</string>
-    <string name="settings_appearance_email_to_task_self">Tarea propia: Enviar A remindme@astrid.cc</string>
-    <string name="settings_appearance_email_to_task_assigned">Tarea asignada: CC a remindme@astrid.cc con un destinatario</string>
-    <string name="settings_appearance_email_to_task_group">Tarea grupal: CC a remindme@astrid.cc con múltiples destinatarios</string>
+    <string name="settings_appearance_email_to_task_footer">Crea tareas enviando correos a %1$s</string>
+    <string name="settings_appearance_email_to_task_self">Tarea propia: Enviar A %1$s</string>
+    <string name="settings_appearance_email_to_task_assigned">Tarea asignada: CC a %1$s con un destinatario</string>
+    <string name="settings_appearance_email_to_task_group">Tarea grupal: CC a %1$s con múltiples destinatarios</string>
     <string name="settings_appearance_email_to_task_subject">El asunto se convierte en el título de la tarea</string>
     <string name="settings_appearance_email_to_task_body">El cuerpo se convierte en la descripción de la tarea</string>
     <string name="settings_device_language">Idioma del dispositivo</string>
@@ -437,7 +437,7 @@
     <string name="settings_openclaw_agent_name">Nombre del Agente</string>
     <string name="settings_openclaw_agent_name_placeholder">buddy</string>
     <string name="settings_openclaw_agent_name_hint">Elige un nombre para tu agente (ej., buddy, helper, dev-bot)</string>
-    <string name="settings_openclaw_agent_name_preview">%1$s.oc@astrid.cc</string>
+    <string name="settings_openclaw_agent_name_preview">%1$s.oc@%2$s</string>
     <string name="settings_openclaw_create_agent">Crear Agente</string>
     <string name="settings_openclaw_credentials_title">Agente Creado</string>
     <string name="settings_openclaw_credentials_warning">Guarda estas credenciales ahora. El secreto del cliente no se mostrará de nuevo.</string>

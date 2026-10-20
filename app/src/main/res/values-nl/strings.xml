@@ -253,10 +253,10 @@
     <string name="settings_appearance_list_images_off_description">Uit: elke lijst toont in plaats daarvan zijn kleur.</string>
     <string name="settings_appearance_list_images_label">Lijstafbeeldingen tonen</string>
     <string name="settings_appearance_email_to_task">Email-to-Task</string>
-    <string name="settings_appearance_email_to_task_footer">Create tasks by sending emails to remindme@astrid.cc</string>
-    <string name="settings_appearance_email_to_task_self">Self-task: Send TO remindme@astrid.cc</string>
-    <string name="settings_appearance_email_to_task_assigned">Assigned task: CC remindme@astrid.cc with one recipient</string>
-    <string name="settings_appearance_email_to_task_group">Group task: CC remindme@astrid.cc with multiple recipients</string>
+    <string name="settings_appearance_email_to_task_footer">Create tasks by sending emails to %1$s</string>
+    <string name="settings_appearance_email_to_task_self">Self-task: Send TO %1$s</string>
+    <string name="settings_appearance_email_to_task_assigned">Assigned task: CC %1$s with one recipient</string>
+    <string name="settings_appearance_email_to_task_group">Group task: CC %1$s with multiple recipients</string>
     <string name="settings_appearance_email_to_task_subject">Subject becomes task title</string>
     <string name="settings_appearance_email_to_task_body">Body becomes task description</string>
     <string name="settings_device_language">Apparaattaal</string>
@@ -437,7 +437,7 @@
     <string name="settings_openclaw_agent_name">Agentnaam</string>
     <string name="settings_openclaw_agent_name_placeholder">buddy</string>
     <string name="settings_openclaw_agent_name_hint">Kies een naam voor je agent (bijv. buddy, helper, dev-bot)</string>
-    <string name="settings_openclaw_agent_name_preview">%1$s.oc@astrid.cc</string>
+    <string name="settings_openclaw_agent_name_preview">%1$s.oc@%2$s</string>
     <string name="settings_openclaw_create_agent">Agent Aanmaken</string>
     <string name="settings_openclaw_credentials_title">Agent Aangemaakt</string>
     <string name="settings_openclaw_credentials_warning">Sla deze inloggegevens nu op. Het client secret wordt niet meer getoond.</string>

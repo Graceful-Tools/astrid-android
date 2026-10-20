@@ -253,10 +253,10 @@
     <string name="settings_appearance_list_images_off_description">Désactivé : chaque liste affiche sa couleur à la place.</string>
     <string name="settings_appearance_list_images_label">Afficher les images des listes</string>
     <string name="settings_appearance_email_to_task">Email-vers-Tâche</string>
-    <string name="settings_appearance_email_to_task_footer">Créez des tâches en envoyant des e-mails à remindme@astrid.cc</string>
-    <string name="settings_appearance_email_to_task_self">Tâche personnelle : Envoyer À remindme@astrid.cc</string>
-    <string name="settings_appearance_email_to_task_assigned">Tâche assignée : CC à remindme@astrid.cc avec un destinataire</string>
-    <string name="settings_appearance_email_to_task_group">Tâche de groupe : CC à remindme@astrid.cc avec plusieurs destinataires</string>
+    <string name="settings_appearance_email_to_task_footer">Créez des tâches en envoyant des e-mails à %1$s</string>
+    <string name="settings_appearance_email_to_task_self">Tâche personnelle : Envoyer À %1$s</string>
+    <string name="settings_appearance_email_to_task_assigned">Tâche assignée : CC à %1$s avec un destinataire</string>
+    <string name="settings_appearance_email_to_task_group">Tâche de groupe : CC à %1$s avec plusieurs destinataires</string>
     <string name="settings_appearance_email_to_task_subject">L\'objet devient le titre de la tâche</string>
     <string name="settings_appearance_email_to_task_body">Le corps devient la description de la tâche</string>
     <string name="settings_device_language">Langue de l\'appareil</string>
@@ -437,7 +437,7 @@
     <string name="settings_openclaw_agent_name">Nom de l\'Agent</string>
     <string name="settings_openclaw_agent_name_placeholder">buddy</string>
     <string name="settings_openclaw_agent_name_hint">Choisissez un nom pour votre agent (ex. buddy, helper, dev-bot)</string>
-    <string name="settings_openclaw_agent_name_preview">%1$s.oc@astrid.cc</string>
+    <string name="settings_openclaw_agent_name_preview">%1$s.oc@%2$s</string>
     <string name="settings_openclaw_create_agent">Créer l\'Agent</string>
     <string name="settings_openclaw_credentials_title">Agent Créé</string>
     <string name="settings_openclaw_credentials_warning">Enregistrez ces identifiants maintenant. Le secret client ne sera plus affiché.</string>

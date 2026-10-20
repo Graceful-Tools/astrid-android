@@ -253,10 +253,10 @@
     <string name="settings_appearance_list_images_off_description">끄면 각 목록에 이미지 대신 색상이 표시됩니다.</string>
     <string name="settings_appearance_list_images_label">목록 이미지 표시</string>
     <string name="settings_appearance_email_to_task">Email-to-Task</string>
-    <string name="settings_appearance_email_to_task_footer">Create tasks by sending emails to remindme@astrid.cc</string>
-    <string name="settings_appearance_email_to_task_self">Self-task: Send TO remindme@astrid.cc</string>
-    <string name="settings_appearance_email_to_task_assigned">Assigned task: CC remindme@astrid.cc with one recipient</string>
-    <string name="settings_appearance_email_to_task_group">Group task: CC remindme@astrid.cc with multiple recipients</string>
+    <string name="settings_appearance_email_to_task_footer">Create tasks by sending emails to %1$s</string>
+    <string name="settings_appearance_email_to_task_self">Self-task: Send TO %1$s</string>
+    <string name="settings_appearance_email_to_task_assigned">Assigned task: CC %1$s with one recipient</string>
+    <string name="settings_appearance_email_to_task_group">Group task: CC %1$s with multiple recipients</string>
     <string name="settings_appearance_email_to_task_subject">Subject becomes task title</string>
     <string name="settings_appearance_email_to_task_body">Body becomes task description</string>
     <string name="settings_device_language">기기 언어</string>
@@ -437,7 +437,7 @@
     <string name="settings_openclaw_agent_name">에이전트 이름</string>
     <string name="settings_openclaw_agent_name_placeholder">buddy</string>
     <string name="settings_openclaw_agent_name_hint">에이전트 이름을 선택하세요 (예: buddy, helper, dev-bot)</string>
-    <string name="settings_openclaw_agent_name_preview">%1$s.oc@astrid.cc</string>
+    <string name="settings_openclaw_agent_name_preview">%1$s.oc@%2$s</string>
     <string name="settings_openclaw_create_agent">에이전트 생성</string>
     <string name="settings_openclaw_credentials_title">에이전트 생성 완료</string>
     <string name="settings_openclaw_credentials_warning">지금 이 자격 증명을 저장하세요. 클라이언트 시크릿은 다시 표시되지 않습니다.</string>

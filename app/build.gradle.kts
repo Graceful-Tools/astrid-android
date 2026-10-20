@@ -22,6 +22,8 @@ android {
         // every value is hosted Astrid's, so the default build is unchanged (AATD-71).
         brandField("ASTRID_BASE_URL", "astridBaseUrl", "https://astrid.cc")
         brandField("ASTRID_SUPPORT_EMAIL", "astridSupportEmail", "support@astrid.cc")
+        brandField("ASTRID_INBOUND_TASK_EMAIL", "astridInboundTaskEmail", "remindme@astrid.cc")
+        brandField("ASTRID_AGENT_EMAIL_DOMAIN", "astridAgentEmailDomain", "astrid.cc")
     }
 
     // A real key comes from the environment (CI secrets, or keystore.properties kept out of git).

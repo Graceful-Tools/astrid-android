@@ -227,7 +227,7 @@ private fun AgentSection(vm: AgentsViewModel, state: AgentsState, agent: HubAgen
                     Text(agent.name, style = TextStyles.body, color = colors.textPrimary)
                     if (!vm.isConfigured(agent) && agent.mode != "off") Caption2(stringResource(R.string.settings_agents_needs_setup), Warning)
                 }
-                Caption2(agent.email ?: "${agent.id}@astrid.cc")
+                Caption2(agent.email ?: "${agent.id}@${Brand.agentEmailDomain}")
             }
             if (state.savingAgentId == agent.id) SmallSpinner()
         }
@@ -718,7 +718,7 @@ private fun RegisterAgentSheet(vm: CustomAgentsViewModel, state: CustomAgentsSta
         }
         if (name.isNotBlank()) {
             FormSection {
-                Text(stringResource(R.string.settings_openclaw_agent_name_preview, name.trim()), style = TextStyles.body, fontFamily = FontFamily.Monospace, color = Success)
+                Text(stringResource(R.string.settings_openclaw_agent_name_preview, name.trim(), Brand.agentEmailDomain), style = TextStyles.body, fontFamily = FontFamily.Monospace, color = Success)
             }
         }
         state.registerError?.let { FormSection { ProblemLabel(it) } }
