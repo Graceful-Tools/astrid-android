@@ -291,7 +291,7 @@ private fun ListHeader(
             )
         }
         if (onFilter != null) HeaderButton(Icons.Outlined.FilterList, stringResource(R.string.my_tasks_filters_title), onFilter)
-        else if (onListSettings != null) HeaderButton(Icons.Outlined.Settings, stringResource(R.string.lists_settings), onListSettings)
+        else if (onListSettings != null) HeaderButton(Icons.Outlined.Settings, stringResource(R.string.lists_list_settings), onListSettings)
     }
 }
 

@@ -21,8 +21,6 @@ import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.People
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -60,12 +58,10 @@ fun ListSettingsScreen(
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
     val colors = AstridTheme.colors
-    val snackbar = remember { SnackbarHostState() }
     var tabIndex by rememberSaveable { androidx.compose.runtime.mutableIntStateOf(0) }
     BackHandler(onBack = onBack)
     DisposableEffect(Unit) { onDispose { vm.flushEdits() } }
     LaunchedEffect(state.gone) { if (state.gone) onGone() }
-    LaunchedEffect(state.error) { state.error?.let { snackbar.showSnackbar(it); vm.dismissError() } }
     val tabs = state.tabs
     val tab = tabs.getOrElse(tabIndex) { ListSettingsTab.FILTERS }
 
@@ -93,7 +89,11 @@ fun ListSettingsScreen(
                 }
             }
         }
-        SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding())
+        // iOS's AppErrorBanner, as every screen shows a refusal (AATD-33).
+        state.error?.let { message ->
+            com.gracefultools.astrid.ui.common.AppErrorBanner(message, vm::dismissError, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(bottom = com.gracefultools.astrid.ui.theme.Spacing.s16))
+            LaunchedEffect(message) { kotlinx.coroutines.delay(6_000); vm.dismissError() }
+        }
     }
 }
 

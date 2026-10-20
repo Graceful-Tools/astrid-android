@@ -54,5 +54,41 @@ class AccessibilityTest {
         compose.onNode(hasText("Water plants")).performClick()
         compose.waitUntil(10_000) { compose.onAllNodesWithText("Description").fetchSemanticsNodes().isNotEmpty() }
         assertEveryTappableIsLabelled("detail")
+        androidx.test.espresso.Espresso.pressBack()
+
+        // AATD-64: the screens iOS parity added — search, settings and its pages, profile, list settings.
+        compose.onNodeWithContentDescription("Open the sidebar").performClick()
+        compose.onNode(hasTestTag("sidebar:search")).performClick()
+        compose.waitForIdle()
+        assertEveryTappableIsLabelled("search")
+        androidx.test.espresso.Espresso.closeSoftKeyboard()
+        androidx.test.espresso.Espresso.pressBack()
+
+        compose.onNodeWithContentDescription("Open the sidebar").performClick()
+        compose.onNode(hasTestTag("sidebar:settings")).performClick()
+        compose.waitUntil(10_000) { compose.onAllNodesWithText("Reminders").fetchSemanticsNodes().isNotEmpty() }
+        assertEveryTappableIsLabelled("settings")
+        for (page in listOf("Reminders", "Appearance")) {
+            compose.onNode(hasText(page) and androidx.compose.ui.test.hasClickAction()).performClick()
+            compose.waitForIdle()
+            assertEveryTappableIsLabelled("settings/$page")
+            androidx.test.espresso.Espresso.pressBack()
+        }
+        androidx.test.espresso.Espresso.pressBack()
+
+        compose.onNodeWithContentDescription("Open the sidebar").performClick()
+        compose.onNode(hasTestTag("sidebar:profile")).performClick()
+        compose.waitForIdle()
+        assertEveryTappableIsLabelled("profile")
+        androidx.test.espresso.Espresso.pressBack()
+
+        compose.onNodeWithContentDescription("Open the sidebar").performClick()
+        compose.onNode(hasTestTag("sidebar:l-home")).performClick()
+        compose.waitUntil(10_000) { compose.onAllNodes(hasContentDescriptionExactly("List Settings")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNode(hasContentDescriptionExactly("List Settings")).performClick()
+        compose.waitForIdle()
+        assertEveryTappableIsLabelled("list settings")
     }
+
+    private fun hasContentDescriptionExactly(text: String) = androidx.compose.ui.test.hasContentDescription(text)
 }
