@@ -87,11 +87,13 @@ class TaskListViewModel(
 
     private var featuredList: JsonObject? = null
 
-    /** `rowsForList` for the open list, a featured one carrying its own shape. */
-    private fun rowsCommand(listId: String, offset: Int, limit: Int) = command(
-        "rowsForList", "listId" to listId, "offset" to offset, "limit" to limit,
-        *listOfNotNull(featuredList?.let { "list" to it }).toTypedArray(),
-    )
+    /**
+     * The open list's rows. A featured list's come from `featuredRows` (core e2d0534): its tasks
+     * fetched from the server, never cached, someone else's read-only — iOS's featuredListTasks.
+     */
+    private fun rowsCommand(listId: String, offset: Int, limit: Int) = featuredList?.let { list ->
+        command("featuredRows", "listId" to listId, "list" to list)
+    } ?: command("rowsForList", "listId" to listId, "offset" to offset, "limit" to limit)
 
     // What the person picked in the quick-add picker; null = not said, so the list's default stands.
     private var chosenPriority: Int? = null

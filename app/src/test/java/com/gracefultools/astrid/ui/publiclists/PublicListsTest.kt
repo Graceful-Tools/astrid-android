@@ -76,11 +76,11 @@ class PublicListsTest {
     }
 
     @Test
-    fun `AATD-46 a featured list's rows ask the core with the list itself, which the cache does not hold`() = runTest {
-        val core = FakeCore().apply { answer("rowsForList", """{"total":1,"rows":[{"id":"t9","title":"Dune","action":"copy","leading":{"kind":"copy"}}]}""") }
+    fun `AATD-46 a featured list's rows come from featuredRows, with the list itself, which the cache does not hold`() = runTest {
+        val core = FakeCore().apply { answer("featuredRows", """{"total":1,"rows":[{"id":"t9","title":"Dune","action":"copy","leading":{"kind":"copy"}}]}""") }
         val vm = TaskListViewModel(core, UnconfinedTestDispatcher(), locale = { "en-US" })
         vm.open("p1", featured = PublicListSummary(id = "p1", name = "Reading", owner = PublicListOwner("o1"), taskCount = 12))
-        val list = core.last("rowsForList")!!["list"] as JsonObject
+        val list = core.last("featuredRows")!!["list"] as JsonObject
         assertEquals(JsonPrimitive("p1"), list["id"])
         assertEquals(JsonPrimitive("PUBLIC"), list["privacy"])
         assertEquals(JsonPrimitive("o1"), list["ownerId"])
@@ -101,6 +101,7 @@ class PublicListsTest {
     fun `AATD-46 Copy List copies the featured list through copyList`() = runTest {
         val core = FakeCore().apply {
             answer("rowsForList", """{"total":0,"rows":[]}""")
+            answer("featuredRows", """{"total":0,"rows":[]}""")
             answer("copyList", """{"id":"mine","name":"Reading"}""")
         }
         val vm = TaskListViewModel(core, UnconfinedTestDispatcher(), locale = { "en-US" })
@@ -115,6 +116,7 @@ class PublicListsTest {
     fun `AATD-46 a refused Copy List says it could not copy`() = runTest {
         val core = FakeCore().apply {
             answer("rowsForList", """{"total":0,"rows":[]}""")
+            answer("featuredRows", """{"total":0,"rows":[]}""")
             answer("copyList") { throw CoreFailure(FailureKind.OFFLINE, "no network") }
         }
         val vm = TaskListViewModel(core, UnconfinedTestDispatcher(), locale = { "en-US" })
