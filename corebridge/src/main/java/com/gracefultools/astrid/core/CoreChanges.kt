@@ -61,3 +61,15 @@ val CoreChange.movesOutbox: Boolean get() = kind == ChangeKind.DELIVERED
 
 /** Account settings moved. */
 val CoreChange.movesSettings: Boolean get() = kind == ChangeKind.SETTINGS
+
+/** `agentTyping`: an agent started (`active`) or stopped thinking about a task or in a channel. */
+data class AgentTyping(val channelId: String?, val taskId: String?, val agentName: String?, val active: Boolean)
+
+/** This change as an agent's typing, or null when it is something else. */
+val CoreChange.agentTyping: AgentTyping?
+    get() = if (kind != ChangeKind.AGENT_TYPING) null else AgentTyping(
+        channelId = string("channelId"),
+        taskId = string("taskId"),
+        agentName = string("agentName")?.takeIf { it.isNotBlank() },
+        active = string("active") == "true",
+    )

@@ -73,6 +73,11 @@ data class TaskFields(
     /** Where it was completed — `google`, `github`, `apple` — when not here. */
     val completedSource: String? = null,
     val lastTimerValue: String? = null,
+    /** `DUE_DATE` or `COMPLETION_DATE`: what a repeat counts from. */
+    val repeatFrom: String? = null,
+    /** The occurrence this one followed, and the one that followed it (iOS's Occurrences row). */
+    val previousOccurrenceId: String? = null,
+    val nextOccurrenceId: String? = null,
 )
 
 @Serializable
@@ -142,11 +147,14 @@ data class RepeatPreset(val value: String = "", val titleKey: String = "", val i
 @Serializable
 data class RepeatOptions(
     val repeating: String? = null,
+    /** `DUE_DATE` or `COMPLETION_DATE`; absent is the core's default, from completion. */
+    val repeatFrom: String? = null,
     val presets: List<RepeatPreset> = emptyList(),
     /** The task's custom pattern, when it has one — what the custom editor opens on. */
     val pattern: RepeatPattern? = null,
 )
 
+/** The wire's `CustomRepeatingPattern` (astrid-rules `model::task`): every field the core reads. */
 @Serializable
 data class RepeatPattern(
     val unit: String? = null,
@@ -155,7 +163,73 @@ data class RepeatPattern(
     val endCondition: String? = null,
     val endAfterOccurrences: Int? = null,
     val endUntilDate: String? = null,
+    /** Monthly: `same_date` (on [monthDay]) or `same_weekday` (on [monthWeekday]). */
+    val monthRepeatType: String? = null,
+    val monthDay: Int? = null,
+    val monthWeekday: MonthWeekday? = null,
+    /** Yearly: the month (1-12) and the day. */
+    val month: Int? = null,
+    val day: Int? = null,
 )
+
+@Serializable
+data class MonthWeekday(val weekday: String = "monday", val weekOfMonth: Int = 1)
+
+/** A file on the task (`attachments`): its own and its comments', with where it is on this device. */
+@Serializable
+data class AttachmentFile(
+    val id: String = "",
+    val name: String = "",
+    val size: Long = 0,
+    val mimeType: String = "application/octet-stream",
+    val isCached: Boolean = false,
+    val path: String? = null,
+) {
+    /** Drawn as a picture rather than an icon. */
+    val isImage: Boolean get() = mimeType.startsWith("image/")
+}
+
+@Serializable
+data class Attachments(val files: List<AttachmentFile> = emptyList())
+
+/** `taskProjectFields`: a GitHub board's fields for this task; no rows off a GitHub board. */
+@Serializable
+data class TaskProjectFields(val projectId: String? = null, val rows: List<ProjectFieldRow> = emptyList())
+
+@Serializable
+data class ProjectFieldRow(
+    val id: String = "",
+    val name: String = "",
+    /** `text`, `number`, `date`, `single_select` or `iteration`. */
+    val dataType: String = "text",
+    val options: List<ProjectFieldOption> = emptyList(),
+    val iterations: List<ProjectFieldIteration> = emptyList(),
+    val value: kotlinx.serialization.json.JsonElement? = null,
+)
+
+@Serializable
+data class ProjectFieldOption(val id: String = "", val name: String = "", val color: String? = null)
+
+@Serializable
+data class ProjectFieldIteration(val id: String = "", val title: String = "", val startDate: String = "", val completed: Boolean = false)
+
+/** One row of the comment box's popup (`commentSuggestions`): a person, a list or a task. */
+@Serializable
+data class CommentSuggestion(
+    /** `mention`, `list` or `task`. */
+    val kind: String = "mention",
+    val id: String = "",
+    val label: String = "",
+    val secondary: String? = null,
+    val isAgent: Boolean = false,
+    val completed: Boolean = false,
+)
+
+@Serializable
+data class CommentTrigger(val kind: String = "mention", val start: Int = 0, val query: String = "")
+
+@Serializable
+data class CommentSuggestions(val trigger: CommentTrigger? = null, val items: List<CommentSuggestion> = emptyList())
 
 @Serializable
 data class ReminderPick(val titleKey: String = "", val reminderTime: String? = null, val isSelected: Boolean = false)
