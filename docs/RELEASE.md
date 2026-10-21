@@ -27,7 +27,9 @@ the universal APK is 37 MB (two ABIs), and Play's per-ABI splits roughly halve w
    app-signing SHA-256 (astrid-web AWTD-1303; the file is in brands/README.md), then Astrid's
    `astridLinkAutoVerify` default becomes `true` in `app/build.gradle.kts` (AATD-76).
    Until then those links offer a chooser rather than opening the app directly.
-5. **Listing:** short description, full description, screenshots (the smoke test writes phone
-   screenshots to `/data/local/tmp/astrid-*.png`), feature graphic, privacy policy URL
-   (astrid.cc/privacy), data-safety form (account email and name; tasks; no ads, no tracking).
+5. **Listing:** the English draft is in `app/src/main/play/` (AATD-19) — title, short and full
+   description, first release notes, and the answers for the permission and data-safety forms;
+   `PlayListingTest` holds it to Play's limits. Still to make: screenshots (the smoke test writes
+   phone screenshots to `/data/local/tmp/astrid-*.png`) and the 1024 × 500 feature graphic.
+   Privacy policy URL: astrid.cc/privacy.
 6. **versionCode** in `app/build.gradle.kts` goes up by one per upload.
