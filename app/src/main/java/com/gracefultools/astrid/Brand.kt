@@ -59,6 +59,29 @@ object Brand {
     /** [urlScheme] for the core's config, or null when it is Astrid's — so Astrid's config is unchanged. */
     val coreUrlScheme: String? = urlScheme.takeIf { it != ASTRID_URL_SCHEME }
 
+    /** iOS `Brand.defaultAccentHex`: Astrid blue (Tailwind blue-500). */
+    const val DEFAULT_ACCENT_HEX = "#3b82f6"
+
+    /** iOS `Brand.accentColorHex` (AATD-75): the brand accent, `#rrggbb` or `#rrggbbaa`. The theme's `Accent`. */
+    val accentColorHex: String = resolveAccentHex(BuildConfig.ASTRID_ACCENT_COLOR)
+
+    /** iOS `Brand.accentHoverColorHex`: the accent's pressed state (blue-600 for Astrid). */
+    val accentHoverColorHex: String = resolveAccentHex(BuildConfig.ASTRID_ACCENT_HOVER_COLOR, fallback = "#2563eb")
+
+    /** iOS `Brand.accentTextColorHex`: drawn on the accent, so a pale accent can take dark text. */
+    val accentTextColorHex: String = resolveAccentHex(BuildConfig.ASTRID_ACCENT_TEXT_COLOR, fallback = "#ffffff")
+
+    /**
+     * iOS `Brand.resolveAccentHex`: a configured colour as lower-case `#rrggbb` / `#rrggbbaa`, or
+     * [fallback]. Total on purpose — a brand colour is chrome, so a typo renders Astrid's.
+     */
+    fun resolveAccentHex(raw: String?, fallback: String = DEFAULT_ACCENT_HEX): String {
+        val digits = raw?.trim()?.removePrefix("#") ?: return fallback
+        if (digits.length != 6 && digits.length != 8) return fallback
+        if (!digits.all { it in '0'..'9' || it.lowercaseChar() in 'a'..'f' }) return fallback
+        return "#" + digits.lowercase()
+    }
+
     /** [base]'s host plus the comma-separated [configured] hosts, lower-cased. */
     fun linkHosts(configured: String, base: String): Set<String> =
         (listOfNotNull(runCatching { java.net.URI(base.trim()).host }.getOrNull()) + configured.split(','))

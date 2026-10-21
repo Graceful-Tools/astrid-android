@@ -2,6 +2,7 @@ package com.gracefultools.astrid.ui.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import com.gracefultools.astrid.Brand
 
 /**
  * The iOS app's palette (astrid-ios `Utilities/Theme.swift`), token for token. A colour here that
@@ -58,10 +59,24 @@ data class AstridColors(
 
 private fun rgb(r: Int, g: Int, b: Int) = Color(r, g, b)
 
-/** Brand.swift `defaultAccentHex` — Astrid blue (Tailwind blue-500), and its pressed state. */
-val Accent = rgb(59, 130, 246)
-val AccentHover = rgb(37, 99, 235)
-val AccentText = Color.White
+/**
+ * iOS `Brand.color(hex)`: a `#rrggbb` / `#rrggbbaa` string that [Brand.resolveAccentHex] has already
+ * checked, as a colour.
+ */
+fun brandColor(hex: String): Color {
+    val digits = hex.removePrefix("#")
+    val v = digits.toLong(16)
+    return if (digits.length == 8) {
+        Color(((v shr 24) and 0xFF).toInt(), ((v shr 16) and 0xFF).toInt(), ((v shr 8) and 0xFF).toInt(), (v and 0xFF).toInt())
+    } else {
+        Color(((v shr 16) and 0xFF).toInt(), ((v shr 8) and 0xFF).toInt(), (v and 0xFF).toInt())
+    }
+}
+
+/** The brand's accent (iOS `Brand.accentColor`, AATD-75) — Astrid blue (blue-500) — and its pressed state. */
+val Accent = brandColor(Brand.accentColorHex)
+val AccentHover = brandColor(Brand.accentHoverColorHex)
+val AccentText = brandColor(Brand.accentTextColorHex)
 
 val Success = rgb(34, 197, 94)
 val Warning = rgb(245, 158, 11)

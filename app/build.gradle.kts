@@ -68,6 +68,12 @@ android {
         brandField("ASTRID_URL_SCHEME", brandUrlScheme)
         brandField("ASTRID_LINK_HOSTS", brandLinkHosts.joinToString(","))
         brandField("ASTRID_HANDOFF_CLIENT_ID", brand("astridHandoffClientId", ""))
+
+        // The in-app accent (AATD-75), iOS's three: BrandAccentColor, -HoverColor, -TextColor. Passed
+        // raw; Brand checks each and falls back to Astrid's, so a typo is Astrid blue, not a crash.
+        brandField("ASTRID_ACCENT_COLOR", brand("astridAccentColor", ""))
+        brandField("ASTRID_ACCENT_HOVER_COLOR", brand("astridAccentHoverColor", ""))
+        brandField("ASTRID_ACCENT_TEXT_COLOR", brand("astridAccentTextColor", ""))
         resValue("string", "app_name", brand("astridAppName", "Astrid"))
         resValue("string", "brand_wordmark", brand("astridWordmark", "astrid"))
         manifestPlaceholders += mapOf(

@@ -31,11 +31,17 @@ unset. With nothing set, every value is Astrid's and the build is the one it alw
 | `astridSupportEmail` | `support@astrid.cc` | Feedback mail |
 | `astridInboundTaskEmail` | `remindme@astrid.cc` | Email-to-task address |
 | `astridAgentEmailDomain` | `astrid.cc` | The domain shown on agent identities |
+| `astridAccentColor` | `#3b82f6` | The in-app accent (`Brand.accentColorHex` → the theme's `Accent`): buttons, links, focus, Material's primary |
+| `astridAccentHoverColor` | `#2563eb` | The accent's pressed state |
+| `astridAccentTextColor` | `#ffffff` | Text and icons drawn on the accent — change it with a pale accent |
+
+Colours are `#rrggbb` or `#rrggbbaa` (iOS `BrandAccentColor`, `BrandAccentHoverColor`,
+`BrandAccentTextColor`; astrid-web `NEXT_PUBLIC_BRAND_ACCENT_*`). A malformed one is Astrid's, as on iOS.
 
 **The server must agree.** The scheme is the server's `BRAND.appUrlScheme` (astrid-web
 `brands/*.brand.json` → `NEXT_PUBLIC_BRAND_APP_URL_SCHEME`), and the hand-off client id must be registered
 in its `DesktopClient` registry, or sign-in delivers to the wrong app. Verified app links need the
 server to serve `/.well-known/assetlinks.json` for the brand's package and release key.
 
-Not yet brand-driven: the in-app accent colour and other `ui/theme` colours (Kotlin, ported from iOS
-`Theme.swift`).
+The rest of the `ui/theme` palette (backgrounds, text, borders) is iOS `Theme.swift`'s and is not
+brand-driven on iOS either.
