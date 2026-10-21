@@ -23,8 +23,9 @@ the universal APK is 37 MB (two ABIs), and Play's per-ABI splits roughly halve w
 1. **Decide the applicationId** — `com.gracefultools.astrid` today; permanent once uploaded.
 2. **Create the Play app** in the Graceful Tools developer account and enrol in Play App Signing.
 3. **Make an upload key** and store it as the four CI secrets above.
-4. **App Links:** add `https://astrid.cc/.well-known/assetlinks.json` (astrid-web, `public/`) with
-   the Play app-signing SHA-256, then set `android:autoVerify="true"` on the `astrid.cc/t/` filter.
+4. **App Links:** astrid.cc and www.astrid.cc serve `/.well-known/assetlinks.json` with the Play
+   app-signing SHA-256 (astrid-web AWTD-1303; the file is in brands/README.md), then Astrid's
+   `astridLinkAutoVerify` default becomes `true` in `app/build.gradle.kts` (AATD-76).
    Until then those links offer a chooser rather than opening the app directly.
 5. **Listing:** short description, full description, screenshots (the smoke test writes phone
    screenshots to `/data/local/tmp/astrid-*.png`), feature graphic, privacy policy URL
