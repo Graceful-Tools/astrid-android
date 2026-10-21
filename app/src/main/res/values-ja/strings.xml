@@ -699,6 +699,14 @@
     <string name="reminders_triage_assign_to">%1$sに割り当て</string>
     <string name="tasks_sync_pending_chip">同期中</string>
     <string name="tasks_sync_failed_chip">同期に失敗</string>
+    <string name="contacts">連絡先</string>
+    <string name="contacts_synced_contacts">同期された連絡先</string>
+    <string name="contacts_sync_contacts_now">今すぐ連絡先を同期</string>
+    <string name="contacts_access_required">連絡先へのアクセスが必要です</string>
+    <string name="contacts_open_settings_prompt">タップして設定を開き、アクセスを有効にしてください</string>
+    <string name="contacts_add_collaborators">共同作業者を追加</string>
+    <string name="contacts_upload_for_collaboration">より良いコラボレーションのために連絡先をアップロードしてください</string>
+    <string name="contacts_footer_text">連絡先は共同作業者の提案に使用されます。暗号化され、第三者と共有されることはありません。</string>
     <string name="core_picker_no_due_date" formatted="false">期限なし</string>
     <string name="core_picker_today" formatted="false">今日</string>
     <string name="core_picker_tomorrow" formatted="false">明日</string>

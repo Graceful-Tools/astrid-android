@@ -699,6 +699,14 @@
     <string name="reminders_triage_assign_to">Atribuir a %1$s</string>
     <string name="tasks_sync_pending_chip">Sincronizando</string>
     <string name="tasks_sync_failed_chip">Falha na sincronização</string>
+    <string name="contacts">Contatos</string>
+    <string name="contacts_synced_contacts">Contatos Sincronizados</string>
+    <string name="contacts_sync_contacts_now">Sincronizar Contatos Agora</string>
+    <string name="contacts_access_required">Acesso aos Contatos Necessário</string>
+    <string name="contacts_open_settings_prompt">Toque para abrir Ajustes e habilitar o acesso</string>
+    <string name="contacts_add_collaborators">Adicionar Colaboradores</string>
+    <string name="contacts_upload_for_collaboration">Envie seus contatos para uma melhor colaboração</string>
+    <string name="contacts_footer_text">Os contatos são usados para sugerir colaboradores. Eles são criptografados e nunca compartilhados.</string>
     <string name="core_picker_no_due_date" formatted="false">Sem prazo</string>
     <string name="core_picker_today" formatted="false">Hoje</string>
     <string name="core_picker_tomorrow" formatted="false">Amanhã</string>

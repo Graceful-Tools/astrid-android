@@ -699,6 +699,14 @@
     <string name="reminders_triage_assign_to">Назначить: %1$s</string>
     <string name="tasks_sync_pending_chip">Синхронизация</string>
     <string name="tasks_sync_failed_chip">Сбой синхронизации</string>
+    <string name="contacts">Контакты</string>
+    <string name="contacts_synced_contacts">Синхронизированные контакты</string>
+    <string name="contacts_sync_contacts_now">Синхронизировать контакты</string>
+    <string name="contacts_access_required">Требуется доступ к контактам</string>
+    <string name="contacts_open_settings_prompt">Нажмите, чтобы открыть Настройки и включить доступ</string>
+    <string name="contacts_add_collaborators">Добавить участников</string>
+    <string name="contacts_upload_for_collaboration">Загрузите свои контакты для лучшего взаимодействия</string>
+    <string name="contacts_footer_text">Контакты используются для предложения участников. Они зашифрованы и никогда не передаются третьим лицам.</string>
     <string name="core_picker_no_due_date" formatted="false">Без срока</string>
     <string name="core_picker_today" formatted="false">Сегодня</string>
     <string name="core_picker_tomorrow" formatted="false">Завтра</string>

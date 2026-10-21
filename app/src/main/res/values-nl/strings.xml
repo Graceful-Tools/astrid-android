@@ -699,6 +699,14 @@
     <string name="reminders_triage_assign_to">Toewijzen aan %1$s</string>
     <string name="tasks_sync_pending_chip">Synchroniseren</string>
     <string name="tasks_sync_failed_chip">Synchronisatie mislukt</string>
+    <string name="contacts">Contacten</string>
+    <string name="contacts_synced_contacts">Gesynchroniseerde contacten</string>
+    <string name="contacts_sync_contacts_now">Contacten nu synchroniseren</string>
+    <string name="contacts_access_required">Toegang tot contacten vereist</string>
+    <string name="contacts_open_settings_prompt">Tik om Instellingen te openen en toegang in te schakelen</string>
+    <string name="contacts_add_collaborators">Medewerkers toevoegen</string>
+    <string name="contacts_upload_for_collaboration">Upload je contacten voor betere samenwerking</string>
+    <string name="contacts_footer_text">Contacten worden gebruikt om medewerkers voor te stellen. Ze zijn versleuteld en worden nooit gedeeld.</string>
     <string name="core_picker_no_due_date" formatted="false">Geen deadline</string>
     <string name="core_picker_today" formatted="false">Vandaag</string>
     <string name="core_picker_tomorrow" formatted="false">Morgen</string>

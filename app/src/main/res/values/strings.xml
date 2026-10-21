@@ -889,6 +889,14 @@
     <string name="tasks_sync_pending_chip">Syncing</string>
     <string name="tasks_sync_failed_chip">Sync failed</string>
     <!-- Ordinals for repeat summaries ("on the 3rd Tuesday"); a language sets all four to its own form. -->
+    <string name="contacts">Contacts</string>
+    <string name="contacts_synced_contacts">Synced Contacts</string>
+    <string name="contacts_sync_contacts_now">Sync Contacts Now</string>
+    <string name="contacts_access_required">Contacts Access Required</string>
+    <string name="contacts_open_settings_prompt">Tap to open Settings and enable access</string>
+    <string name="contacts_add_collaborators">Add Collaborators</string>
+    <string name="contacts_upload_for_collaboration">Upload your contacts for better collaboration</string>
+    <string name="contacts_footer_text">Contacts are used to suggest collaborators when sharing lists. They are encrypted and never shared with third parties.</string>
     <string name="list_separator">", "</string>
     <string name="ordinal_st">%1$sst</string>
     <string name="ordinal_nd">%1$snd</string>
