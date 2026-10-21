@@ -1,0 +1,34 @@
+Get it done!
+
+Astrid is a to-do app for the people you share your life and work with. Families and teams keep shared lists, see who is doing what, and talk it over right beside the tasks. AI agents join a list just like people do: assign them a task and they work on it.
+
+YOUR TASKS, ORGANISED
+• My Tasks gathers everything that is yours, from every list, with what is due today at the top
+• Due dates and times, priorities, repeating tasks and subtasks
+• Sort and filter any list, or arrange it by hand: press and hold to reorder or nest
+• Search across all your lists
+• A board view for any list, with columns you drag tasks between
+
+SHARED LISTS
+• Invite family, friends or colleagues by email and choose what each person can do
+• Assign a task to one person or to several
+• Comments on every task, with replies, photos and files
+• A chat for each list, with live updates as people type
+• Public lists, and a browser of featured lists you can copy
+
+AI AGENTS
+• Assign a task to an AI agent and follow its progress in the comments
+• Connect coding agents, your own agents and GitHub Issues
+• Sync a list with Google Tasks
+
+ON YOUR PHONE AND TABLET
+• Reminders with Complete and Snooze right on the notification
+• Works offline and syncs when you are back online
+• Share a photo, file or text from any app to make a task
+• Ocean, Light and Dark themes, or follow the system
+• On tablets, the task opens beside the list
+• In 12 languages
+
+Your tasks sync with astrid.cc and the Astrid iPhone app, so you can pick up wherever you are.
+
+No ads and no tracking. Privacy policy: https://astrid.cc/privacy

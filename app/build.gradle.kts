@@ -215,4 +215,6 @@ dependencies {
 
 tasks.withType<Test>().configureEach {
     systemProperty("jna.library.path", rootProject.file("corebridge/src/test/resources/native").absolutePath)
+    // PlayListingTest reads the listing draft as files; an edit to it alone must re-run the tests.
+    inputs.dir("src/main/play").withPathSensitivity(PathSensitivity.RELATIVE)
 }
