@@ -107,9 +107,9 @@
     <string name="core_repeat_every_year" formatted="false">Каждый год</string>
     <string name="core_repeat_every_n_years" formatted="false">Каждые %1$s г.</string>
     <string name="core_repeat_on_weekdays" formatted="false">по дням: %1$s</string>
-    <string name="core_repeat_on_day_of_month" formatted="false">%1$s числа</string>
-    <string name="core_repeat_on_nth_weekday" formatted="false">в %1$s %2$s</string>
-    <string name="core_repeat_on_month_and_day" formatted="false">%1$s %2$s</string>
+    <string name="core_repeat_on_day_of_month" formatted="false">%2$s числа</string>
+    <string name="core_repeat_on_nth_weekday" formatted="false">%3$s-я неделя, %2$s</string>
+    <string name="core_repeat_on_month_and_day" formatted="false">%3$s %1$s</string>
     <string name="core_repeat_ends_after" formatted="false">(%1$s раз)</string>
     <string name="core_repeat_ends_on" formatted="false">до %1$s</string>
     <string name="core_repeat_from_due_date" formatted="false">от срока</string>
@@ -142,4 +142,9 @@
     <string name="tasks_complete_a11y">Завершить %1$s</string>
     <!-- iOS update.available_body without its first sentence: Play gives no version name (AATD-67). -->
     <string name="update_available_body">Обновление займёт мгновение и принесёт последние исправления.</string>
+    <string name="ordinal_st">%1$s-й</string>
+    <string name="ordinal_nd">%1$s-й</string>
+    <string name="ordinal_rd">%1$s-й</string>
+    <string name="ordinal_th">%1$s-й</string>
+    <string name="list_separator">", "</string>
 </resources>
