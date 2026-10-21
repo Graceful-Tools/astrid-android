@@ -140,4 +140,6 @@
     <string name="core_filter_lists_public" formatted="false">공개 목록에 있음</string>
     <string name="core_reminder_toast_snooze" formatted="false">%1$s분 다시 알림</string>
     <string name="tasks_complete_a11y">%1$s 완료</string>
+    <!-- iOS update.available_body without its first sentence: Play gives no version name (AATD-67). -->
+    <string name="update_available_body">업데이트는 잠시면 끝나며 최신 수정 사항이 적용됩니다.</string>
 </resources>

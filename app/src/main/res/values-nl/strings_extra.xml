@@ -140,4 +140,6 @@
     <string name="core_filter_lists_public" formatted="false">In een openbare lijst</string>
     <string name="core_reminder_toast_snooze" formatted="false">%1$s min snoozen</string>
     <string name="tasks_complete_a11y">%1$s voltooien</string>
+    <!-- iOS update.available_body without its first sentence: Play gives no version name (AATD-67). -->
+    <string name="update_available_body">Bijwerken duurt even en bevat de nieuwste verbeteringen.</string>
 </resources>

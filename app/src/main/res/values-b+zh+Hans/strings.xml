@@ -639,6 +639,9 @@
     <string name="board_exit_full_screen">退出全屏</string>
     <string name="chat_hide_messages">隐藏消息</string>
     <string name="chat_show_messages_pane">显示消息</string>
+    <string name="update_available_title">新版 %1$s 已就绪</string>
+    <string name="update_action">更新</string>
+    <string name="update_later">以后再说</string>
     <string name="repeating_custom_pattern">自定义重复模式</string>
     <string name="repeating_repeat_every">每隔</string>
     <string name="repeating_repeat_on_days">在以下日期重复</string>

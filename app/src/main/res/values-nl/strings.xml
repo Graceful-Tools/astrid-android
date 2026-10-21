@@ -639,6 +639,9 @@
     <string name="board_exit_full_screen">Volledig scherm afsluiten</string>
     <string name="chat_hide_messages">Berichten verbergen</string>
     <string name="chat_show_messages_pane">Berichten tonen</string>
+    <string name="update_available_title">Een nieuwe %1$s staat klaar</string>
+    <string name="update_action">Bijwerken</string>
+    <string name="update_later">Niet nu</string>
     <string name="repeating_custom_pattern">Aangepast herhalingspatroon</string>
     <string name="repeating_repeat_every">Herhaal elke</string>
     <string name="repeating_repeat_on_days">Herhaal op deze dagen</string>

@@ -639,6 +639,9 @@
     <string name="board_exit_full_screen">Выйти из полноэкранного режима</string>
     <string name="chat_hide_messages">Скрыть сообщения</string>
     <string name="chat_show_messages_pane">Показать сообщения</string>
+    <string name="update_available_title">Новый %1$s готов</string>
+    <string name="update_action">Обновить</string>
+    <string name="update_later">Не сейчас</string>
     <string name="repeating_custom_pattern">Пользовательский шаблон повторения</string>
     <string name="repeating_repeat_every">Повторять каждые</string>
     <string name="repeating_repeat_on_days">Повторять в эти дни</string>

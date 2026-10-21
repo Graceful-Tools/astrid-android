@@ -639,6 +639,9 @@
     <string name="board_exit_full_screen">Vollbild beenden</string>
     <string name="chat_hide_messages">Nachrichten ausblenden</string>
     <string name="chat_show_messages_pane">Nachrichten einblenden</string>
+    <string name="update_available_title">Ein neues %1$s ist bereit</string>
+    <string name="update_action">Aktualisieren</string>
+    <string name="update_later">Jetzt nicht</string>
     <string name="repeating_custom_pattern">Benutzerdefiniertes Wiederholungsmuster</string>
     <string name="repeating_repeat_every">Wiederholen alle</string>
     <string name="repeating_repeat_on_days">An diesen Tagen wiederholen</string>

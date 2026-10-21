@@ -639,6 +639,9 @@
     <string name="board_exit_full_screen">Salir de pantalla completa</string>
     <string name="chat_hide_messages">Ocultar mensajes</string>
     <string name="chat_show_messages_pane">Mostrar mensajes</string>
+    <string name="update_available_title">Hay un nuevo %1$s listo</string>
+    <string name="update_action">Actualizar</string>
+    <string name="update_later">Ahora no</string>
     <string name="repeating_custom_pattern">Patrón de repetición personalizado</string>
     <string name="repeating_repeat_every">Repetir cada</string>
     <string name="repeating_repeat_on_days">Repetir en estos días</string>

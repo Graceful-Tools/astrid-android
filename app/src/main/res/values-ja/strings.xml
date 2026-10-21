@@ -639,6 +639,9 @@
     <string name="board_exit_full_screen">フルスクリーンを終了</string>
     <string name="chat_hide_messages">メッセージを隠す</string>
     <string name="chat_show_messages_pane">メッセージを表示</string>
+    <string name="update_available_title">新しい %1$s が利用できます</string>
+    <string name="update_action">アップデート</string>
+    <string name="update_later">後で</string>
     <string name="repeating_custom_pattern">カスタム繰り返しパターン</string>
     <string name="repeating_repeat_every">繰り返し間隔</string>
     <string name="repeating_repeat_on_days">繰り返す曜日</string>

@@ -140,4 +140,6 @@
     <string name="core_filter_lists_public" formatted="false">В публичном списке</string>
     <string name="core_reminder_toast_snooze" formatted="false">Отложить на %1$s мин</string>
     <string name="tasks_complete_a11y">Завершить %1$s</string>
+    <!-- iOS update.available_body without its first sentence: Play gives no version name (AATD-67). -->
+    <string name="update_available_body">Обновление займёт мгновение и принесёт последние исправления.</string>
 </resources>
