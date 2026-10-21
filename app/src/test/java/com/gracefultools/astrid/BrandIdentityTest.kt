@@ -11,6 +11,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import org.w3c.dom.Element
+import javax.xml.parsers.DocumentBuilderFactory
 
 /**
  * AATD-72: the app's identity — package, name, wordmark, URL scheme, link hosts and hand-off client —
@@ -76,5 +78,25 @@ class BrandIdentityTest {
             } }
             .toList()
         assertEquals(emptyList<String>(), xml)
+    }
+
+    @Test
+    fun `AATD-76 the https links verify only when the brand says its server serves assetlinks_json`() {
+        // The brand decides (astridLinkAutoVerify); Astrid's site serves no assetlinks.json yet.
+        assertEquals("\${astridLinkAutoVerify}", httpsLinkFilter(File("src/main/AndroidManifest.xml")).getAttribute("android:autoVerify"))
+        // So the unconfigured build's merged manifest asks for nothing it cannot have.
+        val config = java.util.Properties().apply {
+            ClassLoader.getSystemResourceAsStream("com/android/tools/test_config.properties")!!.use(::load)
+        }
+        assertEquals("false", httpsLinkFilter(File(config.getProperty("android_merged_manifest"))).getAttribute("android:autoVerify"))
+    }
+
+    /** The VIEW filter on https: the one Android verifies against each host's assetlinks.json. */
+    private fun httpsLinkFilter(manifest: File): Element {
+        val filters = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(manifest).getElementsByTagName("intent-filter")
+        return (0 until filters.length).map { filters.item(it) as Element }.single { filter ->
+            val data = filter.getElementsByTagName("data")
+            (0 until data.length).any { (data.item(it) as Element).getAttribute("android:scheme") == "https" }
+        }
     }
 }

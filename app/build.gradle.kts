@@ -42,6 +42,16 @@ val brandLinkHosts: List<String> = brand("astridLinkHosts", "").split(',').map {
     .let { (listOf(brandBaseHost) + it).distinct() }
     .also { require(it.size <= 2) { "astridLinkHosts: at most two hosts, the server's own included (got $it)" } }
 
+/**
+ * Whether Android verifies those hosts (AATD-76): only true once every host serves
+ * `/.well-known/assetlinks.json` naming this package and its signing key (brands/README.md).
+ * Astrid's site does not yet, so Astrid's is false and its links still offer a chooser.
+ */
+val brandLinkAutoVerify: Boolean = brand("astridLinkAutoVerify", "false").lowercase().let {
+    require(it == "true" || it == "false") { "astridLinkAutoVerify=$it: true or false" }
+    it == "true"
+}
+
 android {
     namespace = "com.gracefultools.astrid"
     compileSdk = 35
@@ -80,6 +90,7 @@ android {
             "astridUrlScheme" to brandUrlScheme,
             "astridLinkHost" to brandLinkHosts.first(),
             "astridLinkHostAlt" to brandLinkHosts.last(),
+            "astridLinkAutoVerify" to brandLinkAutoVerify.toString(),
         )
     }
 

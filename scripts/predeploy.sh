@@ -37,6 +37,9 @@ if [[ "$mode" != "--quick" ]]; then
   # (AATD-72, brands/README.md). Stops short of packaging, so the APK above stays the Astrid one.
   step "gradle: the example brand's manifest and resources"
   ./gradlew --console=plain -PastridBrand=example :app:processDebugResources
+  # Its links verify (astridLinkAutoVerify=true, AATD-76); Astrid's are checked in BrandIdentityTest.
+  grep -q 'android:autoVerify="true"' app/build/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml \
+    || { echo "the example brand's https links are not autoVerify (AATD-76)" >&2; exit 1; }
 fi
 if [[ "$mode" == "--full" ]]; then
   step "gradle: instrumented smoke tests (needs a device or emulator)"

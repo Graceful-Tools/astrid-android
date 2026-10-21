@@ -42,9 +42,9 @@
                 <data android:mimeType="*/*" />
             </intent-filter>
             <!-- Web links (iOS DeepLinkManager, AATD-59) on the brand's hosts (AATD-72): astrid.cc and
-                 www.astrid.cc for Astrid. Not autoVerify until the site serves assetlinks.json for
-                 the release key. -->
-            <intent-filter>
+                 www.astrid.cc for Astrid. Verified only when the brand's server serves assetlinks.json
+                 for its release key (astridLinkAutoVerify, AATD-76): not yet for Astrid. -->
+            <intent-filter android:autoVerify="${astridLinkAutoVerify}">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
