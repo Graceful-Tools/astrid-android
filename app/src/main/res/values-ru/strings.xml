@@ -267,6 +267,11 @@
     <string name="messages_saving">Сохранение...</string>
     <string name="messages_deleting">Удаление...</string>
     <string name="profile_loading">Загрузка профиля...</string>
+    <string name="profile_your_tasks">Ваши задачи</string>
+    <string name="profile_shared_tasks_with">Общие задачи с %1$s</string>
+    <string name="profile_error_not_found">Пользователь не найден</string>
+    <string name="profile_error_load_failed">Не удалось загрузить профиль</string>
+    <string name="profile_go_back">Назад</string>
     <string name="profile_joined">В команде с %1$s</string>
     <string name="profile_edit_title">Редактировать профиль</string>
     <string name="profile_change_photo">Нажмите для смены фото</string>

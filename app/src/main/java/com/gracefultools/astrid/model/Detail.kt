@@ -296,3 +296,22 @@ data class AccountSettings(
 
 @Serializable
 data class ProfileStats(val completed: Int = 0, val inspired: Int = 0, val supported: Int = 0)
+
+/**
+ * `profileTasks`: somebody's profile in one answer — who they are, their three numbers and the
+ * public tasks they share, as rows (AATD-69). No email: the server gives one only on your own.
+ */
+@Serializable
+data class PersonProfile(
+    val id: String = "",
+    val name: String? = null,
+    val image: String? = null,
+    val createdAt: String? = null,
+    val isAIAgent: Boolean? = null,
+    val stats: ProfileStats? = null,
+    val rows: List<TaskRow> = emptyList(),
+    val count: Int = 0,
+    val isOwnProfile: Boolean = false,
+) {
+    val display: String get() = name?.takeIf { it.isNotBlank() } ?: id
+}

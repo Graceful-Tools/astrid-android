@@ -267,6 +267,11 @@
     <string name="messages_saving">Salvando...</string>
     <string name="messages_deleting">Excluindo...</string>
     <string name="profile_loading">Carregando perfil...</string>
+    <string name="profile_your_tasks">Suas Tarefas</string>
+    <string name="profile_shared_tasks_with">Tarefas Compartilhadas com %1$s</string>
+    <string name="profile_error_not_found">Usuário não encontrado</string>
+    <string name="profile_error_load_failed">Falha ao carregar o perfil</string>
+    <string name="profile_go_back">Voltar</string>
     <string name="profile_joined">Entrou em %1$s</string>
     <string name="profile_edit_title">Editar perfil</string>
     <string name="profile_change_photo">Toque para alterar a foto</string>

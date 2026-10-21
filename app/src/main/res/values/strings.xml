@@ -320,6 +320,11 @@
 
     <!-- AATD-56: Profile, Edit Profile, Account & Access, Delete Account (iOS English, verbatim). -->
     <string name="profile_loading">Loading profile...</string>
+    <string name="profile_your_tasks">Your Tasks</string>
+    <string name="profile_shared_tasks_with">Shared Tasks with %1$s</string>
+    <string name="profile_error_not_found">User not found</string>
+    <string name="profile_error_load_failed">Failed to load user profile</string>
+    <string name="profile_go_back">Go Back</string>
     <string name="profile_joined">Joined %1$s</string>
     <string name="profile_edit_title">Edit Profile</string>
     <string name="profile_change_photo">Tap to change photo</string>
