@@ -27,7 +27,13 @@ version = 2
 # A vulnerability, an unmaintained crate or an unsound one fails the build; that is version 2's
 # behaviour and it is not configurable per-kind. To ACCEPT one deliberately, add its id here with
 # the date and the reason — an empty list is a claim that nothing has been waved through.
-ignore = []
+ignore = [
+    # 2026-10-21, AATD-74. `basic-toml` 0.1.10 is unmaintained (no vulnerability), reached only
+    # through uniffi_bindgen 0.32.2 → askama 0.16.1 → askama_derive: a proc-macro's dependency,
+    # so it runs at build time and nothing of it is in the APK. Both are the newest releases and
+    # neither has dropped it. Remove this the day a uniffi release does, and regenerate bindings.
+    { id = "RUSTSEC-2026-0374", reason = "build-time only, via uniffi_bindgen's askama; no upgrade exists (AATD-74)" },
+]
 
 # A yank is not a vulnerability. Upstream yanks for a bad release as often as for a security
 # problem, and a lockfile that lags a yank by a day should not stop a release.
