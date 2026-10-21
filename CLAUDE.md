@@ -30,6 +30,12 @@ scripts/build-core.sh --core ../astrid-core   # build against a local core check
 process is astrid-web `docs/FIXALL_WORKFLOW.md`: strategy comment → RED-GREEN-refactor → gate →
 completion report → complete. Use `listIds` (not `listId`) and the `X-OAuth-Token` header.
 
+`/fixall` also runs unattended at `:10`/`:40` (LaunchAgent `cc.astrid.fixall-android`,
+`scripts/fixall-loop.sh`) — install, inspect and uninstall in [docs/AUTOMATION.md](docs/AUTOMATION.md).
+Working here interactively for long? Take the lock **from this checkout** (the cwd keys it), so a
+tick cannot sweep your edits: `../astrid-web/node_modules/.bin/tsx ../astrid-web/scripts/fixall-session.ts
+acquire --pid <your claude pid> --harness claude-code` (not `$$` — that pid is dead at once).
+
 ## Approvals
 
 **Always ask before:** publishing to Google Play, signing a release with a real key, deleting files.

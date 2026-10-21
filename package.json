@@ -7,7 +7,9 @@
     "predeploy:quick": "./scripts/predeploy.sh --quick",
     "predeploy:full": "./scripts/predeploy.sh --full",
     "build:core": "./scripts/build-core.sh",
-    "install:debug": "./gradlew :app:installDebug"
+    "install:debug": "./gradlew :app:installDebug",
+    "fixall:loop": "./scripts/fixall-loop.sh",
+    "test:scripts": "./scripts/test-fixall-loop.sh"
   },
   "license": "MIT"
 }

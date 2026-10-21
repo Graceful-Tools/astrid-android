@@ -21,6 +21,13 @@ if [[ -f core/Cargo.toml ]]; then
     || { echo "generated bindings changed: commit them with the core change that caused it" >&2; exit 1; }
 fi
 
+# The scheduled loop runs under launchd on the dev Mac only (docs/AUTOMATION.md), and its test
+# drives the real zsh script against stubs, so CI (ubuntu) skips it.
+if [[ "$(uname)" == Darwin ]]; then
+  step "scripts: the scheduled /fixall loop"
+  scripts/test-fixall-loop.sh
+fi
+
 step "gradle: unit tests"
 ./gradlew --console=plain testDebugUnitTest
 if [[ "$mode" != "--quick" ]]; then
