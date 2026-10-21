@@ -146,4 +146,5 @@
     <string name="ordinal_nd">%1$s.º</string>
     <string name="ordinal_rd">%1$s.º</string>
     <string name="ordinal_th">%1$s.º</string>
+    <string name="list_separator">", "</string>
 </resources>
