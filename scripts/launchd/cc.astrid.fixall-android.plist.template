@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Scheduled /fixall on the Android board — one unattended pass at :10 and :40.
+
+  A TEMPLATE, not an installable plist. Install it with:
+
+    ./scripts/launchd/install.sh cc.astrid.fixall-android
+
+  which fills in this checkout's absolute paths, then bootstraps the job. Install it from
+  the MAIN checkout, never a worktree: the loop works the checkout it is installed from.
+  Stop it with:
+
+    launchctl bootout gui/$(id -u)/cc.astrid.fixall-android
+
+  KEEP THE CHECKOUT OUT OF TCC-PROTECTED DIRECTORIES (~/Documents, ~/Desktop,
+  ~/Downloads): from one of those a launchd agent blocks pending consent and hangs in
+  `state = running` while launchd swallows every later tick. See docs/AUTOMATION.md.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>cc.astrid.fixall-android</string>
+
+    <!--
+      node, not zsh: the shim self-locates the repo (one placeholder in this template)
+      and is the TCC workaround the other loops learned the hard way. Keep it.
+    -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/node</string>
+        <string>__REPO_ROOT__/scripts/run-fixall-loop.mjs</string>
+    </array>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <!--
+          An unattended run cannot answer a permission prompt: a prompt in `claude -p` is a
+          denial, and the run stalls on its first gradle build. Set HERE, not defaulted in
+          fixall-loop.sh, so that granting it is a visible line in the file you install and
+          `npm run fixall:loop` by hand still prompts like an ordinary session. Same as the
+          iOS loop's plist.
+        -->
+        <key>FIXALL_PERMISSION_MODE</key>
+        <string>bypassPermissions</string>
+    </dict>
+
+    <!--
+      :10 and :40. Three loops share this Mac: iOS at :00/:30, web at :20/:50, Android
+      here. Interleaving the start minutes keeps the queue reads and the heavy first
+      minutes of each run apart; the load guard in fixall-loop.sh covers the overlap that
+      is left. If the Mac is asleep, launchd runs it once on wake.
+    -->
+    <key>StartCalendarInterval</key>
+    <array>
+        <dict>
+            <key>Minute</key>
+            <integer>10</integer>
+        </dict>
+        <dict>
+            <key>Minute</key>
+            <integer>40</integer>
+        </dict>
+    </array>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>__HOME__/Library/Logs/astrid-fixall-android.log</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/Library/Logs/astrid-fixall-android.log</string>
+</dict>
+</plist>
