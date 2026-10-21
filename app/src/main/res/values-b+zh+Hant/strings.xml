@@ -267,6 +267,11 @@
     <string name="messages_saving">保存中...</string>
     <string name="messages_deleting">刪除中...</string>
     <string name="profile_loading">正在加載個人資料...</string>
+    <string name="profile_your_tasks">您的任務</string>
+    <string name="profile_shared_tasks_with">與 %1$s 共享的任務</string>
+    <string name="profile_error_not_found">找不到使用者</string>
+    <string name="profile_error_load_failed">載入個人資料失敗</string>
+    <string name="profile_go_back">返回</string>
     <string name="profile_joined">加入於 %1$s</string>
     <string name="profile_edit_title">編輯個人資料</string>
     <string name="profile_change_photo">點選更改照片</string>

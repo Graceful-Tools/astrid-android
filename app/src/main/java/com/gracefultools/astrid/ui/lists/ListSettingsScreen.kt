@@ -51,6 +51,8 @@ fun ListSettingsScreen(
     vm: ListSettingsViewModel,
     onBack: () -> Unit,
     onGone: () -> Unit,
+    /** A member was tapped: their profile (AATD-69). */
+    onOpenProfile: (String) -> Unit = {},
     /** The Filters tab's sort and filter sections. */
     filters: @Composable () -> Unit = {},
     /** The Admin tab's AI Coding Agent and External sync sections (ui/sync). */
@@ -84,7 +86,7 @@ fun ListSettingsScreen(
             if (settings != null) Box(Modifier.weight(1f)) {
                 when (tab) {
                     ListSettingsTab.FILTERS -> ListFiltersTab(settings.listId, settings.isFavorite, vm::setFavorite, filters = filters)
-                    ListSettingsTab.MEMBERS -> ListMembersTab(state, vm)
+                    ListSettingsTab.MEMBERS -> ListMembersTab(state, vm, onOpenProfile)
                     ListSettingsTab.ADMIN -> ListAdminTab(state, vm, integrations)
                 }
             }

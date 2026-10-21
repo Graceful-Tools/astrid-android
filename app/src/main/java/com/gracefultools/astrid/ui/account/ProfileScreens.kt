@@ -1,5 +1,10 @@
 package com.gracefultools.astrid.ui.account
 
+import com.gracefultools.astrid.ui.tasks.TaskRowView
+import com.gracefultools.astrid.model.ProfileStats
+import com.gracefultools.astrid.model.PersonProfile
+import com.gracefultools.astrid.core.FailureKind
+import androidx.compose.material.icons.automirrored.outlined.List
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -155,18 +160,7 @@ fun ProfileScreen(vm: ProfileViewModel, onBack: () -> Unit) {
             ) {
                 state.user?.let { UserCard(it, onEdit = { editing = true }) }
                 val stats = state.stats
-                if (stats != null) {
-                    Column(verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
-                        StatCard(Icons.Filled.CheckCircle, StatGreen, stats.completed, R.string.stats_completed, R.string.stats_completed_tagline)
-                        StatCard(Icons.Filled.Lightbulb, StatYellow, stats.inspired, R.string.stats_inspired, R.string.stats_inspired_tagline)
-                        StatCard(Icons.Filled.Favorite, StatBlue, stats.supported, R.string.stats_supported, R.string.stats_supported_tagline)
-                    }
-                } else if (state.loadingStats) {
-                    Column(Modifier.fillMaxWidth().padding(top = Spacing.s32), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s16)) {
-                        CircularProgressIndicator(color = colors.accent)
-                        Text(stringResource(R.string.profile_loading), style = TextStyles.body, color = colors.textMuted)
-                    }
-                }
+                if (stats != null) StatCards(stats) else if (state.loadingStats) ProfileLoading()
             }
         }
         state.error?.let { Box(Modifier.align(Alignment.BottomCenter).padding(bottom = Spacing.s24)) { AppErrorBanner(it, vm::dismissError) } }
@@ -176,17 +170,24 @@ fun ProfileScreen(vm: ProfileViewModel, onBack: () -> Unit) {
 
 /** iOS's userInfoCard: 80 avatar with a camera badge, 24 bold name, AI badge, email, "Joined". */
 @Composable
-private fun UserCard(user: AccountUser, onEdit: () -> Unit) {
+private fun UserCard(user: AccountUser, onEdit: () -> Unit) =
+    UserCard(user.image, user.display, initialsOf(user.name, user.email), user.email, user.createdAt, user.isAIAgent == true, onEdit)
+
+/** The same card for anyone; with no [onEdit] (somebody else's profile) there is no camera badge. */
+@Composable
+private fun UserCard(image: String?, name: String, initials: String, email: String?, createdAt: String?, isAIAgent: Boolean, onEdit: (() -> Unit)?) {
     val colors = AstridTheme.colors
     val editLabel = stringResource(R.string.profile_edit_title)
     ProfileCard {
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s16), verticalAlignment = Alignment.Top) {
             Box(
-                Modifier.size(80.dp).clip(CircleShape).clickable(role = Role.Button, onClickLabel = editLabel, onClick = onEdit)
-                    .semantics { contentDescription = editLabel },
+                Modifier.size(80.dp).clip(CircleShape).then(
+                    if (onEdit == null) Modifier
+                    else Modifier.clickable(role = Role.Button, onClickLabel = editLabel, onClick = onEdit).semantics { contentDescription = editLabel },
+                ),
             ) {
-                Avatar(user.image, initialsOf(user.name, user.email), 80.dp)
-                Box(
+                Avatar(image, initials, 80.dp)
+                if (onEdit != null) Box(
                     Modifier.align(Alignment.BottomEnd).offset(x = (-4).dp, y = (-4).dp).size(24.dp).clip(CircleShape).background(colors.accent),
                     contentAlignment = Alignment.Center,
                 ) { Icon(Icons.Filled.PhotoCamera, null, tint = Color.White, modifier = Modifier.size(12.dp)) }
@@ -194,18 +195,19 @@ private fun UserCard(user: AccountUser, onEdit: () -> Unit) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        user.display, fontSize = 24.sp, fontWeight = FontWeight.Bold, color = colors.textPrimary,
-                        modifier = Modifier.weight(1f, fill = false).clickable(role = Role.Button, onClickLabel = editLabel, onClick = onEdit),
+                        name, fontSize = 24.sp, fontWeight = FontWeight.Bold, color = colors.textPrimary,
+                        modifier = Modifier.weight(1f, fill = false)
+                            .then(if (onEdit == null) Modifier else Modifier.clickable(role = Role.Button, onClickLabel = editLabel, onClick = onEdit)),
                     )
-                    if (user.isAIAgent == true) {
+                    if (isAIAgent) {
                         Text(
                             stringResource(R.string.profile_ai_agent), fontSize = 10.sp, fontWeight = FontWeight.SemiBold, color = Color.White,
                             modifier = Modifier.clip(RoundedCornerShape(Radius.small)).background(colors.accent).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
                         )
                     }
                 }
-                user.email?.let { Text(it, style = TextStyles.footnote, color = colors.textMuted) }
-                localDate(user.createdAt)?.let { joined ->
+                email?.let { Text(it, style = TextStyles.footnote, color = colors.textMuted) }
+                localDate(createdAt)?.let { joined ->
                     val month = joined.format(DateTimeFormatter.ofPattern("MMMM yyyy", androidx.compose.ui.platform.LocalConfiguration.current.locales[0]))
                     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Filled.CalendarMonth, null, tint = colors.textMuted, modifier = Modifier.size(12.dp))
@@ -230,6 +232,95 @@ private fun StatCard(icon: ImageVector, tint: Color, value: Int, label: Int, tag
                 Text("$value ${stringResource(label)}", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = colors.textPrimary)
                 Text(stringResource(tagline), fontSize = 15.sp, fontWeight = FontWeight.Medium, color = colors.textMuted)
             }
+        }
+    }
+}
+
+/** iOS's statsGrid: the three numbers, one card each. */
+@Composable
+private fun StatCards(stats: ProfileStats) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
+        StatCard(Icons.Filled.CheckCircle, StatGreen, stats.completed, R.string.stats_completed, R.string.stats_completed_tagline)
+        StatCard(Icons.Filled.Lightbulb, StatYellow, stats.inspired, R.string.stats_inspired, R.string.stats_inspired_tagline)
+        StatCard(Icons.Filled.Favorite, StatBlue, stats.supported, R.string.stats_supported, R.string.stats_supported_tagline)
+    }
+}
+
+@Composable
+private fun ProfileLoading() {
+    val colors = AstridTheme.colors
+    Column(Modifier.fillMaxWidth().padding(top = Spacing.s32), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s16)) {
+        CircularProgressIndicator(color = colors.accent)
+        Text(stringResource(R.string.profile_loading), style = TextStyles.body, color = colors.textMuted)
+    }
+}
+
+// ── Somebody else's profile ──────────────────────────────────────────────────────────────────
+
+/**
+ * iOS's UserProfileView opened on another person — from the member list or a `users/<id>` link
+ * (AATD-69): their card (no email, no editing), the three numbers, and the tasks they share as
+ * read-only rows. Your own id opens your own, editable profile instead ([onOwnProfile]).
+ */
+@Composable
+fun PersonProfileScreen(vm: PersonProfileViewModel, onBack: () -> Unit, onOwnProfile: () -> Unit, onOpenTask: (String) -> Unit) {
+    val state by vm.state.collectAsStateWithLifecycle()
+    val colors = AstridTheme.colors
+    BackHandler(onBack = onBack)
+    val person = state.person
+    LaunchedEffect(person?.isOwnProfile) { if (person?.isOwnProfile == true) onOwnProfile() }
+
+    Column(Modifier.fillMaxSize().background(colors.bgPrimary)) {
+        FloatingTextHeader(stringResource(R.string.profile_title), icon = Icons.Outlined.AccountCircle, onBack = onBack)
+        when {
+            person != null -> Column(
+                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(Spacing.s16),
+                verticalArrangement = Arrangement.spacedBy(Spacing.s16),
+            ) {
+                val name = person.display
+                UserCard(person.image, name, initialsOf(person.name, null), null, person.createdAt, person.isAIAgent == true, onEdit = null)
+                person.stats?.let { StatCards(it) }
+                if (person.rows.isNotEmpty()) SharedTasks(person, name, onOpenTask)
+            }
+            state.loading -> ProfileLoading()
+            else -> Column(
+                Modifier.fillMaxWidth().padding(Spacing.s32), horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(Spacing.s16),
+            ) {
+                Icon(Icons.Filled.Warning, null, tint = colors.textMuted, modifier = Modifier.size(48.dp))
+                Text(
+                    stringResource(if (state.error == FailureKind.NOT_FOUND) R.string.profile_error_not_found else R.string.profile_error_load_failed),
+                    style = TextStyles.body, color = colors.textMuted,
+                )
+                TextButton(onClick = onBack) { Text(stringResource(R.string.profile_go_back)) }
+            }
+        }
+    }
+}
+
+/** iOS's sharedTasksSection: a checklist heading with the count in an outlined pill, then the rows. */
+@Composable
+private fun SharedTasks(person: PersonProfile, name: String, onOpenTask: (String) -> Unit) {
+    val colors = AstridTheme.colors
+    val shape = RoundedCornerShape(Radius.medium)
+    Column(
+        Modifier.fillMaxWidth().clip(shape).background(colors.bgSecondary).border(1.dp, colors.border, shape).padding(bottom = Spacing.s16),
+        verticalArrangement = Arrangement.spacedBy(Spacing.s12),
+    ) {
+        Row(Modifier.padding(start = Spacing.s16, end = Spacing.s16, top = Spacing.s16), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.AutoMirrored.Outlined.List, null, tint = colors.textMuted)
+            Text(
+                if (person.isOwnProfile) stringResource(R.string.profile_your_tasks) else stringResource(R.string.profile_shared_tasks_with, name),
+                style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.weight(1f).padding(start = Spacing.s8),
+            )
+            Text(
+                "${person.count}", style = TextStyles.caption, color = colors.textSecondary,
+                modifier = Modifier.border(1.dp, colors.border, RoundedCornerShape(Radius.small)).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
+            )
+        }
+        Column(Modifier.padding(horizontal = Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+            // Read-only, as iOS's: the checkbox does nothing here.
+            person.rows.forEach { row -> TaskRowView(row, onLeading = {}, onOpen = { onOpenTask(row.id) }) }
         }
     }
 }

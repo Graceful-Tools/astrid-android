@@ -66,7 +66,7 @@ private val Purple = Color(0xFFAF52DE)
  * AI Agents and List Privacy for admins, then Leave List — or, for the owner, Transfer ownership.
  */
 @Composable
-internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel) {
+internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel, onOpenProfile: (String) -> Unit = {}) {
     val settings = state.settings ?: return
     val colors = AstridTheme.colors
     var adding by remember { mutableStateOf(false) }
@@ -81,11 +81,11 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel)
             val divider: @Composable () -> Unit = { if (!first) FormDivider(); first = false }
             state.owner?.let { owner ->
                 divider()
-                PersonRow(owner) { Text(stringResource(R.string.lists_owner), style = TextStyles.caption, color = colors.textMuted) }
+                PersonRow(owner, onOpen = { onOpenProfile(owner.id) }) { Text(stringResource(R.string.lists_owner), style = TextStyles.caption, color = colors.textMuted) }
             }
             state.otherMembers.forEach { member ->
                 divider()
-                MemberRow(member, settings.canManageMembers, vm)
+                MemberRow(member, settings.canManageMembers, vm, onOpenProfile)
             }
             if (settings.canManageMembers) state.pendingInvitations.forEach { invite ->
                 divider()
@@ -233,15 +233,24 @@ private fun TransferSection(state: ListSettingsState, listName: String, vm: List
 private fun roleLabel(role: String): String =
     stringResource(if (role.equals("admin", ignoreCase = true)) R.string.lists_role_admin else R.string.lists_role_member)
 
-/** A person on the roster: 32dp avatar, name, email (or "No email"), and a trailing control. */
+/**
+ * A person on the roster: 32dp avatar, name, email (or "No email"), and a trailing control. The
+ * face and the name open their profile, as iOS's member list does (AATD-69); the trailing control
+ * keeps its own tap.
+ */
 @Composable
-private fun PersonRow(person: UserSummary, trailing: @Composable () -> Unit) {
+private fun PersonRow(person: UserSummary, onOpen: () -> Unit, trailing: @Composable () -> Unit) {
     val colors = AstridTheme.colors
     FormRow {
-        Avatar(person.image, initialsOf(person.name, person.email), 32.dp)
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(person.display, style = TextStyles.body, color = colors.textPrimary, maxLines = 1)
-            Text(person.email ?: stringResource(R.string.profile_no_email), style = TextStyles.caption2, color = colors.textSecondary, maxLines = 1)
+        Row(
+            Modifier.weight(1f).clickable(role = Role.Button, onClick = onOpen),
+            horizontalArrangement = Arrangement.spacedBy(Spacing.s12), verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Avatar(person.image, initialsOf(person.name, person.email), 32.dp)
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(person.display, style = TextStyles.body, color = colors.textPrimary, maxLines = 1)
+                Text(person.email ?: stringResource(R.string.profile_no_email), style = TextStyles.caption2, color = colors.textSecondary, maxLines = 1)
+            }
         }
         trailing()
     }
@@ -249,12 +258,12 @@ private fun PersonRow(person: UserSummary, trailing: @Composable () -> Unit) {
 
 /** A member row; admins get the role label and a vertical-ellipsis menu (role, destructive Remove). */
 @Composable
-private fun MemberRow(member: Member, canManage: Boolean, vm: ListSettingsViewModel) {
+private fun MemberRow(member: Member, canManage: Boolean, vm: ListSettingsViewModel, onOpenProfile: (String) -> Unit) {
     val colors = AstridTheme.colors
     val userId = member.who ?: return
     val person = member.user ?: UserSummary(userId, member.name, member.email)
     val isAdmin = member.role.equals("admin", ignoreCase = true)
-    PersonRow(person) {
+    PersonRow(person, onOpen = { onOpenProfile(userId) }) {
         if (!canManage) {
             Text(roleLabel(member.role), style = TextStyles.caption, color = colors.textMuted)
         } else {

@@ -267,6 +267,11 @@
     <string name="messages_saving">Opslaan...</string>
     <string name="messages_deleting">Verwijderen...</string>
     <string name="profile_loading">Profiel laden...</string>
+    <string name="profile_your_tasks">Jouw taken</string>
+    <string name="profile_shared_tasks_with">Gedeelde taken met %1$s</string>
+    <string name="profile_error_not_found">Gebruiker niet gevonden</string>
+    <string name="profile_error_load_failed">Kan profiel niet laden</string>
+    <string name="profile_go_back">Ga terug</string>
     <string name="profile_joined">Lid sinds %1$s</string>
     <string name="profile_edit_title">Profiel bewerken</string>
     <string name="profile_change_photo">Tik om foto te wijzigen</string>

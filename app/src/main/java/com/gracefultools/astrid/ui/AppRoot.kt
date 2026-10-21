@@ -121,8 +121,8 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
         when (arrival) {
             is Arrival.OpenTask -> nav.navigate("task/${arrival.ref}")
             is Arrival.OpenList -> { nav.popBackStack("list", inclusive = false); sidebar.select(arrival.id) }
-            // Only the reader's own profile has a screen yet; another person's opens it too.
-            is Arrival.OpenProfile -> nav.navigate("profile")
+            // Somebody's profile; your own id turns into your own, editable one (AATD-69).
+            is Arrival.OpenProfile -> nav.navigate("user/${arrival.userId}")
             is Arrival.OpenSettings -> nav.navigate(arrival.route)
             is Arrival.Shortcode -> arrive(DeepLinks.resolveShortcode(graph.core, arrival.code))
             is Arrival.OpenWeb -> runCatching {
@@ -342,7 +342,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
         composable("list/{id}") { entry ->
             val id = entry.arguments?.getString("id").orEmpty()
             val vm: ListSettingsViewModel = viewModel(key = "list-$id", factory = factory { ListSettingsViewModel(graph.core, id) })
-            ListSettingsScreen(vm, onBack = { nav.popBackStack() }, onGone = {
+            ListSettingsScreen(vm, onBack = { nav.popBackStack() }, onOpenProfile = { nav.navigate("user/$it") }, onGone = {
                 nav.popBackStack()
                 side.myTasks?.let { sidebar.select(it.id) }
                 sidebar.load()
@@ -397,6 +397,16 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
         composable("profile") {
             val vm: ProfileViewModel = viewModel(key = "profile", factory = factory { ProfileViewModel(graph.core) })
             ProfileScreen(vm, onBack = { nav.popBackStack() })
+        }
+        composable("user/{id}") { entry ->
+            val id = entry.arguments?.getString("id").orEmpty()
+            val vm: com.gracefultools.astrid.ui.account.PersonProfileViewModel =
+                viewModel(key = "user-$id", factory = factory { com.gracefultools.astrid.ui.account.PersonProfileViewModel(graph.core, id) })
+            com.gracefultools.astrid.ui.account.PersonProfileScreen(
+                vm, onBack = { nav.popBackStack() },
+                onOwnProfile = { nav.navigate("profile") { popUpTo("user/{id}") { inclusive = true } } },
+                onOpenTask = { nav.navigate("task/$it") },
+            )
         }
         composable("account") {
             val vm: ProfileViewModel = viewModel(key = "profile", factory = factory { ProfileViewModel(graph.core) })
