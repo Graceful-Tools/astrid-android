@@ -639,6 +639,9 @@
     <string name="board_exit_full_screen">전체 화면 종료</string>
     <string name="chat_hide_messages">메시지 숨기기</string>
     <string name="chat_show_messages_pane">메시지 표시</string>
+    <string name="update_available_title">새로운 %1$s 버전이 준비되었습니다</string>
+    <string name="update_action">업데이트</string>
+    <string name="update_later">나중에</string>
     <string name="repeating_custom_pattern">사용자 지정 반복 패턴</string>
     <string name="repeating_repeat_every">반복 간격</string>
     <string name="repeating_repeat_on_days">다음 요일에 반복</string>

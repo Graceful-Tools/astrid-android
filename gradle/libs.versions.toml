@@ -23,10 +23,12 @@ espresso = "3.6.1"
 turbine = "1.2.0"
 coil = "2.7.0"
 playReview = "2.0.2"
+playAppUpdate = "2.1.0"
 
 [libraries]
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "playReview" }
+play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "playAppUpdate" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }

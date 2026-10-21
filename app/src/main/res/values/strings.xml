@@ -816,6 +816,11 @@
     <string name="review_maybe_later">Maybe Later</string>
     <string name="review_report_issue">Report an Issue</string>
     <string name="review_send_feedback">Send Feedback</string>
+    <!-- Update card (AATD-67), iOS's words. The body drops iOS's "Version %@ is available.": Play gives no version name. -->
+    <string name="update_available_title">A new %1$s is ready</string>
+    <string name="update_available_body">Updating takes a moment and brings the latest fixes.</string>
+    <string name="update_action">Update</string>
+    <string name="update_later">Not now</string>
     <!-- Task detail parity, iOS's words (AATD-50/51/52/53/62) -->
     <string name="repeating_custom_pattern">Custom Repeat Pattern</string>
     <string name="repeating_repeat_every">Repeat every</string>

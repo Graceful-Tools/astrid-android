@@ -53,8 +53,10 @@ class MainActivity : ComponentActivity() {
             com.gracefultools.astrid.ui.common.SplashLookalike()
         } else if (state == SignInState.SignedIn) {
             com.gracefultools.astrid.platform.NotificationPrompting(graph.notificationPrompt, graph.preferences)
-            if (!(application as AstridApplication).suppressesInterruptingPrompts) {
+            val app = application as AstridApplication
+            if (!app.suppressesInterruptingPrompts) {
                 com.gracefultools.astrid.platform.ReviewPrompting(graph.reviewPrompt)
+                com.gracefultools.astrid.platform.AppUpdatePrompting(app.appUpdatePrompt, app.playUpdates)
             }
             AppRoot(graph = graph, onSignedOut = signIn::signedOut, onDeepLink = deepLinks)
         } else {

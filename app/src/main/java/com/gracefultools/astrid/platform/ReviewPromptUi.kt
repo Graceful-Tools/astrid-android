@@ -76,7 +76,7 @@ fun requestStoreReview(activity: Activity) {
     }
 }
 
-private fun openPlayListing(context: Context) {
+internal fun openPlayListing(context: Context) {
     val market = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${context.packageName}")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     runCatching { context.startActivity(market) }.onFailure {
         runCatching {
