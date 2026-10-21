@@ -699,6 +699,14 @@
     <string name="reminders_triage_assign_to">指派給%1$s</string>
     <string name="tasks_sync_pending_chip">正在同步</string>
     <string name="tasks_sync_failed_chip">同步失敗</string>
+    <string name="contacts">聯絡人</string>
+    <string name="contacts_synced_contacts">已同步聯絡人</string>
+    <string name="contacts_sync_contacts_now">立即同步聯絡人</string>
+    <string name="contacts_access_required">需要聯絡人訪問權限</string>
+    <string name="contacts_open_settings_prompt">點擊打開設置並啟用訪問權限</string>
+    <string name="contacts_add_collaborators">添加協作者</string>
+    <string name="contacts_upload_for_collaboration">上傳您的聯絡人以獲得更好的協作體驗</string>
+    <string name="contacts_footer_text">聯絡人用於推薦協作者。它們經過加密，絕不會與第三方共享。</string>
     <string name="core_picker_no_due_date" formatted="false">無截止日期</string>
     <string name="core_picker_today" formatted="false">今天</string>
     <string name="core_picker_tomorrow" formatted="false">明天</string>

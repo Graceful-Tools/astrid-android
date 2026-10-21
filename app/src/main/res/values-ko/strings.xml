@@ -699,6 +699,14 @@
     <string name="reminders_triage_assign_to">%1$s에게 할당</string>
     <string name="tasks_sync_pending_chip">동기화 중</string>
     <string name="tasks_sync_failed_chip">동기화 실패</string>
+    <string name="contacts">연락처</string>
+    <string name="contacts_synced_contacts">동기화된 연락처</string>
+    <string name="contacts_sync_contacts_now">지금 연락처 동기화</string>
+    <string name="contacts_access_required">연락처 액세스 필요</string>
+    <string name="contacts_open_settings_prompt">설정을 열어 액세스를 허용해 주세요</string>
+    <string name="contacts_add_collaborators">협업자 추가</string>
+    <string name="contacts_upload_for_collaboration">더 나은 협업을 위해 연락처를 업로드하세요</string>
+    <string name="contacts_footer_text">연락처는 협업자 추천에 사용됩니다. 암호화되어 저장되며 제3자에게 공유되지 않습니다.</string>
     <string name="core_picker_no_due_date" formatted="false">마감일 없음</string>
     <string name="core_picker_today" formatted="false">오늘</string>
     <string name="core_picker_tomorrow" formatted="false">내일</string>

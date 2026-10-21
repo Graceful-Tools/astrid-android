@@ -378,9 +378,14 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
         }
         composable("settings") {
             val settings: SettingsViewModel = viewModel(factory = factory { SettingsViewModel(graph.core, graph.preferences) })
+            val appContext = androidx.compose.ui.platform.LocalContext.current.applicationContext
+            val contacts: com.gracefultools.astrid.ui.settings.ContactsViewModel = viewModel(factory = factory {
+                com.gracefultools.astrid.ui.settings.ContactsViewModel(graph.core, { com.gracefultools.astrid.platform.DeviceContacts.read(appContext) })
+            })
             SettingsScreen(
                 settings, onBack = { nav.popBackStack() }, onSignedOut = onSignedOut, onOpen = { nav.navigate(it) },
                 canOpen = { route -> nav.graph.findNode(route) != null },
+                contacts = contacts,
             )
         }
         composable("settings/reminders") {

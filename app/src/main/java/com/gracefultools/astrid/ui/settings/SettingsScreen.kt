@@ -73,6 +73,8 @@ fun SettingsScreen(
     onSignedOut: () -> Unit,
     onOpen: (String) -> Unit = {},
     canOpen: (String) -> Boolean = { true },
+    /** Settings → Contacts (AATD-68); null hides the section. */
+    contacts: ContactsViewModel? = null,
 ) {
     val state by vm.state.collectAsStateWithLifecycle()
     val colors = AstridTheme.colors
@@ -150,6 +152,9 @@ fun SettingsScreen(
                 ) { vm.setSmartTasks("subtaskDisplay", it) }
             }
         }
+
+        // After Preferences, as iOS orders it.
+        contacts?.let { ContactsSection(it) }
 
         FormSection(stringResource(R.string.settings_outbox)) { OutboxRows(state, vm) }
 

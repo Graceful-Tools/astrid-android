@@ -7,7 +7,11 @@ Draft (AATD-19); Jon checks these against astrid.cc/privacy before submitting.
 - **Purpose:** app functionality and account management only.
 - **Shared with third parties:** none, except AI agents and connected services (GitHub, Google Tasks)
   the user connects and assigns work to, which Play counts as user-initiated transfers.
-- **Not collected:** location, contacts, device identifiers, advertising ID, analytics, crash
+- **Contacts (optional, AATD-68):** collected only if the user taps Settings → Contacts → Add
+  Collaborators and grants access — email, name and a phone number per contact, for *app
+  functionality* (suggesting collaborators), encrypted at rest on the server, never shared. Play's
+  answer: *Contacts* collected, optional, not shared.
+- **Not collected:** location, device identifiers, advertising ID, analytics, crash
   reports — the app has no analytics or advertising SDK.
 - **Encrypted in transit:** yes (HTTPS only).
 - **Deletion:** in the app (Account & Access → Delete account) and on astrid.cc.
