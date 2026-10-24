@@ -30,8 +30,11 @@ import kotlinx.serialization.json.put
 /** A board operation that failed, and why — the screen words it. */
 data class BoardFailure(val creating: Boolean, val message: String)
 
-/** iOS ListSettingsModal's tabs. Admin is offered only to those who may manage the list. */
-enum class ListSettingsTab { FILTERS, MEMBERS, ADMIN }
+/**
+ * iOS ListSettingsModal's tabs. Insights is for everyone who can see the list (saved filters never
+ * reach this screen); Admin only for those who may manage it.
+ */
+enum class ListSettingsTab { FILTERS, MEMBERS, INSIGHTS, ADMIN }
 
 data class ListSettingsState(
     val settings: ListSettings? = null,
@@ -69,7 +72,7 @@ data class ListSettingsState(
         get() = detail?.invitations.orEmpty()
 
     val tabs: List<ListSettingsTab>
-        get() = listOf(ListSettingsTab.FILTERS, ListSettingsTab.MEMBERS) + if (settings?.canManageList == true) listOf(ListSettingsTab.ADMIN) else emptyList()
+        get() = listOf(ListSettingsTab.FILTERS, ListSettingsTab.MEMBERS, ListSettingsTab.INSIGHTS) + if (settings?.canManageList == true) listOf(ListSettingsTab.ADMIN) else emptyList()
 
     val recentlyCompletedPreset: RecentlyCompletedPreset get() = RecentlyCompletedPreset.forWindow(detail?.recentlyCompletedWindow)
 

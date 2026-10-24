@@ -736,4 +736,28 @@
     <string name="core_filter_assigned_by_me" formatted="false">Eu</string>
     <string name="core_filter_lists" formatted="false">Listas</string>
     <string name="core_reminder_toast_complete" formatted="false">Concluir</string>
+    <!-- List Settings > Insights (AATD-77), from iOS listInsights.* -->
+    <string name="list_insights_tab">Estatísticas</string>
+    <string name="list_insights_days7">7 dias</string>
+    <string name="list_insights_days30">30 dias</string>
+    <string name="list_insights_days90">90 dias</string>
+    <string name="list_insights_activity">Atividade</string>
+    <string name="list_insights_created">Novas</string>
+    <string name="list_insights_completed">Concluídas</string>
+    <string name="list_insights_created_total">%1$s novas</string>
+    <string name="list_insights_completed_total">%1$s concluídas</string>
+    <string name="list_insights_time_to_complete">Tempo mediano até concluir</string>
+    <string name="list_insights_time_in_lane">Tempo mediano em cada coluna</string>
+    <string name="list_insights_sample_size">de %1$s</string>
+    <string name="list_insights_not_enough_history">Ainda não há histórico suficiente</string>
+    <string name="list_insights_lane_history_note">As mudanças de coluna são registradas a partir de agora; isto vai sendo preenchido conforme os cartões se movem.</string>
+    <string name="list_insights_contributors">Principais colaboradores</string>
+    <string name="list_insights_profile_counts">%1$s concluídas · %2$s inspiradas · %3$s apoiadas</string>
+    <string name="list_insights_activity_counts">%1$s criadas · %2$s edições · %3$s comentários</string>
+    <string name="list_insights_no_activity">Nenhuma atividade neste período</string>
+    <string name="list_insights_load_failed">Não foi possível carregar as estatísticas</string>
+    <string name="list_insights_loading">Carregando estatísticas…</string>
+    <string name="list_insights_duration_minutes">%1$s min</string>
+    <string name="list_insights_duration_hours">%1$s h</string>
+    <string name="list_insights_duration_days">%1$s d</string>
 </resources>

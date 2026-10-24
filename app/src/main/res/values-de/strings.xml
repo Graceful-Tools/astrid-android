@@ -736,4 +736,28 @@
     <string name="core_filter_assigned_by_me" formatted="false">Mir</string>
     <string name="core_filter_lists" formatted="false">Listen</string>
     <string name="core_reminder_toast_complete" formatted="false">Erledigen</string>
+    <!-- List Settings > Insights (AATD-77), from iOS listInsights.* -->
+    <string name="list_insights_tab">Statistiken</string>
+    <string name="list_insights_days7">7 Tage</string>
+    <string name="list_insights_days30">30 Tage</string>
+    <string name="list_insights_days90">90 Tage</string>
+    <string name="list_insights_activity">Aktivität</string>
+    <string name="list_insights_created">Neu</string>
+    <string name="list_insights_completed">Erledigt</string>
+    <string name="list_insights_created_total">%1$s neu</string>
+    <string name="list_insights_completed_total">%1$s erledigt</string>
+    <string name="list_insights_time_to_complete">Mittlere Zeit bis zur Erledigung</string>
+    <string name="list_insights_time_in_lane">Mittlere Zeit pro Spalte</string>
+    <string name="list_insights_sample_size">aus %1$s</string>
+    <string name="list_insights_not_enough_history">Noch nicht genug Verlauf</string>
+    <string name="list_insights_lane_history_note">Spaltenwechsel werden ab jetzt erfasst; die Werte füllen sich, sobald Karten verschoben werden.</string>
+    <string name="list_insights_contributors">Top-Beitragende</string>
+    <string name="list_insights_profile_counts">%1$s erledigt · %2$s inspiriert · %3$s unterstützt</string>
+    <string name="list_insights_activity_counts">%1$s erstellt · %2$s Änderungen · %3$s Kommentare</string>
+    <string name="list_insights_no_activity">Keine Aktivität in diesem Zeitraum</string>
+    <string name="list_insights_load_failed">Statistiken konnten nicht geladen werden</string>
+    <string name="list_insights_loading">Statistiken werden geladen…</string>
+    <string name="list_insights_duration_minutes">%1$s Min.</string>
+    <string name="list_insights_duration_hours">%1$s Std.</string>
+    <string name="list_insights_duration_days">%1$s T.</string>
 </resources>

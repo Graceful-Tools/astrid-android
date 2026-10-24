@@ -902,4 +902,28 @@
     <string name="ordinal_nd">%1$snd</string>
     <string name="ordinal_rd">%1$srd</string>
     <string name="ordinal_th">%1$sth</string>
+    <!-- List Settings > Insights (AATD-77), from iOS listInsights.* -->
+    <string name="list_insights_tab">Insights</string>
+    <string name="list_insights_days7">7 days</string>
+    <string name="list_insights_days30">30 days</string>
+    <string name="list_insights_days90">90 days</string>
+    <string name="list_insights_activity">Activity</string>
+    <string name="list_insights_created">New</string>
+    <string name="list_insights_completed">Completed</string>
+    <string name="list_insights_created_total">%1$s new</string>
+    <string name="list_insights_completed_total">%1$s completed</string>
+    <string name="list_insights_time_to_complete">Median time to complete</string>
+    <string name="list_insights_time_in_lane">Median time in each column</string>
+    <string name="list_insights_sample_size">from %1$s</string>
+    <string name="list_insights_not_enough_history">Not enough history yet</string>
+    <string name="list_insights_lane_history_note">Column moves are recorded from now on, so this fills in as cards move.</string>
+    <string name="list_insights_contributors">Top contributors</string>
+    <string name="list_insights_profile_counts">%1$s completed · %2$s inspired · %3$s supported</string>
+    <string name="list_insights_activity_counts">%1$s created · %2$s edits · %3$s comments</string>
+    <string name="list_insights_no_activity">No activity in this period</string>
+    <string name="list_insights_load_failed">Couldn\'t load insights</string>
+    <string name="list_insights_loading">Loading insights…</string>
+    <string name="list_insights_duration_minutes">%1$s min</string>
+    <string name="list_insights_duration_hours">%1$s h</string>
+    <string name="list_insights_duration_days">%1$s d</string>
 </resources>

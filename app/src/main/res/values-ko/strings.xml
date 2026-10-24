@@ -736,4 +736,28 @@
     <string name="core_filter_assigned_by_me" formatted="false">나</string>
     <string name="core_filter_lists" formatted="false">목록</string>
     <string name="core_reminder_toast_complete" formatted="false">완료</string>
+    <!-- List Settings > Insights (AATD-77), from iOS listInsights.* -->
+    <string name="list_insights_tab">인사이트</string>
+    <string name="list_insights_days7">7일</string>
+    <string name="list_insights_days30">30일</string>
+    <string name="list_insights_days90">90일</string>
+    <string name="list_insights_activity">활동</string>
+    <string name="list_insights_created">새 작업</string>
+    <string name="list_insights_completed">완료</string>
+    <string name="list_insights_created_total">새 작업 %1$s개</string>
+    <string name="list_insights_completed_total">완료 %1$s개</string>
+    <string name="list_insights_time_to_complete">완료까지 걸린 시간(중앙값)</string>
+    <string name="list_insights_time_in_lane">열별 머문 시간(중앙값)</string>
+    <string name="list_insights_sample_size">%1$s개 기준</string>
+    <string name="list_insights_not_enough_history">아직 기록이 충분하지 않습니다</string>
+    <string name="list_insights_lane_history_note">열 이동은 지금부터 기록됩니다. 카드가 이동하면 채워집니다.</string>
+    <string name="list_insights_contributors">주요 기여자</string>
+    <string name="list_insights_profile_counts">완료 %1$s · 영감 %2$s · 지원 %3$s</string>
+    <string name="list_insights_activity_counts">생성 %1$s · 편집 %2$s · 댓글 %3$s</string>
+    <string name="list_insights_no_activity">이 기간에 활동이 없습니다</string>
+    <string name="list_insights_load_failed">인사이트를 불러오지 못했습니다</string>
+    <string name="list_insights_loading">인사이트 불러오는 중…</string>
+    <string name="list_insights_duration_minutes">%1$s분</string>
+    <string name="list_insights_duration_hours">%1$s시간</string>
+    <string name="list_insights_duration_days">%1$s일</string>
 </resources>

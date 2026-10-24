@@ -736,4 +736,28 @@
     <string name="core_filter_assigned_by_me" formatted="false">Я</string>
     <string name="core_filter_lists" formatted="false">Списки</string>
     <string name="core_reminder_toast_complete" formatted="false">Завершить</string>
+    <!-- List Settings > Insights (AATD-77), from iOS listInsights.* -->
+    <string name="list_insights_tab">Статистика</string>
+    <string name="list_insights_days7">7 дней</string>
+    <string name="list_insights_days30">30 дней</string>
+    <string name="list_insights_days90">90 дней</string>
+    <string name="list_insights_activity">Активность</string>
+    <string name="list_insights_created">Новые</string>
+    <string name="list_insights_completed">Выполненные</string>
+    <string name="list_insights_created_total">Новых: %1$s</string>
+    <string name="list_insights_completed_total">Выполнено: %1$s</string>
+    <string name="list_insights_time_to_complete">Медианное время до выполнения</string>
+    <string name="list_insights_time_in_lane">Медианное время в каждой колонке</string>
+    <string name="list_insights_sample_size">из %1$s</string>
+    <string name="list_insights_not_enough_history">Пока недостаточно истории</string>
+    <string name="list_insights_lane_history_note">Перемещения между колонками записываются с этого момента; данные появятся по мере перемещения карточек.</string>
+    <string name="list_insights_contributors">Самые активные участники</string>
+    <string name="list_insights_profile_counts">Выполнено %1$s · Вдохновлено %2$s · Поддержано %3$s</string>
+    <string name="list_insights_activity_counts">Создано %1$s · Правок %2$s · Комментариев %3$s</string>
+    <string name="list_insights_no_activity">Нет активности за этот период</string>
+    <string name="list_insights_load_failed">Не удалось загрузить статистику</string>
+    <string name="list_insights_loading">Загрузка статистики…</string>
+    <string name="list_insights_duration_minutes">%1$s мин</string>
+    <string name="list_insights_duration_hours">%1$s ч</string>
+    <string name="list_insights_duration_days">%1$s д</string>
 </resources>

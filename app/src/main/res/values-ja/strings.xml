@@ -736,4 +736,28 @@
     <string name="core_filter_assigned_by_me" formatted="false">自分</string>
     <string name="core_filter_lists" formatted="false">リスト</string>
     <string name="core_reminder_toast_complete" formatted="false">完了</string>
+    <!-- List Settings > Insights (AATD-77), from iOS listInsights.* -->
+    <string name="list_insights_tab">インサイト</string>
+    <string name="list_insights_days7">7日間</string>
+    <string name="list_insights_days30">30日間</string>
+    <string name="list_insights_days90">90日間</string>
+    <string name="list_insights_activity">アクティビティ</string>
+    <string name="list_insights_created">新規</string>
+    <string name="list_insights_completed">完了</string>
+    <string name="list_insights_created_total">新規 %1$s 件</string>
+    <string name="list_insights_completed_total">完了 %1$s 件</string>
+    <string name="list_insights_time_to_complete">完了までの時間（中央値）</string>
+    <string name="list_insights_time_in_lane">各列での滞在時間（中央値）</string>
+    <string name="list_insights_sample_size">%1$s 件から</string>
+    <string name="list_insights_not_enough_history">まだ十分な履歴がありません</string>
+    <string name="list_insights_lane_history_note">列の移動は今後記録されます。カードが移動するにつれて表示されます。</string>
+    <string name="list_insights_contributors">上位の貢献者</string>
+    <string name="list_insights_profile_counts">完了 %1$s · インスパイア %2$s · サポート %3$s</string>
+    <string name="list_insights_activity_counts">作成 %1$s · 編集 %2$s · コメント %3$s</string>
+    <string name="list_insights_no_activity">この期間のアクティビティはありません</string>
+    <string name="list_insights_load_failed">インサイトを読み込めませんでした</string>
+    <string name="list_insights_loading">インサイトを読み込み中…</string>
+    <string name="list_insights_duration_minutes">%1$s 分</string>
+    <string name="list_insights_duration_hours">%1$s 時間</string>
+    <string name="list_insights_duration_days">%1$s 日</string>
 </resources>

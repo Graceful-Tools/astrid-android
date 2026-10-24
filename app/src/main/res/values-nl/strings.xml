@@ -736,4 +736,28 @@
     <string name="core_filter_assigned_by_me" formatted="false">Ik</string>
     <string name="core_filter_lists" formatted="false">Lijsten</string>
     <string name="core_reminder_toast_complete" formatted="false">Voltooien</string>
+    <!-- List Settings > Insights (AATD-77), from iOS listInsights.* -->
+    <string name="list_insights_tab">Inzichten</string>
+    <string name="list_insights_days7">7 dagen</string>
+    <string name="list_insights_days30">30 dagen</string>
+    <string name="list_insights_days90">90 dagen</string>
+    <string name="list_insights_activity">Activiteit</string>
+    <string name="list_insights_created">Nieuw</string>
+    <string name="list_insights_completed">Voltooid</string>
+    <string name="list_insights_created_total">%1$s nieuw</string>
+    <string name="list_insights_completed_total">%1$s voltooid</string>
+    <string name="list_insights_time_to_complete">Mediane tijd tot voltooiing</string>
+    <string name="list_insights_time_in_lane">Mediane tijd per kolom</string>
+    <string name="list_insights_sample_size">uit %1$s</string>
+    <string name="list_insights_not_enough_history">Nog niet genoeg geschiedenis</string>
+    <string name="list_insights_lane_history_note">Kolomverplaatsingen worden vanaf nu vastgelegd; dit vult zich naarmate kaarten verschuiven.</string>
+    <string name="list_insights_contributors">Topbijdragers</string>
+    <string name="list_insights_profile_counts">%1$s voltooid · %2$s geïnspireerd · %3$s ondersteund</string>
+    <string name="list_insights_activity_counts">%1$s gemaakt · %2$s bewerkingen · %3$s reacties</string>
+    <string name="list_insights_no_activity">Geen activiteit in deze periode</string>
+    <string name="list_insights_load_failed">Inzichten konden niet worden geladen</string>
+    <string name="list_insights_loading">Inzichten laden…</string>
+    <string name="list_insights_duration_minutes">%1$s min</string>
+    <string name="list_insights_duration_hours">%1$s u</string>
+    <string name="list_insights_duration_days">%1$s d</string>
 </resources>

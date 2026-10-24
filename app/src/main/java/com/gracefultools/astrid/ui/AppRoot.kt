@@ -355,6 +355,10 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     }
                 },
                 integrations = { com.gracefultools.astrid.ui.sync.ListIntegrationsSections(graph.core, id) },
+                insights = {
+                    val insights: com.gracefultools.astrid.ui.lists.ListInsightsViewModel = viewModel(key = "insights-$id", factory = factory { com.gracefultools.astrid.ui.lists.ListInsightsViewModel(graph.core, id) })
+                    com.gracefultools.astrid.ui.lists.ListInsightsTab(insights)
+                },
             )
         }
         composable("new-list") {

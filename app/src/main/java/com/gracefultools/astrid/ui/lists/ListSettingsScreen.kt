@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ShowChart
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.People
 import androidx.compose.material.icons.outlined.Settings
@@ -42,8 +43,8 @@ import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Spacing
 
 /**
- * iOS ListSettingsModal: "List Settings" with a segmented Filters / Members / Admin control (Admin
- * only for those who may manage the list). Android pushes it as a screen with a back chevron where
+ * iOS ListSettingsModal: "List Settings" with a segmented Filters / Members / Insights / Admin
+ * control (Admin only for those who may manage the list). Android pushes it as a screen with a back chevron where
  * iOS presents a sheet with Done.
  */
 @Composable
@@ -55,6 +56,8 @@ fun ListSettingsScreen(
     onOpenProfile: (String) -> Unit = {},
     /** The Filters tab's sort and filter sections. */
     filters: @Composable () -> Unit = {},
+    /** The Insights tab (AATD-77): ListInsightsTab over its own view model. */
+    insights: @Composable () -> Unit = {},
     /** The Admin tab's AI Coding Agent and External sync sections (ui/sync). */
     integrations: @Composable () -> Unit = {},
 ) {
@@ -75,6 +78,7 @@ fun ListSettingsScreen(
                     when (t) {
                         ListSettingsTab.FILTERS -> Icons.Outlined.FilterList to stringResource(R.string.lists_filters)
                         ListSettingsTab.MEMBERS -> Icons.Outlined.People to stringResource(R.string.lists_members)
+                        ListSettingsTab.INSIGHTS -> Icons.AutoMirrored.Outlined.ShowChart to stringResource(R.string.list_insights_tab)
                         ListSettingsTab.ADMIN -> Icons.Outlined.Settings to stringResource(R.string.lists_admin)
                     }
                 },
@@ -87,6 +91,7 @@ fun ListSettingsScreen(
                 when (tab) {
                     ListSettingsTab.FILTERS -> ListFiltersTab(settings.listId, settings.isFavorite, vm::setFavorite, filters = filters)
                     ListSettingsTab.MEMBERS -> ListMembersTab(state, vm, onOpenProfile)
+                    ListSettingsTab.INSIGHTS -> insights()
                     ListSettingsTab.ADMIN -> ListAdminTab(state, vm, integrations)
                 }
             }

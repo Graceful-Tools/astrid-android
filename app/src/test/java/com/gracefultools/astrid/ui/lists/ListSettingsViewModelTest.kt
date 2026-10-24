@@ -88,10 +88,10 @@ class ListSettingsViewModelTest {
     // ---- AATD-43: List Settings, Admin tab ----
 
     @Test
-    fun `AATD-43 tabs are Filters and Members, plus Admin only for whoever may manage the list`() = runTest {
-        assertEquals(listOf(ListSettingsTab.FILTERS, ListSettingsTab.MEMBERS, ListSettingsTab.ADMIN), vm(ownedCore()).state.value.tabs)
+    fun `AATD-43 AATD-77 tabs are Filters, Members and Insights, plus Admin only for whoever may manage the list`() = runTest {
+        assertEquals(listOf(ListSettingsTab.FILTERS, ListSettingsTab.MEMBERS, ListSettingsTab.INSIGHTS, ListSettingsTab.ADMIN), vm(ownedCore()).state.value.tabs)
         val member = FakeCore().apply { answer("listMembers", owned.replace("\"canManageList\":true", "\"canManageList\":false")) }
-        assertEquals(listOf(ListSettingsTab.FILTERS, ListSettingsTab.MEMBERS), vm(member).state.value.tabs)
+        assertEquals(listOf(ListSettingsTab.FILTERS, ListSettingsTab.MEMBERS, ListSettingsTab.INSIGHTS), vm(member).state.value.tabs)
     }
 
     @Test
