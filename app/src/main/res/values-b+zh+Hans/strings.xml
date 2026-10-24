@@ -736,4 +736,28 @@
     <string name="core_filter_assigned_by_me" formatted="false">我</string>
     <string name="core_filter_lists" formatted="false">清单</string>
     <string name="core_reminder_toast_complete" formatted="false">完成</string>
+    <!-- List Settings > Insights (AATD-77), from iOS listInsights.* -->
+    <string name="list_insights_tab">洞察</string>
+    <string name="list_insights_days7">7 天</string>
+    <string name="list_insights_days30">30 天</string>
+    <string name="list_insights_days90">90 天</string>
+    <string name="list_insights_activity">活动</string>
+    <string name="list_insights_created">新建</string>
+    <string name="list_insights_completed">已完成</string>
+    <string name="list_insights_created_total">新建 %1$s 项</string>
+    <string name="list_insights_completed_total">完成 %1$s 项</string>
+    <string name="list_insights_time_to_complete">完成所需时间（中位数）</string>
+    <string name="list_insights_time_in_lane">各列停留时间（中位数）</string>
+    <string name="list_insights_sample_size">基于 %1$s 项</string>
+    <string name="list_insights_not_enough_history">历史记录还不够</string>
+    <string name="list_insights_lane_history_note">从现在开始记录列的移动，随着卡片移动这里会逐渐有数据。</string>
+    <string name="list_insights_contributors">主要贡献者</string>
+    <string name="list_insights_profile_counts">完成 %1$s · 启发 %2$s · 支持 %3$s</string>
+    <string name="list_insights_activity_counts">创建 %1$s · 编辑 %2$s · 评论 %3$s</string>
+    <string name="list_insights_no_activity">此期间没有活动</string>
+    <string name="list_insights_load_failed">无法加载洞察</string>
+    <string name="list_insights_loading">正在加载洞察…</string>
+    <string name="list_insights_duration_minutes">%1$s 分钟</string>
+    <string name="list_insights_duration_hours">%1$s 小时</string>
+    <string name="list_insights_duration_days">%1$s 天</string>
 </resources>

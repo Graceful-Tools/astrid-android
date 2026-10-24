@@ -48,6 +48,16 @@ class CoreSessionTest {
     }
 
     @Test
+    fun `AATD-77 the pinned core knows listInsights, so signed out it is a sign-in refusal, not an unknown command`() = runBlocking {
+        try {
+            session().run(command("listInsights", "listId" to "l1", "days" to 7, "timeZone" to "UTC"))
+            fail("expected a failure")
+        } catch (failure: CoreFailure) {
+            assertEquals(failure.message, FailureKind.UNAUTHORIZED, failure.kind)
+        }
+    }
+
+    @Test
     fun `AATD-4 nobody is signed in on a fresh cache`() = runBlocking {
         val answer = session().run(command("isSignedIn")) as JsonObject
         assertEquals(JsonPrimitive(false), answer["signedIn"])
