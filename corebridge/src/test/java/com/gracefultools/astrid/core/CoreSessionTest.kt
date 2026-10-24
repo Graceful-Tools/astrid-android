@@ -123,6 +123,21 @@ class CoreSessionTest {
     }
 
     @Test
+    fun `AATD-78 completing an every-4-weeks-on-Friday task rolls it four weeks on, not one`() = runBlocking {
+        val core = session()
+        core.run(CoreJson.parseToJsonElement("""{"kind":"seedCache","currentUser":{"id":"u"},
+            "tasks":[{"id":"t1","title":"Bins","dueDateTime":"2026-10-23T09:00:00Z","isAllDay":false}]}""").jsonObject)
+        core.run(command("updateTask", "taskId" to "t1", "changes" to mapOf(
+            "repeating" to "custom", "repeatFrom" to "DUE_DATE",
+            "repeatingData" to mapOf("type" to "custom", "unit" to "weeks", "interval" to 4, "weekdays" to listOf("friday")),
+        )))
+        val rolled = core.run(command("completeTask", "taskId" to "t1", "completed" to true)).jsonObject
+        assertEquals(JsonPrimitive(false), rolled["completed"])
+        val due = (rolled["dueDateTime"] as JsonPrimitive).content
+        assertTrue("next occurrence is Fri 20 Nov, got $due", due.startsWith("2026-11-20"))
+    }
+
+    @Test
     fun `AATD-50 the rules door words a repeat that is still being edited`() {
         val parts = CoreRules.ask(
             CoreJson.parseToJsonElement(
