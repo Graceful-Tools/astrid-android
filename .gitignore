@@ -14,3 +14,5 @@ core/target/
 *.jks
 *.keystore
 keystore.properties
+# Cloud agent credentials (astrid-web scripts/push-agent-env.sh), never committed.
+.env.cloud*

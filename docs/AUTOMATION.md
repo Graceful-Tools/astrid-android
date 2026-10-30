@@ -12,6 +12,35 @@ to no one), so a LaunchAgent polls.
 | Log | `~/Library/Logs/astrid-fixall-android.log` — every tick ends in one `RESULT: OK/SKIPPED/FAILED` line |
 | Runs on | the Claude Code CLI subscription; no API key anywhere in the path |
 
+## Moving to the cloud (AATD-80)
+
+Jon decided on 2026-10-24 (AATD-79) that the Android board is worked from the cloud and the Mac is
+for astrid-ios only. The pieces are in place; the switch is not made yet:
+
+| | |
+|---|---|
+| Workflow | `.github/workflows/agent-run.yml`: dispatch-only until proven, then `:10`/`:40` |
+| Prompt | `.github/agent-run-prompt.md` |
+| Toolchain | `.github/actions/android-setup`, shared with `ci.yml`, so CI-green and agent-green mean the same |
+| Device tests | `ci.yml` → `instrumented`: API 35 x86_64 emulator under KVM, on every PR and push |
+| Secrets | the `agent` environment here, holding no production keys |
+
+The run clones astrid-web and astrid-core beside the checkout, so `../astrid-web` paths work as
+they do on the Mac. It ends at a PR, never a merge. The task waits in `Waiting` with
+`BLOCKED-ON: <PR> merged to main` until it lands. It cannot push to astrid-core, so a core fix is
+handed back.
+
+**What a person has to do, in order:**
+
+1. In this checkout, write `.env.cloud` (git-ignored) with `CLAUDE_CODE_OAUTH_TOKEN` (from
+   `claude setup-token`), `ASTRID_OAUTH_CLIENT_ID` / `ASTRID_OAUTH_CLIENT_SECRET` (the pair in
+   astrid-web's `.env.local`), and `AGENT_GH_TOKEN`: a fine-grained token for **astrid-android
+   only**, with Contents + Pull requests read/write and **no** Actions write. Upload it with
+   `../astrid-web/scripts/push-agent-env.sh`, which targets the repo of the cwd.
+2. Dry run: `gh workflow run agent-run.yml -f dry_run=true`, then one real run that ends in a PR.
+3. Add `schedule: - cron: '10,40 * * * *'` to `agent-run.yml`, then retire this LaunchAgent with
+   the uninstall lines below, and stop the idle Gradle daemon (`./gradlew --stop`).
+
 ## Install, inspect, uninstall
 
 Always from the **main checkout** (`~/mycode/astrid-android`), never a worktree: the loop works the
