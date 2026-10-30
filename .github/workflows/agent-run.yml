@@ -1,0 +1,274 @@
+name: 'Agent Run'
+
+# One /fixall pass on the Android board by a coding agent on an ephemeral runner (AATD-80).
+# Ported from astrid-web's agent-run.yml; astrid-web docs/AGENT_FLEET.md is the design and
+# docs/AUTOMATION.md here says how this replaces the Mac's LaunchAgent.
+#
+# What differs from the web workflow, and why:
+#   - astrid-web and astrid-core are cloned BESIDE this checkout, so the `../astrid-web`
+#     paths in CLAUDE.md, fixstuff.md and the queue scripts mean what they mean on the Mac.
+#     Board scripts run from ../astrid-web (they read its tsx and its package), except the
+#     wake-state restore, whose `gh api repos/{owner}/{repo}` must resolve to THIS repo.
+#   - No Postgres: the Android gate needs none. It needs the toolchain (android-setup).
+#   - No "register cloud handoff" step: astrid-web's validator accepts AWTD- branches only,
+#     and it exists to gate a production deploy, which Android does not have. A push to
+#     main reaches nobody; Play releases always go through Jon. The agent's own PR is the
+#     handoff, and the run checks that it opened one.
+#
+# What this job can NOT do, on purpose: read production credentials (it declares the
+# `agent` environment only), dispatch workflows (no `actions: write`), merge, or publish.
+#
+# Dispatch-only until the dry run and one real run are proven (AATD-80 step 3). The
+# schedule goes in when the Mac loop is retired, at :10/:40, the slot it frees.
+on:
+  workflow_dispatch:
+    inputs:
+      harness:
+        description: 'Which coding agent runs the pass'
+        required: true
+        default: 'claude-code'
+        type: choice
+        options:
+          - claude-code
+      dry_run:
+        description: 'List the queue without working it'
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: agent-run-${{ (inputs.harness || 'claude-code') }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: read
+
+jobs:
+  run:
+    name: "Agent run (${{ (inputs.harness || 'claude-code') }})"
+    runs-on: ubuntu-24.04
+    environment: agent
+    timeout-minutes: 90
+    env:
+      ASTRID_OAUTH_CLIENT_ID: ${{ secrets.ASTRID_OAUTH_CLIENT_ID }}
+      ASTRID_OAUTH_CLIENT_SECRET: ${{ secrets.ASTRID_OAUTH_CLIENT_SECRET }}
+      ASTRID_FIXALL_HARNESS: ${{ (inputs.harness || 'claude-code') }}
+      # By id, never by name: two lists are called "Astrid Android To-do".
+      ASTRID_OAUTH_LIST_ID: ${{ vars.ASTRID_ANDROID_LIST_ID || '85eef4ce-3d4d-4072-9ca7-bd631ca815b1' }}
+      ASTRID_FIXALL_CLAIMS_FILE: ${{ github.workspace }}/.agent-output/claims.txt
+      # astrid-web docs/FIXALL_WORKFLOW.md → On an ephemeral runner: no lock, no
+      # production access, and the run stops at the PR.
+      ASTRID_FIXALL_EPHEMERAL: '1'
+      ASTRID_FIXALL_MAX_TASKS: ${{ vars.ASTRID_FIXALL_MAX_TASKS || '1' }}
+      # A fine-grained token for THIS repo (Contents + Pull requests write, no Actions
+      # write). PRs opened with the built-in token get no CI (GitHub's loop guard).
+      GH_TOKEN: ${{ secrets.AGENT_GH_TOKEN }}
+      WEB: ${{ github.workspace }}/../astrid-web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.AGENT_GH_TOKEN || github.token }}
+
+      - name: Android setup
+        uses: ./.github/actions/android-setup
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Both are public. astrid-core is there to read, and for `build-core.sh --core`;
+      # this run cannot push to it, so a fix that lives in the core is a handback.
+      - name: Sibling checkouts (astrid-web, astrid-core)
+        run: |
+          git clone --depth 1 https://github.com/Graceful-Tools/astrid-web.git "${WEB}"
+          git clone --depth 1 https://github.com/Graceful-Tools/astrid-core.git "${GITHUB_WORKSPACE}/../astrid-core"
+          (cd "${WEB}" && npm ci --no-audit --no-fund)
+
+      - name: Identify the run in git
+        run: |
+          mkdir -p .agent-output .agent-state
+          touch "${ASTRID_FIXALL_CLAIMS_FILE}"
+          git config user.name "Astrid agent (${ASTRID_FIXALL_HARNESS})"
+          git config user.email "agent-${ASTRID_FIXALL_HARNESS}@users.noreply.github.com"
+
+      - name: Restore durable wake state
+        id: wake-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .agent-state
+          key: agent-wake-v1-${{ (inputs.harness || 'claude-code') }}-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: agent-wake-v1-${{ (inputs.harness || 'claude-code') }}-${{ github.ref_name }}-
+
+      - name: Restore retained state when the cache was evicted
+        if: ${{ steps.wake-cache.outputs.cache-matched-key == '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: '"${WEB}/node_modules/.bin/tsx" "${WEB}/scripts/restore-cloud-wake-state.ts"'
+
+      - name: Queue and inbox preflight
+        id: preflight
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          AGENT=$(node -e 'const m={"claude-code":"claude"}; const a=m[process.env.ASTRID_FIXALL_HARNESS]; if(!a) process.exit(1); process.stdout.write(a)')
+          echo "agent=${AGENT}" >> "${GITHUB_OUTPUT}"
+          OUT="${GITHUB_WORKSPACE}/.agent-output"
+          STATE="${GITHUB_WORKSPACE}/.agent-state"
+          cd "${WEB}"
+          if [ "${DRY_RUN}" != "true" ]; then
+            if [ -z "${GH_TOKEN}" ]; then
+              echo "::error::AGENT_GH_TOKEN is required so branch pushes and PRs receive CI"
+              exit 1
+            fi
+            npx tsx scripts/agent-queue-status.ts --agent "${AGENT}" --list "${ASTRID_OAUTH_LIST_ID}" \
+              --require-polling --dry-run --no-write-seen && STATUS=0 || STATUS=$?
+            if [ "${STATUS}" != 0 ] && [ "${STATUS}" != 3 ]; then exit "${STATUS}"; fi
+            npx tsx scripts/release-stuck-doing.ts --agent "${AGENT}" \
+              --list "${ASTRID_OAUTH_LIST_ID}" --stale-minutes 180
+          fi
+          FLAGS=()
+          if [ "${DRY_RUN}" = "true" ]; then FLAGS+=(--dry-run); fi
+          npx tsx scripts/agent-queue-status.ts --agent "${AGENT}" \
+            --board android --list "${ASTRID_OAUTH_LIST_ID}" --include-unassigned \
+            --require-polling --no-write-seen --seen "${STATE}/seen.json" \
+            --output "${OUT}/preflight.json" "${FLAGS[@]}" && STATUS=0 || STATUS=$?
+          if [ "${STATUS}" != 0 ] && [ "${STATUS}" != 3 ]; then exit "${STATUS}"; fi
+          OUT="${OUT}" node -e '
+            const fs=require("fs"), o=process.env.OUT, p=JSON.parse(fs.readFileSync(o+"/preflight.json"));
+            if(p.version!==1 || typeof p.work!=="boolean" || !Array.isArray(p.wakeKeys)) process.exit(1);
+            fs.writeFileSync(o+"/wake-keys.json",JSON.stringify(p.wakeKeys));
+            fs.appendFileSync(process.env.GITHUB_OUTPUT,`work=${p.work}\n`);
+          '
+
+      - name: Build and verify Astrid MCP
+        if: ${{ !inputs.dry_run && steps.preflight.outputs.work == 'true' }}
+        working-directory: ../astrid-web
+        run: |
+          npm run build:mcp:oauth
+          node --input-type=module -e '
+            import {Client} from "@modelcontextprotocol/sdk/client/index.js";
+            import {StdioClientTransport} from "@modelcontextprotocol/sdk/client/stdio.js";
+            const client=new Client({name:"agent-preflight",version:"1"});
+            const transport=new StdioClientTransport({command:"node",args:["mcp/astrid-mcp-launch.js"],env:process.env});
+            try {
+              await client.connect(transport);
+              const {tools}=await client.listTools();
+              for(const name of ["get_agent_queue","get_task","get_task_comments","add_comment","update_task"])
+                if(!tools.some(t=>t.name===name)) throw new Error(`Missing MCP tool ${name}`);
+            } finally { await client.close(); }
+          '
+          node -e '
+            const fs=require("fs");
+            const server={command:"node",args:[process.cwd()+"/mcp/astrid-mcp-launch.js"]};
+            fs.writeFileSync(process.env.RUNNER_TEMP+"/astrid-mcp.json",JSON.stringify({mcpServers:{astrid:server}}));
+          '
+
+      - name: Run Claude Code
+        id: claude
+        timeout-minutes: 75
+        if: ${{ !inputs.dry_run && steps.preflight.outputs.work == 'true' }}
+        env:
+          # Subscription token from `claude setup-token`, never an API key.
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          set -o pipefail
+          npm install --global @anthropic-ai/claude-code@2.1.306
+          claude -p "$(cat .github/agent-run-prompt.md)" \
+            --mcp-config "${RUNNER_TEMP}/astrid-mcp.json" --strict-mcp-config \
+            --add-dir "${WEB}" --add-dir "${GITHUB_WORKSPACE}/../astrid-core" \
+            --permission-mode acceptEdits \
+            --allowedTools "Bash(npm run *),Bash(./gradlew *),Bash(scripts/*),Bash(cargo *),Bash(cd *),Bash(npx tsx scripts/*),Bash(git *),Bash(gh pr *),mcp__astrid__*,Read,Edit,Write,Grep,Glob" \
+            | tee .agent-output/agent-transcript.txt
+
+      # The harness exits 0 whether or not the agent finished; its last RESULT line is
+      # the verdict (astrid-web AWTD-1366, AWTD-1424).
+      - name: Fail the run unless the agent reports OK or SKIPPED
+        if: ${{ !inputs.dry_run && steps.preflight.outputs.work == 'true' }}
+        run: |
+          RESULT=$(grep -E '^RESULT: ' .agent-output/agent-transcript.txt 2>/dev/null | tail -1 || true)
+          echo "${RESULT:-no RESULT line}"
+          if ! printf '%s\n' "${RESULT}" | grep -qE '^RESULT: (OK|SKIPPED)($| +[^| ])'; then
+            echo "::error::The agent did not finish: ${RESULT:-it printed no RESULT line}"
+            exit 1
+          fi
+
+      # The handoff check the web runner does with open-fixall-prs.ts, by branch name:
+      # every agent branch this run pushed must have an open PR into main.
+      - name: Every pushed agent branch has a PR
+        if: ${{ !inputs.dry_run && steps.preflight.outputs.work == 'true' }}
+        run: |
+          git fetch -q --prune origin
+          MISSING=0
+          for BRANCH in $(git for-each-ref --format='%(refname:lstrip=3)' "refs/remotes/origin/agent/${ASTRID_FIXALL_HARNESS}/"); do
+            [ "$(git rev-list --count origin/main..origin/${BRANCH})" = 0 ] && continue
+            if [ -z "$(gh pr list --head "${BRANCH}" --base main --state open --json number -q '.[0].number')" ]; then
+              echo "::error::${BRANCH} has unmerged commits and no open PR"
+              MISSING=1
+            fi
+          done
+          exit "${MISSING}"
+
+      - name: Preserve unfinished work
+        if: ${{ always() && !inputs.dry_run && steps.preflight.outputs.work == 'true' }}
+        run: |
+          DIRTY=$(git status --porcelain)
+          UNPUSHED=$(git rev-list --count HEAD --not --remotes=origin)
+          if [ -n "${DIRTY}" ] || [ "${UNPUSHED}" != 0 ]; then
+            BRANCH=$(git branch --show-current)
+            if [ "${BRANCH}" = main ] || [ -z "${BRANCH}" ]; then
+              git switch -c "agent/${ASTRID_FIXALL_HARNESS}/recovery-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+            fi
+            if [ -n "${DIRTY}" ]; then
+              git add --all
+              git commit -m "wip: agent run ${GITHUB_RUN_ID} UNFINISHED, UNVERIFIED"
+            fi
+            git bundle create .agent-output/recovery.bundle HEAD --not --remotes=origin
+            git rev-parse HEAD > .agent-output/recovery-head.txt
+            git push --set-upstream origin HEAD
+          fi
+
+      - name: Release unfinished claims
+        if: ${{ always() && !inputs.dry_run && steps.preflight.outputs.agent != '' }}
+        working-directory: ../astrid-web
+        env:
+          AGENT: ${{ steps.preflight.outputs.agent }}
+        run: |
+          npx tsx scripts/release-stuck-doing.ts --agent "${AGENT}" \
+            --claims-file "${ASTRID_FIXALL_CLAIMS_FILE}"
+
+      - name: Record wake outcome
+        if: ${{ always() && !inputs.dry_run && steps.preflight.outputs.work == 'true' }}
+        working-directory: ../astrid-web
+        env:
+          AGENT: ${{ steps.preflight.outputs.agent }}
+          RUN_OK: ${{ job.status == 'success' }}
+        run: |
+          FLAGS=()
+          if [ "${RUN_OK}" != true ]; then FLAGS+=(--failed); fi
+          npx tsx scripts/agent-queue-status.ts --agent "${AGENT}" --list "${ASTRID_OAUTH_LIST_ID}" \
+            --seen "${GITHUB_WORKSPACE}/.agent-state/seen.json" --mark-seen \
+            --seen-keys-file "${GITHUB_WORKSPACE}/.agent-output/wake-keys.json" "${FLAGS[@]}"
+
+      - name: Persist durable wake state
+        if: ${{ always() && !inputs.dry_run && steps.preflight.outputs.work == 'true' }}
+        uses: actions/cache/save@v4
+        with:
+          path: .agent-state
+          key: agent-wake-v1-${{ (inputs.harness || 'claude-code') }}-${{ github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Persist run outputs and recovery evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-run-${{ (inputs.harness || 'claude-code') }}-${{ github.run_id }}
+          path: |
+            .agent-output/
+            .agent-state/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30

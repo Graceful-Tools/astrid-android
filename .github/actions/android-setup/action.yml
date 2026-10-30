@@ -1,0 +1,36 @@
+name: 'Android setup'
+description: >-
+  The one Android toolchain every job here gets: JDK 21, the SDK and NDK, Rust with
+  the Android targets and cargo-ndk, and Gradle. ci.yml's gate, its emulator job and
+  agent-run.yml all call this, so a gate that is green for CI is green for an agent
+  (AATD-80; the same rule as astrid-web's agent-setup action).
+
+  The emulator itself is not here: only the instrumented job needs one, and
+  android-emulator-runner installs its own system image.
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: "21"
+    # Packages named explicitly: the action's default list still includes the retired `tools`,
+    # which no longer exists and fails the step.
+    - uses: android-actions/setup-android@v3
+      with:
+        packages: platform-tools platforms;android-35 build-tools;35.0.0 ndk;27.2.12479018
+    - name: NDK location
+      shell: bash
+      run: echo "ANDROID_NDK_HOME=${ANDROID_SDK_ROOT}/ndk/27.2.12479018" >> "$GITHUB_ENV"
+    - name: Rust targets and cargo-ndk
+      if: hashFiles('core/Cargo.toml') != ''
+      shell: bash
+      run: |
+        rustup target add aarch64-linux-android x86_64-linux-android
+        cargo install cargo-ndk --locked
+    - uses: Swatinem/rust-cache@v2
+      if: hashFiles('core/Cargo.toml') != ''
+      with:
+        workspaces: core
+    - uses: gradle/actions/setup-gradle@v4
