@@ -57,7 +57,9 @@ jobs:
           api-level: 35
           arch: x86_64
           target: google_apis
-          profile: pixel_8
+          # pixel_6, not the Mac's pixel_8: the runner's avdmanager has no pixel_8 profile. Same
+          # 1080x2400 screen at ~411dp, so layouts and scroll distances match.
+          profile: pixel_6
           disable-animations: true
           emulator-options: -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect
           # Each line is its own shell. A Custom Tab left on top by a sign-in check covers the app
