@@ -25,6 +25,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ContentCopy
@@ -155,6 +157,9 @@ private fun TitleChips(row: TaskRow) {
     row.remote?.let { remote -> chip(remote.label, remote.url?.let { url -> { runCatching { uri.openUri(url) } } }) }
 }
 
+/** Test tag on the repeat arrows that frame a face or the "U" mark (AATD-84). */
+internal const val REPEAT_FRAME_TAG = "repeat-frame"
+
 @Composable
 private fun LeadingControl(row: TaskRow, onTap: () -> Unit) {
     val colors = AstridTheme.colors
@@ -167,20 +172,48 @@ private fun LeadingControl(row: TaskRow, onTap: () -> Unit) {
         "copy" -> Box(tap.border(2.dp, Color.Gray.copy(alpha = 0.4f), square), contentAlignment = Alignment.Center) {
             Icon(Icons.Outlined.ContentCopy, null, tint = Color.Gray, modifier = Modifier.size(16.dp))
         }
-        "avatar" -> Avatar(
-            image = row.assignee?.image,
-            initials = row.leading.initial ?: initialsOf(row.assignee?.name, row.assignee?.email),
-            size = 34.dp, shape = RowFaceShape, border = priority, modifier = tap,
-        )
-        "unassigned" -> Box(tap.border(2.dp, priority, square), contentAlignment = Alignment.Center) {
-            Text(
-                stringResource(R.string.tasks_unassigned_glyph),
-                color = priority, fontSize = 15.sp, fontWeight = FontWeight.SemiBold,
-                textDecoration = if (row.completed) TextDecoration.LineThrough else null,
-                modifier = Modifier.alpha(if (row.completed) 0.5f else 1f),
+        "avatar" -> {
+            val initials = row.leading.initial ?: initialsOf(row.assignee?.name, row.assignee?.email)
+            if (row.isRepeating) RepeatFrame(row, onTap, label) {
+                Avatar(image = row.assignee?.image, initials = initials, size = 22.dp)
+            } else Avatar(
+                image = row.assignee?.image, initials = initials,
+                size = 34.dp, shape = RowFaceShape, border = priority, modifier = tap,
             )
         }
+        "unassigned" -> {
+            val mark = @Composable { size: Int ->
+                Text(
+                    stringResource(R.string.tasks_unassigned_glyph),
+                    color = priority, fontSize = size.sp, fontWeight = FontWeight.SemiBold,
+                    textDecoration = if (row.completed) TextDecoration.LineThrough else null,
+                    modifier = Modifier.alpha(if (row.completed) 0.5f else 1f),
+                )
+            }
+            if (row.isRepeating) RepeatFrame(row, onTap, label) { mark(13) }
+            else Box(tap.border(2.dp, priority, square), contentAlignment = Alignment.Center) { mark(15) }
+        }
         else -> CheckboxArt(row.priority, row.isRepeating, row.completed, tap)
+    }
+}
+
+/**
+ * The repeat arrows as the border of a face or the "U" mark (AATD-84, web AWTD-1571). Your own
+ * repeating task already draws the arrows as its checkbox; this gives someone else's and nobody's
+ * the same cue. The art is the checkbox's own, drawn at 42 rather than 34 so the mark fits inside
+ * the loop. Tapping it does what tapping the plain square does.
+ */
+@Composable
+private fun RepeatFrame(row: TaskRow, onTap: () -> Unit, label: String, content: @Composable () -> Unit) {
+    // Laid out in the 34 slot every leading control takes, drawn 4dp past each side of it, so a
+    // framed row's title lines up with its neighbours'.
+    Box(
+        Modifier.size(34.dp).wrapContentSize(unbounded = true).size(42.dp).clip(CircleShape).clickable(onClick = onTap).testTag(REPEAT_FRAME_TAG)
+            .semantics { contentDescription = row.checkboxLabel ?: label; role = Role.Checkbox },
+        contentAlignment = Alignment.Center,
+    ) {
+        CheckboxArt(row.priority, repeating = true, checked = false, size = 42.dp)
+        content()
     }
 }
 
