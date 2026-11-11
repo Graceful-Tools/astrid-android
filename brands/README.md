@@ -36,6 +36,11 @@ unset. With nothing set, every value is Astrid's and the build is the one it alw
 | `astridAccentHoverColor` | `#2563eb` | The accent's pressed state |
 | `astridAccentTextColor` | `#ffffff` | Text and icons drawn on the accent — change it with a pale accent |
 
+Astrid's palette comes from astrid-core `design/tokens.json`, which now gives the accent as `#2563EB`
+and its hover as `#1D4ED8` (DS26). The table shows what Android builds today: its copy lags the tokens
+until the colours are generated from them (AATD-85, through core's Compose emitter AWTD2-163). Building
+a partner's app from its `brands/*.brand.json` in one command is AATD-90.
+
 Colours are `#rrggbb` or `#rrggbbaa` (iOS `BrandAccentColor`, `BrandAccentHoverColor`,
 `BrandAccentTextColor`; astrid-web `NEXT_PUBLIC_BRAND_ACCENT_*`). A malformed one is Astrid's, as on iOS.
 
@@ -69,5 +74,6 @@ prints a keystore's. Check a device with `adb shell pm get-app-links <astridAppl
 
 Astrid's own site does not serve this file yet, so Astrid's build leaves the key `false`.
 
-The rest of the `ui/theme` palette (backgrounds, text, borders) is iOS `Theme.swift`'s and is not
-brand-driven on iOS either.
+The rest of the `ui/theme` palette (backgrounds, text, borders) is not brand-driven on iOS either. Its
+source is astrid-core `design/tokens.json`; Android's hand copy (taken from iOS `Theme.swift`) is replaced
+by a generated one in AATD-85.

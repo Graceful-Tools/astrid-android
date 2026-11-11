@@ -47,6 +47,9 @@ completion report → complete. Polishing after M2 is driven from the board, not
 
 ## State, 2026-10-18 morning
 
+*A snapshot from that morning, kept as history: AATD-20 was completed later the same day. Current
+state is the Astrid Android To-do board and astrid-core `docs/CROSS_CLIENT_REVIEW_2026-11.md`.*
+
 M0, M1 and M2 are on `main`; AATD-1…18, 21 and 22 are complete. Open: AATD-19 (Play — needs
 Jon), AATD-20 (board drag-and-drop), and the polish rows in [PARITY.md](./PARITY.md). Cross-repo
 work it needed: astrid-web e6410f63 (deployed), astrid-core 8750331, 4e046e1, c0c83ed, 778d817,

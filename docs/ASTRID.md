@@ -83,7 +83,7 @@ app/Astrid (Compose)  ──  corebridge (Kotlin facade + UniFFI bindings)  ─�
 | Bindings + facade | `corebridge/src/main/java/` (`uniffi/` generated; `com/gracefultools/astrid/core/` hand-written) |
 | App entry, DI | `app/.../AstridApplication.kt`, `AppGraph.kt` |
 | Screens | `app/.../ui/<feature>/` — one `*Screen.kt` + `*ViewModel.kt` per feature |
-| Theme | `app/.../ui/theme/` — colours ported from iOS `Theme.swift` |
+| Theme | `app/.../ui/theme/` — colours from astrid-core `design/tokens.json`; today a hand copy (taken from iOS `Theme.swift`) that lags the tokens until it is generated (AATD-85) |
 | Strings | `app/src/main/res/values/strings.xml` |
 | Brand values (server, support / inbound-task addresses, agent email domain) | `app/.../Brand.kt`, from BuildConfig fields that Gradle properties set (`-PastridBaseUrl=…`, `-PastridSupportEmail=…`, `-PastridInboundTaskEmail=…`, `-PastridAgentEmailDomain=…`); unset, hosted Astrid's. iOS `Brand.swift`. Web links are `Brand.webUrl(path)`, never a literal origin |
 
