@@ -33,6 +33,8 @@ step "gradle: unit tests"
 if [[ "$mode" != "--quick" ]]; then
   step "gradle: lint and debug APK"
   ./gradlew --console=plain lintDebug assembleDebug
+  step "native libraries: every shipped ABI carries the core (AATD-88)"
+  scripts/check-native-abis.sh app/build/outputs/apk/debug/app-debug.apk
   # A white-label brand still merges: its manifest placeholders, resources and generated shortcut
   # (AATD-72, brands/README.md). Stops short of packaging, so the APK above stays the Astrid one.
   step "gradle: the example brand's manifest and resources"
