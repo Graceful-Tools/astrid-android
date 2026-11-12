@@ -46,8 +46,16 @@ data class SidebarState(
     val suggestedLists get() = com.gracefultools.astrid.ui.publiclists.PublicListSections.browsable(publicLists)
 }
 
-/** A board column is a state and a label is a tag: neither is somewhere to go (web's list flavours). */
-fun ListSummary.isPlace(): Boolean = listType != "status" && listType != "label"
+/**
+ * A board column is a state, and a label, milestone or iteration is a tag: none is somewhere to go.
+ *
+ * STAND-IN (AATD-89): an exact mirror of the core's `TaskList::is_domain_list` (`!is_status_list &&
+ * !is_tag_list`, astrid-rules `model/list.rs`), kept only until the core's `sidebar` command
+ * (AWTD2-166) answers the whole sidebar, at which point this and the sort below are deleted.
+ */
+fun ListSummary.isPlace(): Boolean = listType !in NOT_PLACES
+
+private val NOT_PLACES = setOf("status", "label", "milestone", "iteration")
 
 /**
  * The sidebar: My Tasks first and selected by default, then favourites in their saved order, then

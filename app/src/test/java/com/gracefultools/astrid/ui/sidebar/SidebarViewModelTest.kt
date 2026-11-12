@@ -32,6 +32,25 @@ class SidebarViewModelTest {
     }
 
     @Test
+    fun `AATD-89 GitHub milestones and iterations are tags, not places, so the sidebar hides them`() = runTest {
+        val core = core().apply {
+            answer("lists", """[
+                {"id":"a","name":"Alpha"},
+                {"id":"ms","name":"v1.0","listType":"milestone"},
+                {"id":"it","name":"Sprint 4","listType":"iteration","isFavorite":true,"favoriteOrder":1},
+                {"id":"col","name":"Doing","listType":"status"},
+                {"id":"lab","name":"bug","listType":"label"},
+                {"id":"r","name":"Regular","listType":"regular"}
+            ]""")
+        }
+        val vm = SidebarViewModel(core, UnconfinedTestDispatcher())
+        vm.load()
+        val s = vm.state.value
+        assertEquals(emptyList<String>(), s.favorites.map { it.id })
+        assertEquals(listOf("a", "r"), s.lists.map { it.id })
+    }
+
+    @Test
     fun `AATD-7 My Tasks is open on launch and a choice survives a reload`() = runTest {
         val core = core()
         val vm = SidebarViewModel(core, UnconfinedTestDispatcher())
