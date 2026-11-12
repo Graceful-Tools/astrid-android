@@ -52,6 +52,23 @@ if [[ "$mode" != "--quick" ]]; then
   # Its links verify (astridLinkAutoVerify=true, AATD-76); Astrid's are checked in BrandIdentityTest.
   grep -q 'android:autoVerify="true"' app/build/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml \
     || { echo "the example brand's https links are not autoVerify (AATD-76)" >&2; exit 1; }
+  # A brand's generated artwork merges over the app's (AATD-90): icons from one 1024-px source, a
+  # silhouette and the character. Needs sips or ImageMagick to make it; skipped where neither exists.
+  if command -v sips >/dev/null || command -v magick >/dev/null || command -v convert >/dev/null; then
+    step "gradle: a brand's generated icons and character art merge"
+    art="$(mktemp -d)"; trap 'rm -rf "$art" brands/.artcheck' EXIT
+    python3 -I -c 'import json,sys; p=json.load(open(sys.argv[1])); p["android"]={"appIcon":"icon.png","monochromeIcon":"mono.png","characterImage":"character.png","iconBackground":"#123456"}; json.dump(p,open(sys.argv[2],"w"))' \
+      brands/acme/profile.brand.json "$art/artcheck.brand.json"
+    scale() { if command -v sips >/dev/null; then sips -z 1024 1024 "$1" --out "$2" >/dev/null; else "$(command -v magick || command -v convert)" "$1" -resize 1024x1024! "$2"; fi; }
+    scale app/src/main/res/drawable-nodpi/astrid_character.png "$art/icon.png"
+    scale app/src/main/res/mipmap-xxxhdpi/ic_launcher_monochrome.png "$art/mono.png"
+    cp app/src/main/res/drawable-nodpi/check_box_1.png "$art/character.png"
+    scripts/make-brand-variant.sh "$art/artcheck.brand.json" --out brands/.artcheck 2>/dev/null
+    ./gradlew --console=plain -PastridBrand=.artcheck :app:processDebugResources
+    grep -q '<color name="ic_launcher_background">#FF123456</color>' \
+      app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir/values/values.xml \
+      || { echo "the brand's generated icon background did not replace Astrid's (AATD-90)" >&2; exit 1; }
+  fi
   # A partner's build should name the partner, not Astrid. Not there yet: the budget is how many
   # strings still do, and it only goes down (check-brand-literals.py; the goal is 0, AATD-90).
   step "gradle: the acme brand names no Astrid (budget 24)"

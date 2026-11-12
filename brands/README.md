@@ -30,8 +30,8 @@ scripts/make-brand-variant.sh path/to/partner.brand.json # any profile, no astri
 It maps the profile's `env` (name, wordmark, domain, URL scheme, emails, accent) and takes the
 package from the first entry of `BRAND_ANDROID_APP_LINKS`. An optional `android` block holds what only
 the app knows: `applicationId`, `appName`, `handoffClientId`, `linkHosts`, `linkAutoVerify`,
-`accentHoverColor`, `accentTextColor`, `versionCode`, `versionName`, and `play` (below). It writes
-`brand.properties`, the Play listing and a copy of the profile. Re-run it after the profile changes;
+`accentHoverColor`, `accentTextColor`, `versionCode`, `versionName`, `play` and the artwork (both
+below). It writes `brand.properties`, the Play listing, the artwork and a copy of the profile. Re-run it after the profile changes;
 predeploy fails while `brands/acme` is stale.
 
 **Play listing.** `brands/<slug>/play/` has the same layout as Astrid's `app/src/main/play/` (title,
@@ -40,12 +40,25 @@ short and full description, first release notes). The text comes from `android.p
 the script refuses longer text). With no `play` block, it writes a neutral draft in the brand's
 name and domain, for the partner to replace.
 
+**Artwork.** These are image paths relative to the profile. `sips` (macOS) or ImageMagick resizes them into
+`brands/<slug>/res/`, as iOS does for its icon sets:
+
+| Key | Becomes |
+|---|---|
+| `appIcon` | A 1024×1024 PNG: `mipmap-*/ic_launcher` (48 dp) and the adaptive icon's foreground, scaled to the 72 dp a launcher mask shows, on `iconBackground` |
+| `iconBackground` | `#rrggbb` behind the adaptive icon (`ic_launcher_background`). Default: the profile's accent |
+| `monochromeIcon` | A 1024×1024 silhouette (only its alpha counts): the themed icon (Android 13+) and `ic_notification`. Without it, the brand's adaptive icon has no themed layer, so it never shows Astrid's silhouette. The notification icon stays Astrid's, and the script says so |
+| `characterImage` | A square PNG that replaces `astrid_character` (sign-in, sidebar, empty states, agents), at 512 px |
+
+Re-running the script removes only the files it wrote last time (listed in `res/.make-brand-variant`), so
+removing a key from the profile brings back Astrid's art. It never touches resources a partner added by hand.
+Predeploy merges a brand with generated art. The checkbox PNGs and `ocean_bg` are still Astrid's.
+
 **Literal audit.** `scripts/check-brand-literals.py` lists every string in a brand build's merged
 resources and manifest that contains one of the profile's `expect.forbidLiterals`. Predeploy runs it
 on acme, including its Play listing (`--text brands/acme/play`), against a budget that only goes
-down (24: the webhook hint's `ASTRID_WEBHOOK_SECRET` and `npx astrid-agent`, in 12 locales). Icons and
-character art from one source, the ink keys, and auditing the dex are still to come in AATD-90. Until then a partner
-supplies `res/` by hand, as below.
+down (24: the webhook hint's `ASTRID_WEBHOOK_SECRET` and `npx astrid-agent`, in 12 locales). The ink keys and auditing the dex
+are still to come in AATD-90. Anything else a partner supplies in `res/` by hand, as below.
 
 Any key can also be passed alone as `-P<key>=<value>` without a brand directory. A blank value is
 unset. With nothing set, every value is Astrid's and the build is the one it always was.

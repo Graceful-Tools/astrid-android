@@ -85,6 +85,63 @@ echo '{"env":{"BRAND_ANDROID_APP_LINKS":"not a package:AA"}}' > "$work/bad.brand
 ! "$root/scripts/make-brand-variant.sh" "$work/bad.brand.json" --out "$work/bad" 2>/dev/null \
   || fail "a malformed application id was accepted"
 
+# --- artwork from one source (AATD-90, third slice) ---------------------------------------------
+if command -v sips >/dev/null || command -v magick >/dev/null || command -v convert >/dev/null; then
+  png() {  # $1 path, $2 size, $3 r g b a: a solid square PNG, no image library needed
+    python3 -I - "$@" <<'PNG'
+import struct, sys, zlib
+path, size, rgba = sys.argv[1], int(sys.argv[2]), bytes(int(v) for v in sys.argv[3:7])
+row = b"\x00" + rgba * size
+chunk = lambda t, d: struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d))
+open(path, "wb").write(b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", size, size, 8, 6, 0, 0, 0))
+                       + chunk(b"IDAT", zlib.compress(row * size)) + chunk(b"IEND", b""))
+PNG
+  }
+  px() { python3 -I -c 'import struct,sys; d=open(sys.argv[1],"rb").read(24); print(*struct.unpack(">II", d[16:24]))' "$1"; }
+  png "$work/icon.png" 1024 168 85 247 255
+  png "$work/mono.png" 1024 255 255 255 200
+  png "$work/mascot.png" 800 10 20 30 255
+  python3 -I - "$work/acme.brand.json" <<'PY3'
+import json, sys
+p = json.load(open(sys.argv[1]))
+p["android"].update({"appIcon": "icon.png", "monochromeIcon": "mono.png", "characterImage": "mascot.png",
+                     "iconBackground": "#112233"})
+json.dump(p, open(sys.argv[1], "w"))
+PY3
+  "$root/scripts/make-brand-variant.sh" "$work/acme.brand.json" --out "$work/out" >/dev/null
+  r="$work/out/res"
+  for d in mdpi:48:108:24 hdpi:72:162:36 xhdpi:96:216:48 xxhdpi:144:324:72 xxxhdpi:192:432:96; do
+    IFS=: read -r dpi legacy fg note <<<"$d"
+    [[ "$(px "$r/mipmap-$dpi/ic_launcher.png")" == "$legacy $legacy" ]] || fail "mipmap-$dpi/ic_launcher.png is not ${legacy}px"
+    [[ "$(px "$r/mipmap-$dpi/ic_launcher_foreground.png")" == "$fg $fg" ]] || fail "mipmap-$dpi foreground is not ${fg}px"
+    [[ "$(px "$r/mipmap-$dpi/ic_launcher_monochrome.png")" == "$fg $fg" ]] || fail "mipmap-$dpi monochrome is not ${fg}px"
+    [[ "$(px "$r/drawable-$dpi/ic_notification.png")" == "$note $note" ]] || fail "drawable-$dpi/ic_notification.png is not ${note}px"
+  done
+  [[ "$(px "$r/drawable-nodpi/astrid_character.png")" == "512 512" ]] || fail "the character art is not 512px"
+  grep -qF '<color name="ic_launcher_background">#FF112233</color>' "$r/values/brand_icon.xml" \
+    || fail "the icon background is not android.iconBackground"
+  grep -qF '<monochrome' "$r/mipmap-anydpi-v26/ic_launcher.xml" || fail "a monochrome source did not make a themed icon"
+
+  # No silhouette: no themed layer (never Astrid's), and the notification icon is left to the app.
+  python3 -I -c 'import json,sys; p=json.load(open(sys.argv[1])); del p["android"]["monochromeIcon"]; del p["android"]["iconBackground"]; json.dump(p,open(sys.argv[1],"w"))' "$work/acme.brand.json"
+  "$root/scripts/make-brand-variant.sh" "$work/acme.brand.json" --out "$work/out" >/dev/null 2>&1
+  ! grep -qF '<monochrome' "$r/mipmap-anydpi-v26/ic_launcher.xml" || fail "no silhouette still declared a themed icon"
+  [[ ! -e "$r/mipmap-mdpi/ic_launcher_monochrome.png" && ! -e "$r/drawable-mdpi/ic_notification.png" ]] \
+    || fail "a dropped silhouette left its icons behind"
+  grep -qF '#FFA855F7' "$r/values/brand_icon.xml" || fail "the icon background did not default to the accent"
+
+  # Dropping the art entirely goes back to Astrid's: nothing generated is left.
+  python3 -I -c 'import json,sys; p=json.load(open(sys.argv[1])); [p["android"].pop(k) for k in ("appIcon","characterImage")]; json.dump(p,open(sys.argv[1],"w"))' "$work/acme.brand.json"
+  "$root/scripts/make-brand-variant.sh" "$work/acme.brand.json" --out "$work/out" >/dev/null
+  [[ -z "$(find "$r" -type f 2>/dev/null)" ]] || fail "dropping the art left: $(find "$r" -type f | head -3)"
+
+  png "$work/small.png" 512 1 2 3 255
+  bad "a['appIcon']='$work/small.png'" "an app icon that is not 1024x1024 was accepted"
+  bad "a['characterImage']='$work/nope.png'" "a missing character image was accepted"
+else
+  echo "  (no sips or ImageMagick here: the artwork checks are skipped)"
+fi
+
 # --- check-brand-literals: text is checked, names are not, the budget is exact -------------------
 res="$work/res"; mkdir -p "$res/values" "$res/values-de"
 cat > "$res/values/values.xml" <<'XML'
