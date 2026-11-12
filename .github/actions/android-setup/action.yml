@@ -26,6 +26,9 @@ runs:
     - name: Rust targets and cargo-ndk
       if: hashFiles('core/Cargo.toml') != ''
       shell: bash
+      # In core/, so the targets land on the toolchain core/rust-toolchain.toml pins (AATD-87),
+      # not on the runner's default stable.
+      working-directory: core
       run: |
         rustup target add aarch64-linux-android x86_64-linux-android
         cargo install cargo-ndk --locked
