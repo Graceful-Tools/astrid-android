@@ -52,7 +52,6 @@ import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.DueLabel
 import com.gracefultools.astrid.model.TaskRow
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.PriorityColors
 import com.gracefultools.astrid.ui.theme.Spacing
 import java.time.LocalDate
 import java.time.LocalTime
@@ -163,7 +162,7 @@ internal const val REPEAT_FRAME_TAG = "repeat-frame"
 @Composable
 private fun LeadingControl(row: TaskRow, onTap: () -> Unit) {
     val colors = AstridTheme.colors
-    val priority = PriorityColors.getOrElse(row.priority) { PriorityColors[0] }
+    val priority = colors.priority.getOrElse(row.priority) { colors.priority[0] }
     val square = RoundedCornerShape(8.dp)
     val label = stringResource(if (row.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, row.title)
     val tap = Modifier.size(34.dp).clip(square).clickable(onClick = onTap)

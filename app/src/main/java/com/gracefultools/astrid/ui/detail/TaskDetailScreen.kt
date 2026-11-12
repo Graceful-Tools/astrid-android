@@ -120,7 +120,7 @@ import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.tasks.parseColor
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
-import com.gracefultools.astrid.ui.theme.PriorityColors
+import com.gracefultools.astrid.ui.theme.Overdue
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -318,7 +318,7 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
         val assignee = detail.assignee
         if (assignee != null && detail.fieldOrder.firstOrNull() != "assignee" && assignee.id.isNotEmpty()) {
             Avatar(assignee.image, initialsOf(assignee.name, assignee.email), 34.dp, tap, shape = RowFaceShape,
-                border = PriorityColors.getOrElse(detail.task.priority) { PriorityColors[0] })
+                border = colors.priority.getOrElse(detail.task.priority) { colors.priority[0] })
         } else {
             CheckboxArt(detail.task.priority, detail.task.repeating != null && detail.task.repeating != "never", detail.task.completed, tap)
         }
@@ -436,7 +436,7 @@ private fun WhenRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailVi
                 val label = detailDateLabel(detail)
                 Text(
                     label ?: stringResource(R.string.picker_no_due_date), style = TextStyles.body,
-                    color = if (label == null) colors.textMuted else if (detail.isOverdue) Error else colors.textPrimary, maxLines = 1,
+                    color = if (label == null) colors.textMuted else if (detail.isOverdue) Overdue else colors.textPrimary, maxLines = 1,
                 )
             }
             if (hasDate) {
@@ -472,12 +472,12 @@ private fun PriorityRow(current: Int, onPick: (Int) -> Unit) {
     IconRow(stringResource(R.string.tasks_priority), glyph = "!!!") {
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s12)) {
             for (level in 0..3) {
-                val tint = PriorityColors[level]
+                val tint = AstridTheme.colors.priority[level]
                 val selected = level == current
                 val spoken = stringResource(R.string.priority_a11y, stringResource(names[level]))
                 Box(
                     Modifier.size(40.dp).clip(RoundedCornerShape(Radius.small))
-                        .background(if (selected) tint else Color.Transparent)
+                        .background(if (selected) AstridTheme.colors.priorityFill[level] else Color.Transparent)
                         .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
                         .clickable { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove); onPick(level) }
                         .semantics(mergeDescendants = true) { this.selected = selected; role = Role.RadioButton; contentDescription = spoken },

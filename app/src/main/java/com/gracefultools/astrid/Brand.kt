@@ -59,14 +59,20 @@ object Brand {
     /** [urlScheme] for the core's config, or null when it is Astrid's — so Astrid's config is unchanged. */
     val coreUrlScheme: String? = urlScheme.takeIf { it != ASTRID_URL_SCHEME }
 
-    /** iOS `Brand.defaultAccentHex`: Astrid blue (Tailwind blue-500). */
-    const val DEFAULT_ACCENT_HEX = "#3b82f6"
+    /**
+     * Astrid blue: astrid-core `design/tokens.json` `brand.accent` (blue-600 since DS26, AWTD-1598 —
+     * dark enough for a white label on it).
+     */
+    const val DEFAULT_ACCENT_HEX = "#2563eb"
 
     /** iOS `Brand.accentColorHex` (AATD-75): the brand accent, `#rrggbb` or `#rrggbbaa`. The theme's `Accent`. */
     val accentColorHex: String = resolveAccentHex(BuildConfig.ASTRID_ACCENT_COLOR)
 
-    /** iOS `Brand.accentHoverColorHex`: the accent's pressed state (blue-600 for Astrid). */
-    val accentHoverColorHex: String = resolveAccentHex(BuildConfig.ASTRID_ACCENT_HOVER_COLOR, fallback = "#2563eb")
+    /** iOS `Brand.accentHoverColorHex`: the accent's pressed state (tokens `brand.accent-hover`, blue-700 for Astrid). */
+    val accentHoverColorHex: String = resolveAccentHex(BuildConfig.ASTRID_ACCENT_HOVER_COLOR, fallback = DEFAULT_ACCENT_HOVER_HEX)
+
+    /** Tokens `brand.accent-hover`. */
+    const val DEFAULT_ACCENT_HOVER_HEX = "#1d4ed8"
 
     /** iOS `Brand.accentTextColorHex`: drawn on the accent, so a pale accent can take dark text. */
     val accentTextColorHex: String = resolveAccentHex(BuildConfig.ASTRID_ACCENT_TEXT_COLOR, fallback = "#ffffff")

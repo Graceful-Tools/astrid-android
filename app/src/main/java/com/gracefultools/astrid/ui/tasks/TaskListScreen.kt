@@ -103,7 +103,6 @@ import com.gracefultools.astrid.ui.common.RowFaceShape
 import com.gracefultools.astrid.ui.common.AppErrorBanner
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
-import com.gracefultools.astrid.ui.theme.PriorityColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -378,7 +377,7 @@ private fun QuickAddBar(
         ) {
             val chosen = defaults.options.firstOrNull { it.userId != null && it.userId == defaults.assigneeId }
             if (defaults.leading.kind == "avatar" && chosen != null) {
-                Avatar(chosen.image, chosen.initials, 34.dp, shape = RowFaceShape, border = PriorityColors.getOrElse(defaults.priority) { PriorityColors[0] })
+                Avatar(chosen.image, chosen.initials, 34.dp, shape = RowFaceShape, border = colors.priority.getOrElse(defaults.priority) { colors.priority[0] })
             } else {
                 CheckboxArt(defaults.priority, repeating = false, checked = false)
             }
@@ -430,11 +429,11 @@ private fun QuickAddPicker(defaults: QuickAddDefaults, onPriority: (Int) -> Unit
         Text(stringResource(R.string.tasks_priority), style = TextStyles.headline, color = colors.textPrimary)
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s12)) {
             listOf("○", "!", "!!", "!!!").forEachIndexed { p, glyph ->
-                val tint = PriorityColors[p]
+                val tint = colors.priority[p]
                 val selected = defaults.priority == p
                 Box(
                     Modifier.weight(1f).heightIn(min = 44.dp).clip(RoundedCornerShape(Radius.small))
-                        .background(if (selected) tint else Color.Transparent)
+                        .background(if (selected) colors.priorityFill[p] else Color.Transparent)
                         .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
                         .clickable { haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove); onPriority(p) },
                     contentAlignment = Alignment.Center,

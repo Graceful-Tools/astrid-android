@@ -65,7 +65,7 @@ fun materialScheme(c: AstridColors): androidx.compose.material3.ColorScheme {
         surfaceTint = androidx.compose.ui.graphics.Color.Transparent,
         inverseSurface = c.textPrimary, inverseOnSurface = c.bgPrimary,
         error = Error, onError = androidx.compose.ui.graphics.Color.White,
-        errorContainer = Error.copy(alpha = 0.12f), onErrorContainer = Error,
+        errorContainer = Error.copy(alpha = 0.12f), onErrorContainer = c.errorInk,
         outline = c.borderHover, outlineVariant = c.border,
         scrim = androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.4f),
         surfaceBright = sheet, surfaceDim = c.bgTertiary,
