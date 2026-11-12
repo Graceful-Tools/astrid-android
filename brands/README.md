@@ -32,13 +32,15 @@ unset. With nothing set, every value is Astrid's and the build is the one it alw
 | `astridSupportEmail` | `support@astrid.cc` | Feedback mail |
 | `astridInboundTaskEmail` | `remindme@astrid.cc` | Email-to-task address |
 | `astridAgentEmailDomain` | `astrid.cc` | The domain shown on agent identities |
-| `astridAccentColor` | `#3b82f6` | The in-app accent (`Brand.accentColorHex` → the theme's `Accent`): buttons, links, focus, Material's primary |
-| `astridAccentHoverColor` | `#2563eb` | The accent's pressed state |
+| `astridAccentColor` | `#2563eb` | The in-app accent (`Brand.accentColorHex` → the theme's `Accent`): buttons, links, focus, Material's primary |
+| `astridAccentHoverColor` | `#1d4ed8` | The accent's pressed state |
 | `astridAccentTextColor` | `#ffffff` | Text and icons drawn on the accent — change it with a pale accent |
 
-Astrid's palette comes from astrid-core `design/tokens.json`, which now gives the accent as `#2563EB`
-and its hover as `#1D4ED8` (DS26). The table shows what Android builds today: its copy lags the tokens
-until the colours are generated from them (AATD-85, through core's Compose emitter AWTD2-163). Building
+Astrid's palette comes from astrid-core `design/tokens.json` (accent `#2563EB`, hover `#1D4ED8`, DS26;
+AWTD-1598). Android's copy is still by hand until the colours are generated from the tokens (AATD-85,
+through core's Compose emitter AWTD2-163). The accent's text shades — `brand.accent-ink` and
+`accent-ink-dark` — are Astrid's blues for Astrid; for a partner accent they are worked out from it, as
+astrid-web does, so text in the accent reads at 4.5:1 on a card and on its own wash. Building
 a partner's app from its `brands/*.brand.json` in one command is AATD-90.
 
 Colours are `#rrggbb` or `#rrggbbaa` (iOS `BrandAccentColor`, `BrandAccentHoverColor`,

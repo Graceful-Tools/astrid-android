@@ -2,7 +2,10 @@ package com.gracefultools.astrid.ui.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.luminance
 import com.gracefultools.astrid.Brand
+import kotlin.math.roundToInt
 
 /**
  * The iOS app's palette (astrid-ios `Utilities/Theme.swift`), token for token. A colour here that
@@ -51,10 +54,28 @@ data class AstridColors(
     val borderFocus: Color = Accent,
     /** iOS's Divider: neutral grey on every light theme (Ocean's border is cyan, its dividers are not). */
     val divider: Color = if (isDark) border else Color(229, 231, 235),
+    /**
+     * Each meaning's colour as text or an icon on this theme's own surfaces (astrid-core's `-ink`
+     * tokens, DS25, AWTD-1598). The base colours ([accent], [Error], [Success]…) are fills, washes
+     * and borders.
+     */
+    val accentInk: Color = AccentInk,
+    val successInk: Color = rgb(21, 128, 61),
+    val warningInk: Color = rgb(180, 83, 9),
+    val errorInk: Color = rgb(185, 28, 28),
+    val infoInk: Color = rgb(14, 116, 144),
+    /** Tokens `priority-low`: the accent, and on Dark the accent's light ink (DS26). */
+    val priorityLow: Color = Accent,
 ) {
     val accent: Color get() = Accent
     val accentHover: Color get() = AccentHover
     val accentText: Color get() = AccentText
+
+    /** Priority colours, tokens `priority-*`. Index is the wire priority (0 none … 3 highest). */
+    val priority: List<Color> get() = listOf(rgb(107, 114, 128), priorityLow, rgb(251, 191, 36), Overdue)
+
+    /** A chosen priority's fill, under a white mark: low stays the accent on every theme (DS26). */
+    val priorityFill: List<Color> get() = listOf(rgb(107, 114, 128), Accent, rgb(251, 191, 36), Overdue)
 }
 
 private fun rgb(r: Int, g: Int, b: Int) = Color(r, g, b)
@@ -73,18 +94,53 @@ fun brandColor(hex: String): Color {
     }
 }
 
-/** The brand's accent (iOS `Brand.accentColor`, AATD-75) — Astrid blue (blue-500) — and its pressed state. */
+/** The brand's accent (iOS `Brand.accentColor`, AATD-75) — Astrid blue (blue-600) — and its pressed state. */
 val Accent = brandColor(Brand.accentColorHex)
 val AccentHover = brandColor(Brand.accentHoverColorHex)
 val AccentText = brandColor(Brand.accentTextColorHex)
 
+/**
+ * The accent as text on a light card and on a dark one: tokens `brand.accent-ink` /
+ * `accent-ink-dark` for Astrid. The tokens cannot derive a partner's, so a partner accent's is
+ * worked out from it as astrid-web does (`lib/brand/css-vars.ts`).
+ */
+val AccentInk = if (Brand.accentColorHex == Brand.DEFAULT_ACCENT_HEX) rgb(29, 78, 216) else accentInk(Accent, Color.White, 0)
+val AccentInkDark = if (Brand.accentColorHex == Brand.DEFAULT_ACCENT_HEX) rgb(96, 165, 250) else accentInk(Accent, rgb(31, 41, 55), 255)
+
 val Success = rgb(34, 197, 94)
 val Warning = rgb(245, 158, 11)
-val Error = rgb(239, 68, 68)
+/** Tokens `error`: red-600 since DS26 (AWTD-1598), dark enough for a white label. */
+val Error = rgb(220, 38, 38)
 val Info = rgb(6, 182, 212)
+/** Tokens `overdue` (and `priority-high`): unchanged by DS26, so no longer the same as [Error]. */
+val Overdue = rgb(239, 68, 68)
 
-/** Priority colours, iOS `Theme.priority*`. Index is the wire priority (0 none … 3 highest). */
-val PriorityColors = listOf(rgb(107, 114, 128), Accent, rgb(251, 191, 36), rgb(239, 68, 68))
+/** WCAG AA for body text, which astrid-core holds every ink to. */
+private const val INK_CONTRAST = 4.5
+
+/** How strong a wash is: the accent at 12% over the card. */
+private const val WASH_OPACITY = 0.12f
+
+internal fun contrast(a: Color, b: Color): Float {
+    val la = a.luminance(); val lb = b.luminance()
+    return (maxOf(la, lb) + 0.05f) / (minOf(la, lb) + 0.05f)
+}
+
+/**
+ * astrid-web `accentInk`: [accent] moved towards [toward] (0 on a light card, 255 on a dark one) in
+ * twentieths until it reads at 4.5:1 on [card] and on its own wash there.
+ */
+fun accentInk(accent: Color, card: Color, toward: Int): Color {
+    val solid = accent.copy(alpha = 1f)
+    val wash = solid.copy(alpha = WASH_OPACITY).compositeOver(card)
+    val channels = listOf(solid.red, solid.green, solid.blue).map { (it * 255).roundToInt() }
+    for (step in 0..20) {
+        val (r, g, b) = channels.map { (it + (toward - it) * (step / 20f)).roundToInt() }
+        val ink = Color(r, g, b)
+        if (contrast(ink, card) >= INK_CONTRAST && contrast(ink, wash) >= INK_CONTRAST) return ink
+    }
+    return Color(toward, toward, toward)
+}
 
 val LightColors = AstridColors(
     bgPrimary = Color.White, bgSecondary = rgb(249, 250, 251), bgTertiary = rgb(243, 244, 246),
@@ -104,7 +160,7 @@ val LightColors = AstridColors(
 
 val DarkColors = AstridColors(
     bgPrimary = rgb(17, 24, 39), bgSecondary = rgb(31, 41, 55), bgTertiary = rgb(55, 65, 81),
-    bgActive = rgb(75, 85, 99), bgSelected = rgb(30, 58, 138), bgSelectedBorder = Accent,
+    bgActive = rgb(75, 85, 99), bgSelected = rgb(30, 58, 138), bgSelectedBorder = AccentInkDark,
     border = rgb(75, 85, 99), borderHover = rgb(107, 114, 128),
     inputBg = Color.Black, inputBorder = rgb(75, 85, 99), inputPlaceholder = rgb(156, 163, 175),
     textPrimary = Color.White, textSecondary = rgb(209, 213, 219), textMuted = rgb(156, 163, 175),
@@ -115,6 +171,10 @@ val DarkColors = AstridColors(
     field = Color.Black, fieldBorder = rgb(75, 85, 99),
     chipBg = rgb(31, 41, 55), chipBorder = rgb(75, 85, 99),
     pageBg = rgb(17, 24, 39), pressed = rgb(55, 65, 81),
+    // DS26: focus lines, the selection outline and low priority read the light blue on Dark.
+    borderFocus = AccentInkDark, priorityLow = AccentInkDark,
+    accentInk = AccentInkDark, successInk = rgb(74, 222, 128), warningInk = rgb(251, 191, 36),
+    errorInk = rgb(248, 113, 113), infoInk = rgb(34, 211, 238),
 )
 
 /** iOS's default theme: cyan behind white cards, silver inputs. */

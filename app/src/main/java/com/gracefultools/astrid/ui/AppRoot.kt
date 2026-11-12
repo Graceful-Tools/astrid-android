@@ -62,7 +62,7 @@ private const val MY_TASKS_FILTER_ID = "virtual:my-tasks"
 
 /** iOS's My Tasks title: " - Today !! !" for the due filter and priorities chosen, marks in their colours. */
 @Composable
-private fun myTasksSuffix(state: com.gracefultools.astrid.ui.filters.FiltersState): androidx.compose.ui.text.AnnotatedString? {
+private fun myTasksSuffix(state: com.gracefultools.astrid.ui.filters.FiltersState, priorityColors: List<androidx.compose.ui.graphics.Color>): androidx.compose.ui.text.AnnotatedString? {
     val due = state.groups.firstOrNull { it.field == "filterDueDate" }?.picks?.firstOrNull { it.isSelected && it.value != "all" }
     val priority = state.groups.firstOrNull { it.field == "filterPriority" }?.picks?.firstOrNull { it.isSelected && it.value != "all" }
     if (due == null && priority == null) return null
@@ -72,7 +72,7 @@ private fun myTasksSuffix(state: com.gracefultools.astrid.ui.filters.FiltersStat
         if (dueWord != null) append(dueWord)
         priority?.value?.toIntOrNull()?.let { p ->
             if (dueWord != null) append(" ")
-            pushStyle(androidx.compose.ui.text.SpanStyle(color = com.gracefultools.astrid.ui.theme.PriorityColors[p.coerceIn(0, 3)]))
+            pushStyle(androidx.compose.ui.text.SpanStyle(color = priorityColors[p.coerceIn(0, 3)]))
             append(if (p == 0) "○" else "!".repeat(p))
             pop()
         }
@@ -240,7 +240,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                 }
                 TaskListScreen(
                     title = title,
-                    titleSuffix = myFilterState?.let { myTasksSuffix(it) },
+                    titleSuffix = myFilterState?.let { myTasksSuffix(it, com.gracefultools.astrid.ui.theme.AstridTheme.colors.priority) },
                     onFilter = if (isMyTasks) ({ myFilters?.load(); filtering = true }) else null,
                     viewMode = mode,
                     hasBoard = hasBoard,

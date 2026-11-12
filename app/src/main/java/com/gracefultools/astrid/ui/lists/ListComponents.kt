@@ -66,7 +66,6 @@ import com.gracefultools.astrid.ui.detail.PickerSheet
 import com.gracefultools.astrid.ui.tasks.parseColor
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
-import com.gracefultools.astrid.ui.theme.PriorityColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -137,12 +136,12 @@ internal fun PriorityButtons(current: Int, onPick: (Int) -> Unit) {
     val names = listOf(R.string.priority_none, R.string.priority_low, R.string.priority_medium, R.string.priority_high)
     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s12)) {
         for (level in 0..3) {
-            val tint = PriorityColors[level]
+            val tint = AstridTheme.colors.priority[level]
             val chosen = level == current
             val spoken = stringResource(R.string.priority_a11y, stringResource(names[level]))
             Box(
                 Modifier.size(40.dp).clip(RoundedCornerShape(Radius.small))
-                    .background(if (chosen) tint else Color.Transparent)
+                    .background(if (chosen) AstridTheme.colors.priorityFill[level] else Color.Transparent)
                     .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
                     .clickable(role = Role.RadioButton) { onPick(level) }
                     .semantics(mergeDescendants = true) { selected = chosen; contentDescription = spoken },

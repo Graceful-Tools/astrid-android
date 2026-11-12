@@ -158,7 +158,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
                     )
                     Column(Modifier.weight(1f)) {
                         Text(detail.task.title, style = TextStyles.rowTitle, color = colors.textPrimary)
-                        dueText(detail.due)?.let { Text(it, style = TextStyles.subheadline, color = if (detail.isOverdue) com.gracefultools.astrid.ui.theme.Error else colors.textSecondary) }
+                        dueText(detail.due)?.let { Text(it, style = TextStyles.subheadline, color = if (detail.isOverdue) com.gracefultools.astrid.ui.theme.Overdue else colors.textSecondary) }
                     }
                 }
                 AstridSpeechBubble(phrase, Modifier.padding(horizontal = Spacing.s16), characterSize = 80.dp)
@@ -309,7 +309,7 @@ private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (Tria
         task.listChips.firstOrNull()?.let { Text(it.name, style = TextStyles.caption, color = colors.textMuted) }
         Text(task.task.title, fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-            val dueColor = if (task.isOverdue) com.gracefultools.astrid.ui.theme.Error else colors.textMuted
+            val dueColor = if (task.isOverdue) com.gracefultools.astrid.ui.theme.Overdue else colors.textMuted
             Icon(Icons.Filled.CalendarToday, null, tint = dueColor, modifier = Modifier.size(16.dp))
             Text(dueText(task.due) ?: stringResource(R.string.picker_no_due_date), style = TextStyles.body, color = dueColor)
         }
