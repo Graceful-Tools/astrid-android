@@ -11,15 +11,19 @@
 #   "android": { "applicationId": "example.acme.tasks", "appName": "Acme Tasks",
 #                "handoffClientId": "acme-android", "linkHosts": "tasks.acme.example",
 #                "linkAutoVerify": true, "accentHoverColor": "#9333ea", "accentTextColor": "#ffffff",
-#                "versionCode": 3, "versionName": "1.2.0",
+#                "versionCode": 3, "versionName": "1.2.0" "appIcon": "acme-icon-1024.png",
+#                "monochromeIcon": "acme-glyph-1024.png", "characterImage": "acme-mascot.png",
 #                "play": { "title": "…", "shortDescription": "…", "fullDescription": "…", "releaseNotes": "…" } }
 #
 # — and writes brands/<slug>/brand.properties, its Play listing (play/, a neutral draft in the
 # brand's name when there is no android.play) and a copy of the profile, so `./gradlew assembleRelease -PastridBrand=<slug>` is
 # that deployment's app (brands/README.md has the keys). The applicationId otherwise comes from the
 # first package in the server's BRAND_ANDROID_APP_LINKS, which is the one the server vouches for.
-# A value the profile leaves out stays out, so the build uses Astrid's. A brand's res/ directory
-# (icons, colours) is left alone; generating that from the profile comes next in AATD-90.
+# A value the profile leaves out stays out, so the build uses Astrid's. Artwork comes from images
+# beside the profile: android.appIcon (1024x1024), android.monochromeIcon (a 1024x1024 silhouette for
+# the themed and notification icons), android.characterImage (square), android.iconBackground
+# (#rrggbb, default the accent). sips or ImageMagick resizes them into res/. Re-running removes only
+# the files it wrote last time (res/.make-brand-variant), never a partner's own resources.
 #
 # Generated: re-run it after the profile changes rather than editing the file. predeploy re-runs it
 # for acme and fails if the committed copy is stale. scripts/test-make-brand-variant.sh tests it.
@@ -30,7 +34,7 @@ profile="" out=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --out) out="$2"; shift 2 ;;
-    -h|--help) sed -n '2,26p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,29p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     -*) echo "unknown option: $1" >&2; exit 2 ;;
     *) profile="$1"; shift ;;
   esac
@@ -140,6 +144,130 @@ for key, path, limit in files:
         sys.exit(f"android.play.{key} is {len(text)} characters; Play allows {limit}")
     os.makedirs(os.path.dirname(os.path.join(play_dir, path)), exist_ok=True)
     open(os.path.join(play_dir, path), "w", encoding="utf-8").write(text + "\n")
+PY
+# The artwork, from the profile's images (paths relative to it): the launcher icon at every density
+# and as an adaptive icon, the themed and notification icons from a silhouette, and the character.
+python3 -I - "$profile" "$out/res" <<'PY'
+import json, os, re, shutil, subprocess, sys
+
+profile_path, res = sys.argv[1:3]
+here = os.path.dirname(os.path.abspath(profile_path))
+profile = json.load(open(profile_path, encoding="utf-8"))
+android = profile.get("android") or {}
+env = profile.get("env") or {}
+
+# Only what this script wrote last time is removed (listed in the marker), never a partner's own res/.
+marker = os.path.join(res, ".make-brand-variant")
+if os.path.isfile(marker):
+    for rel in open(marker, encoding="utf-8").read().split():
+        path = os.path.join(res, rel)
+        if os.path.isfile(path):
+            os.remove(path)
+            try:
+                os.removedirs(os.path.dirname(path))     # empty directories go too, up to res/ itself
+            except OSError:
+                pass
+    if os.path.isfile(marker):
+        os.remove(marker)
+    try:
+        os.removedirs(res)
+    except OSError:
+        pass
+
+def source(key):
+    if not android.get(key):
+        return None
+    path = os.path.join(here, str(android[key]))
+    if not os.path.isfile(path):
+        sys.exit(f"android.{key}: no such file {path}")
+    return path
+
+icon, mono, character = source("appIcon"), source("monochromeIcon"), source("characterImage")
+if mono and not icon:
+    sys.exit("android.monochromeIcon needs android.appIcon: it is the themed layer of that icon")
+if not (icon or character):
+    sys.exit(0)
+
+tool = next((t for t in ("sips", "magick", "convert") if shutil.which(t)), None)
+if not tool:
+    sys.exit("android.appIcon / characterImage need sips (macOS) or ImageMagick to resize")
+
+def run(*args):
+    done = subprocess.run(args, capture_output=True, text=True)
+    if done.returncode:
+        sys.exit(f"{args[0]} failed: {done.stderr.strip()}")
+    return done.stdout
+
+def size(path):
+    if tool == "sips":
+        out = run("sips", "-g", "pixelWidth", "-g", "pixelHeight", path)
+        return tuple(int(re.search(rf"{k}: (\d+)", out).group(1)) for k in ("pixelWidth", "pixelHeight"))
+    identify = ["magick", "identify"] if tool == "magick" else ["identify"]
+    return tuple(int(v) for v in run(*identify, "-format", "%w %h", path + "[0]").split())
+
+def square(path, key, need=None):
+    w, h = size(path)
+    if w != h or (need and w != need):
+        want = f"{need}x{need}" if need else "square"
+        sys.exit(f"android.{key} must be {want} pixels, not {w}x{h}: {path}")
+
+written = []
+def resize(src, rel, px, canvas=None, pad=None):
+    """src scaled to px, centred on a canvas x canvas square of pad (transparent when None)."""
+    out = os.path.join(res, rel)
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    if tool == "sips":
+        run("sips", "-s", "format", "png", "-z", str(px), str(px), src, "--out", out)
+        if canvas:
+            run("sips", "-p", str(canvas), str(canvas), *(["--padColor", pad.lstrip("#")] if pad else []),
+                out, "--out", out)
+    else:
+        cmd = ["magick"] if tool == "magick" else ["convert"]
+        cmd += [src, "-resize", f"{px}x{px}!"]
+        if canvas:
+            cmd += ["-background", pad or "none", "-gravity", "center", "-extent", f"{canvas}x{canvas}"]
+        run(*cmd, "PNG32:" + out)
+    written.append(rel)
+
+def write(rel, text):
+    path = os.path.join(res, rel)
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    open(path, "w", encoding="utf-8").write(text)
+    written.append(rel)
+
+GENERATED = "<!-- Generated by scripts/make-brand-variant.sh (AATD-90); do not edit. -->\n"
+# Launcher 48dp (legacy); adaptive layers 108dp, the art in the 72dp a mask can show; notification 24dp.
+densities = [("mdpi", 1), ("hdpi", 1.5), ("xhdpi", 2), ("xxhdpi", 3), ("xxxhdpi", 4)]
+if icon:
+    square(icon, "appIcon", 1024)
+    background = str(android.get("iconBackground") or env.get("NEXT_PUBLIC_BRAND_ACCENT_COLOR") or "#88dcf8").strip()
+    if not re.fullmatch(r"#[0-9a-fA-F]{6}", background):
+        sys.exit(f"android.iconBackground must be #rrggbb: {background!r}")
+    if mono:
+        square(mono, "monochromeIcon", 1024)
+    for dpi, scale in densities:
+        resize(icon, f"mipmap-{dpi}/ic_launcher.png", int(48 * scale))
+        resize(icon, f"mipmap-{dpi}/ic_launcher_foreground.png", int(72 * scale), int(108 * scale), background)
+        if mono:
+            resize(mono, f"mipmap-{dpi}/ic_launcher_monochrome.png", int(72 * scale), int(108 * scale))
+            resize(mono, f"drawable-{dpi}/ic_notification.png", int(24 * scale))
+    write("values/brand_icon.xml", '<?xml version="1.0" encoding="utf-8"?>\n' + GENERATED + "<resources>\n"
+          f'    <color name="ic_launcher_background">#FF{background[1:].upper()}</color>\n</resources>\n')
+    write("mipmap-anydpi-v26/ic_launcher.xml", '<?xml version="1.0" encoding="utf-8"?>\n' + GENERATED
+          + '<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n'
+          + '    <background android:drawable="@color/ic_launcher_background" />\n'
+          + '    <foreground android:drawable="@drawable/ic_launcher_foreground" />\n'
+          + ('    <monochrome android:drawable="@mipmap/ic_launcher_monochrome" />\n' if mono else "")
+          + "</adaptive-icon>\n")
+    if not mono:
+        print("  note: no android.monochromeIcon, so no themed icon, and the notification icon stays Astrid's",
+              file=sys.stderr)
+if character:
+    square(character, "characterImage")
+    resize(character, "drawable-nodpi/astrid_character.png", 512)
+
+open(marker, "w", encoding="utf-8").write("\n".join(sorted(written)) + "\n")
+print(f"  art: {len(written)} files in res/", file=sys.stderr)
 PY
 # The profile beside it: the audit reads its expect.forbidLiterals in CI, which has no astrid-web.
 [[ "$(cd "$(dirname "$profile")" && pwd)/$(basename "$profile")" -ef "$out/profile.brand.json" ]] \

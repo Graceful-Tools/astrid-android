@@ -16,3 +16,5 @@ core/target/
 keystore.properties
 # Cloud agent credentials (astrid-web scripts/push-agent-env.sh), never committed.
 .env.cloud*
+# A brand predeploy generates to check artwork merges (AATD-90).
+brands/.artcheck/
