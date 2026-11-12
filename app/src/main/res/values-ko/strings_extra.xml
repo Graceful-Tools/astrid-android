@@ -79,8 +79,8 @@
     <string name="tasks_move_up">위로 이동</string>
     <string name="tasks_move_down">아래로 이동</string>
     <string name="lists_copy_list">목록 복사</string>
-    <string name="review_loving_title">Astrid가 마음에 드시나요?</string>
-    <string name="review_loving_message">Astrid를 즐겁게 사용하고 계신가요? 의견을 들려주세요!</string>
+    <string name="review_loving_title">%1$s가 마음에 드시나요?</string>
+    <string name="review_loving_message">%1$s를 즐겁게 사용하고 계신가요? 의견을 들려주세요!</string>
     <string name="review_not_really">별로예요</string>
     <string name="review_love_it">네, 아주 좋아요!</string>
     <string name="review_help_us_improve">개선에 도움을 주세요</string>

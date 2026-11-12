@@ -79,8 +79,8 @@
     <string name="tasks_move_up">上移</string>
     <string name="tasks_move_down">下移</string>
     <string name="lists_copy_list">複製清單</string>
-    <string name="review_loving_title">喜歡 Astrid 嗎？</string>
-    <string name="review_loving_message">您喜歡使用 Astrid 嗎？我們很想聽聽您的意見！</string>
+    <string name="review_loving_title">喜歡 %1$s 嗎？</string>
+    <string name="review_loving_message">您喜歡使用 %1$s 嗎？我們很想聽聽您的意見！</string>
     <string name="review_not_really">不太喜歡</string>
     <string name="review_love_it">是的，我很喜歡！</string>
     <string name="review_help_us_improve">協助我們改進</string>

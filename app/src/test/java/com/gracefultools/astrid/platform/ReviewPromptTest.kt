@@ -72,4 +72,12 @@ class ReviewPromptTest {
     fun `AATD-63 Send Feedback mails support with iOS's subject`() {
         assertEquals("mailto:support@astrid.cc?subject=Astrid%20App%20Feedback", ReviewPrompt.feedbackMailto())
     }
+
+    @Test
+    fun `AATD-90 a partner's feedback subject names the partner, not Astrid`() {
+        assertEquals(
+            "mailto:helpdesk@acme.example?subject=Acme%20App%20Feedback",
+            ReviewPrompt.feedbackMailto(appName = "Acme", supportEmail = "helpdesk@acme.example"),
+        )
+    }
 }

@@ -90,6 +90,7 @@ android {
         brandField("ASTRID_ACCENT_COLOR", brand("astridAccentColor", ""))
         brandField("ASTRID_ACCENT_HOVER_COLOR", brand("astridAccentHoverColor", ""))
         brandField("ASTRID_ACCENT_TEXT_COLOR", brand("astridAccentTextColor", ""))
+        brandField("ASTRID_APP_NAME", brand("astridAppName", "Astrid"))   // Brand.appName, for code (AATD-90)
         resValue("string", "app_name", brand("astridAppName", "Astrid"))
         resValue("string", "brand_wordmark", brand("astridWordmark", "astrid"))
         manifestPlaceholders += mapOf(

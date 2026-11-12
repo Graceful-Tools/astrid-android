@@ -44,8 +44,8 @@ fun ReviewPrompting(prompt: ReviewPrompt) {
         ReviewDialog.NONE -> Unit
         ReviewDialog.LOVE -> AlertDialog(
             onDismissRequest = prompt::dismiss,
-            title = { Text(stringResource(R.string.review_loving_title)) },
-            text = { Text(stringResource(R.string.review_loving_message)) },
+            title = { Text(stringResource(R.string.review_loving_title, stringResource(R.string.app_name))) },
+            text = { Text(stringResource(R.string.review_loving_message, stringResource(R.string.app_name))) },
             dismissButton = { TextButton(onClick = prompt::notReally) { Text(stringResource(R.string.review_not_really)) } },
             confirmButton = {
                 TextButton(onClick = { prompt.love(); requestStoreReview(activity) }) { Text(stringResource(R.string.review_love_it)) }

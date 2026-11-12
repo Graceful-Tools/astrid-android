@@ -16,6 +16,30 @@ source ~/dev-tools/android-env.sh
 ./gradlew assembleDebug -PastridBrand=example -PastridAppName="Example Beta"   # -P beats the file
 ```
 
+### From a deployment's profile (AATD-90)
+
+A partner's server is configured by a profile in astrid-web `brands/*.brand.json`. The app's brand
+is generated from the same file rather than typed again:
+
+```bash
+scripts/make-brand-variant.sh acme                       # ../astrid-web/brands/acme.brand.json → brands/acme
+scripts/make-brand-variant.sh path/to/partner.brand.json # any profile, no astrid-web checkout
+./gradlew assembleRelease -PastridBrand=acme
+```
+
+It maps the profile's `env` (name, wordmark, domain, URL scheme, emails, accent) and takes the
+package from the first entry of `BRAND_ANDROID_APP_LINKS`. An optional `android` block holds what only
+the app knows: `applicationId`, `appName`, `handoffClientId`, `linkHosts`, `linkAutoVerify`,
+`accentHoverColor`, `accentTextColor`. It writes `brand.properties` plus a copy of the profile. Re-run
+it after the profile changes; predeploy fails while `brands/acme` is stale.
+
+**Literal audit.** `scripts/check-brand-literals.py` lists every string in a brand build's merged
+resources and manifest that contains one of the profile's `expect.forbidLiterals`. Predeploy runs it
+on acme against a budget that only goes down (24: the webhook hint's `ASTRID_WEBHOOK_SECRET` and
+`npx astrid-agent`, in 12 locales). Icons and character art from one source, a per-brand Play listing,
+versioning, the ink keys, and auditing the dex are still to come in AATD-90. Until then a partner
+supplies `res/` by hand, as below.
+
 Any key can also be passed alone as `-P<key>=<value>` without a brand directory. A blank value is
 unset. With nothing set, every value is Astrid's and the build is the one it always was.
 
@@ -40,8 +64,8 @@ Astrid's palette comes from astrid-core `design/tokens.json` (accent `#2563EB`, 
 AWTD-1598). Android's copy is still by hand until the colours are generated from the tokens (AATD-85,
 through core's Compose emitter AWTD2-163). The accent's text shades — `brand.accent-ink` and
 `accent-ink-dark` — are Astrid's blues for Astrid; for a partner accent they are worked out from it, as
-astrid-web does, so text in the accent reads at 4.5:1 on a card and on its own wash. Building
-a partner's app from its `brands/*.brand.json` in one command is AATD-90.
+astrid-web does, so text in the accent reads at 4.5:1 on a card and on its own wash. See *From a deployment's profile* above
+(AATD-90).
 
 Colours are `#rrggbb` or `#rrggbbaa` (iOS `BrandAccentColor`, `BrandAccentHoverColor`,
 `BrandAccentTextColor`; astrid-web `NEXT_PUBLIC_BRAND_ACCENT_*`). A malformed one is Astrid's, as on iOS.

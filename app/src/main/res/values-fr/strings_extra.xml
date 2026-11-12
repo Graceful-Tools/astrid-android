@@ -79,8 +79,8 @@
     <string name="tasks_move_up">Monter</string>
     <string name="tasks_move_down">Descendre</string>
     <string name="lists_copy_list">Copier la liste</string>
-    <string name="review_loving_title">Vous aimez Astrid ?</string>
-    <string name="review_loving_message">Vous aimez utiliser Astrid ? Nous serions ravis d\'avoir votre avis !</string>
+    <string name="review_loving_title">Vous aimez %1$s ?</string>
+    <string name="review_loving_message">Vous aimez utiliser %1$s ? Nous serions ravis d\'avoir votre avis !</string>
     <string name="review_not_really">Pas vraiment</string>
     <string name="review_love_it">Oui, j\'adore !</string>
     <string name="review_help_us_improve">Aidez-nous à nous améliorer</string>

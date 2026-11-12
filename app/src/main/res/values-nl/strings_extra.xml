@@ -79,8 +79,8 @@
     <string name="tasks_move_up">Omhoog</string>
     <string name="tasks_move_down">Omlaag</string>
     <string name="lists_copy_list">Lijst kopiëren</string>
-    <string name="review_loving_title">Vind je Astrid fijn?</string>
-    <string name="review_loving_message">Gebruik je Astrid graag? We horen graag van je!</string>
+    <string name="review_loving_title">Vind je %1$s fijn?</string>
+    <string name="review_loving_message">Gebruik je %1$s graag? We horen graag van je!</string>
     <string name="review_not_really">Niet echt</string>
     <string name="review_love_it">Ja, geweldig!</string>
     <string name="review_help_us_improve">Help ons verbeteren</string>

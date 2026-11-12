@@ -79,8 +79,8 @@
     <string name="tasks_move_up">上へ移動</string>
     <string name="tasks_move_down">下へ移動</string>
     <string name="lists_copy_list">リストをコピー</string>
-    <string name="review_loving_title">Astrid を気に入っていますか？</string>
-    <string name="review_loving_message">Astrid を楽しく使っていますか？ぜひご意見をお聞かせください！</string>
+    <string name="review_loving_title">%1$s を気に入っていますか？</string>
+    <string name="review_loving_message">%1$s を楽しく使っていますか？ぜひご意見をお聞かせください！</string>
     <string name="review_not_really">あまり</string>
     <string name="review_love_it">はい、大好きです！</string>
     <string name="review_help_us_improve">改善にご協力ください</string>

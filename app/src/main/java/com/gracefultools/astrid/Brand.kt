@@ -19,6 +19,12 @@ object Brand {
      */
     val baseUrl: String = origin(BuildConfig.ASTRID_BASE_URL, ASTRID_ORIGIN)
 
+    /**
+     * iOS `Brand.appName`, for code that is not drawing a resource: the same value as `@string/app_name`
+     * (both from `astridAppName`), which is what views use (AATD-90).
+     */
+    val appName: String = BuildConfig.ASTRID_APP_NAME.trim().ifEmpty { "Astrid" }
+
     /** iOS `Brand.supportEmail`: where feedback mail goes. */
     val supportEmail: String = BuildConfig.ASTRID_SUPPORT_EMAIL.trim().ifEmpty { "support@astrid.cc" }
 
