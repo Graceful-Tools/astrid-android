@@ -64,6 +64,12 @@ android {
         versionName = "0.1.0"
         testInstrumentationRunner = "com.gracefultools.astrid.AstridTestRunner"
 
+        // Exactly the ABIs scripts/build-core.sh builds the core for. JNA alone ships seven, and an
+        // unfiltered package advertised them all, so Play would install it on a 32-bit phone where
+        // libastrid_android.so does not exist and the app dies at startup (AATD-88). Adding an ABI
+        // means adding it to build-core.sh too; scripts/check-native-abis.sh holds the two together.
+        ndk { abiFilters += listOf("arm64-v8a", "x86_64") }
+
         // The brand's identity (iOS Brand.swift's Info.plist keys), set per build with Gradle
         // properties — `./gradlew assembleDebug -PastridBaseUrl=https://tasks.example.com`. Unset,
         // every value is hosted Astrid's, so the default build is unchanged (AATD-71).
