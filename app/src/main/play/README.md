@@ -11,3 +11,6 @@ could read it without changes. Nothing here uploads anything — the Play upload
 `PlayListingTest` (app unit tests) enforces the limits. Screenshots come from the smoke test
 (`/data/local/tmp/astrid-*.png`, docs/RELEASE.md); the feature graphic (1024 × 500) is still to make.
 Other languages: add `listings/<locale>/` once the English is approved.
+
+This is Astrid's listing. A partner's brand has its own in `brands/<slug>/play/`, written by
+`scripts/make-brand-variant.sh` from its profile (brands/README.md, AATD-90).

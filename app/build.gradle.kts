@@ -60,8 +60,13 @@ android {
         applicationId = brand("astridApplicationId", "com.gracefultools.astrid")
         minSdk = 28
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        // Per build (AATD-90): `-PastridVersionCode` from CI (or ORG_GRADLE_PROJECT_astridVersionCode),
+        // or a brand's profile. Play needs a higher versionCode for every upload of each package.
+        versionCode = brand("astridVersionCode", "1").let { code ->
+            code.toIntOrNull()?.takeIf { it in 1..2_100_000_000 }
+                ?: error("astridVersionCode=$code: a whole number from 1 to 2100000000 (Play's limit)")
+        }
+        versionName = brand("astridVersionName", "0.1.0")
         testInstrumentationRunner = "com.gracefultools.astrid.AstridTestRunner"
 
         // Exactly the ABIs scripts/build-core.sh builds the core for. JNA alone ships seven, and an

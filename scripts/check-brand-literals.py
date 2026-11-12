@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """The brand literal audit (AATD-90): what a partner's build shows that still names Astrid.
 
-    scripts/check-brand-literals.py <profile.brand.json> <merged res dir> [<merged manifest>] [--budget N]
+    scripts/check-brand-literals.py <profile.brand.json> <merged res dir> [<merged manifest>]
+                                    [--text <dir>]… [--budget N]
 
 Reads the profile's `expect.forbidLiterals` (astrid-web `brands/*.brand.json`, the same list web's
 brand matrix checks) and looks for each one, ignoring case as web does, in the text a person can be
 shown: every <string>, <plurals> item and <string-array> item in the brand build's merged resources,
 and the merged manifest's labels. Resource NAMES are not text and are not checked
-(`review_loving_title` is fine; "Loving Astrid?" is not).
+(`review_loving_title` is fine; "Loving Astrid?" is not). Each --text directory adds its .txt files,
+line by line: the brand's Play listing (brands/<slug>/play), which a person reads in the store.
 
 The goal is none. Until then, --budget N is the most this build may have: one more fails, and one
 fewer fails too, saying to lower the budget, so the number only ever goes down. With no budget, any
@@ -52,8 +54,23 @@ def manifest_texts(manifest):
                 yield "AndroidManifest.xml", f"{element.tag} android:{attr}", value
 
 
+def plain_texts(text_dir):
+    for folder, _, files in sorted(os.walk(text_dir)):
+        for file in sorted(f for f in files if f.endswith(".txt")):
+            path = os.path.join(folder, file)
+            where = os.path.relpath(path, os.path.dirname(text_dir.rstrip("/")))
+            for n, line in enumerate(open(path, encoding="utf-8"), 1):
+                if line.strip():
+                    yield where, f"line {n}", line
+
+
 def main(argv):
     budget = None
+    text_dirs = []
+    while "--text" in argv:
+        i = argv.index("--text")
+        text_dirs.append(argv[i + 1])
+        argv = argv[:i] + argv[i + 2:]
     if "--budget" in argv:
         i = argv.index("--budget")
         budget = int(argv[i + 1])
@@ -73,6 +90,11 @@ def main(argv):
     texts = list(resource_texts(res_dir))
     if manifest:
         texts += list(manifest_texts(manifest))
+    for text_dir in text_dirs:
+        if not os.path.isdir(text_dir):
+            print(f"✗ --text {text_dir}: no such directory", file=sys.stderr)
+            return 2
+        texts += list(plain_texts(text_dir))
     # One hit per string, however many literals it holds: "astrid.cc" is also "Astrid".
     hits = [(where, name, found, text) for where, name, text in texts
             if (found := [l for l in literals if l.lower() in text.lower()])]

@@ -32,4 +32,6 @@ the universal APK is 37 MB (two ABIs), and Play's per-ABI splits roughly halve w
    `PlayListingTest` holds it to Play's limits. Still to make: screenshots (the smoke test writes
    phone screenshots to `/data/local/tmp/astrid-*.png`) and the 1024 × 500 feature graphic.
    Privacy policy URL: astrid.cc/privacy.
-6. **versionCode** in `app/build.gradle.kts` goes up by one per upload.
+6. **versionCode** goes up by one per upload: pass `-PastridVersionCode=<n> -PastridVersionName=<x.y.z>`
+   to `bundleRelease` (defaults 1 and 0.1.0; AATD-90). A partner's brand can set both in its profile
+   (`android.versionCode`/`versionName`), and its listing is `brands/<slug>/play/` (brands/README.md).

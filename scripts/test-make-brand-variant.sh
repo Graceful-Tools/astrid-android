@@ -44,6 +44,43 @@ has "$p" "astridAppName=Acme Tasks"
 has "$p" "astridHandoffClientId=acme-android"
 has "$p" "astridLinkAutoVerify=true"
 
+# --- versioning and the Play listing (AATD-90, second slice) ------------------------------------
+lacks "$p" astridVersionCode                         # no android.versionCode: Astrid's default
+pl="$work/out/play"
+[[ -s "$pl/listings/en-US/title.txt" ]] || fail "no Play listing written without an android.play block"
+has "$pl/listings/en-US/title.txt" "Acme Tasks"      # the draft takes the app's name …
+grep -qF "tasks.acme.example" "$pl/listings/en-US/full-description.txt" || fail "the draft lacks the brand's domain"
+for f in listings/en-US/short-description.txt release-notes/en-US/default.txt; do
+  [[ -s "$pl/$f" ]] || fail "the draft has no $f"
+done
+! grep -rqi "astrid" "$pl" || fail "the generated listing names Astrid"
+
+python3 -I - "$work/acme.brand.json" <<'PY2'
+import json, sys
+p = json.load(open(sys.argv[1]))
+p["android"].update({"versionCode": 42, "versionName": "4.2.0", "play": {
+    "title": "Acme Tasks: Team To-dos", "shortDescription": "Acme's lists.",
+    "fullDescription": "Line one.\nLine two.", "releaseNotes": "First Acme release."}})
+json.dump(p, open(sys.argv[1], "w"))
+PY2
+"$root/scripts/make-brand-variant.sh" "$work/acme.brand.json" --out "$work/out" >/dev/null
+has "$p" "astridVersionCode=42"
+has "$p" "astridVersionName=4.2.0"
+has "$pl/listings/en-US/title.txt" "Acme Tasks: Team To-dos"
+has "$pl/listings/en-US/short-description.txt" "Acme's lists."
+has "$pl/listings/en-US/full-description.txt" "Line two."
+has "$pl/release-notes/en-US/default.txt" "First Acme release."
+
+bad() {  # a profile the script must refuse: $1 a Python edit of p["android"], $2 why
+  cp "$work/acme.brand.json" "$work/bad.brand.json"
+  python3 -I -c "import json,sys; p=json.load(open(sys.argv[1])); a=p['android']; $1; json.dump(p, open(sys.argv[1],'w'))" "$work/bad.brand.json"
+  ! "$root/scripts/make-brand-variant.sh" "$work/bad.brand.json" --out "$work/bad" 2>/dev/null || fail "$2"
+}
+bad "a['play']['title']='x'*31" "a title over Play's 30 characters was accepted"
+bad "a['play']['shortDescription']='x'*81" "a short description over 80 was accepted"
+bad "a['versionCode']='1.5'" "a versionCode that is not a whole number was accepted"
+bad "a['versionCode']=0" "versionCode 0 was accepted"
+
 echo '{"env":{"BRAND_ANDROID_APP_LINKS":"not a package:AA"}}' > "$work/bad.brand.json"
 ! "$root/scripts/make-brand-variant.sh" "$work/bad.brand.json" --out "$work/bad" 2>/dev/null \
   || fail "a malformed application id was accepted"
@@ -72,5 +109,12 @@ XML
 audit --budget 2 || fail "two literals did not meet a budget of two"
 ! audit --budget 3 || fail "under the budget should fail, so the budget gets lowered"
 ! audit --budget 1 || fail "over the budget passed"
+
+# The listing is text a person is shown too: --text scans its .txt files.
+txt="$work/play"; mkdir -p "$txt/listings/en-US"; echo "Acme Tasks" > "$txt/listings/en-US/title.txt"
+audit --budget 2 --text "$txt" || fail "a clean listing changed the count"
+echo "Synced with astrid.cc" > "$txt/listings/en-US/full-description.txt"
+! audit --budget 2 --text "$txt" || fail "a listing naming Astrid did not count"
+audit --budget 3 --text "$txt" || fail "the listing's one hit did not make three"
 
 echo "✓ make-brand-variant and the brand literal audit"

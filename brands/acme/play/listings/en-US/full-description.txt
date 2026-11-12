@@ -1,0 +1,11 @@
+Acme is a to-do app for the people you share your life and work with. Families and teams keep shared lists, see who is doing what, and talk it over right beside the tasks.
+
+• My Tasks gathers everything that is yours, from every list
+• Due dates, priorities, repeating tasks and subtasks
+• Shared lists with comments, a chat for each list, and assignees
+• Assign a task to an AI agent and follow its progress in the comments
+• Reminders with Complete and Snooze right on the notification
+• Works offline and syncs when you are back online
+
+Your tasks sync with tasks.acme.example.
+Privacy policy: https://tasks.acme.example/privacy

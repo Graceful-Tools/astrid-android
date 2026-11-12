@@ -30,14 +30,21 @@ scripts/make-brand-variant.sh path/to/partner.brand.json # any profile, no astri
 It maps the profile's `env` (name, wordmark, domain, URL scheme, emails, accent) and takes the
 package from the first entry of `BRAND_ANDROID_APP_LINKS`. An optional `android` block holds what only
 the app knows: `applicationId`, `appName`, `handoffClientId`, `linkHosts`, `linkAutoVerify`,
-`accentHoverColor`, `accentTextColor`. It writes `brand.properties` plus a copy of the profile. Re-run
-it after the profile changes; predeploy fails while `brands/acme` is stale.
+`accentHoverColor`, `accentTextColor`, `versionCode`, `versionName`, and `play` (below). It writes
+`brand.properties`, the Play listing and a copy of the profile. Re-run it after the profile changes;
+predeploy fails while `brands/acme` is stale.
+
+**Play listing.** `brands/<slug>/play/` has the same layout as Astrid's `app/src/main/play/` (title,
+short and full description, first release notes). The text comes from `android.play`
+(`title` ≤ 30, `shortDescription` ≤ 80, `fullDescription` ≤ 4000, `releaseNotes` ≤ 500 characters;
+the script refuses longer text). With no `play` block, it writes a neutral draft in the brand's
+name and domain, for the partner to replace.
 
 **Literal audit.** `scripts/check-brand-literals.py` lists every string in a brand build's merged
 resources and manifest that contains one of the profile's `expect.forbidLiterals`. Predeploy runs it
-on acme against a budget that only goes down (24: the webhook hint's `ASTRID_WEBHOOK_SECRET` and
-`npx astrid-agent`, in 12 locales). Icons and character art from one source, a per-brand Play listing,
-versioning, the ink keys, and auditing the dex are still to come in AATD-90. Until then a partner
+on acme, including its Play listing (`--text brands/acme/play`), against a budget that only goes
+down (24: the webhook hint's `ASTRID_WEBHOOK_SECRET` and `npx astrid-agent`, in 12 locales). Icons and
+character art from one source, the ink keys, and auditing the dex are still to come in AATD-90. Until then a partner
 supplies `res/` by hand, as below.
 
 Any key can also be passed alone as `-P<key>=<value>` without a brand directory. A blank value is
@@ -59,6 +66,8 @@ unset. With nothing set, every value is Astrid's and the build is the one it alw
 | `astridAccentColor` | `#2563eb` | The in-app accent (`Brand.accentColorHex` → the theme's `Accent`): buttons, links, focus, Material's primary |
 | `astridAccentHoverColor` | `#1d4ed8` | The accent's pressed state |
 | `astridAccentTextColor` | `#ffffff` | Text and icons drawn on the accent — change it with a pale accent |
+| `astridVersionCode` | `1` | The package's versionCode, 1–2100000000. Play needs a higher one for every upload, so CI usually passes `-PastridVersionCode` (or `ORG_GRADLE_PROJECT_astridVersionCode`) |
+| `astridVersionName` | `0.1.0` | The version people see |
 
 Astrid's palette comes from astrid-core `design/tokens.json` (accent `#2563EB`, hover `#1D4ED8`, DS26;
 AWTD-1598). Android's copy is still by hand until the colours are generated from the tokens (AATD-85,
