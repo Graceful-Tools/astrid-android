@@ -79,8 +79,8 @@
     <string name="tasks_move_up">Переместить вверх</string>
     <string name="tasks_move_down">Переместить вниз</string>
     <string name="lists_copy_list">Копировать список</string>
-    <string name="review_loving_title">Нравится Astrid?</string>
-    <string name="review_loving_message">Вам нравится пользоваться Astrid? Нам будет приятно узнать ваше мнение!</string>
+    <string name="review_loving_title">Нравится %1$s?</string>
+    <string name="review_loving_message">Вам нравится пользоваться %1$s? Нам будет приятно узнать ваше мнение!</string>
     <string name="review_not_really">Не очень</string>
     <string name="review_love_it">Да, очень!</string>
     <string name="review_help_us_improve">Помогите нам стать лучше</string>

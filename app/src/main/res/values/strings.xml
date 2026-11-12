@@ -812,8 +812,8 @@
     <string name="chat_hide_messages">Hide messages</string>
     <string name="chat_show_messages_pane">Show messages</string>
     <!-- Review prompt and feedback (AATD-63) -->
-    <string name="review_loving_title">Loving Astrid?</string>
-    <string name="review_loving_message">Do you love using Astrid? We\'d love to hear from you!</string>
+    <string name="review_loving_title">Loving %1$s?</string>
+    <string name="review_loving_message">Do you love using %1$s? We\'d love to hear from you!</string>
     <string name="review_not_really">Not really</string>
     <string name="review_love_it">Yes, I love it!</string>
     <string name="review_help_us_improve">Help Us Improve</string>

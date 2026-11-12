@@ -70,12 +70,14 @@ class ReviewPrompt(
         const val MIN_COMPLETED_TASKS = 5
         /** iOS Brand.supportEmail and its "<app> App Feedback" subject. */
         val SUPPORT_EMAIL: String get() = com.gracefultools.astrid.Brand.supportEmail
-        const val FEEDBACK_SUBJECT = "Astrid App Feedback"
         /** Where Report an Issue goes until the core names the Bugs & Feedback list (see PARITY). */
         val REPORT_ISSUE_URL: String get() = com.gracefultools.astrid.Brand.baseUrl
         private const val DAY_MILLIS = 24L * 60 * 60 * 1000
 
-        /** iOS openSupportEmail's address, subject percent-encoded. */
-        fun feedbackMailto(): String = "mailto:$SUPPORT_EMAIL?subject=" + FEEDBACK_SUBJECT.replace(" ", "%20")
+        /** iOS openSupportEmail: "\(Brand.appName) App Feedback" to the brand's support address, percent-encoded. */
+        fun feedbackMailto(
+            appName: String = com.gracefultools.astrid.Brand.appName,
+            supportEmail: String = SUPPORT_EMAIL,
+        ): String = "mailto:$supportEmail?subject=" + java.net.URLEncoder.encode("$appName App Feedback", "UTF-8").replace("+", "%20")
     }
 }

@@ -23,6 +23,16 @@ fi
 
 # The scheduled loop runs under launchd on the dev Mac only (docs/AUTOMATION.md), and its test
 # drives the real zsh script against stubs, so CI (ubuntu) skips it.
+step "scripts: a brand from its profile, and the literal audit (AATD-90)"
+scripts/test-make-brand-variant.sh
+# brands/acme is generated from astrid-web's acme profile: stale when that profile has moved on.
+web="${ASTRID_WEB_DIR:-../astrid-web}"
+if [[ -f "$web/brands/acme.brand.json" ]]; then
+  scripts/make-brand-variant.sh "$web/brands/acme.brand.json" >/dev/null
+  git diff --exit-code -- brands/acme \
+    || { echo "brands/acme is stale: commit what scripts/make-brand-variant.sh acme wrote" >&2; exit 1; }
+fi
+
 if [[ "$(uname)" == Darwin ]]; then
   step "scripts: the scheduled /fixall loop"
   scripts/test-fixall-loop.sh
@@ -42,6 +52,13 @@ if [[ "$mode" != "--quick" ]]; then
   # Its links verify (astridLinkAutoVerify=true, AATD-76); Astrid's are checked in BrandIdentityTest.
   grep -q 'android:autoVerify="true"' app/build/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml \
     || { echo "the example brand's https links are not autoVerify (AATD-76)" >&2; exit 1; }
+  # A partner's build should name the partner, not Astrid. Not there yet: the budget is how many
+  # strings still do, and it only goes down (check-brand-literals.py; the goal is 0, AATD-90).
+  step "gradle: the acme brand names no Astrid (budget 24)"
+  ./gradlew --console=plain -PastridBrand=acme :app:processDebugResources
+  scripts/check-brand-literals.py brands/acme/profile.brand.json \
+    app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir \
+    app/build/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml --budget 24
 fi
 if [[ "$mode" == "--full" ]]; then
   step "gradle: instrumented smoke tests (needs a device or emulator)"
