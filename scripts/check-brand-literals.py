@@ -27,6 +27,11 @@ own defaults. Their strings are packed with nothing between them ("…androidast
 temp_…"), so a name cannot be told from part of an identifier (`setAstridModel`) and is not
 counted there. A domain or address literal is, in any case and wherever it appears. One library
 built for several ABIs is one library: its hits count once (the ABI with the most).
+
+WIRE_NAMES are exempt: names a partner's developer really types, which the server and SDK accept
+under no other name, so branding the text would make it wrong (Jon, 2026-11-13, AATD-90). Each is
+taken out of a string, exactly and in its own case, before the string is checked, so the rest of
+that string is still audited. Nothing else is exempt; add one only with a decision behind it.
 """
 import json
 import os
@@ -34,6 +39,16 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 import zipfile
+
+
+# The webhook secret's environment variable and the agent SDK's command (Settings → Agents).
+WIRE_NAMES = ("ASTRID_WEBHOOK_SECRET", "npx astrid-agent serve")
+
+
+def without_wire_names(text):
+    for name in WIRE_NAMES:
+        text = text.replace(name, "")
+    return text
 
 
 def text_of(element):
@@ -180,13 +195,13 @@ def main(argv):
         texts += list(plain_texts(text_dir))
     # One hit per string, however many literals it holds: "astrid.cc" is also "Astrid".
     hits = [(where, name, found, text) for where, name, text in texts
-            if (found := [l for l in literals if l.lower() in text.lower()])]
+            if (found := [l for l in literals if l.lower() in without_wire_names(text).lower()])]
     if apk:
         patterns = [(l, dex_pattern(l)) for l in literals]
         dex = list(apk_texts(apk))
         texts += dex
         hits += [(where, name, found, text) for where, name, text in dex
-                 if (found := [l for l, pattern in patterns if pattern.search(text)])]
+                 if (found := [l for l, pattern in patterns if pattern.search(without_wire_names(text))])]
         hits += native_hits(apk, literals)
 
     label = os.path.basename(profile_path)

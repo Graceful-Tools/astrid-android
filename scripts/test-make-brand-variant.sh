@@ -259,4 +259,26 @@ audit --budget 5 --text "$txt" --apk "$work/native.apk" && fail "the APK's nativ
 audit --budget 7 --text "$txt" --apk "$work/native.apk" \
   || fail "the native library should add two (https://astrid.cc and SUPPORT@ASTRID.CC), once for both ABIs (AATD-90)"
 
+# Wire/SDK names a partner's developer really types are exempt (Jon, 2026-11-13, AATD-90 option 1):
+# exactly ASTRID_WEBHOOK_SECRET and npx astrid-agent serve, in their own case. They are taken out
+# of the string, so anything else in it still counts, and the same words in another case still do.
+wire="$work/wire"; mkdir -p "$wire/values"
+cat > "$wire/values/values.xml" <<'XML'
+<resources>
+  <string name="settings_agents_webhook_url_hint">Your endpoint. Runs on the %1$s SDK (npx astrid-agent serve).</string>
+  <string name="settings_agents_webhook_secret_warning">Shown once. Add it as ASTRID_WEBHOOK_SECRET.</string>
+</resources>
+XML
+wire_audit() { python3 -I "$root/scripts/check-brand-literals.py" "$work/acme.brand.json" "$wire" "$@" >/dev/null 2>&1; }
+wire_audit || fail "the exempt wire names ASTRID_WEBHOOK_SECRET / npx astrid-agent serve counted (AATD-90)"
+cat > "$wire/values/values.xml" <<'XML'
+<resources>
+  <string name="a">Runs on Astrid's SDK (npx astrid-agent serve).</string>
+  <string name="b">Run NPX ASTRID-AGENT SERVE.</string>
+  <string name="c">Set Astrid_Webhook_Secret.</string>
+  <string name="d">npx astrid-agent login</string>
+</resources>
+XML
+wire_audit --budget 4 || fail "only the two exact wire names are exempt, not the rest of their string or other cases (AATD-90)"
+
 echo "✓ make-brand-variant and the brand literal audit"
