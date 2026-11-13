@@ -14,6 +14,16 @@ step() { printf '\n── %s ──\n' "$*"; }
 if [[ -f core/Cargo.toml ]]; then
   step "core: fmt, clippy, test"
   (cd core && cargo fmt --all -- --check && cargo clippy --all-targets -- -D warnings && cargo test --workspace)
+  # CI's supply-chain job, run here too: without it main sat red on RUSTSEC-2026-0433 for five
+  # merges that all passed this gate (AWTD-1621). Advisories change daily, so a red here can be new.
+  step "core: cargo-deny (advisories, bans, licenses, sources)"
+  if command -v cargo-deny >/dev/null; then
+    (cd core && cargo deny check)
+  elif [[ -n "${CI:-}" ]]; then
+    echo "cargo-deny is not installed (CI runs it in its own supply-chain job)"
+  else
+    echo "cargo-deny is not installed: cargo install --locked cargo-deny" >&2; exit 1
+  fi
   step "core: native libraries and Kotlin bindings"
   if [[ "$mode" == "--quick" ]]; then scripts/build-core.sh --host-only; else scripts/build-core.sh; fi
   step "bindings are what the core generates"
