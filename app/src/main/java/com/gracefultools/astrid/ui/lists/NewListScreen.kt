@@ -142,7 +142,7 @@ fun NewListScreen(vm: NewListViewModel, onCancel: () -> Unit, onCreated: (String
                             )
                         }
                         IconButton(onClick = { vm.removeInvitee(invitee.email) }) {
-                            Icon(Icons.Filled.Cancel, stringResource(R.string.lists_remove_invitee, invitee.email), tint = Color.Gray)
+                            Icon(Icons.Filled.Cancel, stringResource(R.string.lists_remove_invitee, invitee.email), tint = colors.neutral)
                         }
                     }
                 }

@@ -489,7 +489,7 @@ fun WebhookSettingsScreen(vm: WebhookViewModel, onBack: () -> Unit) {
             FormSection(header = stringResource(R.string.settings_agents_webhook_status)) {
                 val active = state.settings.enabled == true
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-                    Box(Modifier.size(8.dp).clip(CircleShape).background(if (active) Success else Color.Gray))
+                    Box(Modifier.size(8.dp).clip(CircleShape).background(if (active) Success else colors.neutral))
                     Text(
                         stringResource(if (active) R.string.settings_agents_webhook_active else R.string.settings_agents_webhook_disabled),
                         style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f),
@@ -682,7 +682,7 @@ private fun CustomAgentRow(agent: CustomAgent, busy: Boolean, onDelete: () -> Un
             Text(agent.email, style = TextStyles.subheadline, fontFamily = FontFamily.Monospace, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
                 val active = agent.status == "active"
-                Box(Modifier.size(8.dp).clip(CircleShape).background(if (active) Success else Color.Gray))
+                Box(Modifier.size(8.dp).clip(CircleShape).background(if (active) Success else colors.neutral))
                 Caption2(stringResource(if (active) R.string.settings_openclaw_status_active else R.string.settings_openclaw_status_idle))
             }
             Caption2(stringResource(R.string.settings_openclaw_registered, displayDate(agent.registeredAt, withTime = true) ?: agent.registeredAt))
@@ -796,8 +796,8 @@ fun AstridModelScreen(vm: AstridModelViewModel, onBack: () -> Unit, onAddKey: ()
                     subtitleColor = colors.textMuted,
                     selected = state.model.selected == null,
                     leading = {
-                        Box(Modifier.size(36.dp).clip(CircleShape).background(Color.Gray.copy(alpha = 0.15f)), contentAlignment = Alignment.Center) {
-                            Icon(Icons.Filled.Close, null, tint = Color.Gray, modifier = Modifier.size(16.dp))
+                        Box(Modifier.size(36.dp).clip(CircleShape).background(colors.neutral.copy(alpha = 0.15f)), contentAlignment = Alignment.Center) {
+                            Icon(Icons.Filled.Close, null, tint = colors.neutral, modifier = Modifier.size(16.dp))
                         }
                     },
                 ) { vm.select(null) }

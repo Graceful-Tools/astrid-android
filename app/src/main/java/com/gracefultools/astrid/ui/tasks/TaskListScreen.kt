@@ -319,7 +319,7 @@ private fun SwipeToDelete(onDelete: () -> Unit, content: @Composable () -> Unit)
             if (state.dismissDirection == SwipeToDismissBoxValue.EndToStart) Box(
                 Modifier.fillMaxSize().background(Error, RoundedCornerShape(Radius.medium)).padding(horizontal = Spacing.s20),
                 contentAlignment = Alignment.CenterEnd,
-            ) { Icon(Icons.Filled.Delete, stringResource(R.string.tasks_delete), tint = Color.White) }
+            ) { Icon(Icons.Filled.Delete, stringResource(R.string.tasks_delete), tint = AstridTheme.colors.onFill) }
         },
     ) { content() }
 }
@@ -439,7 +439,7 @@ private fun QuickAddPicker(defaults: QuickAddDefaults, onPriority: (Int) -> Unit
                         .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
                         .clickable { haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove); onPriority(p) },
                     contentAlignment = Alignment.Center,
-                ) { Text(glyph, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = if (selected) Color.White else tint) }
+                ) { Text(glyph, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = if (selected) colors.onFill else tint) }
             }
         }
         HorizontalDivider(Modifier.padding(vertical = Spacing.s12), color = colors.border)

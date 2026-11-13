@@ -234,7 +234,7 @@ private fun ColumnView(
                 Text(
                     column.total.toString(), style = com.gracefultools.astrid.ui.theme.TextStyles.caption, color = colors.textSecondary,
                     modifier = Modifier.clip(androidx.compose.foundation.shape.CircleShape)
-                        .background(if (colors.isDark) colors.bgTertiary else Color.Gray.copy(alpha = 0.1f)).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
+                        .background(if (colors.isDark) colors.bgTertiary else colors.neutral.copy(alpha = 0.1f)).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
                 )
             }
             column.description?.takeIf { it.isNotBlank() }?.let {

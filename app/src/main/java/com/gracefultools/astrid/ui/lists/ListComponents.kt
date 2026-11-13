@@ -88,7 +88,7 @@ internal fun ColorSwatches(choices: List<String>, current: String, onPick: (Stri
                 contentAlignment = Alignment.Center,
             ) {
                 Box(Modifier.size(28.dp).clip(CircleShape).background(parseColor(swatch)), contentAlignment = Alignment.Center) {
-                    if (chosen) Icon(Icons.Filled.Check, null, tint = Color.White, modifier = Modifier.size(14.dp))
+                    if (chosen) Icon(Icons.Filled.Check, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(14.dp))
                 }
             }
         }
@@ -101,7 +101,7 @@ internal fun ColorSwatches(choices: List<String>, current: String, onPick: (Stri
         ) {
             val wheel = Brush.sweepGradient(listOf(Color.Red, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.Magenta, Color.Red))
             Box(Modifier.size(28.dp).clip(CircleShape).background(wheel).padding(Spacing.s4).clip(CircleShape).background(parseColor(current)), contentAlignment = Alignment.Center) {
-                if (isCustom) Icon(Icons.Filled.Check, null, tint = Color.White, modifier = Modifier.size(12.dp))
+                if (isCustom) Icon(Icons.Filled.Check, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(12.dp))
             }
         }
     }
@@ -147,7 +147,7 @@ internal fun PriorityButtons(current: Int, onPick: (Int) -> Unit) {
                     .semantics(mergeDescendants = true) { selected = chosen; contentDescription = spoken },
                 contentAlignment = Alignment.Center,
             ) {
-                Text(if (level == 0) "○" else "!".repeat(level), color = if (chosen) Color.White else tint, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                Text(if (level == 0) "○" else "!".repeat(level), color = if (chosen) AstridTheme.colors.onFill else tint, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
             }
         }
     }

@@ -183,8 +183,8 @@ private fun LeadingControl(row: TaskRow, onLeading: () -> Unit) {
     val tap = Modifier.size(34.dp).completionPop(pop).clip(square).clickable(onClick = onTap)
         .semantics { contentDescription = row.checkboxLabel ?: label; role = Role.Checkbox }
     when (row.leading.kind) {
-        "copy" -> Box(tap.border(2.dp, Color.Gray.copy(alpha = 0.4f), square), contentAlignment = Alignment.Center) {
-            Icon(Icons.Outlined.ContentCopy, null, tint = Color.Gray, modifier = Modifier.size(16.dp))
+        "copy" -> Box(tap.border(2.dp, colors.neutral.copy(alpha = 0.4f), square), contentAlignment = Alignment.Center) {
+            Icon(Icons.Outlined.ContentCopy, null, tint = colors.neutral, modifier = Modifier.size(16.dp))
         }
         "avatar" -> {
             val initials = row.leading.initial ?: initialsOf(row.assignee?.name, row.assignee?.email)

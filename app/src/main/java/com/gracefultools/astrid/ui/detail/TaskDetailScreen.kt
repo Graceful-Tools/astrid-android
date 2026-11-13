@@ -489,7 +489,7 @@ private fun PriorityRow(current: Int, onPick: (Int) -> Unit) {
                         .semantics(mergeDescendants = true) { this.selected = selected; role = Role.RadioButton; contentDescription = spoken },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(if (level == 0) "○" else "!".repeat(level), color = if (selected) Color.White else tint, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                    Text(if (level == 0) "○" else "!".repeat(level), color = if (selected) AstridTheme.colors.onFill else tint, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
                 }
             }
         }
@@ -843,7 +843,7 @@ private fun QueuedFiles(files: List<QueuedFile>, onRemove: (String) -> Unit) {
                     }
                 }
                 Icon(
-                    Icons.Filled.Cancel, stringResource(R.string.attachments_remove_a11y, file.name), tint = Color.White,
+                    Icons.Filled.Cancel, stringResource(R.string.attachments_remove_a11y, file.name), tint = colors.onFill,
                     modifier = Modifier.align(Alignment.TopEnd).size(22.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.6f))
                         .clickable { onRemove(file.path) },
                 )

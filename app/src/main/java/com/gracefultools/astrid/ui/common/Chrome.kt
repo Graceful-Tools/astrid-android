@@ -189,9 +189,9 @@ fun AppErrorBanner(message: String, onDismiss: () -> Unit, modifier: Modifier = 
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
     ) {
-        Icon(Icons.Filled.Warning, null, tint = Color.White, modifier = Modifier.size(18.dp))
-        Text(message, style = TextStyles.subheadline, color = Color.White, modifier = Modifier.weight(1f))
-        IconButton(onClick = onDismiss) { Icon(Icons.Filled.Close, stringResource(R.string.common_dismiss), tint = Color.White) }
+        Icon(Icons.Filled.Warning, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(18.dp))
+        Text(message, style = TextStyles.subheadline, color = AstridTheme.colors.onFill, modifier = Modifier.weight(1f))
+        IconButton(onClick = onDismiss) { Icon(Icons.Filled.Close, stringResource(R.string.common_dismiss), tint = AstridTheme.colors.onFill) }
     }
 }
 

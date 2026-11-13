@@ -186,7 +186,7 @@ internal fun ToggleRow(title: String, checked: Boolean, icon: ImageVector? = nul
         }
         Switch(
             checked = checked, onCheckedChange = null,
-            colors = SwitchDefaults.colors(checkedTrackColor = colors.accent, checkedThumbColor = Color.White),
+            colors = SwitchDefaults.colors(checkedTrackColor = colors.accent, checkedThumbColor = colors.onFill),
         )
     }
 }
