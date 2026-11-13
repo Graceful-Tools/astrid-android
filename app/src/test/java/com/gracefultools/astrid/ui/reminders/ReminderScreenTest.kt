@@ -36,9 +36,10 @@ class ReminderScreenTest {
     fun `AATD-54 one reminder shows iOS's card, and 1 week snoozes for a week`() {
         val core = core()
         var finished: Set<String>? = null
+        val vm = ReminderViewModel(core, listOf("t1"), dispatcher = Dispatchers.Main)
         compose.setContent {
             AstridTheme {
-                ReminderOverlay(ReminderViewModel(core, listOf("t1"), dispatcher = Dispatchers.Main), onOpenTask = {}, onFinished = { finished = it })
+                ReminderOverlay(vm, onOpenTask = {}, onFinished = { finished = it })
             }
         }
         compose.waitUntil(5_000) { compose.onAllNodesWithText("Snooze 15 minutes").fetchSemanticsNodes().isNotEmpty() }
@@ -53,9 +54,10 @@ class ReminderScreenTest {
     @Test
     fun `AATD-54 several reminders deal the triage deck until all are caught up`() {
         val core = core()
+        val vm = ReminderViewModel(core, listOf("t1", "t2"), dispatcher = Dispatchers.Main)
         compose.setContent {
             AstridTheme {
-                ReminderOverlay(ReminderViewModel(core, listOf("t1", "t2"), dispatcher = Dispatchers.Main), onOpenTask = {}, onFinished = {})
+                ReminderOverlay(vm, onOpenTask = {}, onFinished = {})
             }
         }
         compose.waitUntil(5_000) { compose.onAllNodesWithText("Triage").fetchSemanticsNodes().isNotEmpty() }
