@@ -21,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.ui.platform.testTag
@@ -169,6 +170,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
             val height = config.screenHeightDp
             val twoPane = PaneLayout.showsDetailPane(width)
             var paneTaskId by rememberSaveable { mutableStateOf<String?>(null) }
+            val rowAnchor = remember { com.gracefultools.astrid.ui.common.SelectedRowAnchor() }
             var boardFullScreen by remember { mutableStateOf(graph.preferences.boardFullScreen) }
             var messagesHidden by remember { mutableStateOf(graph.preferences.messagesPaneHidden) }
             // iOS's search is a mode of the main pane, entered from the sidebar's magnifier.
@@ -290,6 +292,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
             }
             val panes: @Composable () -> Unit = {
                 androidx.compose.foundation.layout.BoxWithConstraints(androidx.compose.ui.Modifier.fillMaxSize()) {
+                  androidx.compose.runtime.CompositionLocalProvider(com.gracefultools.astrid.ui.common.LocalSelectedRowAnchor provides rowAnchor.takeIf { twoPane }) {
                     val openId = paneTaskId?.takeIf { twoPane }
                     val layout = PaneLayout.widths(
                         maxWidth, showsMessages, messagesHidden,
@@ -308,11 +311,25 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                                 chat = chat,
                             )
                         }
-                        if (openId != null && layout.detail > 0.dp) {
-                            androidx.compose.material3.VerticalDivider(color = divider)
-                            androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.width(layout.detail).testTag("detailPane")) { detailPane(openId) }
+                        // Details open out of the selected row (DS7): the panel wears its outline and
+                        // points at it, entering and leaving over motion.panel. The last task and width
+                        // are kept so the panel can animate out after it is closed.
+                        var shownId by remember { mutableStateOf(openId) }
+                        var shownWidth by remember { mutableStateOf(layout.detail) }
+                        if (openId != null && layout.detail > 0.dp) { shownId = openId; shownWidth = layout.detail }
+                        val panelMotion = androidx.compose.animation.core.tween<androidx.compose.ui.unit.IntSize>(com.astrid.design.AstridTokens.Motion.panelDurationMillis)
+                        val panelFade = androidx.compose.animation.core.tween<Float>(com.astrid.design.AstridTokens.Motion.panelDurationMillis)
+                        androidx.compose.animation.AnimatedVisibility(
+                            visible = openId != null && layout.detail > 0.dp,
+                            enter = androidx.compose.animation.expandHorizontally(panelMotion) + androidx.compose.animation.fadeIn(panelFade),
+                            exit = androidx.compose.animation.shrinkHorizontally(panelMotion) + androidx.compose.animation.fadeOut(panelFade),
+                        ) {
+                            shownId?.let { id ->
+                                com.gracefultools.astrid.ui.detail.DetailsPanel(rowAnchor, androidx.compose.ui.Modifier.width(shownWidth).fillMaxHeight()) { detailPane(id) }
+                            }
                         }
                     }
+                  }
                 }
             }
             if (permanentSidebar) {
