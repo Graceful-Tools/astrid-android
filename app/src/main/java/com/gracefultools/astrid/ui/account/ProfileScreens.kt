@@ -113,7 +113,6 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.TypeSize
-import com.gracefultools.astrid.ui.theme.Warning
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -497,7 +496,7 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
                 }
                 IconButton(onClick = pick, enabled = !state.saving) {
                     if (state.saving && photo != null) CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
-                    else Icon(Icons.Filled.PhotoCamera, stringResource(R.string.account_change_photo), tint = colors.accent)
+                    else Icon(Icons.Filled.PhotoCamera, stringResource(R.string.account_change_photo), tint = colors.accentInk)
                 }
             }
             FormDivider(inset = false)
@@ -541,9 +540,9 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
             ) {
                 if (pending) {
                     FormRowFrame {
-                        RowIcon(Icons.Filled.Email, Warning)
+                        RowIcon(Icons.Filled.Email, AstridTheme.colors.warningInk)
                         Column {
-                            Text(stringResource(R.string.account_pending_email), style = TextStyles.body, color = Warning)
+                            Text(stringResource(R.string.account_pending_email), style = TextStyles.body, color = AstridTheme.colors.warningInk)
                             Text(user.pendingEmail.orEmpty(), style = TextStyles.footnote, color = colors.textSecondary)
                         }
                     }
@@ -551,8 +550,8 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
                     ButtonRow(stringResource(R.string.account_resend_verification), icon = Icons.Filled.Refresh, onClick = vm::resendVerification)
                 } else {
                     FormRowFrame {
-                        RowIcon(Icons.Filled.Warning, Warning)
-                        Text(stringResource(R.string.account_email_not_verified), style = TextStyles.body, color = Warning)
+                        RowIcon(Icons.Filled.Warning, AstridTheme.colors.warningInk)
+                        Text(stringResource(R.string.account_email_not_verified), style = TextStyles.body, color = AstridTheme.colors.warningInk)
                     }
                     FormDivider()
                     ButtonRow(stringResource(R.string.account_send_verification), icon = Icons.Filled.Email, onClick = vm::resendVerification)
@@ -605,7 +604,7 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
         }
 
         FormSection(stringResource(R.string.account_danger_zone), stringResource(R.string.account_delete_account_footer)) {
-            ButtonRow(stringResource(R.string.account_delete_account), icon = Icons.Filled.Delete, color = Error, onClick = onDelete)
+            ButtonRow(stringResource(R.string.account_delete_account), icon = Icons.Filled.Delete, color = AstridTheme.colors.errorInk, onClick = onDelete)
         }
     }
 
@@ -670,7 +669,7 @@ private fun PasskeyRows(passkeys: List<Passkey>?, loading: Boolean, vm: ProfileV
                 }
                 if (editingId == key.id) {
                     IconButton(onClick = { vm.renamePasskey(key.id, editingName); editingId = null }) {
-                        Icon(Icons.Filled.CheckCircle, stringResource(R.string.account_save_passkey_name), tint = Success)
+                        Icon(Icons.Filled.CheckCircle, stringResource(R.string.account_save_passkey_name), tint = AstridTheme.colors.successInk)
                     }
                     IconButton(onClick = { editingId = null; editingName = "" }) {
                         Icon(Icons.Filled.Cancel, stringResource(R.string.common_cancel), tint = colors.textMuted)
@@ -680,7 +679,7 @@ private fun PasskeyRows(passkeys: List<Passkey>?, loading: Boolean, vm: ProfileV
                         Icon(Icons.Filled.Edit, stringResource(R.string.account_edit_passkey), tint = colors.textMuted)
                     }
                     IconButton(onClick = { vm.revokePasskey(key.id) }) {
-                        Icon(Icons.Filled.Delete, stringResource(R.string.actions_delete), tint = Error)
+                        Icon(Icons.Filled.Delete, stringResource(R.string.actions_delete), tint = AstridTheme.colors.errorInk)
                     }
                 }
             }
@@ -708,8 +707,8 @@ fun DeleteAccountScreen(vm: ProfileViewModel, onBack: () -> Unit, onSignedOut: (
         FormSection {
             Column(Modifier.fillMaxWidth().padding(Spacing.s16), verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.Warning, null, tint = Error, modifier = Modifier.size(24.dp))
-                    Text(stringResource(R.string.account_delete_warning), style = TextStyles.headline, color = Error)
+                    Icon(Icons.Filled.Warning, null, tint = AstridTheme.colors.errorInk, modifier = Modifier.size(24.dp))
+                    Text(stringResource(R.string.account_delete_warning), style = TextStyles.headline, color = AstridTheme.colors.errorInk)
                 }
                 Text(stringResource(R.string.account_delete_remove_list_header), style = TextStyles.body, color = colors.textPrimary)
                 Column(Modifier.padding(start = Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
@@ -718,7 +717,7 @@ fun DeleteAccountScreen(vm: ProfileViewModel, onBack: () -> Unit, onSignedOut: (
                         R.string.account_delete_remove_profile, R.string.account_delete_remove_files,
                     ).forEach { line ->
                         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-                            Text("•", color = Error, style = TextStyles.footnote)
+                            Text("•", color = AstridTheme.colors.errorInk, style = TextStyles.footnote)
                             Text(stringResource(line), style = TextStyles.footnote, color = colors.textSecondary)
                         }
                     }
@@ -729,8 +728,8 @@ fun DeleteAccountScreen(vm: ProfileViewModel, onBack: () -> Unit, onSignedOut: (
         val footer: @Composable () -> Unit = {
             when {
                 state.deleteText.isEmpty() -> Text(stringResource(R.string.account_delete_confirm_instruction), style = TextStyles.footnote, color = colors.textSecondary)
-                !state.deleteMatches -> FeedbackLine(Icons.Outlined.Cancel, stringResource(R.string.account_delete_confirm_mismatch), Error)
-                else -> FeedbackLine(Icons.Outlined.CheckCircle, stringResource(R.string.account_delete_confirm_match), Success)
+                !state.deleteMatches -> FeedbackLine(Icons.Outlined.Cancel, stringResource(R.string.account_delete_confirm_mismatch), AstridTheme.colors.errorInk)
+                else -> FeedbackLine(Icons.Outlined.CheckCircle, stringResource(R.string.account_delete_confirm_match), AstridTheme.colors.successInk)
             }
         }
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
@@ -752,7 +751,7 @@ fun DeleteAccountScreen(vm: ProfileViewModel, onBack: () -> Unit, onSignedOut: (
         FormSection {
             ButtonRow(
                 stringResource(if (state.deleting) R.string.messages_deleting else R.string.account_delete_my_account_button),
-                icon = if (state.deleting) null else Icons.Filled.Delete, color = Error, centered = true,
+                icon = if (state.deleting) null else Icons.Filled.Delete, color = AstridTheme.colors.errorInk, centered = true,
                 enabled = state.deleteMatches && !state.deleting,
                 trailing = { if (state.deleting) CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp, color = Error) },
                 onClick = vm::askDelete,
@@ -767,7 +766,7 @@ fun DeleteAccountScreen(vm: ProfileViewModel, onBack: () -> Unit, onSignedOut: (
             text = { Text(stringResource(R.string.account_delete_final_warning)) },
             dismissButton = { TextButton(onClick = vm::cancelDelete) { Text(stringResource(R.string.common_cancel)) } },
             confirmButton = {
-                TextButton(onClick = vm::deleteAccount) { Text(stringResource(R.string.account_delete_forever), color = Error, fontWeight = FontWeight.SemiBold) }
+                TextButton(onClick = vm::deleteAccount) { Text(stringResource(R.string.account_delete_forever), color = AstridTheme.colors.errorInk, fontWeight = FontWeight.SemiBold) }
             },
         )
     }

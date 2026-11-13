@@ -236,7 +236,7 @@ internal fun ShareListSheet(name: String, privacy: String?, link: String?, faile
         val note = if (privacy.equals("PUBLIC", ignoreCase = true)) R.string.share_public_list_message else R.string.share_private_list_message
         Text(stringResource(note), style = TextStyles.subheadline, color = colors.textSecondary)
         when {
-            failed -> Text(stringResource(R.string.share_link_failed), style = TextStyles.body, color = Error)
+            failed -> Text(stringResource(R.string.share_link_failed), style = TextStyles.body, color = AstridTheme.colors.errorInk)
             link == null -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                 CircularProgressIndicator(Modifier.size(18.dp), color = colors.accent, strokeWidth = 2.dp)
                 Text(stringResource(R.string.share_generating_link), style = TextStyles.body, color = colors.textSecondary)
@@ -244,10 +244,10 @@ internal fun ShareListSheet(name: String, privacy: String?, link: String?, faile
             else -> {
                 Text(link, style = TextStyles.subheadline, color = colors.textPrimary, modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgSecondary).padding(Spacing.s12))
                 Text(stringResource(R.string.share_share_list_link_hint), style = TextStyles.caption, color = colors.textMuted)
-                PickRow(stringResource(if (copied) R.string.share_link_copied else R.string.share_copy_link), copied, leading = { Icon(Icons.Outlined.ContentCopy, null, tint = colors.accent) }) {
+                PickRow(stringResource(if (copied) R.string.share_link_copied else R.string.share_copy_link), copied, leading = { Icon(Icons.Outlined.ContentCopy, null, tint = colors.accentInk) }) {
                     clipboard.setText(AnnotatedString(link)); copied = true
                 }
-                PickRow(stringResource(R.string.actions_share), false, leading = { Icon(Icons.Outlined.Share, null, tint = colors.accent) }) {
+                PickRow(stringResource(R.string.actions_share), false, leading = { Icon(Icons.Outlined.Share, null, tint = colors.accentInk) }) {
                     val send = android.content.Intent(android.content.Intent.ACTION_SEND).setType("text/plain")
                         .putExtra(android.content.Intent.EXTRA_SUBJECT, name).putExtra(android.content.Intent.EXTRA_TEXT, link)
                     context.startActivity(android.content.Intent.createChooser(send, null))
@@ -261,7 +261,7 @@ internal fun ShareListSheet(name: String, privacy: String?, link: String?, faile
 @Composable
 internal fun ErrorBox(message: String, modifier: Modifier = Modifier) {
     Text(
-        message, style = TextStyles.caption, color = Error,
+        message, style = TextStyles.caption, color = AstridTheme.colors.errorInk,
         modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(Error.copy(alpha = 0.1f)).padding(Spacing.s12),
     )
 }

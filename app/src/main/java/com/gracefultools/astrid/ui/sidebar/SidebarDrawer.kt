@@ -66,7 +66,6 @@ import com.gracefultools.astrid.ui.tasks.parseColor
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
-import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
 
 /** iOS SidebarBrandHeader: the logo column every row's icon centres in, and the gap after it. */
@@ -171,7 +170,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.publicSection(
     if (more) item(key = "$key-more") {
         Group(Position.Last) {
             Text(
-                stringResource(seeAll), style = TextStyles.caption, color = AstridTheme.colors.accent,
+                stringResource(seeAll), style = TextStyles.caption, color = AstridTheme.colors.accentInk,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s8).clip(RoundedCornerShape(Radius.medium))
                     .clickable(role = androidx.compose.ui.semantics.Role.Button, onClick = onSeeAll)
                     .testTag("sidebar:$key-see-all").padding(start = Spacing.s12, top = 13.dp, bottom = 13.dp),
@@ -297,9 +296,9 @@ private fun AddListEntry(onClick: () -> Unit) {
     val colors = AstridTheme.colors
     RowShell(false, "sidebar:add-list", onClick) {
         Box(Modifier.width(LogoColumn), contentAlignment = Alignment.Center) {
-            Icon(Icons.Filled.AddCircle, null, tint = colors.accent, modifier = Modifier.size(20.dp))
+            Icon(Icons.Filled.AddCircle, null, tint = colors.accentInk, modifier = Modifier.size(20.dp))
         }
-        Text(stringResource(R.string.navigation_add_list), style = TextStyles.body, color = colors.accent, modifier = Modifier.weight(1f))
+        Text(stringResource(R.string.navigation_add_list), style = TextStyles.body, color = colors.accentInk, modifier = Modifier.weight(1f))
     }
 }
 
@@ -315,8 +314,8 @@ private fun Entry(list: ListSummary, selected: Boolean, count: Int?, image: Stri
         }
         Text(list.name, style = TextStyles.body, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
         when (list.privacy) {
-            "PUBLIC" -> Icon(Icons.Outlined.Public, stringResource(R.string.lists_privacy_public), tint = colors.accent, modifier = Modifier.size(13.dp))
-            "SHARED" -> Icon(Icons.Filled.People, stringResource(R.string.lists_privacy_shared), tint = Success, modifier = Modifier.size(13.dp))
+            "PUBLIC" -> Icon(Icons.Outlined.Public, stringResource(R.string.lists_privacy_public), tint = colors.accentInk, modifier = Modifier.size(13.dp))
+            "SHARED" -> Icon(Icons.Filled.People, stringResource(R.string.lists_privacy_shared), tint = AstridTheme.colors.successInk, modifier = Modifier.size(13.dp))
         }
         CountCapsule(count ?: list.taskCount ?: 0)
     }

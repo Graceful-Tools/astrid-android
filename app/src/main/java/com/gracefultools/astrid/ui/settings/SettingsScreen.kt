@@ -50,11 +50,8 @@ import com.gracefultools.astrid.model.SettingChoice
 import com.gracefultools.astrid.ui.common.AppErrorBanner
 import com.gracefultools.astrid.ui.common.coreLabel
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Spacing
-import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
-import com.gracefultools.astrid.ui.theme.Warning
 
 /** Purple and green, iOS's tints on the GitHub Issues and Google Tasks rows. */
 private val GitHubPurple = Color(0xFFAF52DE)
@@ -180,7 +177,7 @@ fun SettingsScreen(
         }
 
         FormSection {
-            ButtonRow(stringResource(R.string.settings_sign_out), icon = Icons.AutoMirrored.Filled.Logout, color = Error, centered = true, onClick = vm::askSignOut)
+            ButtonRow(stringResource(R.string.settings_sign_out), icon = Icons.AutoMirrored.Filled.Logout, color = AstridTheme.colors.errorInk, centered = true, onClick = vm::askSignOut)
         }
     }
 
@@ -191,7 +188,7 @@ fun SettingsScreen(
             text = { Text(stringResource(R.string.settings_are_you_sure_sign_out)) },
             dismissButton = { TextButton(onClick = vm::cancelSignOut) { Text(stringResource(R.string.common_cancel)) } },
             confirmButton = {
-                TextButton(onClick = vm::signOut) { Text(stringResource(R.string.settings_sign_out), color = Error, fontWeight = FontWeight.SemiBold) }
+                TextButton(onClick = vm::signOut) { Text(stringResource(R.string.settings_sign_out), color = AstridTheme.colors.errorInk, fontWeight = FontWeight.SemiBold) }
             },
         )
     }
@@ -213,19 +210,19 @@ private fun OutboxRows(state: SettingsState, vm: SettingsViewModel) {
     FormRowFrame {
         Icon(
             if (outbox.isHealthy) Icons.Filled.Verified else Icons.Filled.Warning, null,
-            tint = if (outbox.isHealthy) Success else Warning, modifier = Modifier.size(20.dp),
+            tint = if (outbox.isHealthy) AstridTheme.colors.successInk else AstridTheme.colors.warningInk, modifier = Modifier.size(20.dp),
         )
         Text(
             stringResource(R.string.settings_outbox_summary, outbox.completed, outbox.pending + outbox.running, outbox.failed),
             style = TextStyles.caption2, color = colors.textSecondary, modifier = Modifier.weight(1f),
         )
-        TextButton(onClick = vm::refreshOutbox) { Text(stringResource(R.string.settings_outbox_refresh), style = TextStyles.caption2, color = colors.accent) }
+        TextButton(onClick = vm::refreshOutbox) { Text(stringResource(R.string.settings_outbox_refresh), style = TextStyles.caption2, color = colors.accentInk) }
     }
     outbox.deadLetters.forEach { letter ->
         FormDivider(inset = false)
         Text(
             "${letter.kind}: ${letter.error ?: stringResource(R.string.settings_outbox_unknown_error)}",
-            style = TextStyles.caption2, color = Warning, maxLines = 3,
+            style = TextStyles.caption2, color = AstridTheme.colors.warningInk, maxLines = 3,
             modifier = Modifier.padding(horizontal = Spacing.s16, vertical = Spacing.s8),
         )
     }
@@ -247,7 +244,7 @@ internal fun MenuPickerRow(title: String, choices: List<SettingChoice>, selected
             choices.forEach { choice ->
                 DropdownMenuItem(
                     text = { Text(coreLabel(choice.titleKey), color = colors.textPrimary) },
-                    trailingIcon = if (choice.value == selected) ({ Icon(Icons.Filled.CheckCircle, null, tint = colors.accent) }) else null,
+                    trailingIcon = if (choice.value == selected) ({ Icon(Icons.Filled.CheckCircle, null, tint = colors.accentInk) }) else null,
                     onClick = { open = false; onPick(choice.value) },
                 )
             }

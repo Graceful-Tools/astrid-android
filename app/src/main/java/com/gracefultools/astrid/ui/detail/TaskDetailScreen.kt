@@ -121,7 +121,6 @@ import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.tasks.parseColor
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Overdue
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
@@ -281,8 +280,8 @@ private fun DetailHeader(detail: TaskDetail?, vm: TaskDetailViewModel, onBack: (
                     onClick = { menu = false; vm.toggleWontDo() },
                 )
                 DropdownMenuItem(
-                    text = { Text(stringResource(R.string.tasks_delete_task), color = Error) },
-                    leadingIcon = { Icon(Icons.Outlined.Delete, null, tint = Error) },
+                    text = { Text(stringResource(R.string.tasks_delete_task), color = AstridTheme.colors.errorInk) },
+                    leadingIcon = { Icon(Icons.Outlined.Delete, null, tint = AstridTheme.colors.errorInk) },
                     onClick = { menu = false; confirmingDelete = true },
                 )
             }
@@ -292,7 +291,7 @@ private fun DetailHeader(detail: TaskDetail?, vm: TaskDetailViewModel, onBack: (
         AlertDialog(
             onDismissRequest = { confirmingDelete = false },
             title = { Text(stringResource(R.string.tasks_delete_confirm)) },
-            confirmButton = { TextButton(onClick = { confirmingDelete = false; vm.delete() }) { Text(stringResource(R.string.actions_delete), color = Error) } },
+            confirmButton = { TextButton(onClick = { confirmingDelete = false; vm.delete() }) { Text(stringResource(R.string.actions_delete), color = AstridTheme.colors.errorInk) } },
             dismissButton = { TextButton(onClick = { confirmingDelete = false }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
@@ -455,7 +454,7 @@ private fun WhenRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailVi
                     val repeats = detail.task.repeating != null && detail.task.repeating != "never"
                     Icon(
                         Icons.Outlined.Repeat,
-                        stringResource(R.string.repeating_title), tint = if (repeats) colors.accent else colors.textMuted, modifier = Modifier.size(18.dp),
+                        stringResource(R.string.repeating_title), tint = if (repeats) colors.accentInk else colors.textMuted, modifier = Modifier.size(18.dp),
                     )
                     if (repeats && summary != null) Text(summary, style = TextStyles.body, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
@@ -571,7 +570,7 @@ private fun ProjectStateRow(state: com.gracefultools.astrid.model.BoardState, en
             state.chips.forEach { chip ->
                 Text(
                     chip.name, style = TextStyles.subheadline,
-                    color = if (chip.isCurrent) colors.accent else colors.textPrimary,
+                    color = if (chip.isCurrent) colors.accentInk else colors.textPrimary,
                     modifier = Modifier.clip(RoundedCornerShape(Radius.medium))
                         .background(if (chip.isCurrent) colors.accent.copy(alpha = 0.15f) else colors.bgSecondary)
                         .clickable(enabled = enabled && !chip.isCurrent) { onPick(chip.id) }
@@ -684,7 +683,7 @@ private fun SubtasksSection(detail: TaskDetail, vm: TaskDetailViewModel, onOpenT
                 Icon(
                     if (sub.completed) Icons.Outlined.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
                     stringResource(if (sub.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, sub.title),
-                    tint = if (sub.completed) colors.accent else colors.textMuted,
+                    tint = if (sub.completed) colors.accentInk else colors.textMuted,
                     modifier = Modifier.size(22.dp).clip(CircleShape).clickable(enabled = !detail.isCopyOnly) { vm.setSubtaskCompleted(sub.id, !sub.completed) },
                 )
                 Text(
@@ -759,7 +758,7 @@ private fun CommentComposer(
                 stringResource(R.string.comments_replying_to, replyTo.authorName ?: ""), style = TextStyles.caption, color = colors.textSecondary,
                 modifier = Modifier.weight(1f),
             )
-            Text(stringResource(R.string.common_cancel), style = TextStyles.caption, color = colors.accent, modifier = Modifier.clickable(onClick = onCancelReply))
+            Text(stringResource(R.string.common_cancel), style = TextStyles.caption, color = colors.accentInk, modifier = Modifier.clickable(onClick = onCancelReply))
         }
         if (state.queued.isNotEmpty()) QueuedFiles(state.queued, vm::unqueueFile)
         Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
@@ -781,7 +780,7 @@ private fun CommentComposer(
                 )
             }
             Box {
-                ComposerButton(Icons.Filled.AttachFile, stringResource(R.string.detail_attach), colors.accent) { attachMenu = true }
+                ComposerButton(Icons.Filled.AttachFile, stringResource(R.string.detail_attach), colors.accentInk) { attachMenu = true }
                 DropdownMenu(attachMenu, onDismissRequest = { attachMenu = false }) {
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.attachments_from_photos)) }, leadingIcon = { Icon(Icons.Outlined.PhotoLibrary, null) },
@@ -807,11 +806,11 @@ private fun CommentComposer(
                 }
             }
             if (canSend) {
-                ComposerButton(Icons.AutoMirrored.Filled.Send, stringResource(R.string.detail_send), tint = colors.accent) {
+                ComposerButton(Icons.AutoMirrored.Filled.Send, stringResource(R.string.detail_send), tint = colors.accentInk) {
                     onSend(text.text); text = androidx.compose.ui.text.input.TextFieldValue("")
                 }
             } else if (onTimer != null) {
-                ComposerButton(Icons.Outlined.Timer, stringResource(R.string.timer_open), tint = colors.accent, onClick = onTimer)
+                ComposerButton(Icons.Outlined.Timer, stringResource(R.string.timer_open), tint = colors.accentInk, onClick = onTimer)
             }
         }
     }
@@ -867,7 +866,7 @@ private fun SuggestionList(items: List<com.gracefultools.astrid.model.CommentSug
                 when {
                     item.kind == "list" -> Text("#", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(20.dp))
                     item.kind == "task" -> Text("!", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(20.dp))
-                    item.isAgent -> Icon(Icons.Outlined.SmartToy, null, tint = colors.accent, modifier = Modifier.size(20.dp))
+                    item.isAgent -> Icon(Icons.Outlined.SmartToy, null, tint = colors.accentInk, modifier = Modifier.size(20.dp))
                     else -> Icon(Icons.Outlined.AccountCircle, null, tint = colors.textMuted, modifier = Modifier.size(20.dp))
                 }
                 Column(Modifier.weight(1f)) {

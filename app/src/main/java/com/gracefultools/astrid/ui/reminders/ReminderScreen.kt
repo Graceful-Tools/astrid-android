@@ -242,7 +242,7 @@ private fun TriageDeck(state: ReminderState, vm: ReminderViewModel, onOpenTask: 
             val task = state.current
             if (task == null) {
                 Column(Modifier.weight(1f).fillMaxWidth(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Filled.Verified, null, tint = Success, modifier = Modifier.size(56.dp))
+                    Icon(Icons.Filled.Verified, null, tint = AstridTheme.colors.successInk, modifier = Modifier.size(56.dp))
                     Spacer(Modifier.size(Spacing.s16))
                     Text(stringResource(R.string.reminders_triage_caught_up), fontSize = TypeSize.title3, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
                     Spacer(Modifier.size(Spacing.s16))

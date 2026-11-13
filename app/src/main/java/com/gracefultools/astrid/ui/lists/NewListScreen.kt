@@ -120,8 +120,8 @@ fun NewListScreen(vm: NewListViewModel, onCancel: () -> Unit, onCreated: (String
                             .heightIn(min = 32.dp).padding(horizontal = Spacing.s4),
                         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4),
                     ) {
-                        Icon(Icons.Outlined.PersonAdd, null, tint = colors.accent, modifier = Modifier.size(16.dp))
-                        Text(stringResource(R.string.actions_add), style = TextStyles.caption, color = colors.accent)
+                        Icon(Icons.Outlined.PersonAdd, null, tint = colors.accentInk, modifier = Modifier.size(16.dp))
+                        Text(stringResource(R.string.actions_add), style = TextStyles.caption, color = colors.accentInk)
                     }
                 }
                 if (state.invitees.isEmpty()) {
@@ -132,7 +132,7 @@ fun NewListScreen(vm: NewListViewModel, onCancel: () -> Unit, onCreated: (String
                         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
                     ) {
                         Box(Modifier.size(32.dp).clip(CircleShape).background(colors.accent.copy(alpha = 0.2f)), contentAlignment = Alignment.Center) {
-                            Text(invitee.email.take(1).uppercase(), style = TextStyles.caption, color = colors.accent)
+                            Text(invitee.email.take(1).uppercase(), style = TextStyles.caption, color = colors.accentInk)
                         }
                         Column(Modifier.weight(1f)) {
                             Text(invitee.email, style = TextStyles.body, color = colors.textPrimary, maxLines = 1)

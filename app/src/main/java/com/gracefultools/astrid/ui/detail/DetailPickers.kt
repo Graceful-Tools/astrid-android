@@ -70,7 +70,6 @@ import com.gracefultools.astrid.model.TaskDetail
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.coreLabel
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -117,7 +116,7 @@ internal fun PickRow(label: String, selected: Boolean, color: Color? = null, sub
             Text(label, style = TextStyles.body, color = color ?: colors.textPrimary)
             if (subtitle != null) Text(subtitle, style = TextStyles.caption2, color = colors.textMuted)
         }
-        if (selected) Icon(Icons.Filled.Check, null, tint = color ?: colors.accent, modifier = Modifier.size(18.dp))
+        if (selected) Icon(Icons.Filled.Check, null, tint = color ?: colors.accentInk, modifier = Modifier.size(18.dp))
     }
 }
 
@@ -206,7 +205,7 @@ private fun SomeoneElseSection(section: SomeoneElse, vm: TaskDetailViewModel) {
         }
     }
     val error = if (section.needsList) stringResource(R.string.assignee_needs_a_list) else section.error
-    if (error != null) Text(error, style = TextStyles.caption, color = Error)
+    if (error != null) Text(error, style = TextStyles.caption, color = AstridTheme.colors.errorInk)
 }
 
 /** iOS's InlineDatePicker sheet: "No due date" (red), the quick picks, and a calendar that saves on a tap. */
@@ -214,7 +213,7 @@ private fun SomeoneElseSection(section: SomeoneElse, vm: TaskDetailViewModel) {
 @Composable
 internal fun DateSheet(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailViewModel, onDismiss: () -> Unit) {
     PickerSheet(stringResource(R.string.tasks_due_date), onDismiss) {
-        PickRow(stringResource(R.string.picker_no_due_date), selected = detail.task.dueDateTime == null, color = Error) { vm.setDue(null, false); onDismiss() }
+        PickRow(stringResource(R.string.picker_no_due_date), selected = detail.task.dueDateTime == null, color = AstridTheme.colors.errorInk) { vm.setDue(null, false); onDismiss() }
         state.dueOptions?.dates?.forEach { pick ->
             PickRow(coreLabel(pick.titleKey), pick.isSelected) { vm.setDue(pick.dueDateTime, true); onDismiss() }
         }
@@ -238,7 +237,7 @@ internal fun DateSheet(detail: TaskDetail, state: TaskDetailState, vm: TaskDetai
 internal fun TimeSheet(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailViewModel, onDismiss: () -> Unit) {
     val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
     PickerSheet(stringResource(R.string.picker_time), onDismiss) {
-        PickRow(stringResource(R.string.picker_all_day), selected = detail.task.isAllDay, color = Error) {
+        PickRow(stringResource(R.string.picker_all_day), selected = detail.task.isAllDay, color = AstridTheme.colors.errorInk) {
             // Keep the day, drop the time: the core's all-day instant for the task's local day.
             detail.task.dueDateTime?.let { iso ->
                 runCatching { Instant.parse(iso).atZone(java.time.ZoneId.systemDefault()).toLocalDate().toString() }.getOrNull()?.let(vm::pickDay)
@@ -306,7 +305,7 @@ internal fun ListsSheet(detail: TaskDetail, state: TaskDetailState, vm: TaskDeta
             ) {
                 Box(Modifier.size(16.dp).clip(RoundedCornerShape(3.dp)).background(com.gracefultools.astrid.ui.tasks.parseColor(list.color)))
                 Text(list.name, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Icon(if (on) Icons.Filled.CheckCircle else Icons.Outlined.RadioButtonUnchecked, null, tint = if (on) colors.accent else colors.textMuted)
+                Icon(if (on) Icons.Filled.CheckCircle else Icons.Outlined.RadioButtonUnchecked, null, tint = if (on) colors.accentInk else colors.textMuted)
             }
         }
     }
@@ -378,7 +377,7 @@ internal fun ShareTaskSheet(vm: TaskDetailViewModel, detail: TaskDetail, onDismi
         Text(stringResource(R.string.share_private_task_message), style = TextStyles.subheadline, color = colors.textSecondary)
         val link = state.shareLink
         when {
-            state.shareFailed -> Text(stringResource(R.string.share_link_failed), style = TextStyles.body, color = Error)
+            state.shareFailed -> Text(stringResource(R.string.share_link_failed), style = TextStyles.body, color = AstridTheme.colors.errorInk)
             link == null -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                 CircularProgressIndicator(Modifier.size(18.dp), color = colors.accent, strokeWidth = 2.dp)
                 Text(stringResource(R.string.share_generating_link), style = TextStyles.body, color = colors.textSecondary)
@@ -386,10 +385,10 @@ internal fun ShareTaskSheet(vm: TaskDetailViewModel, detail: TaskDetail, onDismi
             else -> {
                 Text(link, style = TextStyles.subheadline, color = colors.textPrimary, modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgSecondary).padding(Spacing.s12))
                 Text(stringResource(R.string.share_share_link_hint), style = TextStyles.caption, color = colors.textMuted)
-                PickRow(stringResource(if (copied) R.string.share_link_copied else R.string.share_copy_link), copied, leading = { Icon(Icons.Outlined.ContentCopy, null, tint = colors.accent) }) {
+                PickRow(stringResource(if (copied) R.string.share_link_copied else R.string.share_copy_link), copied, leading = { Icon(Icons.Outlined.ContentCopy, null, tint = colors.accentInk) }) {
                     clipboard.setText(AnnotatedString(link)); copied = true
                 }
-                PickRow(stringResource(R.string.actions_share), false, leading = { Icon(Icons.Outlined.Share, null, tint = colors.accent) }) {
+                PickRow(stringResource(R.string.actions_share), false, leading = { Icon(Icons.Outlined.Share, null, tint = colors.accentInk) }) {
                     val send = android.content.Intent(android.content.Intent.ACTION_SEND).setType("text/plain")
                         .putExtra(android.content.Intent.EXTRA_SUBJECT, detail.task.title).putExtra(android.content.Intent.EXTRA_TEXT, link)
                     context.startActivity(android.content.Intent.createChooser(send, null))

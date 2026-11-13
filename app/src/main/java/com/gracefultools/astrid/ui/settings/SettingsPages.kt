@@ -306,13 +306,13 @@ fun AppearanceSettingsScreen(vm: SettingsViewModel, onBack: () -> Unit) {
         FormSection(stringResource(R.string.settings_appearance_email_to_task), stringResource(R.string.settings_appearance_email_to_task_footer, com.gracefultools.astrid.Brand.inboundTaskEmail)) {
             Column(Modifier.fillMaxWidth().padding(Spacing.s16), verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.Email, null, tint = colors.accent, modifier = Modifier.size(20.dp))
+                    Icon(Icons.Filled.Email, null, tint = colors.accentInk, modifier = Modifier.size(20.dp))
                     Text(com.gracefultools.astrid.Brand.inboundTaskEmail, style = TextStyles.body, fontWeight = FontWeight.Medium, color = colors.textPrimary)
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-                    Bullet(stringResource(R.string.settings_appearance_email_to_task_self, com.gracefultools.astrid.Brand.inboundTaskEmail), colors.accent)
-                    Bullet(stringResource(R.string.settings_appearance_email_to_task_assigned, com.gracefultools.astrid.Brand.inboundTaskEmail), colors.accent)
-                    Bullet(stringResource(R.string.settings_appearance_email_to_task_group, com.gracefultools.astrid.Brand.inboundTaskEmail), colors.accent)
+                    Bullet(stringResource(R.string.settings_appearance_email_to_task_self, com.gracefultools.astrid.Brand.inboundTaskEmail), colors.accentInk)
+                    Bullet(stringResource(R.string.settings_appearance_email_to_task_assigned, com.gracefultools.astrid.Brand.inboundTaskEmail), colors.accentInk)
+                    Bullet(stringResource(R.string.settings_appearance_email_to_task_group, com.gracefultools.astrid.Brand.inboundTaskEmail), colors.accentInk)
                     HorizontalDivider(Modifier.padding(vertical = Spacing.s4), color = colors.divider)
                     Bullet(stringResource(R.string.settings_appearance_email_to_task_subject), Purple)
                     Bullet(stringResource(R.string.settings_appearance_email_to_task_body), Purple)

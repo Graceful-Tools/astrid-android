@@ -60,10 +60,8 @@ import com.gracefultools.astrid.ui.agents.WebSessionRequiredRow
 import com.gracefultools.astrid.ui.agents.displayDate
 import com.gracefultools.astrid.ui.agents.openInCustomTab
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
-import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
 
 /** The core names a section by resource key (`connections.category.app`); these are iOS's words for them. */
@@ -143,7 +141,7 @@ fun ConnectionsScreen(vm: ConnectionsViewModel, core: Core, onBack: () -> Unit) 
         stringResource(R.string.connections_title), onBack,
         actions = {
             Icon(
-                Icons.Filled.Add, stringResource(R.string.settings_connections_new), tint = colors.accent,
+                Icons.Filled.Add, stringResource(R.string.settings_connections_new), tint = colors.accentInk,
                 modifier = Modifier.size(32.dp).clip(CircleShape).clickable(role = Role.Button) { openings++; editor = EditorMode(null, openings) }.padding(Spacing.s4),
             )
         },
@@ -197,7 +195,7 @@ fun ConnectionsScreen(vm: ConnectionsViewModel, core: Core, onBack: () -> Unit) 
                     ),
                 )
             },
-            confirmButton = { TextButton(onClick = vm::confirmRevoke) { Text(stringResource(R.string.connections_revoke), color = Error) } },
+            confirmButton = { TextButton(onClick = vm::confirmRevoke) { Text(stringResource(R.string.connections_revoke), color = AstridTheme.colors.errorInk) } },
             dismissButton = { TextButton(onClick = vm::cancelRevoke) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
@@ -233,7 +231,7 @@ private fun ConnectionRow(row: Connection, ownerBadge: String?, isRevoking: Bool
                 )
             }
             Spacer(Modifier.weight(1f))
-            Caption2(statusLabel(row.status), if (row.status == "active") Success else colors.textSecondary)
+            Caption2(statusLabel(row.status), if (row.status == "active") AstridTheme.colors.successInk else colors.textSecondary)
         }
         Text(
             stringResource(R.string.settings_connections_acts_as, row.actsAs ?: stringResource(R.string.settings_connections_acts_as_you)),
@@ -247,8 +245,8 @@ private fun ConnectionRow(row: Connection, ownerBadge: String?, isRevoking: Bool
             if (row.managedOnAgentsPage) Caption2(stringResource(R.string.settings_connections_manage_in_agents))
             Spacer(Modifier.weight(1f))
             if (isRevoking) SmallSpinner() else {
-                if (onEdit != null) RowButton(stringResource(R.string.actions_edit), Icons.Filled.Edit, colors.accent, onEdit)
-                if (row.revocable) RowButton(stringResource(R.string.connections_revoke), Icons.Filled.GppBad, Error, onRevoke)
+                if (onEdit != null) RowButton(stringResource(R.string.actions_edit), Icons.Filled.Edit, colors.accentInk, onEdit)
+                if (row.revocable) RowButton(stringResource(R.string.connections_revoke), Icons.Filled.GppBad, AstridTheme.colors.errorInk, onRevoke)
             }
         }
     }
@@ -331,7 +329,7 @@ private fun OAuthClientEditorSheet(vm: OAuthClientEditorViewModel, onFinished: (
             ) {
                 FormTextField(draft.redirectUriText, vm::setRedirectUris, "https://", monospace = true, singleLine = false, minLines = 3)
                 state.check.problem?.takeIf { it.key == "redirectRequired" || it.key == "redirectInvalid" }?.let {
-                    Caption2(problemMessage(it), Error)
+                    Caption2(problemMessage(it), AstridTheme.colors.errorInk)
                 }
             }
             FormSection(

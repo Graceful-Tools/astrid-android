@@ -109,8 +109,8 @@ fun SignInScreen(
                             horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Icon(Icons.Filled.Error, null, tint = com.gracefultools.astrid.ui.theme.Error, modifier = Modifier.size(14.dp))
-                            Text(state.error, style = TextStyles.caption, color = com.gracefultools.astrid.ui.theme.Error)
+                            Icon(Icons.Filled.Error, null, tint = AstridTheme.colors.errorInk, modifier = Modifier.size(14.dp))
+                            Text(state.error, style = TextStyles.caption, color = AstridTheme.colors.errorInk)
                         }
                     }
                 }

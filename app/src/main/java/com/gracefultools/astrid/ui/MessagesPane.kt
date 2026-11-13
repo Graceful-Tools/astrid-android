@@ -37,7 +37,7 @@ fun MessagesPane(hidden: Boolean, onToggle: () -> Unit, modifier: Modifier = Mod
                 .clickable(role = Role.Button, onClick = onToggle).semantics { contentDescription = label }
                 .testTag("messages.togglePane"),
             contentAlignment = Alignment.Center,
-        ) { Icon(Icons.Outlined.ViewSidebar, null, tint = colors.accent, modifier = Modifier.height(18.dp)) }
+        ) { Icon(Icons.Outlined.ViewSidebar, null, tint = colors.accentInk, modifier = Modifier.height(18.dp)) }
         if (!hidden) Box(Modifier.weight(1f)) { chat() }
     }
 }

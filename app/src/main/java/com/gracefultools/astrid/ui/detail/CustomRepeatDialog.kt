@@ -218,7 +218,7 @@ fun CustomRepeatDialog(
                             Text(stringResource(title), style = TextStyles.body, color = colors.textPrimary)
                             Text(stringResource(caption), style = TextStyles.caption2, color = colors.textMuted)
                         }
-                        if (chosen) Icon(Icons.Filled.Check, null, tint = colors.accent)
+                        if (chosen) Icon(Icons.Filled.Check, null, tint = colors.accentInk)
                     }
                 }
             }
@@ -301,12 +301,12 @@ private fun Stepper(value: Int, range: IntRange, label: String, onChange: (Int) 
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            Icons.Filled.Remove, stringResource(R.string.repeating_decrease, label), tint = if (value > range.first) colors.accent else colors.textMuted,
+            Icons.Filled.Remove, stringResource(R.string.repeating_decrease, label), tint = if (value > range.first) colors.accentInk else colors.textMuted,
             modifier = Modifier.size(44.dp).clickable(enabled = value > range.first) { onChange(value - 1) }.padding(Spacing.s12),
         )
         Text(value.toString(), style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.width(36.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         Icon(
-            Icons.Filled.Add, stringResource(R.string.repeating_increase, label), tint = if (value < range.last) colors.accent else colors.textMuted,
+            Icons.Filled.Add, stringResource(R.string.repeating_increase, label), tint = if (value < range.last) colors.accentInk else colors.textMuted,
             modifier = Modifier.size(44.dp).clickable(enabled = value < range.last) { onChange(value + 1) }.padding(Spacing.s12),
         )
     }

@@ -122,7 +122,7 @@ private fun Inlines(inlines: List<JsonObject>, size: Int, weight: FontWeight, on
                     )
                     val link = inline.str("link")
                     if (link != null) {
-                        withLink(LinkAnnotation.Url(link, TextLinkStyles(SpanStyle(color = colors.accent, textDecoration = TextDecoration.Underline)))) {
+                        withLink(LinkAnnotation.Url(link, TextLinkStyles(SpanStyle(color = colors.accentInk, textDecoration = TextDecoration.Underline)))) {
                             withStyle(style) { append(inline.str("text").orEmpty()) }
                         }
                     } else {
@@ -133,7 +133,7 @@ private fun Inlines(inlines: List<JsonObject>, size: Int, weight: FontWeight, on
                     val kind = inline.str("reference").orEmpty()
                     val id = inline.str("id").orEmpty()
                     withLink(
-                        LinkAnnotation.Clickable("$kind:$id", TextLinkStyles(SpanStyle(color = colors.accent))) { onReference(kind, id) },
+                        LinkAnnotation.Clickable("$kind:$id", TextLinkStyles(SpanStyle(color = colors.accentInk))) { onReference(kind, id) },
                     ) { append(inline.str("label").orEmpty()) }
                 }
                 "lineBreak" -> append("\n")

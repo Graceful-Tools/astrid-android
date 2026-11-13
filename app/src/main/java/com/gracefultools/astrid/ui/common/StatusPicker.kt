@@ -39,7 +39,7 @@ fun StatusPicker(options: StatusOptions, onPick: (String) -> Unit, onDismiss: ()
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(column.name, fontSize = TypeSize.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
-                        if (column.isCurrent) Icon(Icons.Filled.Check, null, tint = colors.accent)
+                        if (column.isCurrent) Icon(Icons.Filled.Check, null, tint = colors.accentInk)
                     }
                 }
             }

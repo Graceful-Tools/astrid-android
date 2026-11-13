@@ -46,7 +46,6 @@ import com.gracefultools.astrid.ui.detail.PickRow
 import com.gracefultools.astrid.ui.detail.PickerSheet
 import com.gracefultools.astrid.ui.tasks.parseColor
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -119,7 +118,7 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel, i
                         Text(stringResource(R.string.lists_list_image_description), style = TextStyles.caption2, color = colors.textSecondary)
                     }
                     TextButton(onClick = pickImage, enabled = !state.imageUploading) {
-                        Text(stringResource(R.string.actions_change), style = TextStyles.body, color = colors.accent)
+                        Text(stringResource(R.string.actions_change), style = TextStyles.body, color = colors.accentInk)
                     }
                 }
                 FormDivider()
@@ -165,17 +164,17 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel, i
             footer = stringResource(if (settings.projectId == null) R.string.lists_create_board_footer else R.string.lists_disable_board_footer),
         ) {
             if (settings.projectId != null) {
-                FormButtonRow(Icons.Outlined.ViewWeek, stringResource(R.string.lists_disable_board), Error, enabled = !state.boardBusy) { confirmDisableBoard = true }
+                FormButtonRow(Icons.Outlined.ViewWeek, stringResource(R.string.lists_disable_board), AstridTheme.colors.errorInk, enabled = !state.boardBusy) { confirmDisableBoard = true }
             } else {
                 FormButtonRow(
-                    Icons.Outlined.ViewWeek, stringResource(R.string.lists_create_board), colors.accent, enabled = !state.boardBusy,
+                    Icons.Outlined.ViewWeek, stringResource(R.string.lists_create_board), colors.accentInk, enabled = !state.boardBusy,
                     trailing = if (state.boardBusy) ({ CircularProgressIndicator(Modifier.size(18.dp), color = colors.accent, strokeWidth = 2.dp) }) else null,
                 ) { vm.createBoard() }
             }
             state.boardError?.let { failure ->
                 Text(
                     stringResource(if (failure.creating) R.string.lists_board_create_failed else R.string.lists_board_disable_failed, failure.message),
-                    style = TextStyles.footnote, color = Error, modifier = Modifier.padding(start = Spacing.s16, end = Spacing.s16, bottom = Spacing.s12),
+                    style = TextStyles.footnote, color = AstridTheme.colors.errorInk, modifier = Modifier.padding(start = Spacing.s16, end = Spacing.s16, bottom = Spacing.s12),
                 )
             }
         }
@@ -197,7 +196,7 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel, i
         // Danger Zone.
         if (settings.canDeleteList) {
             FormSection(stringResource(R.string.messages_danger_zone)) {
-                FormButtonRow(Icons.Outlined.Delete, stringResource(R.string.lists_delete), Error) { confirmDelete = true }
+                FormButtonRow(Icons.Outlined.Delete, stringResource(R.string.lists_delete), AstridTheme.colors.errorInk) { confirmDelete = true }
             }
         }
     }
