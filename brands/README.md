@@ -49,11 +49,12 @@ name and domain, for the partner to replace.
 | `iconBackground` | `#rrggbb` behind the adaptive icon (`ic_launcher_background`). Default: the profile's accent |
 | `monochromeIcon` | A 1024×1024 silhouette (only its alpha counts): the themed icon (Android 13+) and `ic_notification`. Without it, the brand's adaptive icon has no themed layer, so it never shows Astrid's silhouette. The notification icon stays Astrid's, and the script says so |
 | `characterImage` | A square PNG that replaces `astrid_character` (sign-in, sidebar, empty states, agents), at 512 px |
+| `checkboxImages` | A folder of square PNGs named as Astrid's are, `check_box[_repeat][_checked]_<priority 0-3>.png` (16 in all). Each one present replaces Astrid's, at 56 px; the rest stay Astrid's. Astrid's low-priority box is blue, so a brand with another accent usually replaces at least the four `_1` images. Any other PNG name is refused, so a typo cannot be ignored silently |
 
 Re-running the script removes only the files it wrote last time (listed in `res/.make-brand-variant`), so
 removing a key from the profile brings back Astrid's art. It never touches resources a partner added by hand.
-Predeploy merges a brand with generated art. The checkbox PNGs and Ocean's cyan are still Astrid's; a brand that
-wants neither cyan nor Astrid's look starts on another theme (`defaultTheme`).
+Predeploy merges a brand with generated art. Ocean's cyan is still Astrid's; a brand that does not want it
+starts on another theme (`defaultTheme`).
 
 **Literal audit.** `scripts/check-brand-literals.py` lists every string in a brand build's merged
 resources and manifest that contains one of the profile's `expect.forbidLiterals`. Predeploy runs it

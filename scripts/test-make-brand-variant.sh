@@ -151,6 +151,34 @@ PY3
   "$root/scripts/make-brand-variant.sh" "$work/acme.brand.json" --out "$work/out" >/dev/null
   [[ -z "$(find "$r" -type f 2>/dev/null)" ]] || fail "dropping the art left: $(find "$r" -type f | head -3)"
 
+  # Checkbox art (AATD-90, seventh slice): each image in the folder replaces Astrid's; the rest stay.
+  mkdir -p "$work/boxes"
+  png "$work/boxes/check_box_1.png" 168 168 85 247 255
+  png "$work/boxes/check_box_checked_1.png" 112 168 85 247 255
+  python3 -I -c 'import json,sys; p=json.load(open(sys.argv[1])); p["android"]["checkboxImages"]="boxes"; json.dump(p,open(sys.argv[1],"w"))' "$work/acme.brand.json"
+  "$root/scripts/make-brand-variant.sh" "$work/acme.brand.json" --out "$work/out" >/dev/null 2>&1 \
+    || fail "a checkbox folder on its own was refused"
+  [[ "$(px "$r/drawable-nodpi/check_box_1.png")" == "56 56" ]] || fail "check_box_1.png is not Astrid's 56px"
+  [[ "$(px "$r/drawable-nodpi/check_box_checked_1.png")" == "56 56" ]] || fail "check_box_checked_1.png is not 56px"
+  [[ ! -e "$r/drawable-nodpi/check_box_0.png" ]] || fail "a checkbox the folder lacks was written anyway"
+  python3 -I -c 'import json,sys; p=json.load(open(sys.argv[1])); del p["android"]["checkboxImages"]; json.dump(p,open(sys.argv[1],"w"))' "$work/acme.brand.json"
+  "$root/scripts/make-brand-variant.sh" "$work/acme.brand.json" --out "$work/out" >/dev/null
+  [[ -z "$(find "$r" -type f 2>/dev/null)" ]] || fail "dropping the checkbox art left: $(find "$r" -type f | head -3)"
+
+  mkdir -p "$work/typo" "$work/none" "$work/oblong"
+  png "$work/typo/check_box_1.png" 56 1 2 3 255; png "$work/typo/checkbox_2.png" 56 1 2 3 255
+  png "$work/none/readme.txt" 4 1 2 3 255
+  python3 -I - "$work/oblong/check_box_2.png" <<'OBLONG'
+import struct, sys, zlib
+chunk = lambda t, d: struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d))
+open(sys.argv[1], "wb").write(b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", 56, 40, 8, 6, 0, 0, 0))
+                              + chunk(b"IDAT", zlib.compress((b"\x00" + b"\x01\x02\x03\xff" * 56) * 40)) + chunk(b"IEND", b""))
+OBLONG
+  bad "a['checkboxImages']='$work/nope'" "a missing checkbox folder was accepted"
+  bad "a['checkboxImages']='$work/typo'" "a checkbox image with an unknown name was accepted"
+  bad "a['checkboxImages']='$work/none'" "a checkbox folder with none of the 16 images was accepted"
+  bad "a['checkboxImages']='$work/oblong'" "a checkbox image that is not square was accepted"
+
   png "$work/small.png" 512 1 2 3 255
   bad "a['appIcon']='$work/small.png'" "an app icon that is not 1024x1024 was accepted"
   bad "a['characterImage']='$work/nope.png'" "a missing character image was accepted"
