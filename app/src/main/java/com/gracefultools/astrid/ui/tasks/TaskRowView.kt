@@ -1,5 +1,9 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.ui.common.reportsSelectedRow
+import com.gracefultools.astrid.ui.common.selectionOutline
+import com.gracefultools.astrid.ui.common.selectionOutlineStyle
+import com.astrid.design.AstridTokens
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.foundation.background
@@ -63,7 +67,7 @@ import java.time.format.FormatStyle
 
 /**
  * One row, drawn as iOS's TaskRowView (AATD-36): a rounded-8 card (white 0.8 on Ocean, 1.0 and a
- * 2.5 accent border when it is the open task in two panes), the leading control in a 34 square — the
+ * the selection outline when it is the open task in two panes, DS5), the leading control in a 34 square — the
  * checkbox artwork, a face, the unassigned mark or the copy control — a 19sp title, and one line of
  * metadata: the board identifier, the due date, up to two list chips and "+N". Every value is the
  * core's projection; nothing here decides what a row says.
@@ -75,7 +79,7 @@ fun TaskRowView(
     onLeading: () -> Unit,
     onOpen: () -> Unit,
     modifier: Modifier = Modifier,
-    /** The task open beside the list (two panes): accent border, full white. */
+    /** The task open beside the list (two panes): the selection outline (DS5), full white. */
     isSelected: Boolean = false,
     /** One-line title while the detail pane is open, as iOS's compact mode; otherwise the "Task titles" setting (DS19). */
     compact: Boolean = false,
@@ -83,7 +87,8 @@ fun TaskRowView(
     embedded: Boolean = false,
 ) {
     val colors = AstridTheme.colors
-    val shape = RoundedCornerShape(8.dp)
+    val shape = RoundedCornerShape(AstridTokens.Layout.Comfortable.rowRadius)
+    val outline = selectionOutlineStyle()
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
     val clipboard = androidx.compose.ui.platform.LocalClipboardManager.current
     var menu by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
@@ -94,8 +99,9 @@ fun TaskRowView(
                 .then(
                     if (embedded) Modifier else Modifier.clip(shape)
                         .background(if (isSelected) colors.cardSelected else colors.card)
-                        .border(if (isSelected) 2.5.dp else 0.5.dp, if (isSelected) colors.accent else colors.cardBorder, shape),
+                        .then(if (isSelected) Modifier.selectionOutline(outline, shape) else Modifier.border(AstridTokens.Size.hairline, colors.cardBorder, shape)),
                 )
+                .reportsSelectedRow(row.id, isSelected && !embedded)
                 .combinedClickable(
                     onClick = onOpen,
                     onLongClick = if (row.offersCopyIdentifier && row.identifier != null) ({
