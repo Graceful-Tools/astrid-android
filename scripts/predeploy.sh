@@ -51,6 +51,12 @@ if [[ -f "$web/brands/acme.brand.json" ]]; then
     || { echo "brands/acme is stale: commit what scripts/make-brand-variant.sh acme wrote" >&2; exit 1; }
 fi
 
+# Hand-written colours, sizes and copy in ui/ (AATD-86): a count may fall, never rise. Lower the
+# budget with --update when yours falls; raising one is an edit to the JSON with its reason.
+step "design: no hand-written colour, size or copy count rose (AATD-86)"
+scripts/test-report-design-metrics.sh
+python3 -I scripts/report-design-metrics.py --check
+
 if [[ "$(uname)" == Darwin ]]; then
   step "scripts: the scheduled /fixall loop"
   scripts/test-fixall-loop.sh

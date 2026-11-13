@@ -36,4 +36,7 @@ file holds only what is different **here**.
 - **Match iOS.** Behaviour, wording and design follow astrid-ios; a divergence needs an Android reason,
   recorded in docs/PARITY.md.
 - **A push to `main` reaches nobody.** Releases are a Play upload, which always needs Jon.
+- **The design counts only go down** (AATD-86). Predeploy fails when `ui/` gains a hand-written colour,
+  `.dp`, `.sp`, corner shape or English sentence (`npm run design:metrics` shows them). When a change
+  lowers a count, run `python3 scripts/report-design-metrics.py --update` and commit the lower budget with it.
 - Generated bindings (`corebridge/src/main/java/uniffi/`) are never edited; the gate fails if they drift.
