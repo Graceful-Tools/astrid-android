@@ -11,6 +11,7 @@
 #   "android": { "applicationId": "example.acme.tasks", "appName": "Acme Tasks",
 #                "handoffClientId": "acme-android", "linkHosts": "tasks.acme.example",
 #                "linkAutoVerify": true, "accentHoverColor": "#9333ea", "accentTextColor": "#ffffff",
+#                "accentInk": "#6b21a8", "accentInkDark": "#d8b4fe",
 #                "versionCode": 3, "versionName": "1.2.0" "appIcon": "acme-icon-1024.png",
 #                "monochromeIcon": "acme-glyph-1024.png", "characterImage": "acme-mascot.png",
 #                "play": { "title": "…", "shortDescription": "…", "fullDescription": "…", "releaseNotes": "…" } }
@@ -86,6 +87,8 @@ values = [
     ("astridAccentColor", env.get("NEXT_PUBLIC_BRAND_ACCENT_COLOR", "")),
     ("astridAccentHoverColor", android.get("accentHoverColor", "")),
     ("astridAccentTextColor", android.get("accentTextColor", "")),
+    ("astridAccentInkColor", android.get("accentInk", "").lower()),
+    ("astridAccentInkDarkColor", android.get("accentInkDark", "").lower()),
     ("astridVersionCode", android.get("versionCode", "")),
     ("astridVersionName", android.get("versionName", "")),
 ]
@@ -99,6 +102,35 @@ if scheme and not re.fullmatch(r"[a-z][a-z0-9+.-]*", scheme):
 code = dict(values)["astridVersionCode"]
 if code and not (re.fullmatch(r"[0-9]+", code) and 1 <= int(code) <= 2100000000):
     sys.exit(f"versionCode must be a whole number from 1 to 2100000000 (Play's limit): {code!r}")
+
+# The accent as text (tokens brand.accent-ink / -dark). The core holds every ink to WCAG AA, 4.5:1, on
+# its card and on the accent's 12% wash there; the cards are the app's (AstridColors: white, gray-800).
+def _rgb(hex_):
+    return [int(hex_[i:i + 2], 16) for i in (1, 3, 5)]
+
+def _luminance(rgb):
+    c = [v / 255 for v in rgb]
+    c = [v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4 for v in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+def _contrast(a, b):
+    la, lb = sorted((_luminance(a), _luminance(b)))
+    return (lb + 0.05) / (la + 0.05)
+
+accent_hex = dict(values)["astridAccentColor"].lower()
+for key, card, theme in (("astridAccentInkColor", (255, 255, 255), "accentInk"),
+                         ("astridAccentInkDarkColor", (31, 41, 55), "accentInkDark")):
+    ink = dict(values)[key]
+    if not ink:
+        continue
+    if not re.fullmatch(r"#[0-9a-f]{6}", ink):
+        sys.exit(f"android.{theme} must be #rrggbb: {ink!r}")
+    wash = card
+    if re.fullmatch(r"#[0-9a-f]{6}", accent_hex):
+        wash = [round(0.12 * a + 0.88 * c) for a, c in zip(_rgb(accent_hex), card)]
+    worst = min(_contrast(_rgb(ink), card), _contrast(_rgb(ink), wash))
+    if worst < 4.5:
+        sys.exit(f"android.{theme} {ink} reads at {worst:.2f}:1 on its card; text needs 4.5:1")
 
 def escape(value):  # java.util.Properties: backslash, and a leading space would be dropped
     return value.replace("\\", "\\\\").replace("\n", "\\n")

@@ -30,7 +30,7 @@ scripts/make-brand-variant.sh path/to/partner.brand.json # any profile, no astri
 It maps the profile's `env` (name, wordmark, domain, URL scheme, emails, accent) and takes the
 package from the first entry of `BRAND_ANDROID_APP_LINKS`. An optional `android` block holds what only
 the app knows: `applicationId`, `appName`, `handoffClientId`, `linkHosts`, `linkAutoVerify`,
-`accentHoverColor`, `accentTextColor`, `versionCode`, `versionName`, `play` and the artwork (both
+`accentHoverColor`, `accentTextColor`, `accentInk`, `accentInkDark`, `versionCode`, `versionName`, `play` and the artwork (both
 below). It writes `brand.properties`, the Play listing, the artwork and a copy of the profile. Re-run it after the profile changes;
 predeploy fails while `brands/acme` is stale.
 
@@ -79,6 +79,8 @@ unset. With nothing set, every value is Astrid's and the build is the one it alw
 | `astridAccentColor` | `#2563eb` | The in-app accent (`Brand.accentColorHex` → the theme's `Accent`): buttons, links, focus, Material's primary |
 | `astridAccentHoverColor` | `#1d4ed8` | The accent's pressed state |
 | `astridAccentTextColor` | `#ffffff` | Text and icons drawn on the accent — change it with a pale accent |
+| `astridAccentInkColor` | (Astrid's token, or derived from the accent) | The accent as text on a light card (tokens `brand.accent-ink`): links, selected rows. Must read at 4.5:1 on white and on the accent's 12% wash; `make-brand-variant.sh` refuses less, and the app falls back to the derived ink |
+| `astridAccentInkDarkColor` | (Astrid's token, or derived from the accent) | The same on a dark card (gray-800, `accent-ink-dark`): Dark's focus line, selection outline and low priority |
 | `astridVersionCode` | `1` | The package's versionCode, 1–2100000000. Play needs a higher one for every upload, so CI usually passes `-PastridVersionCode` (or `ORG_GRADLE_PROJECT_astridVersionCode`) |
 | `astridVersionName` | `0.1.0` | The version people see |
 

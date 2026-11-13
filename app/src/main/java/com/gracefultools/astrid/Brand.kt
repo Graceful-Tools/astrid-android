@@ -84,6 +84,17 @@ object Brand {
     val accentTextColorHex: String = resolveAccentHex(BuildConfig.ASTRID_ACCENT_TEXT_COLOR, fallback = "#ffffff")
 
     /**
+     * The accent as text on a light card and on a dark one (tokens `brand.accent-ink` /
+     * `accent-ink-dark`, AATD-90), or null when the brand leaves it to be derived from the accent.
+     */
+    val accentInkHex: String? = optionalHex(BuildConfig.ASTRID_ACCENT_INK_COLOR)
+    val accentInkDarkHex: String? = optionalHex(BuildConfig.ASTRID_ACCENT_INK_DARK_COLOR)
+
+    /** A configured `#rrggbb` as lower case, or null when it is blank or malformed. */
+    fun optionalHex(raw: String?): String? =
+        resolveAccentHex(raw, fallback = "").takeIf { it.length == 7 }
+
+    /**
      * iOS `Brand.resolveAccentHex`: a configured colour as lower-case `#rrggbb` / `#rrggbbaa`, or
      * [fallback]. Total on purpose — a brand colour is chrome, so a typo renders Astrid's.
      */
