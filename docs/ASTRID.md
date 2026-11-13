@@ -30,7 +30,8 @@ breaking it shipped a regression on another platform.
 7. **API paths are `/api/v1/...` only** — enforced by the core's request guard.
 8. **TDD for bug fixes:** RED test naming the task id, then GREEN, then `npm run predeploy`.
 9. **Reuse before you write.** User-facing strings live in `res/values*/strings.xml`; colours and
-   spacing in `ui/theme`. Never inline a role comparison — permissions come from the core's
+   spacing in `ui/theme`; the gate counts the ones typed in elsewhere and fails if a count rises
+   (`npm run design:metrics`, AATD-86). Never inline a role comparison — permissions come from the core's
    `listAccess`.
 10. **Match iOS.** Behaviour, information architecture, wording and visual design follow the iOS
     app (`astrid-ios/Astrid App`). Diverge only where Android interaction or capability requires it

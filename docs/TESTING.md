@@ -19,6 +19,7 @@
 | View models over a fake core | `app/src/test/` | `testDebugUnitTest` |
 | Compose screens | `app/src/test/` with Robolectric | `testDebugUnitTest` |
 | Smoke tests on a device | `app/src/androidTest/` — offline core seeded with `SeedCache` | `predeploy --full` |
+| Design counts (AATD-86) | `scripts/report-design-metrics.py`: hand-written colours, `.dp`/`.sp`, corner shapes and English copy in `ui/` outside `ui/theme`, held to `scripts/design-metrics.budget.json` | `predeploy` (`npm run check:design`) |
 
 ## Emulator
 

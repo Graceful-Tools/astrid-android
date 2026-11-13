@@ -9,7 +9,9 @@
     "build:core": "./scripts/build-core.sh",
     "install:debug": "./gradlew :app:installDebug",
     "fixall:loop": "./scripts/fixall-loop.sh",
-    "test:scripts": "./scripts/test-fixall-loop.sh"
+    "test:scripts": "./scripts/test-fixall-loop.sh",
+    "design:metrics": "python3 -I scripts/report-design-metrics.py",
+    "check:design": "python3 -I scripts/report-design-metrics.py --check"
   },
   "license": "MIT"
 }
