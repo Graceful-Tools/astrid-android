@@ -315,7 +315,7 @@ private fun SwipeToDelete(onDelete: () -> Unit, content: @Composable () -> Unit)
             // Only while a swipe is under way: the cards are translucent (white 0.8 on Ocean), so a
             // background drawn at rest would tint every row red.
             if (state.dismissDirection == SwipeToDismissBoxValue.EndToStart) Box(
-                Modifier.fillMaxSize().background(Error, RoundedCornerShape(8.dp)).padding(horizontal = 20.dp),
+                Modifier.fillMaxSize().background(Error, RoundedCornerShape(Radius.medium)).padding(horizontal = 20.dp),
                 contentAlignment = Alignment.CenterEnd,
             ) { Icon(Icons.Filled.Delete, stringResource(R.string.tasks_delete), tint = Color.White) }
         },
@@ -372,7 +372,7 @@ private fun QuickAddBar(
     ) {
         val pickLabel = stringResource(R.string.quick_add_picker_a11y)
         Box(
-            Modifier.size(34.dp).clip(RoundedCornerShape(8.dp)).clickable { focus.clearFocus(); picker = true }
+            Modifier.size(34.dp).clip(RoundedCornerShape(Radius.medium)).clickable { focus.clearFocus(); picker = true }
                 .semantics { contentDescription = pickLabel },
         ) {
             val chosen = defaults.options.firstOrNull { it.userId != null && it.userId == defaults.assigneeId }
@@ -607,7 +607,7 @@ private fun RowDragArea(
                     // core's `copy`), and it can be neither swiped away nor moved (iOS 1227-1241).
                     if (row.action == "copy") face() else SwipeToDelete(onDelete = { onDelete(row) }) { face() }
                     if (current == DropTarget.OnRow(row.id)) {
-                        Box(Modifier.matchParentSize().border(2.dp, colors.accent, RoundedCornerShape(8.dp)))
+                        Box(Modifier.matchParentSize().border(2.dp, colors.accent, RoundedCornerShape(Radius.medium)))
                     }
                 }
             }
@@ -634,7 +634,7 @@ private fun RowDragArea(
             Box(
                 Modifier.zIndex(1f).offset { androidx.compose.ui.unit.IntOffset(0, (d.pointer.y - d.grabY).toInt()) }
                     .padding(horizontal = Spacing.s8).fillMaxWidth().heightIn(min = with(density) { height.toDp() })
-                    .shadow(8.dp, RoundedCornerShape(8.dp)),
+                    .shadow(8.dp, RoundedCornerShape(Radius.medium)),
             ) { TaskRowView(d.row, onLeading = {}, onOpen = {}) }
         }
     }

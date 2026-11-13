@@ -61,6 +61,7 @@ import com.gracefultools.astrid.ui.agents.displayDate
 import com.gracefultools.astrid.ui.agents.openInCustomTab
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
+import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -256,7 +257,7 @@ private fun ConnectionRow(row: Connection, ownerBadge: String?, isRevoking: Bool
 @Composable
 private fun RowButton(label: String, icon: androidx.compose.ui.graphics.vector.ImageVector, color: androidx.compose.ui.graphics.Color, onClick: () -> Unit) {
     Row(
-        Modifier.clip(RoundedCornerShape(6.dp)).clickable(role = Role.Button, onClick = onClick).heightIn(min = 36.dp).padding(horizontal = Spacing.s4),
+        Modifier.clip(RoundedCornerShape(Radius.small)).clickable(role = Role.Button, onClick = onClick).heightIn(min = 36.dp).padding(horizontal = Spacing.s4),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4),
     ) {
         Icon(icon, null, tint = color, modifier = Modifier.size(14.dp))

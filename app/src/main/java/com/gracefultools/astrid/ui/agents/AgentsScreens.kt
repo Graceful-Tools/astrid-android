@@ -80,6 +80,7 @@ import com.gracefultools.astrid.Brand
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
+import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -293,7 +294,7 @@ private fun TransportPicker(vm: AgentsViewModel, agent: HubAgent, enabled: Boole
     val current = vm.transport(agent) ?: Transport.POLLING
     Box {
         Row(
-            Modifier.fillMaxWidth().heightIn(min = 44.dp).clip(RoundedCornerShape(6.dp)).clickable(enabled = enabled, role = Role.DropdownList) { open = true },
+            Modifier.fillMaxWidth().heightIn(min = 44.dp).clip(RoundedCornerShape(Radius.small)).clickable(enabled = enabled, role = Role.DropdownList) { open = true },
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(stringResource(R.string.settings_agents_transport), style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
@@ -359,7 +360,7 @@ private fun KeyEditor(vm: AgentsViewModel, state: AgentsState, service: String) 
         }
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
             Row(
-                Modifier.clip(RoundedCornerShape(6.dp)).clickable(enabled = inputs[service].orEmpty().isNotBlank() && !busy, role = Role.Button) {
+                Modifier.clip(RoundedCornerShape(Radius.small)).clickable(enabled = inputs[service].orEmpty().isNotBlank() && !busy, role = Role.Button) {
                     vm.saveKey(service, inputs[service].orEmpty())
                 }.heightIn(min = 36.dp).padding(horizontal = Spacing.s4),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4),
@@ -819,7 +820,7 @@ private fun ModelRow(
 ) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().heightIn(min = 48.dp).clip(RoundedCornerShape(6.dp))
+        Modifier.fillMaxWidth().heightIn(min = 48.dp).clip(RoundedCornerShape(Radius.small))
             .then(
                 if (trailing == null) Modifier.selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
                 else Modifier.clickable(role = Role.Button, onClick = onClick),

@@ -44,6 +44,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 
 @Composable
@@ -97,7 +98,7 @@ fun ChatPanel(vm: ChatViewModel, modifier: Modifier = Modifier) {
         Row(Modifier.fillMaxWidth().background(colors.headerBg).navigationBarsPadding().imePadding().padding(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
             TextField(
                 value = text, onValueChange = { text = it }, placeholder = { Text(stringResource(R.string.chat_placeholder)) },
-                shape = RoundedCornerShape(12.dp), maxLines = 4,
+                shape = RoundedCornerShape(Radius.large), maxLines = 4,
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = colors.inputBg, unfocusedContainerColor = colors.inputBg,
                     focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent,

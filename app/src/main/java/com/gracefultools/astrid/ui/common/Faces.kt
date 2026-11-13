@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.Radius
 
 /**
  * A person's face, as iOS draws it everywhere: their photo when there is one, else their initials
@@ -63,7 +64,7 @@ fun Avatar(
 }
 
 /** A row's rounded-8 square face. */
-val RowFaceShape = RoundedCornerShape(8.dp)
+val RowFaceShape = RoundedCornerShape(Radius.medium)
 
 /**
  * iOS's User.initials: two words give a letter each, one word its first two letters, no name the

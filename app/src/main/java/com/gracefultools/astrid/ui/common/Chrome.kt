@@ -132,8 +132,8 @@ fun AstridSpeechBubble(message: String, modifier: Modifier = Modifier, character
         Box(Modifier.weight(1f)) {
             Text(
                 message, style = TextStyles.body, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
-                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(bubble)
-                    .border(2.dp, border, RoundedCornerShape(16.dp)).padding(Spacing.s16),
+                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.xLarge)).background(bubble)
+                    .border(2.dp, border, RoundedCornerShape(Radius.xLarge)).padding(Spacing.s16),
             )
             Canvas(Modifier.matchParentSize()) {
                 val cy = size.height / 2

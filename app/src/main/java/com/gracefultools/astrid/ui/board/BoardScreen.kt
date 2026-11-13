@@ -3,6 +3,7 @@ package com.gracefultools.astrid.ui.board
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import com.gracefultools.astrid.ui.theme.Radius
 import kotlinx.coroutines.launch
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.foundation.layout.size
@@ -185,7 +186,7 @@ fun BoardContent(
             val topLeft = lifted.pointer - lifted.grab - root.topLeft
             Box(
                 Modifier.zIndex(1f).offset { IntOffset(topLeft.x.roundToInt(), topLeft.y.roundToInt()) }
-                    .width(284.dp).shadow(8.dp, RoundedCornerShape(8.dp)),
+                    .width(284.dp).shadow(8.dp, RoundedCornerShape(Radius.medium)),
             ) { TaskRowView(lifted.card, onLeading = {}, onOpen = {}) }
         }
         state.error?.let { message ->
@@ -221,7 +222,7 @@ private fun ColumnView(
     // background), 6 walls, radius 12; an accent ring while a card hovers over it.
     val frame = when { colors.isDark -> colors.headerBg; colors == com.gracefultools.astrid.ui.theme.OceanColors -> Color.White.copy(alpha = 0.8f); else -> Color.White }
     val well = when { colors.isDark -> colors.bgPrimary; colors == com.gracefultools.astrid.ui.theme.OceanColors -> colors.bgPrimary; else -> colors.bgTertiary }
-    val shape = RoundedCornerShape(12.dp)
+    val shape = RoundedCornerShape(Radius.large)
     Column(
         Modifier.width(width).fillMaxHeight().padding(bottom = Spacing.s8).clip(shape).background(frame)
             .border(3.dp, if (hoverIndex != null) colors.accent else Color.Transparent, shape)

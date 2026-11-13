@@ -312,7 +312,7 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         val label = stringResource(if (detail.task.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, detail.task.title)
-        val tap = Modifier.size(34.dp).completionPop(pop).clip(RoundedCornerShape(8.dp))
+        val tap = Modifier.size(34.dp).completionPop(pop).clip(RoundedCornerShape(Radius.medium))
             .clickable(enabled = !detail.isCopyOnly) {
                 val openSubtasks = detail.subtasks.any { !it.completed }
                 if (!detail.task.completed && openSubtasks) askSubtasks = true

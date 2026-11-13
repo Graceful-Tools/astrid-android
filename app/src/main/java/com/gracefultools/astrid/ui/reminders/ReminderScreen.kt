@@ -133,7 +133,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
     ) {
         Column(
             Modifier.padding(horizontal = Spacing.s16).widthIn(max = 500.dp).fillMaxWidth()
-                .shadow(20.dp, RoundedCornerShape(16.dp)).clip(RoundedCornerShape(16.dp)).background(colors.bgPrimary)
+                .shadow(20.dp, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgPrimary)
                 .clickable(onClickLabel = stringResource(R.string.reminders_triage_card_hint)) { onOpenTask(id) }
                 .padding(bottom = Spacing.s24),
         ) {
@@ -163,8 +163,8 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
                 AstridSpeechBubble(phrase, Modifier.padding(horizontal = Spacing.s16), characterSize = 80.dp)
                 if (state.countingOnYou.isNotEmpty()) {
                     Row(
-                        Modifier.padding(horizontal = Spacing.s16).fillMaxWidth().clip(RoundedCornerShape(12.dp))
-                            .background(Orange.copy(alpha = 0.1f)).border(1.dp, Orange.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
+                        Modifier.padding(horizontal = Spacing.s16).fillMaxWidth().clip(RoundedCornerShape(Radius.large))
+                            .background(Orange.copy(alpha = 0.1f)).border(1.dp, Orange.copy(alpha = 0.3f), RoundedCornerShape(Radius.large))
                             .padding(Spacing.s12),
                         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
                     ) {
@@ -194,7 +194,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
 @Composable
 private fun ActionButton(title: String, background: Color, foreground: Color, icon: ImageVector?, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Row(
-        modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).background(background).clickable(role = Role.Button, onClick = onClick)
+        modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.large)).background(background).clickable(role = Role.Button, onClick = onClick)
             .padding(vertical = Spacing.s16),
         horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -207,7 +207,7 @@ private fun ActionButton(title: String, background: Color, foreground: Color, ic
 private fun SnoozeButton(title: String, modifier: Modifier, onClick: () -> Unit) {
     val colors = AstridTheme.colors
     Box(
-        modifier.clip(RoundedCornerShape(12.dp)).background(colors.bgSecondary).border(1.dp, colors.border, RoundedCornerShape(12.dp))
+        modifier.clip(RoundedCornerShape(Radius.large)).background(colors.bgSecondary).border(1.dp, colors.border, RoundedCornerShape(Radius.large))
             .clickable(role = Role.Button, onClick = onClick).padding(vertical = Spacing.s16),
         contentAlignment = Alignment.Center,
     ) { Text(title, style = TextStyles.headline, color = colors.textPrimary) }
@@ -246,7 +246,7 @@ private fun TriageDeck(state: ReminderState, vm: ReminderViewModel, onOpenTask: 
                     Text(stringResource(R.string.reminders_triage_caught_up), fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
                     Spacer(Modifier.size(Spacing.s16))
                     Box(
-                        Modifier.clip(RoundedCornerShape(12.dp)).background(colors.accent).clickable(role = Role.Button, onClick = vm::close)
+                        Modifier.clip(RoundedCornerShape(Radius.large)).background(colors.accent).clickable(role = Role.Button, onClick = vm::close)
                             .padding(horizontal = Spacing.s32, vertical = Spacing.s12),
                     ) { Text(stringResource(R.string.reminders_triage_done), style = TextStyles.headline, color = colors.accentText) }
                 }
@@ -283,8 +283,8 @@ private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (Tria
         Modifier.fillMaxWidth().heightIn(min = 220.dp)
             .offset { IntOffset(drag.value.x.roundToInt(), drag.value.y.roundToInt()) }
             .rotate(inDp(drag.value).x / 20f)
-            .shadow(8.dp, RoundedCornerShape(16.dp)).clip(RoundedCornerShape(16.dp)).background(colors.bgSecondary)
-            .border(if (pending == null) 1.dp else 3.dp, pending?.let { triageColor(it, colors.textMuted) } ?: colors.border, RoundedCornerShape(16.dp))
+            .shadow(8.dp, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgSecondary)
+            .border(if (pending == null) 1.dp else 3.dp, pending?.let { triageColor(it, colors.textMuted) } ?: colors.border, RoundedCornerShape(Radius.xLarge))
             .pointerInput(task.task.id) {
                 detectDragGestures(
                     onDragEnd = {
@@ -337,7 +337,7 @@ private fun TriageButton(action: TriageAction, pending: TriageAction?, modifier:
         TriageAction.ASSIGN -> stringResource(R.string.reminders_triage_assign_to, assistantName ?: stringResource(R.string.app_name)) to Icons.Filled.North
     }
     Row(
-        modifier.clip(RoundedCornerShape(12.dp)).background(if (highlighted) color else colors.bgSecondary)
+        modifier.clip(RoundedCornerShape(Radius.large)).background(if (highlighted) color else colors.bgSecondary)
             .clickable(role = Role.Button, onClick = onClick).padding(vertical = Spacing.s12),
         horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
     ) {

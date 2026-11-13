@@ -52,6 +52,7 @@ import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.OceanColors
+import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 
@@ -85,7 +86,7 @@ internal fun CommentsSection(
                 Text(
                     stringResource(if (showSystem) R.string.comments_hide_system else R.string.comments_show_system),
                     style = TextStyles.caption, color = colors.accent,
-                    modifier = Modifier.clip(RoundedCornerShape(6.dp)).clickable { showSystem = !showSystem }.padding(6.dp),
+                    modifier = Modifier.clip(RoundedCornerShape(Radius.small)).clickable { showSystem = !showSystem }.padding(6.dp),
                 )
             }
             // iOS's offline mark in the header: the thread is what this device last heard (AATD-62).
@@ -114,7 +115,7 @@ internal fun CommentsSection(
 private fun StreakRow(streak: com.gracefultools.astrid.model.CompletionStreak) {
     val colors = AstridTheme.colors
     var open by remember { mutableStateOf(false) }
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).clickable { open = !open }.padding(vertical = 4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).clickable { open = !open }.padding(vertical = 4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             Icon(Icons.Filled.LocalFireDepartment, null, tint = Color(0xFFF97316), modifier = Modifier.size(16.dp))
             Text(
@@ -172,7 +173,7 @@ private fun CommentBubble(
         Column(horizontalAlignment = if (mine) Alignment.End else Alignment.Start, modifier = Modifier.weight(1f, fill = false)) {
             Box {
                 Column(
-                    Modifier.widthIn(max = 300.dp).clip(RoundedCornerShape(8.dp)).background(bubble)
+                    Modifier.widthIn(max = 300.dp).clip(RoundedCornerShape(Radius.medium)).background(bubble)
                         .combinedClickable(onClick = {}, onLongClick = { menu = true }).padding(12.dp),
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
@@ -183,7 +184,7 @@ private fun CommentBubble(
                     comment.files.filter { it.rendersInline }.forEach { file -> InlineImage(file, fetch) { onOpenFile(file) } }
                     comment.files.filterNot { it.rendersInline }.forEach { file ->
                         Row(
-                            Modifier.clip(RoundedCornerShape(8.dp)).background(colors.bgTertiary).clickable { onOpenFile(file) }.padding(horizontal = 10.dp, vertical = 6.dp),
+                            Modifier.clip(RoundedCornerShape(Radius.medium)).background(colors.bgTertiary).clickable { onOpenFile(file) }.padding(horizontal = 10.dp, vertical = 6.dp),
                             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
                         ) {
                             Icon(Icons.Filled.AttachFile, null, tint = colors.textSecondary, modifier = Modifier.size(16.dp))
