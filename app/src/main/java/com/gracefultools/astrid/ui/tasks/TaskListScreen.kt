@@ -101,11 +101,13 @@ import com.gracefultools.astrid.ui.common.EmptyState
 import com.gracefultools.astrid.ui.common.HamburgerIcon
 import com.gracefultools.astrid.ui.common.RowFaceShape
 import com.gracefultools.astrid.ui.common.AppErrorBanner
+import com.gracefultools.astrid.ui.theme.AstridShadows
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.shadow
 import kotlinx.coroutines.launch
 
 /** iOS's HeaderToggleSegment: what the main pane shows for a list. */
@@ -365,7 +367,7 @@ private fun QuickAddBar(
     val shape = RoundedCornerShape(Radius.large)
     Row(
         Modifier.navigationBarsPadding().imePadding().padding(start = Spacing.s8, end = Spacing.s8, bottom = Spacing.s8)
-            .fillMaxWidth().shadow(6.dp, shape, ambientColor = Color.Black.copy(alpha = 0.1f), spotColor = Color.Black.copy(alpha = 0.1f))
+            .fillMaxWidth().shadow(AstridShadows.bottomBar, shape)
             .clip(shape).background(colors.floatingBar).padding(horizontal = Spacing.s16, vertical = Spacing.s12),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
