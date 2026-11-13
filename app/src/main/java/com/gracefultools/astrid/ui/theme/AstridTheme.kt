@@ -21,7 +21,9 @@ enum class ThemeMode(val wire: String) {
     OCEAN("ocean"), LIGHT("light"), DARK("dark"), AUTO("auto");
 
     companion object {
-        fun of(wire: String?): ThemeMode = entries.firstOrNull { it.wire == wire } ?: OCEAN
+        /** The mode stored as [wire], or [fallback] when it is blank or unknown (a brand's default, AATD-90). */
+        fun of(wire: String?, fallback: ThemeMode = OCEAN): ThemeMode =
+            wire?.trim()?.lowercase()?.let { w -> entries.firstOrNull { it.wire == w } } ?: fallback
     }
 }
 

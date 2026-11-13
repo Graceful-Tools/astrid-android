@@ -11,7 +11,7 @@
 #   "android": { "applicationId": "example.acme.tasks", "appName": "Acme Tasks",
 #                "handoffClientId": "acme-android", "linkHosts": "tasks.acme.example",
 #                "linkAutoVerify": true, "accentHoverColor": "#9333ea", "accentTextColor": "#ffffff",
-#                "accentInk": "#6b21a8", "accentInkDark": "#d8b4fe",
+#                "accentInk": "#6b21a8", "accentInkDark": "#d8b4fe", "defaultTheme": "light",
 #                "versionCode": 3, "versionName": "1.2.0" "appIcon": "acme-icon-1024.png",
 #                "monochromeIcon": "acme-glyph-1024.png", "characterImage": "acme-mascot.png",
 #                "play": { "title": "…", "shortDescription": "…", "fullDescription": "…", "releaseNotes": "…" } }
@@ -89,6 +89,7 @@ values = [
     ("astridAccentTextColor", android.get("accentTextColor", "")),
     ("astridAccentInkColor", android.get("accentInk", "").lower()),
     ("astridAccentInkDarkColor", android.get("accentInkDark", "").lower()),
+    ("astridDefaultTheme", (android.get("defaultTheme") or env.get("NEXT_PUBLIC_BRAND_DEFAULT_THEME", "")).lower()),
     ("astridVersionCode", android.get("versionCode", "")),
     ("astridVersionName", android.get("versionName", "")),
 ]
@@ -102,6 +103,11 @@ if scheme and not re.fullmatch(r"[a-z][a-z0-9+.-]*", scheme):
 code = dict(values)["astridVersionCode"]
 if code and not (re.fullmatch(r"[0-9]+", code) and 1 <= int(code) <= 2100000000):
     sys.exit(f"versionCode must be a whole number from 1 to 2100000000 (Play's limit): {code!r}")
+
+# The theme the app starts on (web's NEXT_PUBLIC_BRAND_DEFAULT_THEME). Android also has auto.
+theme = dict(values)["astridDefaultTheme"]
+if theme and theme not in ("ocean", "light", "dark", "auto"):
+    sys.exit(f"defaultTheme must be ocean, light, dark or auto: {theme!r}")
 
 # The accent as text (tokens brand.accent-ink / -dark). The core holds every ink to WCAG AA, 4.5:1, on
 # its card and on the accent's 12% wash there; the cards are the app's (AstridColors: white, gray-800).
