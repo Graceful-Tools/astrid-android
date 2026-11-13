@@ -44,3 +44,17 @@ live test skips, so `predeploy --full` stays offline.
 Traps: an emulator started with a stale `-dns-server` reaches nothing (`adb shell ping astrid.cc`);
 a process's first request can fail while it is still starting, which is why the harness retries
 fetching the user before it launches the activity.
+
+## Startup: baseline profile and cold start
+
+The release build ships a baseline profile (`app/src/release/generated/baselineProfiles/`), installed
+by `profileinstaller` where Play has not. Regenerate it after a change to the startup path, with the
+emulator (or a phone) connected and nothing covering the app:
+
+```bash
+./gradlew :app:generateBaselineProfile
+./gradlew :baselineprofile:connectedBenchmarkReleaseAndroidTest   # cold start: no compilation vs the profile
+```
+
+The benchmark's numbers land in `baselineprofile/build/outputs/connected_android_test_additional_output/`.
+An emulator's are for comparing runs on that emulator, not for quoting as a phone's.
