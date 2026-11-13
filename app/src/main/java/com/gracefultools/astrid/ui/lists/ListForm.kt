@@ -124,7 +124,7 @@ internal fun SegmentedTabs(items: List<Pair<ImageVector?, String>>, selected: In
     val thumb = if (colors.isDark) colors.bgActive else Color.White
     TabRow(
         selectedTabIndex = selected,
-        modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(track).padding(2.dp),
+        modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(track).padding(Spacing.s2),
         containerColor = Color.Transparent,
         contentColor = colors.textPrimary,
         indicator = { positions ->

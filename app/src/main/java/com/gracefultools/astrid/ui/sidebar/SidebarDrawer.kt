@@ -197,7 +197,7 @@ private fun CreateListDialog(onDismiss: () -> Unit, onCreate: (String) -> Unit) 
 private fun BrandHeader(onSearch: () -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().padding(start = Spacing.s16, end = Spacing.s8, top = 4.dp, bottom = 4.dp),
+        Modifier.fillMaxWidth().padding(start = Spacing.s16, end = Spacing.s8, top = Spacing.s4, bottom = Spacing.s4),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(painterResource(R.drawable.astrid_character), null, Modifier.size(LogoColumn).clip(RoundedCornerShape(Radius.small)))
@@ -208,7 +208,7 @@ private fun BrandHeader(onSearch: () -> Unit) {
         )
         Icon(
             Icons.Outlined.Search, stringResource(R.string.navigation_search), tint = colors.textPrimary,
-            modifier = Modifier.size(40.dp).clip(CircleShape).clickable(onClick = onSearch).padding(8.dp).testTag("sidebar:search"),
+            modifier = Modifier.size(40.dp).clip(CircleShape).clickable(onClick = onSearch).padding(Spacing.s8).testTag("sidebar:search"),
         )
     }
 }
@@ -355,7 +355,7 @@ private fun CountCapsule(count: Int) {
     Text(
         count.toString(), style = TextStyles.callout, color = colors.textSecondary,
         modifier = Modifier.clip(CircleShape).background(if (colors.isDark) colors.bgTertiary else Color.Gray.copy(alpha = 0.1f))
-            .padding(horizontal = Spacing.s4 + 2.dp, vertical = Spacing.s4),
+            .padding(horizontal = Spacing.s4 + Spacing.s2, vertical = Spacing.s4),
     )
 }
 
@@ -374,7 +374,7 @@ private fun AccountCard(user: com.gracefultools.astrid.model.UserSummary?, onPro
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
-            Modifier.weight(1f).clip(RoundedCornerShape(20.dp)).clickable(onClick = onProfile).testTag("sidebar:profile").padding(4.dp),
+            Modifier.weight(1f).clip(RoundedCornerShape(20.dp)).clickable(onClick = onProfile).testTag("sidebar:profile").padding(Spacing.s4),
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
         ) {
             Avatar(user?.image, initialsOf(user?.name, user?.email), 40.dp)

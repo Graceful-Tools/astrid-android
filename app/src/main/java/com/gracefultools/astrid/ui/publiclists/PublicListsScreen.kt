@@ -118,7 +118,7 @@ private fun PublicListRow(list: PublicListSummary, image: String?, copying: Bool
                 list.name, style = TextStyles.headline, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f),
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                 Icon(Icons.Outlined.Public, stringResource(R.string.lists_privacy_public), tint = colors.accent, modifier = Modifier.size(13.dp))
                 if (list.isCollaborative) {
                     Icon(Icons.Outlined.People, stringResource(R.string.lists_privacy_shared), tint = Success, modifier = Modifier.size(13.dp))
@@ -129,7 +129,7 @@ private fun PublicListRow(list: PublicListSummary, image: String?, copying: Bool
             Text(it, style = TextStyles.body, color = colors.textSecondary, maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                 Icon(Icons.Outlined.CheckCircle, null, tint = colors.textMuted, modifier = Modifier.size(12.dp))
                 Text(stringResource(R.string.filters_tasks_count, list.taskCount), style = TextStyles.caption, color = colors.textMuted)
             }

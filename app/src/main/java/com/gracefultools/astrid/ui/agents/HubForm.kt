@@ -255,7 +255,7 @@ internal fun NavRow(title: String, subtitle: String? = null, leading: (@Composab
 internal fun SegmentedControl(options: List<String>, selected: Int, enabled: Boolean = true, onSelect: (Int) -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(if (colors.isDark) colors.bgTertiary else Color(0xFFEEEEEF)).padding(2.dp),
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(if (colors.isDark) colors.bgTertiary else Color(0xFFEEEEEF)).padding(Spacing.s2),
     ) {
         options.forEachIndexed { index, label ->
             val chosen = index == selected

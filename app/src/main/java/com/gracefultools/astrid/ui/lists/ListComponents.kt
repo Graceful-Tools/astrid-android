@@ -100,7 +100,7 @@ internal fun ColorSwatches(choices: List<String>, current: String, onPick: (Stri
             contentAlignment = Alignment.Center,
         ) {
             val wheel = Brush.sweepGradient(listOf(Color.Red, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.Magenta, Color.Red))
-            Box(Modifier.size(28.dp).clip(CircleShape).background(wheel).padding(4.dp).clip(CircleShape).background(parseColor(current)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(28.dp).clip(CircleShape).background(wheel).padding(Spacing.s4).clip(CircleShape).background(parseColor(current)), contentAlignment = Alignment.Center) {
                 if (isCustom) Icon(Icons.Filled.Check, null, tint = Color.White, modifier = Modifier.size(12.dp))
             }
         }

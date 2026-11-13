@@ -115,7 +115,7 @@ internal fun CommentsSection(
 private fun StreakRow(streak: com.gracefultools.astrid.model.CompletionStreak) {
     val colors = AstridTheme.colors
     var open by remember { mutableStateOf(false) }
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).clickable { open = !open }.padding(vertical = 4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).clickable { open = !open }.padding(vertical = Spacing.s4), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             Icon(Icons.Filled.LocalFireDepartment, null, tint = Color(0xFFF97316), modifier = Modifier.size(16.dp))
             Text(
@@ -174,7 +174,7 @@ private fun CommentBubble(
             Box {
                 Column(
                     Modifier.widthIn(max = 300.dp).clip(RoundedCornerShape(Radius.medium)).background(bubble)
-                        .combinedClickable(onClick = {}, onLongClick = { menu = true }).padding(12.dp),
+                        .combinedClickable(onClick = {}, onLongClick = { menu = true }).padding(Spacing.s12),
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
                     if (comment.showsText) {
@@ -210,7 +210,7 @@ private fun CommentBubble(
             Text(
                 listOfNotNull(who.takeIf { it.isNotEmpty() }, time).joinToString(" · ") +
                     if (comment.isPending) "  " + stringResource(R.string.tasks_waiting_to_send) else "",
-                style = TextStyles.caption2, color = colors.textMuted, modifier = Modifier.padding(top = 3.dp, start = 4.dp, end = 4.dp),
+                style = TextStyles.caption2, color = colors.textMuted, modifier = Modifier.padding(top = 3.dp, start = Spacing.s4, end = Spacing.s4),
             )
         }
         if (mine) { Spacer(Modifier.size(Spacing.s8)); Avatar(comment.authorImage, comment.authorInitials ?: "", 32.dp) }

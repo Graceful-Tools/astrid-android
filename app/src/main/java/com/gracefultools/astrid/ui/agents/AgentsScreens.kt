@@ -141,7 +141,7 @@ internal fun BrandIcon(@DrawableRes icon: Int?, size: androidx.compose.ui.unit.D
     if (icon != null) {
         Image(painterResource(icon), null, modifier.size(size).clip(CircleShape), contentScale = ContentScale.Fit)
     } else {
-        Icon(fallback, null, tint = AstridTheme.colors.accent, modifier = modifier.size(size).padding(4.dp))
+        Icon(fallback, null, tint = AstridTheme.colors.accent, modifier = modifier.size(size).padding(Spacing.s4))
     }
 }
 
@@ -198,7 +198,7 @@ fun AgentsScreen(vm: AgentsViewModel, onBack: () -> Unit, onOpen: (String) -> Un
                 FormSection {
                     NavRow(
                         stringResource(R.string.connections_title), stringResource(R.string.settings_connections_subtitle),
-                        leading = { Icon(Icons.Filled.Link, null, tint = AstridTheme.colors.accent, modifier = Modifier.size(30.dp).padding(4.dp)) },
+                        leading = { Icon(Icons.Filled.Link, null, tint = AstridTheme.colors.accent, modifier = Modifier.size(30.dp).padding(Spacing.s4)) },
                     ) { onOpen(AgentRoutes.CONNECTIONS) }
                 }
                 FormSection(footer = stringResource(R.string.settings_agents_model_description, app)) {
@@ -666,7 +666,7 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
 @Composable
 private fun CustomAgentRow(agent: CustomAgent, busy: Boolean, onDelete: () -> Unit) {
     val colors = AstridTheme.colors
-    Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(Spacing.s12), modifier = Modifier.padding(vertical = 4.dp)) {
+    Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(Spacing.s12), modifier = Modifier.padding(vertical = Spacing.s4)) {
         val image = agent.image?.takeIf { it.isNotBlank() }?.let { path ->
             val png = if (path.endsWith(".svg")) path.removeSuffix(".svg") + ".png" else path
             if (png.startsWith("http")) png else Brand.webUrl(png)
@@ -680,7 +680,7 @@ private fun CustomAgentRow(agent: CustomAgent, busy: Boolean, onDelete: () -> Un
         } else {
             BrandIcon(R.drawable.ai_openclaw, size = 40.dp)
         }
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
             Text(agent.email, style = TextStyles.subheadline, fontFamily = FontFamily.Monospace, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
                 val active = agent.status == "active"
@@ -829,7 +829,7 @@ private fun ModelRow(
         horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         leading()
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
             Text(title, style = TextStyles.body, color = colors.textPrimary)
             Caption2(subtitle, subtitleColor)
         }

@@ -248,7 +248,7 @@ private fun DetailHeader(detail: TaskDetail?, vm: TaskDetailViewModel, onBack: (
     ) {
         Icon(
             Icons.AutoMirrored.Filled.ArrowBackIos, stringResource(R.string.common_back), tint = colors.textPrimary,
-            modifier = Modifier.size(44.dp).clip(CircleShape).clickable(onClick = onBack).padding(12.dp).testTag("detail:back"),
+            modifier = Modifier.size(44.dp).clip(CircleShape).clickable(onClick = onBack).padding(Spacing.s12).testTag("detail:back"),
         )
         Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
             Text(
@@ -349,7 +349,7 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
     if (detail.isCanceled) {
         Text(
             stringResource(R.string.tasks_wont_do_chip), style = TextStyles.caption, color = colors.textSecondary,
-            modifier = Modifier.padding(start = 62.dp, bottom = Spacing.s8).border(1.dp, colors.border, RoundedCornerShape(4.dp)).padding(horizontal = 6.dp, vertical = 2.dp),
+            modifier = Modifier.padding(start = 62.dp, bottom = Spacing.s8).border(1.dp, colors.border, RoundedCornerShape(4.dp)).padding(horizontal = 6.dp, vertical = Spacing.s2),
         )
     }
     if (askSubtasks) {
@@ -519,7 +519,7 @@ private fun ListsRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailV
 internal fun ListBadge(name: String, color: String) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.clip(RoundedCornerShape(Radius.small)).background(colors.bgTertiary).padding(horizontal = 8.dp, vertical = 4.dp),
+        Modifier.clip(RoundedCornerShape(Radius.small)).background(colors.bgTertiary).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp),
     ) {
         Box(Modifier.size(8.dp).clip(RoundedCornerShape(2.dp)).background(parseColor(color)))
@@ -575,7 +575,7 @@ private fun ProjectStateRow(state: com.gracefultools.astrid.model.BoardState, en
                         .background(if (chip.isCurrent) colors.accent.copy(alpha = 0.15f) else colors.bgSecondary)
                         .clickable(enabled = enabled && !chip.isCurrent) { onPick(chip.id) }
                         .semantics { selected = chip.isCurrent }
-                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                        .padding(horizontal = Spacing.s12, vertical = 6.dp),
                 )
             }
         }
@@ -689,7 +689,7 @@ private fun SubtasksSection(detail: TaskDetail, vm: TaskDetailViewModel, onOpenT
                 Text(
                     sub.title, style = TextStyles.body, color = if (sub.completed) colors.textMuted else colors.textPrimary,
                     textDecoration = if (sub.completed) TextDecoration.LineThrough else null,
-                    modifier = Modifier.weight(1f).clickable { onOpenTask(sub.id) }.padding(vertical = 2.dp),
+                    modifier = Modifier.weight(1f).clickable { onOpenTask(sub.id) }.padding(vertical = Spacing.s2),
                 )
             }
         }
@@ -764,7 +764,7 @@ private fun CommentComposer(
         Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
             Box(
                 Modifier.weight(1f).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
-                    .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = 40.dp, max = 200.dp).padding(horizontal = 12.dp, vertical = 9.dp),
+                    .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = 40.dp, max = 200.dp).padding(horizontal = Spacing.s12, vertical = 9.dp),
                 contentAlignment = Alignment.CenterStart,
             ) {
                 if (text.text.isEmpty()) Text(stringResource(R.string.comments_add_placeholder), style = TextStyles.body, color = colors.inputPlaceholder)

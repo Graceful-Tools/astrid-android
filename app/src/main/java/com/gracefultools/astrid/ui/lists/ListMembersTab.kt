@@ -248,7 +248,7 @@ private fun PersonRow(person: UserSummary, onOpen: () -> Unit, trailing: @Compos
             horizontalArrangement = Arrangement.spacedBy(Spacing.s12), verticalAlignment = Alignment.CenterVertically,
         ) {
             Avatar(person.image, initialsOf(person.name, person.email), 32.dp)
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
                 Text(person.display, style = TextStyles.body, color = colors.textPrimary, maxLines = 1)
                 Text(person.email ?: stringResource(R.string.profile_no_email), style = TextStyles.caption2, color = colors.textSecondary, maxLines = 1)
             }

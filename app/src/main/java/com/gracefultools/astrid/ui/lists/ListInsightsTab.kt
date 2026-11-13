@@ -61,7 +61,7 @@ internal fun ListInsightsTab(vm: ListInsightsViewModel) {
     val state by vm.state.collectAsStateWithLifecycle()
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(Spacing.s16).navigationBarsPadding().testTag("listInsights"),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+        verticalArrangement = Arrangement.spacedBy(Spacing.s20),
     ) {
         SegmentedTabs(
             ListInsightsFormat.WINDOWS.map { null to windowLabel(it) },
@@ -92,7 +92,7 @@ private fun windowLabel(days: Int): String = when (days) {
 @Composable
 private fun Activity(insights: ListInsights) {
     val colors = AstridTheme.colors
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
         Row(verticalAlignment = Alignment.Bottom) {
             Heading(stringResource(R.string.list_insights_activity))
             Spacer(Modifier.weight(1f))
@@ -143,7 +143,7 @@ private fun LineChart(series: List<InsightDay>, modifier: Modifier) {
                 ticks.reversed().forEach { Text(it.toString(), style = TextStyles.caption2, color = colors.textSecondary) }
             }
         }
-        Row(Modifier.fillMaxWidth().padding(top = 4.dp)) {
+        Row(Modifier.fillMaxWidth().padding(top = Spacing.s4)) {
             dates.forEachIndexed { i, label ->
                 if (i > 0) Spacer(Modifier.weight(1f))
                 Text(label, style = TextStyles.caption2, color = colors.textSecondary)
@@ -182,7 +182,7 @@ private fun Legend(color: Color, label: String) {
 
 @Composable
 private fun Lanes(lanes: List<InsightLane>) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
         Heading(stringResource(R.string.list_insights_time_in_lane))
         if (ListInsightsFormat.lanesHaveHistory(lanes)) {
             lanes.forEach { DurationRow(it.name, it.duration) }
@@ -219,14 +219,14 @@ private fun DurationRow(label: String, value: InsightDuration) {
 @Composable
 private fun Contributors(people: List<InsightContributor>) {
     val colors = AstridTheme.colors
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
         Heading(stringResource(R.string.list_insights_contributors))
         if (people.isEmpty()) Note(stringResource(R.string.list_insights_no_activity))
         people.forEach { person ->
-            Row(Modifier.semantics(mergeDescendants = true) {}, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(Modifier.semantics(mergeDescendants = true) {}, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                 Avatar(person.image, initialsOf(person.name), 24.dp, shape = CircleShape)
-                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                         Text(person.name ?: "—", style = TextStyles.subheadline, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         if (person.isAIAgent) Icon(
                             Icons.Outlined.Memory, stringResource(R.string.lists_ai_coding_agent),
