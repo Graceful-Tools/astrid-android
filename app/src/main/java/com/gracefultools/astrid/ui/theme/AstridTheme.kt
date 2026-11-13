@@ -11,7 +11,10 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.astrid.design.AstridTextStyle
+import com.astrid.design.AstridTokens
+import com.astrid.design.AstridTokens.Space
+import com.astrid.design.AstridTokens.TypeScale.Comfortable as Type
 
 /**
  * The four themes iOS offers and stores (`ThemeMode.swift`): Ocean (the default), Light, Dark, and
@@ -35,14 +38,16 @@ fun colorsFor(mode: ThemeMode, systemDark: Boolean): AstridColors = when (mode) 
     ThemeMode.AUTO -> if (systemDark) DarkColors else LightColors
 }
 
-/** iOS `Theme.spacing*` and `radius*`. */
+/** The tokens' `space.*` (iOS `Theme.spacing*`). */
 object Spacing {
-    val s2 = 2.dp; val s4 = 4.dp; val s8 = 8.dp; val s12 = 12.dp; val s16 = 16.dp
-    val s20 = 20.dp; val s24 = 24.dp; val s32 = 32.dp; val s40 = 40.dp; val s48 = 48.dp
+    val s2 = Space.s2; val s4 = Space.s4; val s8 = Space.s8; val s12 = Space.s12; val s16 = Space.s16
+    val s20 = Space.s20; val s24 = Space.s24; val s32 = Space.s32; val s40 = Space.s40; val s48 = Space.s48
 }
 
+/** The tokens' `radius.*` (iOS `Theme.radius*`). */
 object Radius {
-    val small = 6.dp; val medium = 8.dp; val large = 12.dp; val xLarge = 16.dp
+    val small = AstridTokens.Radius.sm; val medium = AstridTokens.Radius.md
+    val large = AstridTokens.Radius.lg; val xLarge = AstridTokens.Radius.xl
 }
 
 /**
@@ -77,33 +82,35 @@ fun materialScheme(c: AstridColors): androidx.compose.material3.ColorScheme {
     )
 }
 
-/** iOS `Theme.Typography`: the system type scale at iOS's point sizes, as sp so it scales. */
+/** iOS `Theme.Typography` (the tokens' comfortable type scale) on Material's slots, as sp so it scales. */
 val AstridTypography = Typography(
-    displaySmall = TextStyle(fontSize = 34.sp, fontWeight = FontWeight.Bold),
-    headlineMedium = TextStyle(fontSize = 28.sp, fontWeight = FontWeight.Bold),
-    headlineSmall = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.SemiBold),
-    titleMedium = TextStyle(fontSize = 17.sp, fontWeight = FontWeight.SemiBold),
-    bodyLarge = TextStyle(fontSize = 17.sp),
-    bodyMedium = TextStyle(fontSize = 16.sp),
-    bodySmall = TextStyle(fontSize = 15.sp),
-    labelLarge = TextStyle(fontSize = 15.sp, fontWeight = FontWeight.Medium),
-    labelMedium = TextStyle(fontSize = 13.sp),
-    labelSmall = TextStyle(fontSize = 12.sp),
+    displaySmall = style(Type.title1),
+    headlineMedium = style(Type.title2),
+    headlineSmall = style(Type.title3),
+    titleMedium = style(Type.headline),
+    bodyLarge = style(Type.body),
+    bodyMedium = style(Type.callout),
+    bodySmall = style(Type.subheadline),
+    labelLarge = style(Type.subheadline).copy(fontWeight = FontWeight.Medium),
+    labelMedium = style(Type.footnote),
+    labelSmall = style(Type.caption1),
 )
 
-/** iOS's named styles, for text that is not a Material component's. */
+private fun style(t: AstridTextStyle) = TextStyle(fontSize = t.size, fontWeight = t.weight)
+
+/** iOS's named styles (the tokens' comfortable type scale), for text that is not a Material component's. */
 object TextStyles {
     /** headline: list titles, header titles, section titles. */
-    val headline = TextStyle(fontSize = 17.sp, fontWeight = FontWeight.SemiBold)
-    val body = TextStyle(fontSize = 17.sp)
-    val callout = TextStyle(fontSize = 16.sp)
+    val headline = style(Type.headline)
+    val body = style(Type.body)
+    val callout = style(Type.callout)
     /** subheadline: row metadata, list chips. */
-    val subheadline = TextStyle(fontSize = 15.sp)
-    val footnote = TextStyle(fontSize = 13.sp)
-    val caption = TextStyle(fontSize = 12.sp)
-    val caption2 = TextStyle(fontSize = 11.sp)
+    val subheadline = style(Type.subheadline)
+    val footnote = style(Type.footnote)
+    val caption = style(Type.caption1)
+    val caption2 = style(Type.caption2)
     /** A row's title: 17 x 1.1. */
-    val rowTitle = TextStyle(fontSize = 19.sp, fontWeight = FontWeight.Medium)
+    val rowTitle = style(Type.rowTitle)
 }
 
 /** iOS Theme.shadowSmall/Medium/Large as Compose elevations, and the floating header's own. */
