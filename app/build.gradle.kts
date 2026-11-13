@@ -55,6 +55,10 @@ val brandLinkAutoVerify: Boolean = brand("astridLinkAutoVerify", "false").lowerc
 android {
     namespace = "com.gracefultools.astrid"
     compileSdk = 35
+    // The NDK scripts/build-core.sh builds the core with (~/dev-tools/android-env.sh, CI's android-setup).
+    // Without it AGP cannot strip libastrid_android.so and packages it as-is, symbol table and all
+    // (~3.5 MB per ABI), and cannot extract the symbols Play needs to read a native crash (AATD-91).
+    ndkVersion = "27.2.12479018"
 
     defaultConfig {
         applicationId = brand("astridApplicationId", "com.gracefultools.astrid")
@@ -147,6 +151,9 @@ android {
             signingConfig = if (System.getenv("ASTRID_UPLOAD_KEYSTORE") != null) signingConfigs.getByName("release") else signingConfigs.getByName("debug")
             isMinifyEnabled = true
             isShrinkResources = true
+            // The core's symbol table goes into the bundle for Play's crash reports, and out of the
+            // library that ships (AATD-91; core/Cargo.toml keeps it in the release build for this).
+            ndk { debugSymbolLevel = "SYMBOL_TABLE" }
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }

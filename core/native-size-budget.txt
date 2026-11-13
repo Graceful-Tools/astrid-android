@@ -1,0 +1,3 @@
+# Bytes: the stripped libastrid_android.so per ABI, as the app packages it (scripts/check-native-size.sh,
+# AATD-91). Lower a budget when the core shrinks; raising one is a decision, said in the commit.
+arm64-v8a=11600000

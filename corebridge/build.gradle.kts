@@ -9,6 +9,8 @@ plugins {
 android {
     namespace = "com.gracefultools.astrid.core"
     compileSdk = 35
+    // Same NDK as the app and scripts/build-core.sh, so AGP can strip the core here too (AATD-91).
+    ndkVersion = "27.2.12479018"
     defaultConfig {
         minSdk = 28
         consumerProguardFiles("consumer-rules.pro")
