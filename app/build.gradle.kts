@@ -53,7 +53,7 @@ val brandLinkAutoVerify: Boolean = brand("astridLinkAutoVerify", "false").lowerc
 
 android {
     namespace = "com.gracefultools.astrid"
-    compileSdk = 35
+    compileSdk = 37
     // The NDK scripts/build-core.sh builds the core with (~/dev-tools/android-env.sh, CI's android-setup).
     // Without it AGP cannot strip libastrid_android.so and packages it as-is, symbol table and all
     // (~3.5 MB per ABI), and cannot extract the symbols Play needs to read a native crash (AATD-91).
