@@ -122,6 +122,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
         when (arrival) {
             is Arrival.OpenTask -> nav.navigate("task/${arrival.ref}")
             is Arrival.OpenList -> { nav.popBackStack("list", inclusive = false); sidebar.select(arrival.id) }
+            is Arrival.OpenPublicList -> { nav.popBackStack("list", inclusive = false); sidebar.selectFeatured(arrival.list) }
             // Somebody's profile; your own id turns into your own, editable one (AATD-69).
             is Arrival.OpenProfile -> nav.navigate("user/${arrival.userId}")
             is Arrival.OpenSettings -> nav.navigate(arrival.route)

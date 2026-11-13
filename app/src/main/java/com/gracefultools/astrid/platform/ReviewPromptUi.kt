@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -29,11 +28,12 @@ import kotlinx.coroutines.launch
  * after the signed-in app appears and whenever it comes back to the foreground, as iOS does.
  */
 @Composable
-fun ReviewPrompting(prompt: ReviewPrompt) {
+fun ReviewPrompting(prompt: ReviewPrompt, onArrive: (com.gracefultools.astrid.Arrival) -> Unit) {
     val context = LocalContext.current
     val activity = context as? Activity ?: return
     val showing by prompt.showing.collectAsStateWithLifecycle()
     val owner = LocalLifecycleOwner.current
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
     LaunchedEffect(Unit) {
         kotlinx.coroutines.delay(6_000)
         prompt.check()
@@ -58,7 +58,7 @@ fun ReviewPrompting(prompt: ReviewPrompt) {
             // Three choices: Android's dialog has two button slots, so the two routes stack in one.
             confirmButton = {
                 Column {
-                    TextButton(onClick = { prompt.dismiss(); reportIssue(context) }) { Text(stringResource(R.string.review_report_issue)) }
+                    TextButton(onClick = { prompt.dismiss(); scope.launch { onArrive(prompt.reportIssueDestination()) } }) { Text(stringResource(R.string.review_report_issue)) }
                     TextButton(onClick = { prompt.dismiss(); sendFeedback(context) }) { Text(stringResource(R.string.review_send_feedback)) }
                     TextButton(onClick = prompt::dismiss) { Text(stringResource(R.string.review_maybe_later)) }
                 }
@@ -93,9 +93,4 @@ fun sendFeedback(context: Context) {
     runCatching {
         context.startActivity(Intent(Intent.ACTION_SENDTO, Uri.parse(ReviewPrompt.feedbackMailto())).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
-}
-
-/** iOS openFeedbackForm opens the Bugs & Feedback list; the core does not name it yet, so the site. */
-fun reportIssue(context: Context) {
-    runCatching { CustomTabsIntent.Builder().setShowTitle(true).build().launchUrl(context, Uri.parse(ReviewPrompt.REPORT_ISSUE_URL)) }
 }
