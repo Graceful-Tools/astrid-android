@@ -35,7 +35,7 @@ class BrandStringsTest {
     @Test
     @Config(qualifiers = "de")
     fun `AATD-73 a translation takes the brand's address too`() {
-        assertEquals("Erstellen Sie Aufgaben, indem Sie E-Mails an help@example.com senden",
+        assertEquals("Erstelle Aufgaben, indem du E-Mails an help@example.com sendest",
             context.getString(R.string.settings_appearance_email_to_task_footer, "help@example.com"))
         assertEquals("buddy.oc@example.com", context.getString(R.string.settings_openclaw_agent_name_preview, "buddy", "example.com"))
     }

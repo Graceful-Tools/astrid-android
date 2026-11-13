@@ -6,10 +6,15 @@ by name first (auth_tagline <-> "auth.tagline", core_repeating_weekly <-> "repea
 then by identical English text in en.lproj — and that key's translation is written for every
 language iOS ships. Unmatched strings fall back to English at runtime, which Android does by itself.
 Re-runnable; the generated files carry a header saying so. Usage: scripts/port-ios-strings.py [--ios ../astrid-ios]
+
+--check (AATD-96) writes nothing: it fails when a committed values-<lang>/strings.xml is not what the
+current astrid-ios (and astrid-windows, for the core keys) would give, or when a translatable string
+has no translation in a locale, from either the port or that locale's strings_extra.xml.
 """
 import html, os, re, sys
 
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+check = '--check' in sys.argv
 ios = sys.argv[sys.argv.index('--ios') + 1] if '--ios' in sys.argv else os.path.join(root, '..', 'astrid-ios')
 loc = os.path.join(ios, 'Astrid App', 'Resources', 'Localizations')
 res = os.path.join(root, 'app', 'src', 'main', 'res')
@@ -73,6 +78,7 @@ for fname in ('strings.xml', 'core_keys.xml'):
         entries.append((name, attrs, value, key))
 
 matched = sum(1 for e in entries if e[3])
+stale, missing = [], {}
 for ios_lang, qualifier in LANGS.items():
     path = os.path.join(loc, f'{ios_lang}.lproj', 'Localizable.strings')
     if not os.path.exists(path):
@@ -96,6 +102,7 @@ for ios_lang, qualifier in LANGS.items():
         if name in hand:
             count += 1
             continue
+        before = count
         fmt = ' formatted="false"' if 'formatted="false"' in attrs else ''
         if name in windows and windows[name].strip():
             text = html.escape(windows[name], quote=False).replace("'", "\\'")
@@ -104,10 +111,30 @@ for ios_lang, qualifier in LANGS.items():
         elif key and key in tr and tr[key].strip():
             lines.append(f'    <string name="{name}"{fmt}>{ios_to_android(tr[key])}</string>')
             count += 1
+        if count == before:
+            missing.setdefault(f'values-{qualifier}', []).append(name)
     lines.append('</resources>')
     out_dir = os.path.join(res, f'values-{qualifier}')
+    out_path = os.path.join(out_dir, 'strings.xml')
+    text = '\n'.join(lines) + '\n'
+    if check:
+        current = open(out_path, encoding='utf-8').read() if os.path.exists(out_path) else None
+        if current != text:
+            stale.append(f'values-{qualifier}/strings.xml')
+        continue
     os.makedirs(out_dir, exist_ok=True)
-    open(os.path.join(out_dir, 'strings.xml'), 'w', encoding='utf-8').write('\n'.join(lines) + '\n')
+    open(out_path, 'w', encoding='utf-8').write(text)
     print(f'{ios_lang:8} {count}/{len(entries)}')
+if check:
+    for path in stale:
+        print(f'stale: {path} is not what astrid-ios gives now', file=sys.stderr)
+    for qualifier, names in missing.items():
+        print(f'untranslated in {qualifier}: {", ".join(names)}', file=sys.stderr)
+    if stale or missing:
+        print('Re-run scripts/port-ios-strings.py and commit what it writes; translate Android-only strings '
+              'in values-<lang>/strings_extra.xml.', file=sys.stderr)
+        sys.exit(1)
+    print(f'translations are current with astrid-ios: {len(entries)} strings, every locale complete')
+    sys.exit(0)
 print(f'matched to an iOS key: {matched}/{len(entries)}')
 print('unmatched:', ', '.join(n for n, _, _, k in entries if not k))

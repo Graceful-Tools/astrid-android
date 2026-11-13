@@ -147,4 +147,12 @@
     <string name="ordinal_rd">%1$s-й</string>
     <string name="ordinal_th">%1$s-й</string>
     <string name="list_separator">", "</string>
+    <string name="settings_appearance_list_images_title">Изображения списков</string>
+    <string name="settings_appearance_list_images_off_description">Если выключено, у каждого списка вместо картинки показан его цвет.</string>
+    <string name="settings_appearance_list_images_label">Показывать изображения списков</string>
+    <string name="settings_appearance_task_titles">Названия задач</string>
+    <string name="settings_appearance_task_titles_footer">Какую часть длинного названия показывает строка задачи (сохраняется на этом устройстве)</string>
+    <string name="settings_task_titles_wrap">Переносить</string>
+    <string name="settings_task_titles_two">Две строки</string>
+    <string name="settings_task_titles_one">Одна строка</string>
 </resources>

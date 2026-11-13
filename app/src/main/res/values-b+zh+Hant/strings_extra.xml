@@ -147,4 +147,12 @@
     <string name="ordinal_rd">%1$s</string>
     <string name="ordinal_th">%1$s</string>
     <string name="list_separator">、</string>
+    <string name="settings_appearance_list_images_title">清單圖片</string>
+    <string name="settings_appearance_list_images_off_description">關閉後，每個清單改為顯示其顏色。</string>
+    <string name="settings_appearance_list_images_label">顯示清單圖片</string>
+    <string name="settings_appearance_task_titles">任務標題</string>
+    <string name="settings_appearance_task_titles_footer">任務列顯示多長的標題（儲存在此裝置上）</string>
+    <string name="settings_task_titles_wrap">換行</string>
+    <string name="settings_task_titles_two">兩行</string>
+    <string name="settings_task_titles_one">一行</string>
 </resources>

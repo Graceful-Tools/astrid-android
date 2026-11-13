@@ -62,6 +62,17 @@ step "design: no hand-written colour, size or copy count rose (AATD-86)"
 scripts/test-report-design-metrics.sh
 python3 -I scripts/report-design-metrics.py --check
 
+# values-<lang>/strings.xml is ported from astrid-ios (and astrid-windows for the core keys): stale
+# when iOS has moved on, and no translatable string may be left untranslated in any locale.
+step "translations: current with astrid-ios, none missing (AATD-96)"
+scripts/test-port-ios-strings.sh
+ios="${ASTRID_IOS_DIR:-../astrid-ios}"
+if [[ -d "$ios/Astrid App/Resources/Localizations" && -d ../astrid-windows/app/Astrid.App/Strings ]]; then
+  python3 -I -B scripts/port-ios-strings.py --ios "$ios" --check
+else
+  echo "SKIPPED: the translation drift check needs ../astrid-ios and ../astrid-windows next to this checkout"
+fi
+
 if [[ "$(uname)" == Darwin ]]; then
   step "scripts: the scheduled /fixall loop"
   scripts/test-fixall-loop.sh

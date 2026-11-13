@@ -249,9 +249,6 @@
     <string name="settings_appearance_task_details_footer">작업 세부 정보의 배치를 선택하세요. 목록은 우선순위와 담당자에게 각각의 행을 제공합니다. 프로젝트는 간결하며, 체크박스는 작업을 완료하는 대신 선택기를 엽니다.</string>
     <string name="core_smart_layout_list">목록</string>
     <string name="core_smart_layout_project">프로젝트</string>
-    <string name="settings_appearance_list_images_title">목록 이미지</string>
-    <string name="settings_appearance_list_images_off_description">끄면 각 목록에 이미지 대신 색상이 표시됩니다.</string>
-    <string name="settings_appearance_list_images_label">목록 이미지 표시</string>
     <string name="settings_appearance_email_to_task">Email-to-Task</string>
     <string name="settings_appearance_email_to_task_footer">Create tasks by sending emails to %1$s</string>
     <string name="settings_appearance_email_to_task_self">Self-task: Send TO %1$s</string>
@@ -707,6 +704,29 @@
     <string name="contacts_add_collaborators">협업자 추가</string>
     <string name="contacts_upload_for_collaboration">더 나은 협업을 위해 연락처를 업로드하세요</string>
     <string name="contacts_footer_text">연락처는 협업자 추천에 사용됩니다. 암호화되어 저장되며 제3자에게 공유되지 않습니다.</string>
+    <string name="list_insights_tab">인사이트</string>
+    <string name="list_insights_days7">7일</string>
+    <string name="list_insights_days30">30일</string>
+    <string name="list_insights_days90">90일</string>
+    <string name="list_insights_activity">활동</string>
+    <string name="list_insights_created">새 작업</string>
+    <string name="list_insights_completed">완료됨</string>
+    <string name="list_insights_created_total">새 작업 %1$s개</string>
+    <string name="list_insights_completed_total">완료 %1$s개</string>
+    <string name="list_insights_time_to_complete">완료까지 걸린 시간(중앙값)</string>
+    <string name="list_insights_time_in_lane">열별 머문 시간(중앙값)</string>
+    <string name="list_insights_sample_size">%1$s개 기준</string>
+    <string name="list_insights_not_enough_history">아직 기록이 충분하지 않습니다</string>
+    <string name="list_insights_lane_history_note">열 이동은 지금부터 기록됩니다. 카드가 이동하면 채워집니다.</string>
+    <string name="list_insights_contributors">주요 기여자</string>
+    <string name="list_insights_profile_counts">완료 %1$s · 영감 %2$s · 지원 %3$s</string>
+    <string name="list_insights_activity_counts">생성 %1$s · 편집 %2$s · 댓글 %3$s</string>
+    <string name="list_insights_no_activity">이 기간에 활동이 없습니다</string>
+    <string name="list_insights_load_failed">인사이트를 불러오지 못했습니다</string>
+    <string name="list_insights_loading">인사이트 불러오는 중…</string>
+    <string name="list_insights_duration_minutes">%1$s분</string>
+    <string name="list_insights_duration_hours">%1$s시간</string>
+    <string name="list_insights_duration_days">%1$s일</string>
     <string name="core_picker_no_due_date" formatted="false">마감일 없음</string>
     <string name="core_picker_today" formatted="false">오늘</string>
     <string name="core_picker_tomorrow" formatted="false">내일</string>
@@ -736,33 +756,4 @@
     <string name="core_filter_assigned_by_me" formatted="false">나</string>
     <string name="core_filter_lists" formatted="false">목록</string>
     <string name="core_reminder_toast_complete" formatted="false">완료</string>
-    <!-- List Settings > Insights (AATD-77), from iOS listInsights.* -->
-    <string name="list_insights_tab">인사이트</string>
-    <string name="list_insights_days7">7일</string>
-    <string name="list_insights_days30">30일</string>
-    <string name="list_insights_days90">90일</string>
-    <string name="list_insights_activity">활동</string>
-    <string name="list_insights_created">새 작업</string>
-    <string name="list_insights_completed">완료</string>
-    <string name="list_insights_created_total">새 작업 %1$s개</string>
-    <string name="list_insights_completed_total">완료 %1$s개</string>
-    <string name="list_insights_time_to_complete">완료까지 걸린 시간(중앙값)</string>
-    <string name="list_insights_time_in_lane">열별 머문 시간(중앙값)</string>
-    <string name="list_insights_sample_size">%1$s개 기준</string>
-    <string name="list_insights_not_enough_history">아직 기록이 충분하지 않습니다</string>
-    <string name="list_insights_lane_history_note">열 이동은 지금부터 기록됩니다. 카드가 이동하면 채워집니다.</string>
-    <string name="list_insights_contributors">주요 기여자</string>
-    <string name="list_insights_profile_counts">완료 %1$s · 영감 %2$s · 지원 %3$s</string>
-    <string name="list_insights_activity_counts">생성 %1$s · 편집 %2$s · 댓글 %3$s</string>
-    <string name="list_insights_no_activity">이 기간에 활동이 없습니다</string>
-    <string name="list_insights_load_failed">인사이트를 불러오지 못했습니다</string>
-    <string name="list_insights_loading">인사이트 불러오는 중…</string>
-    <string name="list_insights_duration_minutes">%1$s분</string>
-    <string name="list_insights_duration_hours">%1$s시간</string>
-    <string name="list_insights_duration_days">%1$s일</string>
-    <string name="settings_appearance_task_titles">작업 제목</string>
-    <string name="settings_appearance_task_titles_footer">긴 제목을 작업 행에 얼마나 표시할지 (이 기기에 저장됨)</string>
-    <string name="settings_task_titles_wrap">줄바꿈</string>
-    <string name="settings_task_titles_two">두 줄</string>
-    <string name="settings_task_titles_one">한 줄</string>
 </resources>
