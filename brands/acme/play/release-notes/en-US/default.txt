@@ -1,1 +1,1 @@
-The first Acme for Android.
+The first Acme Tasks for Android.

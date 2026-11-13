@@ -1,4 +1,4 @@
-Acme is a to-do app for the people you share your life and work with. Families and teams keep shared lists, see who is doing what, and talk it over right beside the tasks.
+Acme Tasks is a to-do app for the people you share your life and work with. Families and teams keep shared lists, see who is doing what, and talk it over right beside the tasks.
 
 • My Tasks gathers everything that is yours, from every list
 • Due dates, priorities, repeating tasks and subtasks
