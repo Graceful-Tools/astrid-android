@@ -30,7 +30,7 @@ scripts/make-brand-variant.sh path/to/partner.brand.json # any profile, no astri
 It maps the profile's `env` (name, wordmark, domain, URL scheme, emails, accent) and takes the
 package from the first entry of `BRAND_ANDROID_APP_LINKS`. An optional `android` block holds what only
 the app knows: `applicationId`, `appName`, `handoffClientId`, `linkHosts`, `linkAutoVerify`,
-`accentHoverColor`, `accentTextColor`, `accentInk`, `accentInkDark`, `versionCode`, `versionName`, `play` and the artwork (both
+`accentHoverColor`, `accentTextColor`, `accentInk`, `accentInkDark`, `defaultTheme`, `versionCode`, `versionName`, `play` and the artwork (both
 below). It writes `brand.properties`, the Play listing, the artwork and a copy of the profile. Re-run it after the profile changes;
 predeploy fails while `brands/acme` is stale.
 
@@ -52,13 +52,14 @@ name and domain, for the partner to replace.
 
 Re-running the script removes only the files it wrote last time (listed in `res/.make-brand-variant`), so
 removing a key from the profile brings back Astrid's art. It never touches resources a partner added by hand.
-Predeploy merges a brand with generated art. The checkbox PNGs and `ocean_bg` are still Astrid's.
+Predeploy merges a brand with generated art. The checkbox PNGs and Ocean's cyan are still Astrid's; a brand that
+wants neither cyan nor Astrid's look starts on another theme (`defaultTheme`).
 
 **Literal audit.** `scripts/check-brand-literals.py` lists every string in a brand build's merged
 resources and manifest that contains one of the profile's `expect.forbidLiterals`. Predeploy runs it
 on acme, including its Play listing (`--text brands/acme/play`), against a budget that only goes
-down (24: the webhook hint's `ASTRID_WEBHOOK_SECRET` and `npx astrid-agent`, in 12 locales). The ink keys and auditing the dex
-are still to come in AATD-90. Anything else a partner supplies in `res/` by hand, as below.
+down (24: the webhook hint's `ASTRID_WEBHOOK_SECRET` and `npx astrid-agent`, in 12 locales). Auditing the dex
+is still to come in AATD-90. Anything else a partner supplies in `res/` by hand, as below.
 
 Any key can also be passed alone as `-P<key>=<value>` without a brand directory. A blank value is
 unset. With nothing set, every value is Astrid's and the build is the one it always was.
@@ -81,6 +82,7 @@ unset. With nothing set, every value is Astrid's and the build is the one it alw
 | `astridAccentTextColor` | `#ffffff` | Text and icons drawn on the accent — change it with a pale accent |
 | `astridAccentInkColor` | (Astrid's token, or derived from the accent) | The accent as text on a light card (tokens `brand.accent-ink`): links, selected rows. Must read at 4.5:1 on white and on the accent's 12% wash; `make-brand-variant.sh` refuses less, and the app falls back to the derived ink |
 | `astridAccentInkDarkColor` | (Astrid's token, or derived from the accent) | The same on a dark card (gray-800, `accent-ink-dark`): Dark's focus line, selection outline and low priority |
+| `astridDefaultTheme` | `ocean` | The theme a fresh install starts on: `ocean`, `light`, `dark` or `auto`. A theme the user picks still wins. The launch window and Android 12+ splash take that theme's page colour (`@color/launch_bg`: cyan, white, gray-900; white for `auto`). From `android.defaultTheme`, else the profile's `NEXT_PUBLIC_BRAND_DEFAULT_THEME`; the script refuses another name, the app reads one as Ocean |
 | `astridVersionCode` | `1` | The package's versionCode, 1–2100000000. Play needs a higher one for every upload, so CI usually passes `-PastridVersionCode` (or `ORG_GRADLE_PROJECT_astridVersionCode`) |
 | `astridVersionName` | `0.1.0` | The version people see |
 

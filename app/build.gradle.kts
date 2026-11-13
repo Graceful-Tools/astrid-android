@@ -99,6 +99,16 @@ android {
         // Blank: Astrid's tokens, or a partner's ink derived from its accent.
         brandField("ASTRID_ACCENT_INK_COLOR", brand("astridAccentInkColor", ""))
         brandField("ASTRID_ACCENT_INK_DARK_COLOR", brand("astridAccentInkDarkColor", ""))
+        // The theme a fresh install starts on (web's NEXT_PUBLIC_BRAND_DEFAULT_THEME, AATD-90), and the
+        // launch window behind it: each theme's page colour (AstridColors bgPrimary), so a Light brand
+        // does not open on Ocean's cyan. Blank or unknown is Ocean, as Brand.defaultTheme reads it.
+        val defaultTheme = brand("astridDefaultTheme", "").trim().lowercase()
+        brandField("ASTRID_DEFAULT_THEME", defaultTheme)
+        resValue("color", "launch_bg", when (defaultTheme) {
+            "light", "auto" -> "#FFFFFFFF"
+            "dark" -> "#FF111827"
+            else -> "#FF88DCF8"
+        })
         brandField("ASTRID_APP_NAME", brand("astridAppName", "Astrid"))   // Brand.appName, for code (AATD-90)
         resValue("string", "app_name", brand("astridAppName", "Astrid"))
         resValue("string", "brand_wordmark", brand("astridWordmark", "astrid"))

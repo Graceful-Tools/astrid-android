@@ -90,6 +90,14 @@ object Brand {
     val accentInkHex: String? = optionalHex(BuildConfig.ASTRID_ACCENT_INK_COLOR)
     val accentInkDarkHex: String? = optionalHex(BuildConfig.ASTRID_ACCENT_INK_DARK_COLOR)
 
+    /**
+     * The theme a fresh install starts on (AATD-90), as web's `NEXT_PUBLIC_BRAND_DEFAULT_THEME` is
+     * the one a visitor starts on: Ocean for Astrid. A theme the user picks still wins. The launch
+     * window's colour (`@color/launch_bg`) comes from the same Gradle property.
+     */
+    val defaultTheme: com.gracefultools.astrid.ui.theme.ThemeMode =
+        com.gracefultools.astrid.ui.theme.ThemeMode.of(BuildConfig.ASTRID_DEFAULT_THEME)
+
     /** A configured `#rrggbb` as lower case, or null when it is blank or malformed. */
     fun optionalHex(raw: String?): String? =
         resolveAccentHex(raw, fallback = "").takeIf { it.length == 7 }

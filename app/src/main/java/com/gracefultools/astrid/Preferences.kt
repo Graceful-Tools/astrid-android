@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.asStateFlow
  * @AppStorage, and the notification prompt's counts, as iOS keeps them in UserDefaults. Account
  * settings live in the core.
  */
-class Preferences(context: Context) : PromptLedger, com.gracefultools.astrid.platform.ReviewLedger,
+class Preferences(context: Context, defaultTheme: ThemeMode = Brand.defaultTheme) : PromptLedger, com.gracefultools.astrid.platform.ReviewLedger,
     com.gracefultools.astrid.platform.UpdateLedger {
     private val prefs = context.getSharedPreferences("astrid", Context.MODE_PRIVATE)
-    private val _theme = MutableStateFlow(ThemeMode.of(prefs.getString(THEME, null)))
+    private val _theme = MutableStateFlow(ThemeMode.of(prefs.getString(THEME, null), fallback = defaultTheme))
     val theme: StateFlow<ThemeMode> = _theme.asStateFlow()
 
     fun setTheme(mode: ThemeMode) {
