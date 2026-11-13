@@ -34,6 +34,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.OpenInFull
 import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.material.icons.outlined.SmartToy
@@ -621,34 +622,43 @@ private fun WaitingOnRow(section: com.gracefultools.astrid.model.BlockerSection,
     if (adding) BlockerSheet(state, vm, onDismiss = { adding = false })
 }
 
-/** iOS's InlineTextAreaEditor: a caption label, the description in a box; tap to edit. */
+/**
+ * iOS's InlineTextAreaEditor with offersFullScreen: a caption label with the expand button, the
+ * description in a box. Tapping the box opens the full-screen description already editing
+ * (AITD-649 → AATD-102); the expand button opens a written one for reading.
+ */
 @Composable
 private fun DescriptionBlock(detail: TaskDetail, onSave: (String) -> Unit, onOpenTask: (String) -> Unit, onOpenList: (String) -> Unit) {
     val colors = AstridTheme.colors
-    var editing by remember { mutableStateOf(false) }
-    var text by rememberSaveable(detail.task.id, detail.task.description) { mutableStateOf(detail.task.description) }
-    val focus = remember { androidx.compose.ui.focus.FocusRequester() }
+    val text = detail.task.description
+    val readOnly = detail.isCopyOnly
+    var entry by rememberSaveable(detail.task.id) { mutableStateOf<DescriptionReader.Entry?>(null) }
+    val onReference: (String, String) -> Unit = { kind, id -> if (kind == "list") onOpenList(id) else onOpenTask(id) }
     Column(Modifier.fillMaxWidth().padding(horizontal = Spacing.s16, vertical = Spacing.s12), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        Text(stringResource(R.string.detail_description), style = TextStyles.caption, color = colors.textSecondary)
-        val shape = RoundedCornerShape(Radius.medium)
-        if (editing && !detail.isCopyOnly) {
-            LaunchedEffect(Unit) { focus.requestFocus() }
-            BasicTextField(
-                value = text, onValueChange = { text = it },
-                textStyle = TextStyles.body.copy(color = colors.textPrimary), cursorBrush = SolidColor(colors.accent),
-                modifier = Modifier.fillMaxWidth().heightIn(min = 100.dp).clip(shape).background(colors.bgTertiary).padding(Spacing.s12)
-                    .focusRequester(focus).onFocusChanged { if (!it.isFocused && editing) { editing = false; onSave(text) } },
-            )
-            TextButton(onClick = { editing = false; onSave(text) }, modifier = Modifier.align(Alignment.End)) { Text(stringResource(R.string.actions_done)) }
-        } else {
-            Box(
-                Modifier.fillMaxWidth().clip(shape).background(colors.bgSecondary).clickable(enabled = !detail.isCopyOnly) { editing = true }
-                    .heightIn(min = 44.dp).padding(Spacing.s12),
-            ) {
-                if (detail.descriptionBlocks.isEmpty()) Text(stringResource(R.string.task_edit_add_description), style = TextStyles.body, color = colors.textMuted)
-                else MarkdownView(detail.descriptionBlocks, onReference = { kind, id -> if (kind == "list") onOpenList(id) else onOpenTask(id) })
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(R.string.detail_description), style = TextStyles.caption, color = colors.textSecondary, modifier = Modifier.weight(1f))
+            if (DescriptionReader.offersFullScreen(text, readOnly)) {
+                Icon(
+                    Icons.Outlined.OpenInFull, stringResource(R.string.task_detail_description_full_screen), tint = colors.textSecondary,
+                    modifier = Modifier.clip(RoundedCornerShape(Radius.small)).clickable { entry = DescriptionReader.Entry.EXPAND }
+                        .padding(horizontal = Spacing.s8, vertical = Spacing.s4).size(16.dp).testTag("detail:descriptionExpand"),
+                )
             }
         }
+        Box(
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgSecondary)
+                .clickable(enabled = !readOnly) { entry = DescriptionReader.Entry.WRITE }
+                .heightIn(min = 44.dp).padding(Spacing.s12).testTag("detail:description"),
+        ) {
+            if (detail.descriptionBlocks.isEmpty()) Text(stringResource(R.string.task_edit_add_description), style = TextStyles.body, color = colors.textMuted)
+            else MarkdownView(detail.descriptionBlocks, onReference = onReference)
+        }
+    }
+    entry?.let { opened ->
+        DescriptionReaderScreen(
+            text = text, blocks = detail.descriptionBlocks, isReadOnly = readOnly, entry = opened,
+            onReference = onReference, onSave = onSave, onDismiss = { entry = null },
+        )
     }
 }
 

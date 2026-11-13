@@ -24,6 +24,8 @@
     <string name="detail_back">뒤로</string>
     <string name="detail_title_label">제목</string>
     <string name="detail_description">설명</string>
+    <string name="task_detail_description_full_screen">전체 화면으로 열기</string>
+    <string name="task_detail_description_preview">미리보기</string>
     <string name="detail_assignee">누구</string>
     <string name="detail_unassigned">미할당</string>
     <string name="detail_when">일시</string>

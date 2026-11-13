@@ -24,6 +24,8 @@
     <string name="detail_back">Zurück</string>
     <string name="detail_title_label">Titel</string>
     <string name="detail_description">Beschreibung</string>
+    <string name="task_detail_description_full_screen">Im Vollbild öffnen</string>
+    <string name="task_detail_description_preview">Vorschau</string>
     <string name="detail_assignee">Wer</string>
     <string name="detail_unassigned">Nicht zugewiesen</string>
     <string name="detail_when">Wann</string>

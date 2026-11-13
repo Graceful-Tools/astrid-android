@@ -24,6 +24,8 @@
     <string name="detail_back">Indietro</string>
     <string name="detail_title_label">Titolo</string>
     <string name="detail_description">Descrizione</string>
+    <string name="task_detail_description_full_screen">Apri a schermo intero</string>
+    <string name="task_detail_description_preview">Anteprima</string>
     <string name="detail_assignee">Chi</string>
     <string name="detail_unassigned">Non assegnato</string>
     <string name="detail_when">Quando</string>

@@ -35,6 +35,8 @@
     <string name="detail_more">More</string>
     <string name="detail_title_label">Title</string>
     <string name="detail_description">Description</string>
+    <string name="task_detail_description_full_screen">Open full screen</string>
+    <string name="task_detail_description_preview">Preview</string>
     <string name="detail_assignee">Who</string>
     <string name="detail_unassigned">Unassigned</string>
     <string name="detail_when">When</string>
