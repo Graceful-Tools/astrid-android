@@ -61,6 +61,26 @@ class ReviewPrompt(
 
     fun dismiss() { _showing.value = ReviewDialog.NONE }
 
+    /**
+     * iOS openFeedbackForm (AATD-95): the deployment's own feedback list, named by the core
+     * (`feedbackListId`, from the server's brand block) and opened with `publicList` so it never
+     * joins the sidebar — a partner's users report on the partner's board. With no list named, or
+     * one that will not open, the deployment's website, as iOS does.
+     */
+    suspend fun reportIssueDestination(): com.gracefultools.astrid.Arrival {
+        val fallback = com.gracefultools.astrid.Arrival.OpenWeb(REPORT_ISSUE_URL)
+        return runCatching {
+            val id = (core.run(command("feedbackListId")) as? JsonPrimitive)?.takeIf { it.isString }?.content
+                ?: return fallback
+            val answer = core.run(command("publicList", "listId" to id)) as? JsonObject ?: return fallback
+            val list = answer["list"] ?: answer
+            val summary = com.gracefultools.astrid.core.CoreJson.decodeFromJsonElement(
+                com.gracefultools.astrid.ui.publiclists.PublicListSummary.serializer(), list,
+            )
+            if (summary.id.isEmpty()) fallback else com.gracefultools.astrid.Arrival.OpenPublicList(summary)
+        }.getOrElse { if (it is kotlinx.coroutines.CancellationException) throw it else fallback }
+    }
+
     private suspend fun completedTasks(): Int? = runCatching {
         ((core.run(command("profileStats")) as? JsonObject)?.get("completed") as? JsonPrimitive)?.intOrNull
     }.getOrNull()
@@ -70,7 +90,7 @@ class ReviewPrompt(
         const val MIN_COMPLETED_TASKS = 5
         /** iOS Brand.supportEmail and its "<app> App Feedback" subject. */
         val SUPPORT_EMAIL: String get() = com.gracefultools.astrid.Brand.supportEmail
-        /** Where Report an Issue goes until the core names the Bugs & Feedback list (see PARITY). */
+        /** Where Report an Issue goes when the deployment names no feedback list (iOS feedbackDestination's `.web`). */
         val REPORT_ISSUE_URL: String get() = com.gracefultools.astrid.Brand.baseUrl
         private const val DAY_MILLIS = 24L * 60 * 60 * 1000
 

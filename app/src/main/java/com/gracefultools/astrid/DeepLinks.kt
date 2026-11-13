@@ -22,6 +22,11 @@ sealed interface Arrival {
     /** A page the app has no screen for: shown in a Custom Tab (iOS's in-app browser). */
     data class OpenWeb(val url: String) : Arrival
     /**
+     * A public list the reader is not a member of, opened as a featured list so it never joins the
+     * sidebar: Report an Issue's feedback list (AATD-95, iOS ListPresenter.showPublicList).
+     */
+    data class OpenPublicList(val list: com.gracefultools.astrid.ui.publiclists.PublicListSummary) : Arrival
+    /**
      * Share-to-Astrid (iOS's share extension): a file, or text (an Android extra), or nothing — the
      * "New task" launcher shortcut, also an Android extra.
      */

@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
         } else if (state == SignInState.SignedIn) {
             com.gracefultools.astrid.platform.NotificationPrompting(graph.notificationPrompt, graph.preferences)
             if (!app.suppressesInterruptingPrompts) {
-                com.gracefultools.astrid.platform.ReviewPrompting(graph.reviewPrompt)
+                com.gracefultools.astrid.platform.ReviewPrompting(graph.reviewPrompt, onArrive = deepLinks::offer)
                 com.gracefultools.astrid.platform.AppUpdatePrompting(app.appUpdatePrompt, app.playUpdates)
             }
             AppRoot(graph = graph, onSignedOut = signIn::signedOut, onDeepLink = deepLinks)

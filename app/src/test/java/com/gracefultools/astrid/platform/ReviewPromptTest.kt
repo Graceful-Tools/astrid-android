@@ -80,4 +80,40 @@ class ReviewPromptTest {
             ReviewPrompt.feedbackMailto(appName = "Acme", supportEmail = "helpdesk@acme.example"),
         )
     }
+
+    @Test
+    fun `AATD-95 Report an Issue opens the deployment's feedback list without joining it`() = runTest {
+        val core = FakeCore().apply {
+            answer("feedbackListId", "\"list-acme-feedback\"")
+            answer("publicList", """{"list":{"id":"list-acme-feedback","name":"Bugs & Feedback","privacy":"PUBLIC","publicListType":"collaborative","owner":{"id":"u1","name":"Acme"}},"role":"viewer","canAddTask":true,"canComment":true}""")
+        }
+        val destination = ReviewPrompt(Ledger(), core) { 0 }.reportIssueDestination()
+        val list = (destination as com.gracefultools.astrid.Arrival.OpenPublicList).list
+        assertEquals("list-acme-feedback", list.id)
+        assertEquals("Bugs & Feedback", list.name)
+        assertTrue(list.isCollaborative)
+        assertEquals("list-acme-feedback", (core.last("publicList")!!["listId"] as kotlinx.serialization.json.JsonPrimitive).content)
+    }
+
+    @Test
+    fun `AATD-95 a deployment that names no feedback list sends Report an Issue to its website, as iOS does`() = runTest {
+        val core = FakeCore().apply { answer("feedbackListId", "null") }
+        assertEquals(
+            com.gracefultools.astrid.Arrival.OpenWeb(com.gracefultools.astrid.Brand.baseUrl),
+            ReviewPrompt(Ledger(), core) { 0 }.reportIssueDestination(),
+        )
+        assertFalse("publicList" in core.kinds())
+    }
+
+    @Test
+    fun `AATD-95 a feedback list that cannot be opened falls back to the website`() = runTest {
+        val core = FakeCore().apply {
+            answer("feedbackListId", "\"list-acme-feedback\"")
+            answer("publicList") { throw CoreFailure(FailureKind.OFFLINE, "no network") }
+        }
+        assertEquals(
+            com.gracefultools.astrid.Arrival.OpenWeb(com.gracefultools.astrid.Brand.baseUrl),
+            ReviewPrompt(Ledger(), core) { 0 }.reportIssueDestination(),
+        )
+    }
 }
