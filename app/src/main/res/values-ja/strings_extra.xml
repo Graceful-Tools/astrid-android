@@ -147,4 +147,12 @@
     <string name="ordinal_rd">%1$s</string>
     <string name="ordinal_th">%1$s</string>
     <string name="list_separator">、</string>
+    <string name="settings_appearance_list_images_title">リストの画像</string>
+    <string name="settings_appearance_list_images_off_description">オフにすると、各リストは代わりに色で表示されます。</string>
+    <string name="settings_appearance_list_images_label">リストの画像を表示</string>
+    <string name="settings_appearance_task_titles">タスクのタイトル</string>
+    <string name="settings_appearance_task_titles_footer">長いタイトルをタスクの行にどこまで表示するか（このデバイスに保存されます）</string>
+    <string name="settings_task_titles_wrap">折り返す</string>
+    <string name="settings_task_titles_two">2行</string>
+    <string name="settings_task_titles_one">1行</string>
 </resources>

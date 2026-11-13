@@ -147,4 +147,12 @@
     <string name="ordinal_rd">%1$sº</string>
     <string name="ordinal_th">%1$sº</string>
     <string name="list_separator">", "</string>
+    <string name="settings_appearance_list_images_title">Immagini delle liste</string>
+    <string name="settings_appearance_list_images_off_description">Se disattivato, ogni lista mostra il suo colore.</string>
+    <string name="settings_appearance_list_images_label">Mostra immagini delle liste</string>
+    <string name="settings_appearance_task_titles">Titoli delle attività</string>
+    <string name="settings_appearance_task_titles_footer">Quanta parte di un titolo lungo mostra la riga di un\'attività (salvato su questo dispositivo)</string>
+    <string name="settings_task_titles_wrap">A capo</string>
+    <string name="settings_task_titles_two">Due righe</string>
+    <string name="settings_task_titles_one">Una riga</string>
 </resources>

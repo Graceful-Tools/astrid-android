@@ -147,4 +147,12 @@
     <string name="ordinal_rd">%1$se</string>
     <string name="ordinal_th">%1$se</string>
     <string name="list_separator">", "</string>
+    <string name="settings_appearance_list_images_title">Images des listes</string>
+    <string name="settings_appearance_list_images_off_description">Désactivé : chaque liste affiche sa couleur à la place.</string>
+    <string name="settings_appearance_list_images_label">Afficher les images des listes</string>
+    <string name="settings_appearance_task_titles">Titres des tâches</string>
+    <string name="settings_appearance_task_titles_footer">Quelle part d\'un long titre une ligne de tâche affiche (enregistré sur cet appareil)</string>
+    <string name="settings_task_titles_wrap">Retour à la ligne</string>
+    <string name="settings_task_titles_two">Deux lignes</string>
+    <string name="settings_task_titles_one">Une ligne</string>
 </resources>

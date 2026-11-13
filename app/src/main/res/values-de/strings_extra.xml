@@ -147,4 +147,12 @@
     <string name="ordinal_rd">%1$s.</string>
     <string name="ordinal_th">%1$s.</string>
     <string name="list_separator">", "</string>
+    <string name="settings_appearance_list_images_title">Listenbilder</string>
+    <string name="settings_appearance_list_images_off_description">Wenn aus, zeigt jede Liste stattdessen ihre Farbe.</string>
+    <string name="settings_appearance_list_images_label">Listenbilder anzeigen</string>
+    <string name="settings_appearance_task_titles">Aufgabentitel</string>
+    <string name="settings_appearance_task_titles_footer">Wie viel von einem langen Titel eine Aufgabenzeile zeigt (auf diesem Gerät gespeichert)</string>
+    <string name="settings_task_titles_wrap">Umbrechen</string>
+    <string name="settings_task_titles_two">Zwei Zeilen</string>
+    <string name="settings_task_titles_one">Eine Zeile</string>
 </resources>

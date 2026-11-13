@@ -249,9 +249,6 @@
     <string name="settings_appearance_task_details_footer">Choisissez la présentation des détails de la tâche. Liste donne à la priorité et au responsable leurs propres lignes. Projet est compact, et la case ouvre un sélecteur au lieu de terminer la tâche.</string>
     <string name="core_smart_layout_list">Liste</string>
     <string name="core_smart_layout_project">Projet</string>
-    <string name="settings_appearance_list_images_title">Images des listes</string>
-    <string name="settings_appearance_list_images_off_description">Désactivé : chaque liste affiche sa couleur à la place.</string>
-    <string name="settings_appearance_list_images_label">Afficher les images des listes</string>
     <string name="settings_appearance_email_to_task">Email-vers-Tâche</string>
     <string name="settings_appearance_email_to_task_footer">Créez des tâches en envoyant des e-mails à %1$s</string>
     <string name="settings_appearance_email_to_task_self">Tâche personnelle : Envoyer À %1$s</string>
@@ -707,6 +704,29 @@
     <string name="contacts_add_collaborators">Ajouter des Collaborateurs</string>
     <string name="contacts_upload_for_collaboration">Téléchargez vos contacts pour une meilleure collaboration</string>
     <string name="contacts_footer_text">Les contacts sont utilisés pour suggérer des collaborateurs lors du partage de listes. Ils sont chiffrés et ne sont jamais partagés avec des tiers.</string>
+    <string name="list_insights_tab">Statistiques</string>
+    <string name="list_insights_days7">7 jours</string>
+    <string name="list_insights_days30">30 jours</string>
+    <string name="list_insights_days90">90 jours</string>
+    <string name="list_insights_activity">Activité</string>
+    <string name="list_insights_created">Nouvelles</string>
+    <string name="list_insights_completed">Terminée</string>
+    <string name="list_insights_created_total">%1$s nouvelles</string>
+    <string name="list_insights_completed_total">%1$s terminées</string>
+    <string name="list_insights_time_to_complete">Délai médian de réalisation</string>
+    <string name="list_insights_time_in_lane">Temps médian par colonne</string>
+    <string name="list_insights_sample_size">sur %1$s</string>
+    <string name="list_insights_not_enough_history">Pas encore assez d\'historique</string>
+    <string name="list_insights_lane_history_note">Les déplacements entre colonnes sont enregistrés à partir de maintenant ; ces valeurs se rempliront au fil des déplacements.</string>
+    <string name="list_insights_contributors">Principaux contributeurs</string>
+    <string name="list_insights_profile_counts">%1$s terminées · %2$s inspirées · %3$s soutenues</string>
+    <string name="list_insights_activity_counts">%1$s créées · %2$s modifications · %3$s commentaires</string>
+    <string name="list_insights_no_activity">Aucune activité sur cette période</string>
+    <string name="list_insights_load_failed">Impossible de charger les statistiques</string>
+    <string name="list_insights_loading">Chargement des statistiques…</string>
+    <string name="list_insights_duration_minutes">%1$s min</string>
+    <string name="list_insights_duration_hours">%1$s h</string>
+    <string name="list_insights_duration_days">%1$s j</string>
     <string name="core_picker_no_due_date" formatted="false">Sans échéance</string>
     <string name="core_picker_today" formatted="false">Aujourd\'hui</string>
     <string name="core_picker_tomorrow" formatted="false">Demain</string>
@@ -736,33 +756,4 @@
     <string name="core_filter_assigned_by_me" formatted="false">Moi</string>
     <string name="core_filter_lists" formatted="false">Listes</string>
     <string name="core_reminder_toast_complete" formatted="false">Terminer</string>
-    <!-- List Settings > Insights (AATD-77), from iOS listInsights.* -->
-    <string name="list_insights_tab">Statistiques</string>
-    <string name="list_insights_days7">7 jours</string>
-    <string name="list_insights_days30">30 jours</string>
-    <string name="list_insights_days90">90 jours</string>
-    <string name="list_insights_activity">Activité</string>
-    <string name="list_insights_created">Nouvelles</string>
-    <string name="list_insights_completed">Terminées</string>
-    <string name="list_insights_created_total">%1$s nouvelles</string>
-    <string name="list_insights_completed_total">%1$s terminées</string>
-    <string name="list_insights_time_to_complete">Délai médian de réalisation</string>
-    <string name="list_insights_time_in_lane">Temps médian par colonne</string>
-    <string name="list_insights_sample_size">sur %1$s</string>
-    <string name="list_insights_not_enough_history">Pas encore assez d\'historique</string>
-    <string name="list_insights_lane_history_note">Les déplacements entre colonnes sont enregistrés à partir de maintenant ; ces valeurs se rempliront au fil des déplacements.</string>
-    <string name="list_insights_contributors">Principaux contributeurs</string>
-    <string name="list_insights_profile_counts">%1$s terminées · %2$s inspirées · %3$s soutenues</string>
-    <string name="list_insights_activity_counts">%1$s créées · %2$s modifications · %3$s commentaires</string>
-    <string name="list_insights_no_activity">Aucune activité sur cette période</string>
-    <string name="list_insights_load_failed">Impossible de charger les statistiques</string>
-    <string name="list_insights_loading">Chargement des statistiques…</string>
-    <string name="list_insights_duration_minutes">%1$s min</string>
-    <string name="list_insights_duration_hours">%1$s h</string>
-    <string name="list_insights_duration_days">%1$s j</string>
-    <string name="settings_appearance_task_titles">Titres des tâches</string>
-    <string name="settings_appearance_task_titles_footer">Quelle part d\'un long titre une ligne de tâche affiche (enregistré sur cet appareil)</string>
-    <string name="settings_task_titles_wrap">Retour à la ligne</string>
-    <string name="settings_task_titles_two">Deux lignes</string>
-    <string name="settings_task_titles_one">Une ligne</string>
 </resources>

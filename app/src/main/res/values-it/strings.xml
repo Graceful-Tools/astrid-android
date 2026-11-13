@@ -249,9 +249,6 @@
     <string name="settings_appearance_task_details_footer">Scegli come vengono disposti i dettagli dell\'attività. Elenco assegna a priorità e assegnatario righe proprie. Progetto è compatto e la casella apre un selettore invece di completare l\'attività.</string>
     <string name="core_smart_layout_list">Lista</string>
     <string name="core_smart_layout_project">Progetto</string>
-    <string name="settings_appearance_list_images_title">Immagini delle liste</string>
-    <string name="settings_appearance_list_images_off_description">Se disattivato, ogni lista mostra il suo colore.</string>
-    <string name="settings_appearance_list_images_label">Mostra immagini delle liste</string>
     <string name="settings_appearance_email_to_task">Email-a-Compito</string>
     <string name="settings_appearance_email_to_task_footer">Crea compiti inviando email a %1$s</string>
     <string name="settings_appearance_email_to_task_self">Compito personale: Invia A %1$s</string>
@@ -707,6 +704,29 @@
     <string name="contacts_add_collaborators">Aggiungi collaboratori</string>
     <string name="contacts_upload_for_collaboration">Carica i tuoi contatti per una migliore collaborazione</string>
     <string name="contacts_footer_text">I contatti vengono utilizzati per suggerire collaboratori. Sono crittografati e mai condivisi.</string>
+    <string name="list_insights_tab">Statistiche</string>
+    <string name="list_insights_days7">7 giorni</string>
+    <string name="list_insights_days30">30 giorni</string>
+    <string name="list_insights_days90">90 giorni</string>
+    <string name="list_insights_activity">Attività</string>
+    <string name="list_insights_created">Nuove</string>
+    <string name="list_insights_completed">Completato</string>
+    <string name="list_insights_created_total">%1$s nuove</string>
+    <string name="list_insights_completed_total">%1$s completate</string>
+    <string name="list_insights_time_to_complete">Tempo mediano di completamento</string>
+    <string name="list_insights_time_in_lane">Tempo mediano in ogni colonna</string>
+    <string name="list_insights_sample_size">su %1$s</string>
+    <string name="list_insights_not_enough_history">Storico non ancora sufficiente</string>
+    <string name="list_insights_lane_history_note">Gli spostamenti tra colonne vengono registrati da ora in poi: i dati si riempiranno man mano che le schede si spostano.</string>
+    <string name="list_insights_contributors">Principali collaboratori</string>
+    <string name="list_insights_profile_counts">%1$s completate · %2$s ispirate · %3$s supportate</string>
+    <string name="list_insights_activity_counts">%1$s create · %2$s modifiche · %3$s commenti</string>
+    <string name="list_insights_no_activity">Nessuna attività in questo periodo</string>
+    <string name="list_insights_load_failed">Impossibile caricare le statistiche</string>
+    <string name="list_insights_loading">Caricamento statistiche…</string>
+    <string name="list_insights_duration_minutes">%1$s min</string>
+    <string name="list_insights_duration_hours">%1$s h</string>
+    <string name="list_insights_duration_days">%1$s g</string>
     <string name="core_picker_no_due_date" formatted="false">Nessuna scadenza</string>
     <string name="core_picker_today" formatted="false">Oggi</string>
     <string name="core_picker_tomorrow" formatted="false">Domani</string>
@@ -736,33 +756,4 @@
     <string name="core_filter_assigned_by_me" formatted="false">Io</string>
     <string name="core_filter_lists" formatted="false">Liste</string>
     <string name="core_reminder_toast_complete" formatted="false">Completa</string>
-    <!-- List Settings > Insights (AATD-77), from iOS listInsights.* -->
-    <string name="list_insights_tab">Statistiche</string>
-    <string name="list_insights_days7">7 giorni</string>
-    <string name="list_insights_days30">30 giorni</string>
-    <string name="list_insights_days90">90 giorni</string>
-    <string name="list_insights_activity">Attività</string>
-    <string name="list_insights_created">Nuove</string>
-    <string name="list_insights_completed">Completate</string>
-    <string name="list_insights_created_total">%1$s nuove</string>
-    <string name="list_insights_completed_total">%1$s completate</string>
-    <string name="list_insights_time_to_complete">Tempo mediano di completamento</string>
-    <string name="list_insights_time_in_lane">Tempo mediano in ogni colonna</string>
-    <string name="list_insights_sample_size">su %1$s</string>
-    <string name="list_insights_not_enough_history">Storico non ancora sufficiente</string>
-    <string name="list_insights_lane_history_note">Gli spostamenti tra colonne vengono registrati da ora in poi: i dati si riempiranno man mano che le schede si spostano.</string>
-    <string name="list_insights_contributors">Principali collaboratori</string>
-    <string name="list_insights_profile_counts">%1$s completate · %2$s ispirate · %3$s supportate</string>
-    <string name="list_insights_activity_counts">%1$s create · %2$s modifiche · %3$s commenti</string>
-    <string name="list_insights_no_activity">Nessuna attività in questo periodo</string>
-    <string name="list_insights_load_failed">Impossibile caricare le statistiche</string>
-    <string name="list_insights_loading">Caricamento statistiche…</string>
-    <string name="list_insights_duration_minutes">%1$s min</string>
-    <string name="list_insights_duration_hours">%1$s h</string>
-    <string name="list_insights_duration_days">%1$s g</string>
-    <string name="settings_appearance_task_titles">Titoli delle attività</string>
-    <string name="settings_appearance_task_titles_footer">Quanta parte di un titolo lungo mostra la riga di un\'attività (salvato su questo dispositivo)</string>
-    <string name="settings_task_titles_wrap">A capo</string>
-    <string name="settings_task_titles_two">Due righe</string>
-    <string name="settings_task_titles_one">Una riga</string>
 </resources>

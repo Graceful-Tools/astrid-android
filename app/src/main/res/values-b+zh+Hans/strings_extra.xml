@@ -147,4 +147,12 @@
     <string name="ordinal_rd">%1$s</string>
     <string name="ordinal_th">%1$s</string>
     <string name="list_separator">、</string>
+    <string name="settings_appearance_list_images_title">列表图片</string>
+    <string name="settings_appearance_list_images_off_description">关闭后，每个列表改为显示其颜色。</string>
+    <string name="settings_appearance_list_images_label">显示列表图片</string>
+    <string name="settings_appearance_task_titles">任务标题</string>
+    <string name="settings_appearance_task_titles_footer">任务行显示多长的标题（保存在此设备上）</string>
+    <string name="settings_task_titles_wrap">换行</string>
+    <string name="settings_task_titles_two">两行</string>
+    <string name="settings_task_titles_one">一行</string>
 </resources>
