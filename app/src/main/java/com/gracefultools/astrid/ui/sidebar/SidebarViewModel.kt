@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.Serializable
 
 data class SidebarState(
     val myTasks: ListSummary? = null,
@@ -47,20 +47,18 @@ data class SidebarState(
 }
 
 /**
- * A board column is a state, and a label, milestone or iteration is a tag: none is somewhere to go.
- *
- * STAND-IN (AATD-89): an exact mirror of the core's `TaskList::is_domain_list` (`!is_status_list &&
- * !is_tag_list`, astrid-rules `model/list.rs`), kept only until the core's `sidebar` command
- * (AWTD2-166) answers the whole sidebar, at which point this and the sort below are deleted.
+ * The sidebar: My Tasks first and selected by default, then favourites, then every other place —
+ * iOS's sidebar. Which lists are places, their order and their badges are the core's `sidebar`
+ * command (astrid-rules `rows::sidebar`), never decided here (AATD-89).
  */
-fun ListSummary.isPlace(): Boolean = listType !in NOT_PLACES
+/** The core's `sidebar` answer (astrid-rules `rows::sidebar::Sections`). */
+@Serializable
+data class SidebarSections(
+    val myTasks: ListSummary? = null,
+    val favorites: List<ListSummary> = emptyList(),
+    val lists: List<ListSummary> = emptyList(),
+)
 
-private val NOT_PLACES = setOf("status", "label", "milestone", "iteration")
-
-/**
- * The sidebar: My Tasks first and selected by default, then favourites in their saved order, then
- * every other list by name — iOS's sidebar and astrid-windows' SidebarViewModel.
- */
 class SidebarViewModel(
     private val core: Core,
     dispatcher: CoroutineDispatcher = Dispatchers.Main.immediate,
@@ -76,15 +74,10 @@ class SidebarViewModel(
 
     private suspend fun reload() {
         try {
-            val raw = core.run(command("lists")) as? kotlinx.serialization.json.JsonArray ?: kotlinx.serialization.json.JsonArray(emptyList())
-            val all = CoreJson.decodeFromJsonElement(ListSerializer(ListSummary.serializer()), raw)
-                .filter { it.isPlace() }
-            val mineRaw = runCatching { core.run(command("myTasksList")) }.getOrNull()
-            val mine = mineRaw?.let { runCatching { CoreJson.decodeFromJsonElement(ListSummary.serializer(), it) }.getOrNull() }
-            val byName = compareBy<ListSummary, String>(String.CASE_INSENSITIVE_ORDER) { it.name }
-            val favorites = all.filter { it.isFavorite == true }
-                .sortedWith(compareBy<ListSummary> { it.favoriteOrder ?: Int.MAX_VALUE }.then(byName))
-            val others = all.filter { it.isFavorite != true }.sortedWith(byName)
+            val sections = CoreJson.decodeFromJsonElement(SidebarSections.serializer(), core.run(command("sidebar")))
+            val mine = sections.myTasks
+            val favorites = sections.favorites
+            val others = sections.lists
             _state.update { old ->
                 val everything = listOfNotNull(mine) + favorites + others
                 SidebarState(
@@ -93,35 +86,27 @@ class SidebarViewModel(
                         ?: everything.firstOrNull()?.id,
                     publicLists = old.publicLists,
                     featured = old.featured,
-                    counts = old.counts, user = old.user, images = old.images, showListImages = old.showListImages,
+                    // iOS's ListTaskCount: the badge the core put on each entry, My Tasks the reader's own.
+                    counts = (listOfNotNull(mine) + favorites + others)
+                        .mapNotNull { list -> list.taskCount?.let { list.id to it } }.toMap(),
+                    user = old.user, images = old.images, showListImages = old.showListImages,
                 )
             }
-            loadDecorations(raw, mineRaw, all)
+            loadDecorations(favorites + others)
         } catch (failure: CoreFailure) {
             _state.update { it.copy(error = if (failure.isStillPending) null else failure.message) }
         }
     }
 
-    /** Counts, the reader and list pictures: best effort, each on its own, after the lists draw. */
-    private suspend fun loadDecorations(
-        raw: kotlinx.serialization.json.JsonArray,
-        mine: kotlinx.serialization.json.JsonElement?,
-        lists: List<ListSummary>,
-    ) {
-        val myTasksId = (mine as? kotlinx.serialization.json.JsonObject)?.get("id")?.let { (it as? kotlinx.serialization.json.JsonPrimitive)?.content }
-        val counts = runCatching {
-            // iOS's ListTaskCount, from the core: open tasks per list, My Tasks the reader's own.
-            (core.run(command("listBadges", "lists" to raw, "myTasksId" to myTasksId)) as? kotlinx.serialization.json.JsonObject)
-                ?.mapNotNull { (id, n) -> (n as? kotlinx.serialization.json.JsonPrimitive)?.content?.toIntOrNull()?.let { id to it } }
-                ?.toMap()
-        }.getOrNull().orEmpty()
+    /** The reader and list pictures: best effort, each on its own, after the lists draw. */
+    private suspend fun loadDecorations(lists: List<ListSummary>) {
         val user = runCatching {
             CoreJson.decodeFromJsonElement(com.gracefultools.astrid.model.UserSummary.serializer(), core.run(command("currentUser")))
         }.getOrNull()
         val showImages = runCatching {
             ((core.run(command("features")) as? kotlinx.serialization.json.JsonObject)?.get("showListImages") as? kotlinx.serialization.json.JsonPrimitive)?.content != "false"
         }.getOrDefault(true)
-        _state.update { it.copy(counts = counts, user = user ?: it.user, showListImages = showImages) }
+        _state.update { it.copy(user = user ?: it.user, showListImages = showImages) }
         val images = lists.associate { list ->
             list.id to runCatching {
                 ((core.run(command("listImage", "listId" to list.id)) as? kotlinx.serialization.json.JsonObject)
