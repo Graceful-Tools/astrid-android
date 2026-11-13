@@ -2,7 +2,6 @@
 // libraries scripts/build-core.sh puts in src/main/jniLibs, and the small Kotlin facade the app calls.
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
 }
 
