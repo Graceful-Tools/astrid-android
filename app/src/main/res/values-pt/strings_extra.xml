@@ -155,4 +155,7 @@
     <string name="settings_task_titles_wrap">Quebrar</string>
     <string name="settings_task_titles_two">Duas linhas</string>
     <string name="settings_task_titles_one">Uma linha</string>
+    <string name="settings_custom_agents_change_photo">Alterar foto de perfil</string>
+    <string name="settings_custom_agents_photo_updated">Foto de perfil atualizada</string>
+    <string name="settings_custom_agents_photo_failed">Falha ao atualizar a foto de perfil</string>
 </resources>

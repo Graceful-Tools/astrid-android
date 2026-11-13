@@ -155,4 +155,7 @@
     <string name="settings_task_titles_wrap">折り返す</string>
     <string name="settings_task_titles_two">2行</string>
     <string name="settings_task_titles_one">1行</string>
+    <string name="settings_custom_agents_change_photo">プロフィール写真を変更</string>
+    <string name="settings_custom_agents_photo_updated">プロフィール写真を更新しました</string>
+    <string name="settings_custom_agents_photo_failed">プロフィール写真を更新できませんでした</string>
 </resources>

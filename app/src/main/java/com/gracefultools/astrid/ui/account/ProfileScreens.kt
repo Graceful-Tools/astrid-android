@@ -1,17 +1,14 @@
 package com.gracefultools.astrid.ui.account
 
 import com.gracefultools.astrid.ui.tasks.TaskRowView
+import com.gracefultools.astrid.ui.common.rememberPhotoPicker
 import com.gracefultools.astrid.model.ProfileStats
 import com.gracefultools.astrid.model.PersonProfile
 import com.gracefultools.astrid.core.FailureKind
 import androidx.compose.material.icons.automirrored.outlined.List
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -72,7 +69,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -114,9 +110,6 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.TypeSize
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -319,28 +312,6 @@ private fun SharedTasks(person: PersonProfile, name: String, onOpenTask: (String
             person.rows.forEach { row -> TaskRowView(row, onLeading = {}, onOpen = { onOpenTask(row.id) }) }
         }
     }
-}
-
-/** A picked photo copied where the core can read it; the core uploads it. */
-private suspend fun copyPhoto(context: Context, uri: Uri): String? = withContext(Dispatchers.IO) {
-    runCatching {
-        val type = context.contentResolver.getType(uri)
-        val ext = when (type) { "image/png" -> "png"; "image/webp" -> "webp"; "image/gif" -> "gif"; else -> "jpg" }
-        val file = java.io.File(context.cacheDir, "profile-photo-${System.currentTimeMillis()}.$ext")
-        context.contentResolver.openInputStream(uri)!!.use { input -> file.outputStream().use { input.copyTo(it) } }
-        file.absolutePath
-    }.getOrNull()
-}
-
-/** The system photo picker; answers a path the core can upload. */
-@Composable
-private fun rememberPhotoPicker(onPicked: (String) -> Unit): () -> Unit {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) scope.launch { copyPhoto(context, uri)?.let(onPicked) }
-    }
-    return { launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
 }
 
 /** iOS's EditProfileView, as the sheet it is there: a 120 photo with a camera button, name, Save. */

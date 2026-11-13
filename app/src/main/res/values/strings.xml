@@ -933,4 +933,7 @@
     <string name="settings_task_titles_wrap">Wrap</string>
     <string name="settings_task_titles_two">Two lines</string>
     <string name="settings_task_titles_one">One line</string>
+    <string name="settings_custom_agents_change_photo">Change profile photo</string>
+    <string name="settings_custom_agents_photo_updated">Profile photo updated</string>
+    <string name="settings_custom_agents_photo_failed">Failed to update profile photo</string>
 </resources>

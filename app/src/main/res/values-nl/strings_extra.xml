@@ -155,4 +155,7 @@
     <string name="settings_task_titles_wrap">Terugloop</string>
     <string name="settings_task_titles_two">Twee regels</string>
     <string name="settings_task_titles_one">Eén regel</string>
+    <string name="settings_custom_agents_change_photo">Profielfoto wijzigen</string>
+    <string name="settings_custom_agents_photo_updated">Profielfoto bijgewerkt</string>
+    <string name="settings_custom_agents_photo_failed">Profielfoto kon niet worden bijgewerkt</string>
 </resources>

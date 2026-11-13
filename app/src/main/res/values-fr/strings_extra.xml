@@ -155,4 +155,7 @@
     <string name="settings_task_titles_wrap">Retour à la ligne</string>
     <string name="settings_task_titles_two">Deux lignes</string>
     <string name="settings_task_titles_one">Une ligne</string>
+    <string name="settings_custom_agents_change_photo">Changer la photo de profil</string>
+    <string name="settings_custom_agents_photo_updated">Photo de profil mise à jour</string>
+    <string name="settings_custom_agents_photo_failed">Impossible de mettre à jour la photo de profil</string>
 </resources>

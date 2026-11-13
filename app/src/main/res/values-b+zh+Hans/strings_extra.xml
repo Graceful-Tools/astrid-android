@@ -155,4 +155,7 @@
     <string name="settings_task_titles_wrap">换行</string>
     <string name="settings_task_titles_two">两行</string>
     <string name="settings_task_titles_one">一行</string>
+    <string name="settings_custom_agents_change_photo">更换头像</string>
+    <string name="settings_custom_agents_photo_updated">头像已更新</string>
+    <string name="settings_custom_agents_photo_failed">更新头像失败</string>
 </resources>
