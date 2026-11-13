@@ -113,6 +113,8 @@ import com.gracefultools.astrid.model.TaskDetail
 import com.gracefultools.astrid.ui.common.AppErrorBanner
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.CheckboxArt
+import com.gracefultools.astrid.ui.common.completionPop
+import com.gracefultools.astrid.ui.common.rememberCompletionPop
 import com.gracefultools.astrid.ui.common.CoreLabels
 import com.gracefultools.astrid.ui.common.RowFaceShape
 import com.gracefultools.astrid.ui.common.initialsOf
@@ -303,16 +305,18 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
     val colors = AstridTheme.colors
     var title by rememberSaveable(detail.task.id, detail.task.title) { mutableStateOf(detail.task.title) }
     var askSubtasks by remember { mutableStateOf(false) }
+    val pop = rememberCompletionPop()
     val focus = LocalFocusManager.current
     Row(
         Modifier.fillMaxWidth().padding(start = Spacing.s16, end = Spacing.s16, top = Spacing.s8, bottom = Spacing.s12),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         val label = stringResource(if (detail.task.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, detail.task.title)
-        val tap = Modifier.size(34.dp).clip(RoundedCornerShape(8.dp))
+        val tap = Modifier.size(34.dp).completionPop(pop).clip(RoundedCornerShape(8.dp))
             .clickable(enabled = !detail.isCopyOnly) {
                 val openSubtasks = detail.subtasks.any { !it.completed }
-                if (!detail.task.completed && openSubtasks) askSubtasks = true else vm.setCompleted(!detail.task.completed)
+                if (!detail.task.completed && openSubtasks) askSubtasks = true
+                else { pop.tapped(completes = !detail.task.completed); vm.setCompleted(!detail.task.completed) }
             }
             .semantics { role = Role.Checkbox; contentDescription = label }
         val assignee = detail.assignee
@@ -354,8 +358,8 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
             title = { Text(stringResource(R.string.task_detail_complete_subtasks_title)) },
             text = {
                 Column {
-                    TextButton(onClick = { askSubtasks = false; vm.completeWithSubtasks(true) }) { Text(stringResource(R.string.task_detail_complete_all_subtasks)) }
-                    TextButton(onClick = { askSubtasks = false; vm.completeWithSubtasks(false) }) { Text(stringResource(R.string.task_detail_complete_only_this)) }
+                    TextButton(onClick = { askSubtasks = false; pop.tapped(completes = true); vm.completeWithSubtasks(true) }) { Text(stringResource(R.string.task_detail_complete_all_subtasks)) }
+                    TextButton(onClick = { askSubtasks = false; pop.tapped(completes = true); vm.completeWithSubtasks(false) }) { Text(stringResource(R.string.task_detail_complete_only_this)) }
                 }
             },
             confirmButton = {},

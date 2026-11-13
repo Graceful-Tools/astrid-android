@@ -11,6 +11,9 @@ import androidx.compose.material.icons.outlined.Sell
 import androidx.compose.ui.platform.testTag
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.CheckboxArt
+import com.gracefultools.astrid.ui.common.CompletionPop
+import com.gracefultools.astrid.ui.common.completionPop
+import com.gracefultools.astrid.ui.common.rememberCompletionPop
 import com.gracefultools.astrid.ui.common.RowFaceShape
 import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.theme.Success
@@ -107,10 +110,7 @@ fun TaskRowView(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
         ) {
-            LeadingControl(row) {
-                haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove)
-                onLeading()
-            }
+            LeadingControl(row, onLeading)
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
                     Text(
@@ -160,12 +160,21 @@ private fun TitleChips(row: TaskRow) {
 internal const val REPEAT_FRAME_TAG = "repeat-frame"
 
 @Composable
-private fun LeadingControl(row: TaskRow, onTap: () -> Unit) {
+private fun LeadingControl(row: TaskRow, onLeading: () -> Unit) {
     val colors = AstridTheme.colors
+    val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
+    val pop = rememberCompletionPop()
+    // Whether this tap completes is the core's call (`action`, `completed`); the row only reacts.
+    val completes = row.action == "complete" && !row.completed
+    val onTap = {
+        pop.tapped(completes)
+        if (row.action != "complete") haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove)
+        onLeading()
+    }
     val priority = colors.priority.getOrElse(row.priority) { colors.priority[0] }
     val square = RoundedCornerShape(8.dp)
     val label = stringResource(if (row.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, row.title)
-    val tap = Modifier.size(34.dp).clip(square).clickable(onClick = onTap)
+    val tap = Modifier.size(34.dp).completionPop(pop).clip(square).clickable(onClick = onTap)
         .semantics { contentDescription = row.checkboxLabel ?: label; role = Role.Checkbox }
     when (row.leading.kind) {
         "copy" -> Box(tap.border(2.dp, Color.Gray.copy(alpha = 0.4f), square), contentAlignment = Alignment.Center) {
@@ -173,7 +182,7 @@ private fun LeadingControl(row: TaskRow, onTap: () -> Unit) {
         }
         "avatar" -> {
             val initials = row.leading.initial ?: initialsOf(row.assignee?.name, row.assignee?.email)
-            if (row.isRepeating) RepeatFrame(row, onTap, label) {
+            if (row.isRepeating) RepeatFrame(row, onTap, label, pop) {
                 Avatar(image = row.assignee?.image, initials = initials, size = 22.dp)
             } else Avatar(
                 image = row.assignee?.image, initials = initials,
@@ -189,7 +198,7 @@ private fun LeadingControl(row: TaskRow, onTap: () -> Unit) {
                     modifier = Modifier.alpha(if (row.completed) 0.5f else 1f),
                 )
             }
-            if (row.isRepeating) RepeatFrame(row, onTap, label) { mark(13) }
+            if (row.isRepeating) RepeatFrame(row, onTap, label, pop) { mark(13) }
             else Box(tap.border(2.dp, priority, square), contentAlignment = Alignment.Center) { mark(15) }
         }
         else -> CheckboxArt(row.priority, row.isRepeating, row.completed, tap)
@@ -203,11 +212,11 @@ private fun LeadingControl(row: TaskRow, onTap: () -> Unit) {
  * the loop. Tapping it does what tapping the plain square does.
  */
 @Composable
-private fun RepeatFrame(row: TaskRow, onTap: () -> Unit, label: String, content: @Composable () -> Unit) {
+private fun RepeatFrame(row: TaskRow, onTap: () -> Unit, label: String, pop: CompletionPop, content: @Composable () -> Unit) {
     // Laid out in the 34 slot every leading control takes, drawn 4dp past each side of it, so a
     // framed row's title lines up with its neighbours'.
     Box(
-        Modifier.size(34.dp).wrapContentSize(unbounded = true).size(42.dp).clip(CircleShape).clickable(onClick = onTap).testTag(REPEAT_FRAME_TAG)
+        Modifier.size(34.dp).wrapContentSize(unbounded = true).size(42.dp).completionPop(pop).clip(CircleShape).clickable(onClick = onTap).testTag(REPEAT_FRAME_TAG)
             .semantics { contentDescription = row.checkboxLabel ?: label; role = Role.Checkbox },
         contentAlignment = Alignment.Center,
     ) {
