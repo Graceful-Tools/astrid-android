@@ -52,7 +52,6 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.MonthWeekday
 import com.gracefultools.astrid.model.RepeatPattern
@@ -60,6 +59,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.TypeSize
 import java.time.DayOfWeek
 import java.time.Instant
 import java.time.LocalDate
@@ -146,7 +146,7 @@ fun CustomRepeatDialog(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Text(
-                                    day.getDisplayName(TextStyle.NARROW, locale), fontSize = 12.sp, fontWeight = FontWeight.SemiBold,
+                                    day.getDisplayName(TextStyle.NARROW, locale), fontSize = TypeSize.caption1, fontWeight = FontWeight.SemiBold,
                                     color = if (chosen) colors.accentText else colors.textMuted,
                                 )
                             }

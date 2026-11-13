@@ -39,7 +39,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.common.AppErrorBanner
@@ -51,6 +50,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.TypeSize
 
 /**
  * iOS PublicListBrowserView, "Featured Lists" (AATD-46): the public catalogue, most copied first.
@@ -75,7 +75,7 @@ fun PublicListsScreen(vm: PublicListsViewModel, onBack: () -> Unit, onView: (Pub
                 ) {
                     item {
                         Text(
-                            stringResource(R.string.filters_featured_lists), fontSize = 34.sp, fontWeight = FontWeight.Bold,
+                            stringResource(R.string.filters_featured_lists), fontSize = TypeSize.title1, fontWeight = FontWeight.Bold,
                             color = colors.textPrimary, modifier = Modifier.padding(vertical = Spacing.s8).semantics { heading() },
                         )
                     }

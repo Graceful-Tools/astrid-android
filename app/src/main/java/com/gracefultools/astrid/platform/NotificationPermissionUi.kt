@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -39,6 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.Preferences
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.TypeSize
 
 /**
  * Where the permission stands, as near to iOS's three states as Android lets us tell: granted;
@@ -140,7 +140,7 @@ fun ExactAlarmRow() {
             }
         }.padding(vertical = 6.dp),
     ) {
-        Text(stringResource(R.string.notifications_exact_alarms), color = colors.textPrimary, fontSize = 17.sp)
-        Text(stringResource(R.string.notifications_exact_alarms_hint), color = colors.textSecondary, fontSize = 13.sp)
+        Text(stringResource(R.string.notifications_exact_alarms), color = colors.textPrimary, fontSize = TypeSize.body)
+        Text(stringResource(R.string.notifications_exact_alarms_hint), color = colors.textSecondary, fontSize = TypeSize.footnote)
     }
 }

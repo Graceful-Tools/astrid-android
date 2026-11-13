@@ -39,13 +39,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
+import com.gracefultools.astrid.ui.theme.TypeSize
 
 @Composable
 fun ChatScreen(vm: ChatViewModel, title: String, onBack: () -> Unit) {
@@ -84,9 +84,9 @@ fun ChatPanel(vm: ChatViewModel, modifier: Modifier = Modifier) {
                                 .background(if (message.isMine) colors.accent.copy(alpha = 0.16f) else colors.sheet)
                                 .padding(horizontal = Spacing.s12, vertical = Spacing.s8),
                         ) {
-                            if (!message.isMine) Text(message.authorName ?: message.initials, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = colors.textSecondary)
-                            if (message.blocks.isNotEmpty()) MarkdownView(message.blocks) else Text(message.content, color = colors.textPrimary, fontSize = 16.sp)
-                            if (message.isPending) Text(stringResource(R.string.tasks_waiting_to_send), fontSize = 12.sp, color = colors.textMuted)
+                            if (!message.isMine) Text(message.authorName ?: message.initials, fontSize = TypeSize.footnote, fontWeight = FontWeight.SemiBold, color = colors.textSecondary)
+                            if (message.blocks.isNotEmpty()) MarkdownView(message.blocks) else Text(message.content, color = colors.textPrimary, fontSize = TypeSize.callout)
+                            if (message.isPending) Text(stringResource(R.string.tasks_waiting_to_send), fontSize = TypeSize.caption1, color = colors.textMuted)
                         }
                     }
                 }

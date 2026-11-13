@@ -34,7 +34,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.Lifecycle
@@ -53,6 +52,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import androidx.compose.ui.text.TextStyle
+import com.gracefultools.astrid.ui.theme.TypeSize
 
 /**
  * Google Play In-App Updates (flexible) as the [UpdateSource] (AATD-67) — iOS asks astrid-web what
@@ -166,4 +166,4 @@ internal fun AppUpdateCard(onUpdate: () -> Unit, onDismiss: () -> Unit) {
 }
 
 /** iOS Theme.Typography.title3: the system title2 size, semibold. */
-private val Title3 = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.SemiBold)
+private val Title3 = TextStyle(fontSize = TypeSize.title3, fontWeight = FontWeight.SemiBold)

@@ -112,6 +112,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.TypeSize
 import com.gracefultools.astrid.ui.theme.Warning
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -230,7 +231,7 @@ private fun StatCard(icon: ImageVector, tint: Color, value: Int, label: Int, tag
             }
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                 Text("$value ${stringResource(label)}", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = colors.textPrimary)
-                Text(stringResource(tagline), fontSize = 15.sp, fontWeight = FontWeight.Medium, color = colors.textMuted)
+                Text(stringResource(tagline), fontSize = TypeSize.subheadline, fontWeight = FontWeight.Medium, color = colors.textMuted)
             }
         }
     }

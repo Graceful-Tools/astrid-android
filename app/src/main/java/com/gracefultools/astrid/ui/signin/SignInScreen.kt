@@ -43,7 +43,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.Accent
 import com.gracefultools.astrid.ui.theme.AccentText
@@ -53,6 +52,7 @@ import com.gracefultools.astrid.ui.theme.LightColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.TypeSize
 
 /**
  * iOS LoginView: the Astrid character beside the wordmark and slogan, "Sign in to get started!",
@@ -83,10 +83,10 @@ fun SignInScreen(
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                 Text(
                     look.wordmark ?: stringResource(R.string.app_name).lowercase(),
-                    fontSize = 34.sp, fontWeight = FontWeight.Bold, color = palette.textPrimary,
+                    fontSize = TypeSize.title1, fontWeight = FontWeight.Bold, color = palette.textPrimary,
                     modifier = Modifier.semantics { heading() },
                 )
-                Text(look.slogan ?: stringResource(R.string.auth_tagline), fontSize = 16.sp, color = palette.textSecondary)
+                Text(look.slogan ?: stringResource(R.string.auth_tagline), fontSize = TypeSize.callout, color = palette.textSecondary)
             }
         }
         Spacer(Modifier.height(Spacing.s12))

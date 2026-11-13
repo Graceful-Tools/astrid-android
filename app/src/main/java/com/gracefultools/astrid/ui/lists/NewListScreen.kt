@@ -43,9 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.common.FloatingTextHeader
@@ -89,7 +87,7 @@ fun NewListScreen(vm: NewListViewModel, onCancel: () -> Unit, onCreated: (String
                     Modifier.padding(horizontal = Spacing.s16).fillMaxWidth().clip(RoundedCornerShape(Radius.medium))
                         .background(colors.bgSecondary).padding(Spacing.s12),
                 ) {
-                    val style = TextStyles.body.copy(fontSize = 19.sp, fontWeight = FontWeight.Medium)
+                    val style = TextStyles.rowTitle
                     if (state.name.isEmpty()) Text(placeholder, style = style, color = colors.inputPlaceholder)
                     BasicTextField(
                         state.name, vm::setName, singleLine = true, textStyle = style.copy(color = colors.textPrimary),
