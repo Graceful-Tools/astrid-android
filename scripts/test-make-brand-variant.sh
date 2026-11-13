@@ -240,4 +240,23 @@ audit --budget 3 --text "$txt" --apk "$work/brand.apk" && fail "the APK's dex wa
 audit --budget 5 --text "$txt" --apk "$work/brand.apk" \
   || fail "the dex should add two (\"Astrid\" and help@ASTRID.CC), not its names"
 
+# --apk also reads the native libraries (lib/<abi>/*.so): the core's own defaults live there. Their
+# strings are packed with no separator between them, so a name ("Astrid", here inside identifiers
+# like setAstridModel) cannot be told from a word and is not counted; a domain or address is, in
+# any case. The same library built for two ABIs is one library: its hits count once.
+python3 -I - "$work/brand.apk" "$work/native.apk" <<'PY'
+import sys, zipfile
+rodata = (b"\x7fELF\0\0windowsiosandroidastridhttps://astrid.cctemp_AstridModelsetAstridModel"
+          b"Graceful Toolsconfirm via SUPPORT@ASTRID.CCnow\0crates/astrid-core/src/lib.rs\0")
+with zipfile.ZipFile(sys.argv[1]) as src, zipfile.ZipFile(sys.argv[2], "w") as z:
+    for name in src.namelist():
+        z.writestr(name, src.read(name))
+    z.writestr("lib/arm64-v8a/libastrid_android.so", rodata)
+    z.writestr("lib/x86_64/libastrid_android.so", rodata)
+    z.writestr("assets/plugin.so", rodata)  # not under lib/: not read
+PY
+audit --budget 5 --text "$txt" --apk "$work/native.apk" && fail "the APK's native libraries were not audited (AATD-90)"
+audit --budget 7 --text "$txt" --apk "$work/native.apk" \
+  || fail "the native library should add two (https://astrid.cc and SUPPORT@ASTRID.CC), once for both ABIs (AATD-90)"
+
 echo "✓ make-brand-variant and the brand literal audit"
