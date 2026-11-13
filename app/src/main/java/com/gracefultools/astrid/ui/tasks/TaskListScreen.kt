@@ -261,7 +261,7 @@ private fun ListHeader(
                 contentAlignment = Alignment.Center,
             ) {
                 if (copyingList) androidx.compose.material3.CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = colors.accent)
-                else Icon(Icons.Outlined.ContentCopy, null, tint = colors.accent, modifier = Modifier.size(22.dp))
+                else Icon(Icons.Outlined.ContentCopy, null, tint = colors.accentInk, modifier = Modifier.size(22.dp))
             }
         }
         val next = nextViewMode(mode, hasBoard, includesMessages)
@@ -405,7 +405,7 @@ private fun QuickAddBar(
         )
         Icon(
             Icons.Filled.AddCircle, stringResource(R.string.tasks_add_task),
-            tint = if (text.isBlank()) colors.textMuted else colors.accent,
+            tint = if (text.isBlank()) colors.textMuted else colors.accentInk,
             modifier = Modifier.size(32.dp).clip(CircleShape).clickable(enabled = text.isNotBlank()) { submit(open = true) },
         )
     }
@@ -478,7 +478,7 @@ private fun AssigneeChoice(id: String?, image: String?, initials: String, name: 
             Text(name, style = TextStyles.body, color = colors.textPrimary)
             if (caption != null) Text(caption, style = TextStyles.caption2, color = colors.textMuted)
         }
-        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accent, modifier = Modifier.size(18.dp))
+        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(18.dp))
     }
 }
 
@@ -627,7 +627,7 @@ private fun RowDragArea(
                 DropTarget.Outdent -> Row(
                     Modifier.fillMaxHeight().width(56.dp).background(colors.accent.copy(alpha = 0.12f)),
                     verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center,
-                ) { Icon(Icons.AutoMirrored.Filled.KeyboardTab, null, tint = colors.accent, modifier = Modifier.graphicsLayerRotate180()) }
+                ) { Icon(Icons.AutoMirrored.Filled.KeyboardTab, null, tint = colors.accentInk, modifier = Modifier.graphicsLayerRotate180()) }
                 else -> Unit
             }
             val height = bounds[d.row.id]?.height ?: 0f

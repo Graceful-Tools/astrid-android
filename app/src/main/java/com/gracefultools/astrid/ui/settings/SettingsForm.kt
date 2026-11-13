@@ -116,7 +116,7 @@ internal fun FormDivider(inset: Boolean = true) {
 /** iOS's Label: the accent SF Symbol in a 24 frame, then the title. */
 @Composable
 internal fun RowIcon(icon: ImageVector, tint: Color? = null) {
-    Icon(icon, null, tint = tint ?: AstridTheme.colors.accent, modifier = Modifier.width(24.dp).size(22.dp))
+    Icon(icon, null, tint = tint ?: AstridTheme.colors.accentInk, modifier = Modifier.width(24.dp).size(22.dp))
 }
 
 /** A row's frame: 44 tall at least, 16 in from the card's edges. */
@@ -211,6 +211,6 @@ internal fun CheckRow(title: String, selected: Boolean, subtitle: String? = null
             Text(title, style = TextStyles.body, color = colors.textPrimary)
             if (subtitle != null) Text(subtitle, style = TextStyles.caption2, color = colors.textSecondary)
         }
-        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accent, modifier = Modifier.size(20.dp))
+        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(20.dp))
     }
 }

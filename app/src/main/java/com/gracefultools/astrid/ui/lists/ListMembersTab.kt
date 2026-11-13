@@ -52,10 +52,8 @@ import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.detail.PickRow
 import com.gracefultools.astrid.ui.detail.PickerSheet
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
-import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
 
 /** iOS's system `.orange` and `.purple`, which the Members tab uses for privacy and agents. */
@@ -111,12 +109,12 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
 
         if (settings.canManageMembers) {
             FormSection {
-                FormButtonRow(Icons.Outlined.PersonAdd, stringResource(R.string.lists_add_member), colors.accent) { adding = true }
+                FormButtonRow(Icons.Outlined.PersonAdd, stringResource(R.string.lists_add_member), colors.accentInk) { adding = true }
             }
         }
 
         FormSection(stringResource(R.string.actions_share), footer = stringResource(R.string.lists_share_list_description)) {
-            FormButtonRow(Icons.Outlined.IosShare, stringResource(R.string.lists_share_list), colors.accent) { sharing = true; vm.requestShareLink() }
+            FormButtonRow(Icons.Outlined.IosShare, stringResource(R.string.lists_share_list), colors.accentInk) { sharing = true; vm.requestShareLink() }
         }
 
         // AI Agents — admins, when the account has agents (listAgentOptions).
@@ -146,7 +144,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
                         when {
                             member -> Pill(stringResource(R.string.actions_remove), Color.Red) { vm.removeAgent(agent.id) }
                             // An invitation needs the agent's address; listAgentOptions does not answer it yet.
-                            agent.email != null -> Pill(stringResource(R.string.actions_add), colors.accent) { vm.addAgent(agent.email) }
+                            agent.email != null -> Pill(stringResource(R.string.actions_add), colors.accentInk) { vm.addAgent(agent.email) }
                         }
                     }
                 }
@@ -158,7 +156,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
             val isPublic = settings.privacy.equals("PUBLIC", ignoreCase = true)
             FormSection(stringResource(R.string.lists_list_privacy)) {
                 if (isPublic) FormButtonRow(Icons.Outlined.Lock, stringResource(R.string.lists_make_private), Orange) { vm.togglePublic() }
-                else FormButtonRow(Icons.Outlined.Public, stringResource(R.string.lists_make_public), Success) { vm.togglePublic() }
+                else FormButtonRow(Icons.Outlined.Public, stringResource(R.string.lists_make_public), AstridTheme.colors.successInk) { vm.togglePublic() }
                 Text(
                     stringResource(if (isPublic) R.string.lists_public_description else R.string.lists_private_description),
                     style = TextStyles.caption2, color = colors.textSecondary,
@@ -169,7 +167,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
 
         when {
             settings.canLeave -> FormSection {
-                FormButtonRow(Icons.AutoMirrored.Outlined.Logout, stringResource(R.string.lists_leave_list), Error) { confirmLeave = true }
+                FormButtonRow(Icons.AutoMirrored.Outlined.Logout, stringResource(R.string.lists_leave_list), AstridTheme.colors.errorInk) { confirmLeave = true }
             }
             settings.canTransferOwnership -> TransferSection(state, settings.name, vm)
         }
@@ -209,7 +207,7 @@ private fun TransferSection(state: ListSettingsState, listName: String, vm: List
                 FormPickerRow(stringResource(R.string.lists_transfer_ownership_select), transfer.owners.firstOrNull { it.id == successor }?.display.orEmpty()) { choosing = true }
                 FormDivider()
                 FormButtonRow(
-                    Icons.Outlined.HowToReg, stringResource(R.string.lists_transfer_and_leave), Error,
+                    Icons.Outlined.HowToReg, stringResource(R.string.lists_transfer_and_leave), AstridTheme.colors.errorInk,
                     enabled = successor.isNotEmpty() && !state.transferring,
                 ) { confirming = true }
             }
@@ -287,8 +285,8 @@ private fun MemberRow(member: Member, canManage: Boolean, vm: ListSettingsViewMo
                         onClick = { open = false; vm.setRole(userId, if (isAdmin) "member" else "admin") },
                     )
                     DropdownMenuItem(
-                        text = { Text(stringResource(R.string.lists_remove_member), color = Error) },
-                        leadingIcon = { Icon(Icons.Outlined.Delete, null, tint = Error) },
+                        text = { Text(stringResource(R.string.lists_remove_member), color = AstridTheme.colors.errorInk) },
+                        leadingIcon = { Icon(Icons.Outlined.Delete, null, tint = AstridTheme.colors.errorInk) },
                         onClick = { open = false; vm.remove(userId) },
                     )
                 }

@@ -64,12 +64,9 @@ import com.gracefultools.astrid.Brand
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.common.FloatingTextHeader
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
-import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
-import com.gracefultools.astrid.ui.theme.Warning
 import kotlinx.coroutines.delay
 
 /** iOS opens these in-app; Android's equivalent is a Custom Tab (ASTRID.md §2). */
@@ -155,7 +152,7 @@ internal fun Caption2(text: String, color: Color = AstridTheme.colors.textSecond
 
 /** iOS `Label(text, systemImage: "exclamationmark.triangle.fill")` in red, or orange for a setup warning. */
 @Composable
-internal fun ProblemLabel(text: String, color: Color = Error) {
+internal fun ProblemLabel(text: String, color: Color = AstridTheme.colors.errorInk) {
     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.Top) {
         Icon(Icons.Filled.Warning, null, tint = color, modifier = Modifier.size(16.dp))
         Text(text, style = TextStyles.caption, color = color)
@@ -187,8 +184,8 @@ internal fun ActionRow(
     val colors = AstridTheme.colors
     val tint = when {
         !enabled -> colors.textMuted
-        destructive -> Error
-        else -> colors.accent
+        destructive -> colors.errorInk
+        else -> colors.accentInk
     }
     Row(
         Modifier.fillMaxWidth().heightIn(min = if (small) 32.dp else 44.dp).clip(RoundedCornerShape(Radius.small))
@@ -204,7 +201,7 @@ internal fun ActionRow(
 
 /** A small borderless text button, as iOS's `.buttonStyle(.borderless)` rows of Test / Update / Delete. */
 @Composable
-internal fun InlineButton(label: String, color: Color = AstridTheme.colors.accent, enabled: Boolean = true, onClick: () -> Unit) {
+internal fun InlineButton(label: String, color: Color = AstridTheme.colors.accentInk, enabled: Boolean = true, onClick: () -> Unit) {
     Text(
         label, style = TextStyles.caption, color = if (enabled) color else AstridTheme.colors.textMuted,
         modifier = Modifier.clip(RoundedCornerShape(Radius.small)).clickable(enabled = enabled, role = Role.Button, onClick = onClick)
@@ -287,7 +284,7 @@ internal fun RadioRow(label: String, selected: Boolean, enabled: Boolean = true,
     ) {
         leading?.invoke()
         Text(label, style = TextStyles.body, color = if (enabled) colors.textPrimary else colors.textMuted, modifier = Modifier.weight(1f))
-        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accent, modifier = Modifier.size(18.dp))
+        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(18.dp))
     }
 }
 
@@ -306,8 +303,8 @@ internal fun CopyableCodeBlock(code: String) {
             Modifier.clip(RoundedCornerShape(Radius.small)).clickable(role = Role.Button) { copyToClipboard(context, code); copied = true }.padding(Spacing.s4),
             horizontalArrangement = Arrangement.spacedBy(Spacing.s4), verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(if (copied) Icons.Filled.Check else Icons.Filled.ContentCopy, null, tint = AstridTheme.colors.accent, modifier = Modifier.size(12.dp))
-            Caption2(stringResource(if (copied) R.string.settings_agents_copied else R.string.actions_copy), AstridTheme.colors.accent)
+            Icon(if (copied) Icons.Filled.Check else Icons.Filled.ContentCopy, null, tint = AstridTheme.colors.accentInk, modifier = Modifier.size(12.dp))
+            Caption2(stringResource(if (copied) R.string.settings_agents_copied else R.string.actions_copy), AstridTheme.colors.accentInk)
         }
     }
 }
@@ -324,12 +321,12 @@ internal fun CredentialCopyRow(label: String, value: String, secret: Boolean = f
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 value, style = TextStyles.caption, fontFamily = FontFamily.Monospace, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                color = if (secret) Warning else colors.textPrimary, modifier = Modifier.weight(1f),
+                color = if (secret) AstridTheme.colors.warningInk else colors.textPrimary, modifier = Modifier.weight(1f),
             )
             Spacer(Modifier.width(Spacing.s8))
             Icon(
                 if (copied) Icons.Filled.Check else Icons.Filled.ContentCopy, stringResource(R.string.actions_copy),
-                tint = if (copied) Success else colors.accent,
+                tint = if (copied) AstridTheme.colors.successInk else colors.accentInk,
                 modifier = Modifier.size(36.dp).clip(CircleShape).clickable(role = Role.Button) { copyToClipboard(context, value); copied = true }.padding(Spacing.s8),
             )
         }

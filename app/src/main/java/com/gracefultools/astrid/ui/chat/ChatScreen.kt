@@ -106,7 +106,7 @@ fun ChatPanel(vm: ChatViewModel, modifier: Modifier = Modifier) {
                 modifier = Modifier.weight(1f),
             )
             IconButton(onClick = { vm.send(text); text = "" }, enabled = text.isNotBlank()) {
-                Icon(Icons.AutoMirrored.Filled.Send, stringResource(R.string.detail_send), tint = colors.accent)
+                Icon(Icons.AutoMirrored.Filled.Send, stringResource(R.string.detail_send), tint = colors.accentInk)
             }
         }
     }

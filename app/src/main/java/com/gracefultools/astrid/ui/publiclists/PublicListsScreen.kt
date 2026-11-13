@@ -48,7 +48,6 @@ import com.gracefultools.astrid.ui.sidebar.ListPicture
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
-import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.TypeSize
 
@@ -119,9 +118,9 @@ private fun PublicListRow(list: PublicListSummary, image: String?, copying: Bool
                 modifier = Modifier.weight(1f),
             )
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s4)) {
-                Icon(Icons.Outlined.Public, stringResource(R.string.lists_privacy_public), tint = colors.accent, modifier = Modifier.size(13.dp))
+                Icon(Icons.Outlined.Public, stringResource(R.string.lists_privacy_public), tint = colors.accentInk, modifier = Modifier.size(13.dp))
                 if (list.isCollaborative) {
-                    Icon(Icons.Outlined.People, stringResource(R.string.lists_privacy_shared), tint = Success, modifier = Modifier.size(13.dp))
+                    Icon(Icons.Outlined.People, stringResource(R.string.lists_privacy_shared), tint = AstridTheme.colors.successInk, modifier = Modifier.size(13.dp))
                 }
             }
         }
@@ -134,11 +133,11 @@ private fun PublicListRow(list: PublicListSummary, image: String?, copying: Bool
                 Text(stringResource(R.string.filters_tasks_count, list.taskCount), style = TextStyles.caption, color = colors.textMuted)
             }
             if (list.isCollaborative) {
-                ActionText(stringResource(R.string.filters_view_add), colors.accent, enabled = true, onClick = onView)
+                ActionText(stringResource(R.string.filters_view_add), colors.accentInk, enabled = true, onClick = onView)
             } else {
                 ActionText(
                     stringResource(if (copying) R.string.lists_copying else R.string.actions_copy),
-                    if (copying) colors.textSecondary else colors.accent, enabled = !copying, onClick = onCopy,
+                    if (copying) colors.textSecondary else colors.accentInk, enabled = !copying, onClick = onCopy,
                 )
             }
         }

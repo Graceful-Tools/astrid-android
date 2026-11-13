@@ -50,7 +50,6 @@ import com.gracefultools.astrid.model.TaskDetail
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.OceanColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
@@ -85,7 +84,7 @@ internal fun CommentsSection(
             if (detail.comments.any { it.isSystem }) {
                 Text(
                     stringResource(if (showSystem) R.string.comments_hide_system else R.string.comments_show_system),
-                    style = TextStyles.caption, color = colors.accent,
+                    style = TextStyles.caption, color = colors.accentInk,
                     modifier = Modifier.clip(RoundedCornerShape(Radius.small)).clickable { showSystem = !showSystem }.padding(6.dp),
                 )
             }
@@ -200,7 +199,7 @@ private fun CommentBubble(
                     if (mine) {
                         DropdownMenuItem(text = { Text(stringResource(R.string.comments_edit)) }, leadingIcon = { Icon(Icons.Outlined.Edit, null) },
                             onClick = { editing = true; menu = false })
-                        DropdownMenuItem(text = { Text(stringResource(R.string.actions_delete), color = Error) }, leadingIcon = { Icon(Icons.Outlined.Delete, null, tint = Error) },
+                        DropdownMenuItem(text = { Text(stringResource(R.string.actions_delete), color = AstridTheme.colors.errorInk) }, leadingIcon = { Icon(Icons.Outlined.Delete, null, tint = AstridTheme.colors.errorInk) },
                             onClick = { confirmingDelete = true; menu = false })
                     }
                 }
@@ -230,7 +229,7 @@ private fun CommentBubble(
             onDismissRequest = { confirmingDelete = false },
             title = { Text(stringResource(R.string.comments_delete_comment)) },
             text = { Text(stringResource(R.string.comments_delete_confirm)) },
-            confirmButton = { TextButton(onClick = { confirmingDelete = false; onDelete(comment.id) }) { Text(stringResource(R.string.actions_delete), color = Error) } },
+            confirmButton = { TextButton(onClick = { confirmingDelete = false; onDelete(comment.id) }) { Text(stringResource(R.string.actions_delete), color = AstridTheme.colors.errorInk) } },
             dismissButton = { TextButton(onClick = { confirmingDelete = false }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }

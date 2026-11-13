@@ -79,12 +79,10 @@ import coil3.compose.AsyncImage
 import com.gracefultools.astrid.Brand
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
-import com.gracefultools.astrid.ui.theme.Warning
 import kotlinx.coroutines.delay
 
 /** Routes the hub pushes. */
@@ -141,7 +139,7 @@ internal fun BrandIcon(@DrawableRes icon: Int?, size: androidx.compose.ui.unit.D
     if (icon != null) {
         Image(painterResource(icon), null, modifier.size(size).clip(CircleShape), contentScale = ContentScale.Fit)
     } else {
-        Icon(fallback, null, tint = AstridTheme.colors.accent, modifier = modifier.size(size).padding(Spacing.s4))
+        Icon(fallback, null, tint = AstridTheme.colors.accentInk, modifier = modifier.size(size).padding(Spacing.s4))
     }
 }
 
@@ -198,7 +196,7 @@ fun AgentsScreen(vm: AgentsViewModel, onBack: () -> Unit, onOpen: (String) -> Un
                 FormSection {
                     NavRow(
                         stringResource(R.string.connections_title), stringResource(R.string.settings_connections_subtitle),
-                        leading = { Icon(Icons.Filled.Link, null, tint = AstridTheme.colors.accent, modifier = Modifier.size(30.dp).padding(Spacing.s4)) },
+                        leading = { Icon(Icons.Filled.Link, null, tint = AstridTheme.colors.accentInk, modifier = Modifier.size(30.dp).padding(Spacing.s4)) },
                     ) { onOpen(AgentRoutes.CONNECTIONS) }
                 }
                 FormSection(footer = stringResource(R.string.settings_agents_model_description, app)) {
@@ -226,7 +224,7 @@ private fun AgentSection(vm: AgentsViewModel, state: AgentsState, agent: HubAgen
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
                     Text(agent.name, style = TextStyles.body, color = colors.textPrimary)
-                    if (!vm.isConfigured(agent) && agent.mode != "off") Caption2(stringResource(R.string.settings_agents_needs_setup), Warning)
+                    if (!vm.isConfigured(agent) && agent.mode != "off") Caption2(stringResource(R.string.settings_agents_needs_setup), AstridTheme.colors.warningInk)
                 }
                 Caption2(agent.email ?: "${agent.id}@${Brand.agentEmailDomain}")
             }
@@ -256,7 +254,7 @@ private fun AgentSection(vm: AgentsViewModel, state: AgentsState, agent: HubAgen
                 Caption(stringResource(R.string.settings_agents_webhook_description))
                 NavRow(
                     stringResource(R.string.settings_agents_webhook_configure),
-                    leading = { Icon(Icons.Filled.Hub, null, tint = colors.accent, modifier = Modifier.size(20.dp)) },
+                    leading = { Icon(Icons.Filled.Hub, null, tint = colors.accentInk, modifier = Modifier.size(20.dp)) },
                 ) { onOpen(AgentRoutes.WEBHOOK) }
             }
             else -> Caption(stringResource(R.string.settings_agents_off_description, app))
@@ -366,7 +364,7 @@ private fun KeyEditor(vm: AgentsViewModel, state: AgentsState, service: String) 
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4),
             ) {
                 if (busy) SmallSpinner() else {
-                    val tint = if (inputs[service].orEmpty().isNotBlank()) colors.accent else colors.textMuted
+                    val tint = if (inputs[service].orEmpty().isNotBlank()) colors.accentInk else colors.textMuted
                     Icon(Icons.Filled.Check, null, tint = tint, modifier = Modifier.size(16.dp))
                     Text(stringResource(R.string.agents_actions_save), style = TextStyles.body, color = tint)
                 }
@@ -378,13 +376,13 @@ private fun KeyEditor(vm: AgentsViewModel, state: AgentsState, service: String) 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 if (works == false) Icons.Filled.Cancel else Icons.Filled.CheckCircle, null,
-                tint = if (works == false) Error else Success, modifier = Modifier.size(18.dp),
+                tint = if (works == false) AstridTheme.colors.errorInk else AstridTheme.colors.successInk, modifier = Modifier.size(18.dp),
             )
             Spacer(Modifier.weight(1f))
             if (busy) SmallSpinner() else {
                 InlineButton(stringResource(R.string.settings_agents_test_key)) { vm.testKey(service) }
                 InlineButton(stringResource(R.string.agents_actions_update)) { vm.editKey(service, true) }
-                InlineButton(stringResource(R.string.actions_delete), color = Error) { vm.deleteKey(service) }
+                InlineButton(stringResource(R.string.actions_delete), color = AstridTheme.colors.errorInk) { vm.deleteKey(service) }
             }
         }
     }
@@ -443,7 +441,7 @@ fun WebhookSettingsScreen(vm: WebhookViewModel, onBack: () -> Unit) {
         }
         state.newSecret?.let { secret ->
             FormSection(header = stringResource(R.string.settings_agents_webhook_secret_title)) {
-                ProblemLabel(stringResource(R.string.settings_agents_webhook_secret_warning), Warning)
+                ProblemLabel(stringResource(R.string.settings_agents_webhook_secret_warning), AstridTheme.colors.warningInk)
                 CopyableCodeBlock(secret)
                 CopyableCodeBlock("ASTRID_WEBHOOK_SECRET=$secret")
             }
@@ -452,7 +450,7 @@ fun WebhookSettingsScreen(vm: WebhookViewModel, onBack: () -> Unit) {
         FormSection(
             footerContent = {
                 Caption(stringResource(R.string.settings_agents_webhook_url_hint, app))
-                state.mintError?.let { Caption(it, Error) }
+                state.mintError?.let { Caption(it, AstridTheme.colors.errorInk) }
                 if (state.requiresWebSession && state.error == null) WebSessionRequiredRow()
                 ActionRow(
                     stringResource(R.string.settings_agents_webhook_create_credentials), Icons.Filled.Key,
@@ -471,7 +469,7 @@ fun WebhookSettingsScreen(vm: WebhookViewModel, onBack: () -> Unit) {
                 state.availableAgents.forEach { agent ->
                     ToggleRow(webhookAgentLabel(agent), agent in state.selectedAgents) { vm.toggleAgent(agent) }
                 }
-                if (state.selectedAgents.isEmpty()) Caption2(stringResource(R.string.settings_agents_webhook_no_agents), Warning)
+                if (state.selectedAgents.isEmpty()) Caption2(stringResource(R.string.settings_agents_webhook_no_agents), AstridTheme.colors.warningInk)
             }
             if (state.settings.configured && state.settings.hasSecret == true) {
                 ToggleRow(stringResource(R.string.settings_agents_webhook_regenerate), state.regenerateSecret) { vm.setRegenerate(it) }
@@ -500,7 +498,7 @@ fun WebhookSettingsScreen(vm: WebhookViewModel, onBack: () -> Unit) {
                     Caption2(
                         if (failures > 0) stringResource(R.string.settings_agents_webhook_failures, failures)
                         else stringResource(R.string.settings_agents_webhook_no_failures),
-                        if (failures > 0) Error else colors.textSecondary,
+                        if (failures > 0) AstridTheme.colors.errorInk else colors.textSecondary,
                     )
                 }
                 state.settings.lastFiredAt?.let { fired ->
@@ -513,11 +511,11 @@ fun WebhookSettingsScreen(vm: WebhookViewModel, onBack: () -> Unit) {
                 state.testResult?.let { result ->
                     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                            Icon(if (result.success) Icons.Filled.CheckCircle else Icons.Filled.Cancel, null, tint = if (result.success) Success else Error, modifier = Modifier.size(16.dp))
-                            Caption(result.message ?: if (result.success) "OK" else "Failed", if (result.success) Success else Error)
+                            Icon(if (result.success) Icons.Filled.CheckCircle else Icons.Filled.Cancel, null, tint = if (result.success) AstridTheme.colors.successInk else AstridTheme.colors.errorInk, modifier = Modifier.size(16.dp))
+                            Caption(result.message ?: if (result.success) "OK" else "Failed", if (result.success) AstridTheme.colors.successInk else AstridTheme.colors.errorInk)
                         }
                         result.responseTime?.let { Caption2(stringResource(R.string.settings_agents_webhook_test_response, it)) }
-                        result.error?.let { Caption2(it, Error) }
+                        result.error?.let { Caption2(it, AstridTheme.colors.errorInk) }
                     }
                 }
             }
@@ -528,7 +526,7 @@ fun WebhookSettingsScreen(vm: WebhookViewModel, onBack: () -> Unit) {
         AlertDialog(
             onDismissRequest = vm::cancelRemove,
             text = { Text(stringResource(R.string.settings_agents_webhook_remove_confirm)) },
-            confirmButton = { TextButton(onClick = vm::confirmRemove) { Text(stringResource(R.string.settings_agents_webhook_remove), color = Error) } },
+            confirmButton = { TextButton(onClick = vm::confirmRemove) { Text(stringResource(R.string.settings_agents_webhook_remove), color = AstridTheme.colors.errorInk) } },
             dismissButton = { TextButton(onClick = vm::cancelRemove) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
@@ -572,7 +570,7 @@ internal fun TransportCredentialsSheet(minted: MintedClient, onDone: () -> Unit)
         stringResource(R.string.settings_agents_webhook_credentials_title), onDismiss = onDone,
         trailingAction = { TextButton(onClick = onDone) { Text(stringResource(R.string.actions_done)) } },
     ) {
-        FormSection { ProblemLabel(stringResource(R.string.settings_agents_webhook_credentials_warning), Warning) }
+        FormSection { ProblemLabel(stringResource(R.string.settings_agents_webhook_credentials_warning), AstridTheme.colors.warningInk) }
         FormSection {
             CredentialCopyRow(stringResource(R.string.settings_openclaw_credential_client_id), minted.clientId)
             CredentialCopyRow(stringResource(R.string.settings_openclaw_credential_client_secret), minted.clientSecret, secret = true)
@@ -605,10 +603,10 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
         state.flash?.let { flash ->
             FormSection {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.CheckCircle, null, tint = Success, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Filled.CheckCircle, null, tint = AstridTheme.colors.successInk, modifier = Modifier.size(18.dp))
                     Text(
                         stringResource(if (flash == CustomAgentsState.Flash.CREATED) R.string.settings_openclaw_agent_created else R.string.settings_openclaw_agent_deleted),
-                        style = TextStyles.body, color = Success,
+                        style = TextStyles.body, color = AstridTheme.colors.successInk,
                     )
                 }
             }
@@ -643,7 +641,7 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
         }
         FormSection {
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.Lightbulb, null, tint = colors.accent, modifier = Modifier.size(16.dp))
+                Icon(Icons.Filled.Lightbulb, null, tint = colors.accentInk, modifier = Modifier.size(16.dp))
                 Text(stringResource(R.string.settings_openclaw_tip_title), style = TextStyles.subheadline, color = colors.textPrimary)
             }
             Caption(stringResource(R.string.settings_openclaw_tip_description))
@@ -657,7 +655,7 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
             onDismissRequest = vm::cancelDelete,
             title = { Text(stringResource(R.string.settings_openclaw_delete_agent)) },
             text = { Text(stringResource(R.string.settings_openclaw_delete_confirm, agent.email)) },
-            confirmButton = { TextButton(onClick = vm::confirmDelete) { Text(stringResource(R.string.settings_openclaw_delete_agent), color = Error) } },
+            confirmButton = { TextButton(onClick = vm::confirmDelete) { Text(stringResource(R.string.settings_openclaw_delete_agent), color = AstridTheme.colors.errorInk) } },
             dismissButton = { TextButton(onClick = vm::cancelDelete) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
@@ -692,7 +690,7 @@ private fun CustomAgentRow(agent: CustomAgent, busy: Boolean, onDelete: () -> Un
         }
         if (busy) SmallSpinner() else {
             Icon(
-                Icons.Filled.Delete, stringResource(R.string.settings_openclaw_delete_agent), tint = Error,
+                Icons.Filled.Delete, stringResource(R.string.settings_openclaw_delete_agent), tint = AstridTheme.colors.errorInk,
                 modifier = Modifier.size(36.dp).clip(CircleShape).clickable(role = Role.Button, onClick = onDelete).padding(Spacing.s8),
             )
         }
@@ -719,7 +717,7 @@ private fun RegisterAgentSheet(vm: CustomAgentsViewModel, state: CustomAgentsSta
         }
         if (name.isNotBlank()) {
             FormSection {
-                Text(stringResource(R.string.settings_openclaw_agent_name_preview, name.trim(), Brand.agentEmailDomain), style = TextStyles.body, fontFamily = FontFamily.Monospace, color = Success)
+                Text(stringResource(R.string.settings_openclaw_agent_name_preview, name.trim(), Brand.agentEmailDomain), style = TextStyles.body, fontFamily = FontFamily.Monospace, color = AstridTheme.colors.successInk)
             }
         }
         state.registerError?.let { FormSection { ProblemLabel(it) } }
@@ -732,7 +730,7 @@ private fun CredentialsSheet(result: CustomAgentRegistration, onDone: () -> Unit
         stringResource(R.string.settings_openclaw_credentials_title), onDismiss = onDone,
         trailingAction = { TextButton(onClick = onDone) { Text(stringResource(R.string.actions_done)) } },
     ) {
-        FormSection { ProblemLabel(stringResource(R.string.settings_openclaw_credentials_warning), Warning) }
+        FormSection { ProblemLabel(stringResource(R.string.settings_openclaw_credentials_warning), AstridTheme.colors.warningInk) }
         FormSection {
             CredentialCopyRow(stringResource(R.string.settings_openclaw_credential_email), result.agent.email)
             CredentialCopyRow(stringResource(R.string.settings_openclaw_credential_client_id), result.oauth.clientId)
@@ -768,7 +766,7 @@ fun AstridModelScreen(vm: AstridModelViewModel, onBack: () -> Unit, onAddKey: ()
         val error = state.error
         when {
             state.isLoading -> Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { SmallSpinner() }
-            error != null -> FormSection { Text(error, style = TextStyles.body, color = Error) }
+            error != null -> FormSection { Text(error, style = TextStyles.body, color = AstridTheme.colors.errorInk) }
             else -> FormSection(footer = stringResource(R.string.settings_agents_model_footer, app, app)) {
                 val options = state.model.options
                 options.forEach { option ->
@@ -785,10 +783,10 @@ fun AstridModelScreen(vm: AstridModelViewModel, onBack: () -> Unit, onAddKey: ()
                     ModelRow(
                         title = model.displayName,
                         subtitle = stringResource(R.string.agents_model_key_required, model.subtitle),
-                        subtitleColor = Warning,
+                        subtitleColor = AstridTheme.colors.warningInk,
                         selected = false,
                         leading = { BrandIcon(agentIcon(model.service), size = 36.dp, modifier = Modifier.alpha(0.5f)) },
-                        trailing = { Icon(Icons.Filled.Key, null, tint = Warning, modifier = Modifier.size(14.dp)) },
+                        trailing = { Icon(Icons.Filled.Key, null, tint = AstridTheme.colors.warningInk, modifier = Modifier.size(14.dp)) },
                         onClick = onAddKey,
                     )
                 }
@@ -835,7 +833,7 @@ private fun ModelRow(
         }
         when {
             trailing != null -> trailing()
-            selected -> Icon(Icons.Filled.Check, null, tint = colors.accent, modifier = Modifier.size(18.dp))
+            selected -> Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(18.dp))
             else -> Spacer(Modifier.width(18.dp))
         }
     }

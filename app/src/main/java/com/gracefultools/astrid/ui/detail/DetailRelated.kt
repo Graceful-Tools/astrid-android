@@ -90,7 +90,6 @@ import com.gracefultools.astrid.model.AttachmentFile
 import com.gracefultools.astrid.model.ProjectFieldRow
 import com.gracefultools.astrid.model.TaskDetail
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -162,7 +161,7 @@ internal fun ProjectFieldsRows(state: TaskDetailState, readOnly: Boolean, onSet:
                                 ProjectFieldError.Reason.SAVE_FAILED -> R.string.tasks_project_fields_error_save_failed
                             },
                         ),
-                        style = TextStyles.caption, color = Error,
+                        style = TextStyles.caption, color = AstridTheme.colors.errorInk,
                     )
                 }
             }

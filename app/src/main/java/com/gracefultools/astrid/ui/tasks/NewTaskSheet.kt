@@ -141,7 +141,7 @@ fun NewTaskSheet(
             Column(Modifier.padding(horizontal = Spacing.s16, vertical = Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                 Note(Icons.Filled.Info, stringResource(R.string.share_default_list_note))
                 if (file != null) Note(Icons.Filled.ArrowCircleUp, stringResource(R.string.share_upload_note))
-                error?.let { Text(it, style = TextStyles.caption, color = com.gracefultools.astrid.ui.theme.Error) }
+                error?.let { Text(it, style = TextStyles.caption, color = AstridTheme.colors.errorInk) }
             }
         }
     }

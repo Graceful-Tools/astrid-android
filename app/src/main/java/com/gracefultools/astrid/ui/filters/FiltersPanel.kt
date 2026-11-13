@@ -43,7 +43,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.common.coreLabel
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -72,7 +71,7 @@ fun FiltersPanel(vm: FiltersViewModel, modifier: Modifier = Modifier, extra: @Co
         extra()
         Text(
             stringResource(R.string.lists_clear_all_filters), style = TextStyles.body,
-            color = if (state.isFiltered) Error else colors.textMuted,
+            color = if (state.isFiltered) AstridTheme.colors.errorInk else colors.textMuted,
             modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.large)).background(cardColor())
                 .clickable(enabled = state.isFiltered) { vm.clearAll() }.padding(Spacing.s16),
         )
@@ -112,7 +111,7 @@ private fun ChoiceRow(group: FilterGroup, onPick: (String, String) -> Unit) {
             group.picks.forEach { pick ->
                 DropdownMenuItem(
                     text = { Text(coreLabel(pick.titleKey)) },
-                    trailingIcon = { if (pick.isSelected) Icon(Icons.Filled.Check, null, tint = colors.accent) },
+                    trailingIcon = { if (pick.isSelected) Icon(Icons.Filled.Check, null, tint = colors.accentInk) },
                     onClick = { open = false; onPick(pick.field, pick.value) },
                 )
             }

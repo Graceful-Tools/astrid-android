@@ -21,7 +21,6 @@ import com.gracefultools.astrid.ui.common.rememberCompletionPop
 import com.gracefultools.astrid.ui.common.RowFaceShape
 import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.theme.Radius
-import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -267,8 +266,8 @@ fun ListChipView(chip: com.gracefultools.astrid.model.ListChip, modifier: Modifi
     ) {
         val (icon, iconTint) = when (chip.glyph) {
             "tag" -> Icons.Outlined.Sell to tint
-            "globe" -> Icons.Outlined.Public to Success
-            "people" -> Icons.Outlined.People to colors.accent
+            "globe" -> Icons.Outlined.Public to colors.successInk
+            "people" -> Icons.Outlined.People to colors.accentInk
             else -> Icons.Filled.Tag to tint
         }
         Icon(icon, null, tint = iconTint, modifier = Modifier.size(13.dp))

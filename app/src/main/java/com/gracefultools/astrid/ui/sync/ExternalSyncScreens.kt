@@ -57,12 +57,9 @@ import com.gracefultools.astrid.ui.agents.NavRow
 import com.gracefultools.astrid.ui.agents.SmallSpinner
 import com.gracefultools.astrid.ui.agents.openInCustomTab
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
-import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
-import com.gracefultools.astrid.ui.theme.Warning
 
 /** Routes the two account screens live at. */
 object SyncRoutes {
@@ -89,7 +86,7 @@ fun ExternalSyncRows(core: Core, onOpen: (String) -> Unit) {
     if (available.google) {
         NavRow(
             stringResource(R.string.sync_google_tasks_title),
-            leading = { Icon(Icons.Filled.TaskAlt, null, tint = Success, modifier = Modifier.size(20.dp)) },
+            leading = { Icon(Icons.Filled.TaskAlt, null, tint = AstridTheme.colors.successInk, modifier = Modifier.size(20.dp)) },
         ) { onOpen(SyncRoutes.GOOGLE) }
     }
 }
@@ -143,13 +140,13 @@ fun ExternalSyncScreen(vm: ExternalSyncViewModel, onBack: () -> Unit) {
         ) {
             if (state.connected) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-                    Icon(Icons.Filled.Verified, null, tint = Success, modifier = Modifier.size(20.dp))
+                    Icon(Icons.Filled.Verified, null, tint = AstridTheme.colors.successInk, modifier = Modifier.size(20.dp))
                     Text(stringResource(R.string.sync_connected), style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
-                    InlineButton(stringResource(R.string.sync_disconnect), color = Error) { vm.disconnect() }
+                    InlineButton(stringResource(R.string.sync_disconnect), color = AstridTheme.colors.errorInk) { vm.disconnect() }
                 }
             } else {
                 ActionRow(stringResource(if (google) R.string.sync_connect_google else R.string.sync_connect_github), Icons.Filled.Link) { vm.connect() }
-                state.connectError?.let { Caption2(it, Warning) }
+                state.connectError?.let { Caption2(it, AstridTheme.colors.warningInk) }
             }
         }
         if (!state.connected) return@HubPage
@@ -214,7 +211,7 @@ fun ExternalSyncScreen(vm: ExternalSyncViewModel, onBack: () -> Unit) {
                 stringResource(if (state.isLinking) R.string.sync_linking else R.string.sync_link),
                 enabled = state.canLink,
             ) { vm.link() }
-            if (!google) state.error?.let { Caption2(it, Warning) }
+            if (!google) state.error?.let { Caption2(it, AstridTheme.colors.warningInk) }
         }
 
         // GitHub has no client pass: a cron on the server syncs every linked repository.
@@ -225,7 +222,7 @@ fun ExternalSyncScreen(vm: ExternalSyncViewModel, onBack: () -> Unit) {
                     val time = java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT).format(java.util.Date(at))
                     Caption2(stringResource(R.string.sync_last_synced, time))
                 }
-                state.error?.let { Caption2(it, Warning) }
+                state.error?.let { Caption2(it, AstridTheme.colors.warningInk) }
             }
         }
     }
@@ -256,7 +253,7 @@ fun ListIntegrationsSections(core: Core, listId: String) {
                     Caption2(stringResource(R.string.lists_loading_repositories), colors.textMuted)
                 }
                 repositoriesError != null -> {
-                    Caption2(repositoriesError, Error)
+                    Caption2(repositoriesError, AstridTheme.colors.errorInk)
                     InlineButton(stringResource(R.string.agents_actions_retry)) { vm.refreshRepositories() }
                 }
                 options != null -> {
@@ -284,7 +281,7 @@ fun ListIntegrationsSections(core: Core, listId: String) {
             FormDivider()
             ProviderLinkRow(state.sync.of(SyncProvider.GOOGLE), stringResource(R.string.sync_google_tasks_title), stringResource(R.string.sync_connect_google_hint), vm, SyncProvider.GOOGLE)
         }
-        state.error?.let { Caption2(it, Warning) }
+        state.error?.let { Caption2(it, AstridTheme.colors.warningInk) }
     }
 }
 
@@ -300,7 +297,7 @@ private fun ProviderLinkRow(sync: ProviderSync, title: String, connectHint: Stri
                 sync.containers.firstOrNull { it.id == link.remoteContainerId }?.name?.takeIf { provider == SyncProvider.GOOGLE } ?: link.remoteContainerId,
                 style = TextStyles.caption, color = colors.textSecondary, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f),
             )
-            InlineButton(stringResource(R.string.sync_unlink), color = Error) { vm.unlink(provider, link.id) }
+            InlineButton(stringResource(R.string.sync_unlink), color = AstridTheme.colors.errorInk) { vm.unlink(provider, link.id) }
         }
         else -> {
             val notLinked = stringResource(R.string.sync_not_linked)

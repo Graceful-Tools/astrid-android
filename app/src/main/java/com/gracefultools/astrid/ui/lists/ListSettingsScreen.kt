@@ -39,7 +39,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.common.FloatingTextHeader
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Spacing
 
 /**
@@ -120,7 +119,7 @@ internal fun ConfirmAlert(title: String, message: String, confirm: String, onCon
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = { Text(message) },
-        confirmButton = { TextButton(onClick = { onDismiss(); onConfirm() }) { Text(confirm, color = Error) } },
+        confirmButton = { TextButton(onClick = { onDismiss(); onConfirm() }) { Text(confirm, color = AstridTheme.colors.errorInk) } },
         dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
     )
 }
