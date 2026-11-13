@@ -760,4 +760,9 @@
     <string name="list_insights_duration_minutes">%1$s 分鐘</string>
     <string name="list_insights_duration_hours">%1$s 小時</string>
     <string name="list_insights_duration_days">%1$s 天</string>
+    <string name="settings_appearance_task_titles">任務標題</string>
+    <string name="settings_appearance_task_titles_footer">任務列顯示多長的標題（儲存在此裝置上）</string>
+    <string name="settings_task_titles_wrap">換行</string>
+    <string name="settings_task_titles_two">兩行</string>
+    <string name="settings_task_titles_one">一行</string>
 </resources>

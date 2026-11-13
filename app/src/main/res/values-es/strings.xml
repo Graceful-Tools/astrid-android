@@ -760,4 +760,9 @@
     <string name="list_insights_duration_minutes">%1$s min</string>
     <string name="list_insights_duration_hours">%1$s h</string>
     <string name="list_insights_duration_days">%1$s d</string>
+    <string name="settings_appearance_task_titles">Títulos de tareas</string>
+    <string name="settings_appearance_task_titles_footer">Cuánto de un título largo muestra la fila de una tarea (se guarda en este dispositivo)</string>
+    <string name="settings_task_titles_wrap">Ajustar</string>
+    <string name="settings_task_titles_two">Dos líneas</string>
+    <string name="settings_task_titles_one">Una línea</string>
 </resources>

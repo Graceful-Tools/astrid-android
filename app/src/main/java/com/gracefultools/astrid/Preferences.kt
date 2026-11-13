@@ -2,6 +2,7 @@ package com.gracefultools.astrid
 
 import android.content.Context
 import com.gracefultools.astrid.platform.PromptLedger
+import com.gracefultools.astrid.ui.theme.RowTitleLines
 import com.gracefultools.astrid.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,6 +22,15 @@ class Preferences(context: Context, defaultTheme: ThemeMode = Brand.defaultTheme
     fun setTheme(mode: ThemeMode) {
         prefs.edit().putString(THEME, mode.wire).apply()
         _theme.value = mode
+    }
+
+    private val _rowTitleLines = MutableStateFlow(RowTitleLines.of(prefs.getString(ROW_TITLE_LINES, null)))
+    /** "Task titles" (DS19): how many lines a row's title takes, kept per device like the theme. */
+    val rowTitleLines: StateFlow<RowTitleLines> = _rowTitleLines.asStateFlow()
+
+    fun setRowTitleLines(lines: RowTitleLines) {
+        prefs.edit().putString(ROW_TITLE_LINES, lines.wire).apply()
+        _rowTitleLines.value = lines
     }
 
     override var promptCount: Int
@@ -72,6 +82,7 @@ class Preferences(context: Context, defaultTheme: ThemeMode = Brand.defaultTheme
         const val REVIEWED = "hasReviewedApp"
         const val UPDATE_DISMISSED = "appUpdateDismissedVersion"
         const val THEME = "themeMode"
+        const val ROW_TITLE_LINES = "rowTitleLines"
         const val PROMPT_COUNT = "notificationPromptCount"
         const val LAST_PROMPT = "lastNotificationPromptDate"
         const val ASKED_SYSTEM = "notificationPermissionAsked"

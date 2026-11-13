@@ -760,4 +760,9 @@
     <string name="list_insights_duration_minutes">%1$s min</string>
     <string name="list_insights_duration_hours">%1$s h</string>
     <string name="list_insights_duration_days">%1$s g</string>
+    <string name="settings_appearance_task_titles">Titoli delle attività</string>
+    <string name="settings_appearance_task_titles_footer">Quanta parte di un titolo lungo mostra la riga di un\'attività (salvato su questo dispositivo)</string>
+    <string name="settings_task_titles_wrap">A capo</string>
+    <string name="settings_task_titles_two">Due righe</string>
+    <string name="settings_task_titles_one">Una riga</string>
 </resources>
