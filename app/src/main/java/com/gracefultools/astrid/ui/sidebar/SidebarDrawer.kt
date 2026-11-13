@@ -353,7 +353,7 @@ private fun CountCapsule(count: Int) {
     val colors = AstridTheme.colors
     Text(
         count.toString(), style = TextStyles.callout, color = colors.textSecondary,
-        modifier = Modifier.clip(CircleShape).background(if (colors.isDark) colors.bgTertiary else Color.Gray.copy(alpha = 0.1f))
+        modifier = Modifier.clip(CircleShape).background(if (colors.isDark) colors.bgTertiary else colors.neutral.copy(alpha = 0.1f))
             .padding(horizontal = Spacing.s4 + Spacing.s2, vertical = Spacing.s4),
     )
 }

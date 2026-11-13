@@ -178,7 +178,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
                     }
                 }
                 Column(Modifier.padding(horizontal = Spacing.s16), verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
-                    ActionButton(stringResource(R.string.reminders_complete), Success, Color.White, Icons.Filled.CheckCircle) { vm.complete(id) }
+                    ActionButton(stringResource(R.string.reminders_complete), Success, colors.onFill, Icons.Filled.CheckCircle) { vm.complete(id) }
                     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                         SnoozeButton(stringResource(R.string.reminders_snooze_15_minutes), Modifier.fillMaxWidth()) { vm.snooze(id, 15) }
                         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
@@ -342,7 +342,7 @@ private fun TriageButton(action: TriageAction, pending: TriageAction?, modifier:
             .clickable(role = Role.Button, onClick = onClick).padding(vertical = Spacing.s12),
         horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
     ) {
-        val fg = if (highlighted) Color.White else color
+        val fg = if (highlighted) colors.onFill else color
         Icon(icon, null, tint = fg, modifier = Modifier.size(18.dp))
         Spacer(Modifier.size(Spacing.s8))
         Text(title, style = TextStyles.headline, color = fg)

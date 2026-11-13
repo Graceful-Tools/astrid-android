@@ -75,6 +75,10 @@ data class AstridColors(
     val infoInk: Color = tokens.infoInk,
     /** Tokens `priority-low`: the accent, and on Dark the accent's light ink (DS26). */
     val priorityLow: Color = tokens.priorityLow,
+    /** iOS's neutral grey, SwiftUI `.gray`: member and invite icons, idle status dots, remove buttons, chip washes. */
+    val neutral: Color = Color.Gray,
+    /** A mark on a coloured fill (a chosen priority or list colour, delete, the error banner, a switch thumb): iOS `.white`. */
+    val onFill: Color = Color.White,
 ) {
     val accent: Color get() = tokens.accent
     val accentHover: Color get() = tokens.accentHover

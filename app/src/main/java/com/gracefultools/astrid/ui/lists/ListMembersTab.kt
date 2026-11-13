@@ -89,8 +89,8 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
             if (settings.canManageMembers) state.pendingInvitations.forEach { invite ->
                 divider()
                 FormRow {
-                    Box(Modifier.size(32.dp).clip(CircleShape).background(Color.Gray.copy(alpha = 0.3f)), contentAlignment = Alignment.Center) {
-                        Icon(Icons.Outlined.Email, null, tint = Color.Gray, modifier = Modifier.size(16.dp))
+                    Box(Modifier.size(32.dp).clip(CircleShape).background(colors.neutral.copy(alpha = 0.3f)), contentAlignment = Alignment.Center) {
+                        Icon(Icons.Outlined.Email, null, tint = colors.neutral, modifier = Modifier.size(16.dp))
                     }
                     Column(Modifier.weight(1f)) {
                         Text(invite.email, style = TextStyles.body, color = colors.textPrimary, maxLines = 1)
@@ -101,7 +101,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
                         }
                     }
                     IconButton(onClick = { vm.cancelInvitation(invite.email) }) {
-                        Icon(Icons.Filled.Cancel, stringResource(R.string.lists_cancel_invitation, invite.email), tint = Color.Gray, modifier = Modifier.size(22.dp))
+                        Icon(Icons.Filled.Cancel, stringResource(R.string.lists_cancel_invitation, invite.email), tint = colors.neutral, modifier = Modifier.size(22.dp))
                     }
                 }
             }
