@@ -760,4 +760,9 @@
     <string name="list_insights_duration_minutes">%1$s Min.</string>
     <string name="list_insights_duration_hours">%1$s Std.</string>
     <string name="list_insights_duration_days">%1$s T.</string>
+    <string name="settings_appearance_task_titles">Aufgabentitel</string>
+    <string name="settings_appearance_task_titles_footer">Wie viel von einem langen Titel eine Aufgabenzeile zeigt (auf diesem Gerät gespeichert)</string>
+    <string name="settings_task_titles_wrap">Umbrechen</string>
+    <string name="settings_task_titles_two">Zwei Zeilen</string>
+    <string name="settings_task_titles_one">Eine Zeile</string>
 </resources>

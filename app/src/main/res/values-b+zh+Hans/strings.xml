@@ -760,4 +760,9 @@
     <string name="list_insights_duration_minutes">%1$s 分钟</string>
     <string name="list_insights_duration_hours">%1$s 小时</string>
     <string name="list_insights_duration_days">%1$s 天</string>
+    <string name="settings_appearance_task_titles">任务标题</string>
+    <string name="settings_appearance_task_titles_footer">任务行显示多长的标题（保存在此设备上）</string>
+    <string name="settings_task_titles_wrap">换行</string>
+    <string name="settings_task_titles_two">两行</string>
+    <string name="settings_task_titles_one">一行</string>
 </resources>

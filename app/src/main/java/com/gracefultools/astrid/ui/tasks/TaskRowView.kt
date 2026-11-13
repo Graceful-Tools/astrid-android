@@ -77,7 +77,7 @@ fun TaskRowView(
     modifier: Modifier = Modifier,
     /** The task open beside the list (two panes): accent border, full white. */
     isSelected: Boolean = false,
-    /** One-line title while the detail pane is open, as iOS's compact mode. */
+    /** One-line title while the detail pane is open, as iOS's compact mode; otherwise the "Task titles" setting (DS19). */
     compact: Boolean = false,
     /** A board card's host draws the card; the row draws only its content. */
     embedded: Boolean = false,
@@ -118,7 +118,7 @@ fun TaskRowView(
                         style = TextStyles.rowTitle,
                         color = if (row.completed) colors.textMuted else colors.textPrimary,
                         textDecoration = if (row.completed) TextDecoration.LineThrough else null,
-                        maxLines = if (compact) 1 else Int.MAX_VALUE, overflow = TextOverflow.Ellipsis,
+                        maxLines = if (compact) 1 else com.gracefultools.astrid.ui.theme.LocalRowTitleLines.current.maxLines, overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false),
                     )
                     TitleChips(row)

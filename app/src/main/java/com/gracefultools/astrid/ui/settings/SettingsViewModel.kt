@@ -34,6 +34,8 @@ data class SettingsState(
     val serverOffersGithub: Boolean = false,
     val serverOffersGoogleTasks: Boolean = false,
     val theme: ThemeMode = ThemeMode.OCEAN,
+    /** "Task titles" (DS19), this device's like the theme. */
+    val rowTitleLines: com.gracefultools.astrid.ui.theme.RowTitleLines = com.gracefultools.astrid.ui.theme.RowTitleLines.WRAP,
     val outbox: OutboxStats? = null,
     val syncing: Boolean = false,
     val refreshing: Boolean = false,
@@ -48,14 +50,14 @@ data class SettingsState(
 
 /**
  * iOS's SettingsView and its pages (Reminders, Appearance): every value is the core's, every write
- * a core command. Only the theme is this device's (iOS keeps it in @AppStorage too).
+ * a core command. Only the theme and "Task titles" are this device's (iOS keeps the theme in @AppStorage too).
  */
 class SettingsViewModel(
     private val core: Core,
     private val preferences: Preferences,
     dispatcher: CoroutineDispatcher = Dispatchers.Main.immediate,
 ) : CoreViewModel(dispatcher) {
-    private val _state = MutableStateFlow(SettingsState(theme = preferences.theme.value))
+    private val _state = MutableStateFlow(SettingsState(theme = preferences.theme.value, rowTitleLines = preferences.rowTitleLines.value))
     val state: StateFlow<SettingsState> = _state.asStateFlow()
 
     init {
@@ -130,6 +132,11 @@ class SettingsViewModel(
     fun setTheme(mode: ThemeMode) {
         preferences.setTheme(mode)
         _state.update { it.copy(theme = mode) }
+    }
+
+    fun setRowTitleLines(lines: com.gracefultools.astrid.ui.theme.RowTitleLines) {
+        preferences.setRowTitleLines(lines)
+        _state.update { it.copy(rowTitleLines = lines) }
     }
 
     /** Reminder settings — the server's field names, journaled by the core (offline-safe). */

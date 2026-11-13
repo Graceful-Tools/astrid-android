@@ -64,6 +64,7 @@ import com.gracefultools.astrid.ui.detail.SearchField
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.RowTitleLines
 import com.gracefultools.astrid.ui.theme.ThemeMode
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -270,6 +271,15 @@ fun AppearanceSettingsScreen(vm: SettingsViewModel, onBack: () -> Unit) {
                 ThemeMode.DARK to R.string.settings_theme_dark, ThemeMode.AUTO to R.string.settings_theme_auto,
             )
             Segmented(modes.map { stringResource(it.second) }, modes.indexOfFirst { it.first == state.theme }) { vm.setTheme(modes[it].first) }
+        }
+
+        // DS19: web's "Task titles", kept on this device like the theme.
+        FormSection(stringResource(R.string.settings_appearance_task_titles), stringResource(R.string.settings_appearance_task_titles_footer)) {
+            val lines = listOf(
+                RowTitleLines.WRAP to R.string.settings_task_titles_wrap, RowTitleLines.TWO to R.string.settings_task_titles_two,
+                RowTitleLines.ONE to R.string.settings_task_titles_one,
+            )
+            Segmented(lines.map { stringResource(it.second) }, lines.indexOfFirst { it.first == state.rowTitleLines }) { vm.setRowTitleLines(lines[it].first) }
         }
 
         // The control, not the preference, is gated: the layout chosen elsewhere is honoured regardless.

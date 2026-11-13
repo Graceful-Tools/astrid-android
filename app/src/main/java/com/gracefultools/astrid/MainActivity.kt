@@ -38,9 +38,14 @@ class MainActivity : ComponentActivity() {
             handle(intent)
             setContent {
                 val theme by graph.preferences.theme.collectAsStateWithLifecycle()
+                val rowTitleLines by graph.preferences.rowTitleLines.collectAsStateWithLifecycle()
                 AstridTheme(theme) {
-                    SystemBars()
-                    Root()
+                    androidx.compose.runtime.CompositionLocalProvider(
+                        com.gracefultools.astrid.ui.theme.LocalRowTitleLines provides rowTitleLines,
+                    ) {
+                        SystemBars()
+                        Root()
+                    }
                 }
             }
         }

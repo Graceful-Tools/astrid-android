@@ -760,4 +760,9 @@
     <string name="list_insights_duration_minutes">%1$s мин</string>
     <string name="list_insights_duration_hours">%1$s ч</string>
     <string name="list_insights_duration_days">%1$s д</string>
+    <string name="settings_appearance_task_titles">Названия задач</string>
+    <string name="settings_appearance_task_titles_footer">Какую часть длинного названия показывает строка задачи (сохраняется на этом устройстве)</string>
+    <string name="settings_task_titles_wrap">Переносить</string>
+    <string name="settings_task_titles_two">Две строки</string>
+    <string name="settings_task_titles_one">Одна строка</string>
 </resources>
