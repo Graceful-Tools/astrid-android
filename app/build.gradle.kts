@@ -62,7 +62,7 @@ android {
     defaultConfig {
         applicationId = brand("astridApplicationId", "com.gracefultools.astrid")
         minSdk = 28
-        targetSdk = 35
+        targetSdk = 36
         // Per build (AATD-90): `-PastridVersionCode` from CI (or ORG_GRADLE_PROJECT_astridVersionCode),
         // or a brand's profile. Play needs a higher versionCode for every upload of each package.
         versionCode = brand("astridVersionCode", "1").let { code ->
@@ -245,6 +245,9 @@ dependencies {
 
 tasks.withType<Test>().configureEach {
     systemProperty("jna.library.path", rootProject.file("corebridge/src/test/resources/native").absolutePath)
+    // Robolectric's SDK 36 runtime sets FileDescriptor internals through SharedSecrets, which JDK 21
+    // does not export; without this every Robolectric test fails in setup (AATD-92).
+    jvmArgs("--add-exports=java.base/jdk.internal.access=ALL-UNNAMED")
     // PlayListingTest reads the listing draft as files; an edit to it alone must re-run the tests.
     inputs.dir("src/main/play").withPathSensitivity(PathSensitivity.RELATIVE)
 }
