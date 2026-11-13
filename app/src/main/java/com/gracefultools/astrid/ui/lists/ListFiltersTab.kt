@@ -16,17 +16,14 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
-
-/** iOS's `.yellow`, the favourite star's colour. */
-private val FavoriteYellow = Color(0xFFFFCC00)
 
 /**
  * iOS ListSortFiltersTab. A placeholder for now: only its Favorite section, so the toggle has a
@@ -52,7 +49,7 @@ fun ListFiltersTab(
             FormRow(Modifier.toggleable(value = isFavorite, role = Role.Switch, onValueChange = onFavoriteChange)) {
                 Icon(
                     if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarBorder, null,
-                    tint = if (isFavorite) FavoriteYellow else colors.textMuted, modifier = Modifier.size(20.dp),
+                    tint = if (isFavorite) IosSystemColors.yellow else colors.textMuted, modifier = Modifier.size(20.dp),
                 )
                 Text(stringResource(R.string.lists_favorite), style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
                 Switch(checked = isFavorite, onCheckedChange = null)

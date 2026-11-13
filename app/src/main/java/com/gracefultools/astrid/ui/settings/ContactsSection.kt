@@ -26,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -35,9 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.platform.DeviceContacts
 import com.gracefultools.astrid.ui.theme.AstridTheme
-
-/** iOS's system `.orange`, the "access required" glyph. */
-private val Orange = Color(0xFFFF9500)
+import com.gracefultools.astrid.ui.theme.IosSystemColors
 
 /**
  * iOS's SettingsContactsSection (AATD-68). Before access: Add Collaborators, which explains first
@@ -84,7 +81,7 @@ internal fun ContactsSection(vm: ContactsViewModel) {
                 )
             }
             refused -> NavRow(
-                stringResource(R.string.contacts_access_required), Icons.Filled.Warning, iconTint = Orange,
+                stringResource(R.string.contacts_access_required), Icons.Filled.Warning, iconTint = IosSystemColors.orange,
                 subtitle = stringResource(R.string.contacts_open_settings_prompt),
             ) {
                 context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", context.packageName, null)))

@@ -71,6 +71,7 @@ import com.gracefultools.astrid.ui.common.CheckboxArt
 import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.tasks.dueText
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
@@ -78,9 +79,6 @@ import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.TypeSize
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
-
-/** iOS's orange (Color.orange): the "counting on you" strip and the Tomorrow swipe. */
-private val Orange = Color(0xFFFF9500)
 
 /**
  * What a tapped reminder opens (iOS ReminderPresentationModifier): the reminder card for one task,
@@ -165,7 +163,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
                 if (state.countingOnYou.isNotEmpty()) {
                     Row(
                         Modifier.padding(horizontal = Spacing.s16).fillMaxWidth().clip(RoundedCornerShape(Radius.large))
-                            .background(Orange.copy(alpha = 0.1f)).border(1.dp, Orange.copy(alpha = 0.3f), RoundedCornerShape(Radius.large))
+                            .background(IosSystemColors.orange.copy(alpha = 0.1f)).border(1.dp, IosSystemColors.orange.copy(alpha = 0.3f), RoundedCornerShape(Radius.large))
                             .padding(Spacing.s12),
                         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
                     ) {
@@ -174,7 +172,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
                                 Avatar(person.image, initialsOf(person.display), 32.dp, border = Color.White)
                             }
                         }
-                        Text(stringResource(R.string.reminders_counting_on_you), style = TextStyles.subheadline, fontWeight = FontWeight.Medium, color = Orange)
+                        Text(stringResource(R.string.reminders_counting_on_you), style = TextStyles.subheadline, fontWeight = FontWeight.Medium, color = IosSystemColors.orange)
                     }
                 }
                 Column(Modifier.padding(horizontal = Spacing.s16), verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
@@ -321,7 +319,7 @@ private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (Tria
 
 private fun triageColor(action: TriageAction, muted: Color): Color = when (action) {
     TriageAction.COMPLETE -> Success
-    TriageAction.POSTPONE -> Orange
+    TriageAction.POSTPONE -> IosSystemColors.orange
     TriageAction.KEEP -> muted
     TriageAction.ASSIGN -> com.gracefultools.astrid.ui.theme.Accent
 }

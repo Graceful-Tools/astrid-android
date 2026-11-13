@@ -31,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -57,6 +56,7 @@ import com.gracefultools.astrid.ui.agents.NavRow
 import com.gracefultools.astrid.ui.agents.SmallSpinner
 import com.gracefultools.astrid.ui.agents.openInCustomTab
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -80,7 +80,7 @@ fun ExternalSyncRows(core: Core, onOpen: (String) -> Unit) {
     if (available.github) {
         NavRow(
             stringResource(R.string.sync_github_issues_title),
-            leading = { Icon(Icons.Filled.Code, null, tint = Color(0xFFAF52DE), modifier = Modifier.size(20.dp)) },
+            leading = { Icon(Icons.Filled.Code, null, tint = IosSystemColors.purple, modifier = Modifier.size(20.dp)) },
         ) { onOpen(SyncRoutes.GITHUB) }
     }
     if (available.google) {

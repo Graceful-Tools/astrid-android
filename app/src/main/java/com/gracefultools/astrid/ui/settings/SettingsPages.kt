@@ -62,6 +62,7 @@ import com.gracefultools.astrid.ui.detail.PickerSheet
 import com.gracefultools.astrid.ui.detail.PickRow
 import com.gracefultools.astrid.ui.detail.SearchField
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.RowTitleLines
@@ -314,15 +315,13 @@ fun AppearanceSettingsScreen(vm: SettingsViewModel, onBack: () -> Unit) {
                     Bullet(stringResource(R.string.settings_appearance_email_to_task_assigned, com.gracefultools.astrid.Brand.inboundTaskEmail), colors.accentInk)
                     Bullet(stringResource(R.string.settings_appearance_email_to_task_group, com.gracefultools.astrid.Brand.inboundTaskEmail), colors.accentInk)
                     HorizontalDivider(Modifier.padding(vertical = Spacing.s4), color = colors.divider)
-                    Bullet(stringResource(R.string.settings_appearance_email_to_task_subject), Purple)
-                    Bullet(stringResource(R.string.settings_appearance_email_to_task_body), Purple)
+                    Bullet(stringResource(R.string.settings_appearance_email_to_task_subject), IosSystemColors.purple)
+                    Bullet(stringResource(R.string.settings_appearance_email_to_task_body), IosSystemColors.purple)
                 }
             }
         }
     }
 }
-
-private val Purple = Color(0xFFAF52DE)
 
 @Composable
 private fun Bullet(text: String, dot: Color) {
