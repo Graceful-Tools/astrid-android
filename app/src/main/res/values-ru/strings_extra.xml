@@ -155,4 +155,7 @@
     <string name="settings_task_titles_wrap">Переносить</string>
     <string name="settings_task_titles_two">Две строки</string>
     <string name="settings_task_titles_one">Одна строка</string>
+    <string name="settings_custom_agents_change_photo">Изменить фото профиля</string>
+    <string name="settings_custom_agents_photo_updated">Фото профиля обновлено</string>
+    <string name="settings_custom_agents_photo_failed">Не удалось обновить фото профиля</string>
 </resources>

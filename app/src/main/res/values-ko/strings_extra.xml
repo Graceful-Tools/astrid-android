@@ -155,4 +155,7 @@
     <string name="settings_task_titles_wrap">줄바꿈</string>
     <string name="settings_task_titles_two">두 줄</string>
     <string name="settings_task_titles_one">한 줄</string>
+    <string name="settings_custom_agents_change_photo">프로필 사진 변경</string>
+    <string name="settings_custom_agents_photo_updated">프로필 사진이 업데이트되었습니다</string>
+    <string name="settings_custom_agents_photo_failed">프로필 사진을 업데이트하지 못했습니다</string>
 </resources>

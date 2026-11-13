@@ -445,10 +445,12 @@ data class CustomAgentsState(
     val registration: CustomAgentRegistration? = null,
     val pendingDelete: CustomAgent? = null,
     val deletingId: String? = null,
-    /** iOS flashes "Agent created" / "Agent removed"; the screen words it. */
+    /** The agent whose picked photo is uploading, which draws a spinner over its avatar. */
+    val uploadingPhotoId: String? = null,
+    /** iOS flashes "Agent created" / "Agent removed"; the web "Profile photo updated" or failed. The screen words it. */
     val flash: Flash? = null,
 ) {
-    enum class Flash { CREATED, DELETED }
+    enum class Flash { CREATED, DELETED, PHOTO_UPDATED, PHOTO_FAILED }
 }
 
 /** iOS `CustomAgentsModel` over `customAgents` / `registerCustomAgent` / `deleteCustomAgent`. */
@@ -485,6 +487,29 @@ class CustomAgentsViewModel(private val core: Core, dispatcher: CoroutineDispatc
             _state.update { it.copy(registerError = failure.reason()) }
         } finally {
             _state.update { it.copy(isRegistering = false) }
+        }
+    }
+
+    /**
+     * The web's Custom Agents photo (AATD-95): a picked file goes to the core, which uploads it and
+     * sets it on the agent (`setCustomAgentPhoto` `photoPath`, AWTD-1628). The answer is the image
+     * the server stored, so that is what the row draws; a failure keeps the old photo.
+     */
+    fun setPhoto(agentId: String, photoPath: String) = work {
+        _state.update { it.copy(uploadingPhotoId = agentId) }
+        try {
+            val answer = core.run(command("setCustomAgentPhoto", "agentId" to agentId, "photoPath" to photoPath)) as? JsonObject
+            val image = (answer?.get("image") as? JsonPrimitive)?.contentOrNull
+            _state.update { state ->
+                state.copy(
+                    agents = state.agents.map { if (it.id == agentId) it.copy(image = image) else it },
+                    flash = CustomAgentsState.Flash.PHOTO_UPDATED,
+                )
+            }
+        } catch (failure: Throwable) {
+            _state.update { it.copy(flash = CustomAgentsState.Flash.PHOTO_FAILED) }
+        } finally {
+            _state.update { it.copy(uploadingPhotoId = null) }
         }
     }
 

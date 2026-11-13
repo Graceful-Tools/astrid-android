@@ -155,4 +155,7 @@
     <string name="settings_task_titles_wrap">Ajustar</string>
     <string name="settings_task_titles_two">Dos líneas</string>
     <string name="settings_task_titles_one">Una línea</string>
+    <string name="settings_custom_agents_change_photo">Cambiar foto de perfil</string>
+    <string name="settings_custom_agents_photo_updated">Foto de perfil actualizada</string>
+    <string name="settings_custom_agents_photo_failed">No se pudo actualizar la foto de perfil</string>
 </resources>

@@ -40,6 +40,7 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.SettingsInputAntenna
 import androidx.compose.material.icons.filled.Terminal
 import androidx.compose.material.icons.filled.UnfoldMore
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -66,6 +67,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
@@ -78,6 +80,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.gracefultools.astrid.Brand
 import com.gracefultools.astrid.R
+import com.gracefultools.astrid.ui.common.rememberPhotoPicker
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Radius
@@ -602,12 +605,21 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
             Caption(stringResource(R.string.settings_openclaw_description))
         }
         state.flash?.let { flash ->
+            val failed = flash == CustomAgentsState.Flash.PHOTO_FAILED
+            val ink = if (failed) AstridTheme.colors.errorInk else AstridTheme.colors.successInk
             FormSection {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.CheckCircle, null, tint = AstridTheme.colors.successInk, modifier = Modifier.size(18.dp))
+                    Icon(if (failed) Icons.Filled.Warning else Icons.Filled.CheckCircle, null, tint = ink, modifier = Modifier.size(18.dp))
                     Text(
-                        stringResource(if (flash == CustomAgentsState.Flash.CREATED) R.string.settings_openclaw_agent_created else R.string.settings_openclaw_agent_deleted),
-                        style = TextStyles.body, color = AstridTheme.colors.successInk,
+                        stringResource(
+                            when (flash) {
+                                CustomAgentsState.Flash.CREATED -> R.string.settings_openclaw_agent_created
+                                CustomAgentsState.Flash.DELETED -> R.string.settings_openclaw_agent_deleted
+                                CustomAgentsState.Flash.PHOTO_UPDATED -> R.string.settings_custom_agents_photo_updated
+                                CustomAgentsState.Flash.PHOTO_FAILED -> R.string.settings_custom_agents_photo_failed
+                            },
+                        ),
+                        style = TextStyles.body, color = ink,
                     )
                 }
             }
@@ -626,7 +638,10 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
             else -> FormSection(header = stringResource(R.string.settings_openclaw_section)) {
                 state.agents.forEachIndexed { index, agent ->
                     if (index > 0) FormDivider()
-                    CustomAgentRow(agent, busy = state.deletingId == agent.id) { vm.requestDelete(agent) }
+                    CustomAgentRow(
+                        agent, busy = state.deletingId == agent.id, uploadingPhoto = state.uploadingPhotoId == agent.id,
+                        onPhoto = { path -> vm.setPhoto(agent.id, path) },
+                    ) { vm.requestDelete(agent) }
                 }
             }
         }
@@ -663,21 +678,31 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
 }
 
 @Composable
-private fun CustomAgentRow(agent: CustomAgent, busy: Boolean, onDelete: () -> Unit) {
+private fun CustomAgentRow(agent: CustomAgent, busy: Boolean, uploadingPhoto: Boolean, onPhoto: (String) -> Unit, onDelete: () -> Unit) {
     val colors = AstridTheme.colors
+    val pickPhoto = rememberPhotoPicker(onPhoto)
     Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(Spacing.s12), modifier = Modifier.padding(vertical = Spacing.s4)) {
         val image = agent.image?.takeIf { it.isNotBlank() }?.let { path ->
             val png = if (path.endsWith(".svg")) path.removeSuffix(".svg") + ".png" else path
             if (png.startsWith("http")) png else Brand.webUrl(png)
         }
-        if (image != null) {
-            AsyncImage(
-                model = image, contentDescription = null, contentScale = ContentScale.Crop,
-                placeholder = painterResource(R.drawable.ai_openclaw), error = painterResource(R.drawable.ai_openclaw),
-                modifier = Modifier.size(40.dp).clip(CircleShape),
-            )
-        } else {
-            BrandIcon(R.drawable.ai_openclaw, size = 40.dp)
+        // The web's Custom Agents photo (AATD-95): the avatar is the button that changes it.
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.size(40.dp).clip(CircleShape)
+                .clickable(enabled = !uploadingPhoto, role = Role.Button, onClickLabel = stringResource(R.string.settings_custom_agents_change_photo), onClick = pickPhoto)
+                .testTag("customAgentPhoto-${agent.id}"),
+        ) {
+            if (image != null) {
+                AsyncImage(
+                    model = image, contentDescription = null, contentScale = ContentScale.Crop,
+                    placeholder = painterResource(R.drawable.ai_openclaw), error = painterResource(R.drawable.ai_openclaw),
+                    modifier = Modifier.matchParentSize(),
+                )
+            } else {
+                BrandIcon(R.drawable.ai_openclaw, size = 40.dp)
+            }
+            if (uploadingPhoto) SmallSpinner()
         }
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
             Text(agent.email, style = TextStyles.subheadline, fontFamily = FontFamily.Monospace, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)

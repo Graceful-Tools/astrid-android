@@ -248,6 +248,36 @@ class AgentsViewModelTest {
     }
 
     @Test
+    fun `AATD-95 a picked photo goes to the core as photoPath for that agent, and the stored image is drawn`() = runTest {
+        val core = FakeCore().apply {
+            answer("customAgents", """[{"id":"a1","email":"buddy.oc@astrid.cc","name":"buddy","agentName":"buddy","status":"active","registeredAt":"2026-09-01T10:00:00Z"}]""")
+            answer("setCustomAgentPhoto", """{"image":"https://cdn.test/buddy.png"}""")
+        }
+        val vm = CustomAgentsViewModel(core, UnconfinedTestDispatcher()).apply { load() }
+        vm.setPhoto("a1", "/cache/photo-1.jpg")
+        val sent = core.last("setCustomAgentPhoto")!!
+        assertEquals(JsonPrimitive("a1"), sent["agentId"])
+        assertEquals(JsonPrimitive("/cache/photo-1.jpg"), sent["photoPath"])
+        assertFalse(sent.containsKey("image"))
+        assertEquals("https://cdn.test/buddy.png", vm.state.value.agents.single().image)
+        assertEquals(CustomAgentsState.Flash.PHOTO_UPDATED, vm.state.value.flash)
+        assertNull(vm.state.value.uploadingPhotoId)
+    }
+
+    @Test
+    fun `AATD-95 a photo that fails to upload keeps the old one and says so`() = runTest {
+        val core = FakeCore().apply {
+            answer("customAgents", """[{"id":"a1","email":"buddy.oc@astrid.cc","name":"buddy","image":"/old.png","agentName":"buddy","status":"active","registeredAt":"2026-09-01T10:00:00Z"}]""")
+            answer("setCustomAgentPhoto") { throw CoreFailure(FailureKind.UNKNOWN, "upload failed") }
+        }
+        val vm = CustomAgentsViewModel(core, UnconfinedTestDispatcher()).apply { load() }
+        vm.setPhoto("a1", "/cache/photo-1.jpg")
+        assertEquals("/old.png", vm.state.value.agents.single().image)
+        assertEquals(CustomAgentsState.Flash.PHOTO_FAILED, vm.state.value.flash)
+        assertNull(vm.state.value.uploadingPhotoId)
+    }
+
+    @Test
     fun `AATD-57 Astrid's model is chosen with setAstridModel, and None clears it`() = runTest {
         val core = FakeCore().apply {
             answer("astridModel", """{"options":[{"id":"u1","name":"Claude","service":"claude","serviceLabel":"claude","isSelected":false}],"selected":null}""")
