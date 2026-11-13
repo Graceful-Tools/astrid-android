@@ -29,6 +29,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.Radius
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -61,7 +62,7 @@ private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
         }
         "code" -> Text(
             block.str("text").orEmpty(), fontFamily = FontFamily.Monospace, fontSize = 14.sp, color = colors.textPrimary,
-            modifier = Modifier.fillMaxWidth().background(colors.bgTertiary, RoundedCornerShape(6.dp))
+            modifier = Modifier.fillMaxWidth().background(colors.bgTertiary, RoundedCornerShape(Radius.small))
                 .horizontalScroll(rememberScrollState()).padding(10.dp),
         )
         "list" -> {

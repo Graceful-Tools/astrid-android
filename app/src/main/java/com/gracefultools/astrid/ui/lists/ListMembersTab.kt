@@ -53,6 +53,7 @@ import com.gracefultools.astrid.ui.detail.PickRow
 import com.gracefultools.astrid.ui.detail.PickerSheet
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
+import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -271,7 +272,7 @@ private fun MemberRow(member: Member, canManage: Boolean, vm: ListSettingsViewMo
             val menuLabel = stringResource(R.string.lists_member_options)
             Box {
                 Row(
-                    Modifier.clip(RoundedCornerShape(6.dp)).clickable(role = Role.Button, onClickLabel = menuLabel) { open = true }
+                    Modifier.clip(RoundedCornerShape(Radius.small)).clickable(role = Role.Button, onClickLabel = menuLabel) { open = true }
                         .semantics(mergeDescendants = true) { contentDescription = menuLabel }
                         .padding(horizontal = Spacing.s8, vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
@@ -301,7 +302,7 @@ private fun MemberRow(member: Member, canManage: Boolean, vm: ListSettingsViewMo
 private fun Pill(label: String, tint: Color, onClick: () -> Unit) {
     Text(
         label, style = TextStyles.caption, color = tint,
-        modifier = Modifier.clip(RoundedCornerShape(6.dp)).background(tint.copy(alpha = 0.1f))
+        modifier = Modifier.clip(RoundedCornerShape(Radius.small)).background(tint.copy(alpha = 0.1f))
             .clickable(role = Role.Button, onClick = onClick).padding(horizontal = Spacing.s12, vertical = 6.dp),
     )
 }

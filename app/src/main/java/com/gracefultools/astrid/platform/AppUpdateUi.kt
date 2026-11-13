@@ -49,6 +49,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.requestAppUpdateInfo
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import androidx.compose.ui.text.TextStyle
@@ -134,7 +135,7 @@ internal fun AppUpdateCard(onUpdate: () -> Unit, onDismiss: () -> Unit) {
         ) {
             Column(
                 Modifier.padding(Spacing.s24).widthIn(max = 340.dp).fillMaxWidth()
-                    .shadow(20.dp, RoundedCornerShape(16.dp)).clip(RoundedCornerShape(16.dp)).background(colors.bgPrimary)
+                    .shadow(20.dp, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgPrimary)
                     // The card itself is not the ground: a tap on it is not "Not now".
                     .pointerInput(Unit) { detectTapGestures { } }
                     .padding(Spacing.s24),

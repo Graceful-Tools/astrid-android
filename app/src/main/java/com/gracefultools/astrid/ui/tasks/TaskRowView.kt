@@ -20,6 +20,7 @@ import com.gracefultools.astrid.ui.common.completionPop
 import com.gracefultools.astrid.ui.common.rememberCompletionPop
 import com.gracefultools.astrid.ui.common.RowFaceShape
 import com.gracefultools.astrid.ui.common.initialsOf
+import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
 import androidx.compose.foundation.border
@@ -178,7 +179,7 @@ private fun LeadingControl(row: TaskRow, onLeading: () -> Unit) {
         onLeading()
     }
     val priority = colors.priority.getOrElse(row.priority) { colors.priority[0] }
-    val square = RoundedCornerShape(8.dp)
+    val square = RoundedCornerShape(Radius.medium)
     val label = stringResource(if (row.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, row.title)
     val tap = Modifier.size(34.dp).completionPop(pop).clip(square).clickable(onClick = onTap)
         .semantics { contentDescription = row.checkboxLabel ?: label; role = Role.Checkbox }
@@ -259,7 +260,7 @@ private fun Metadata(row: TaskRow) {
 fun ListChipView(chip: com.gracefultools.astrid.model.ListChip, modifier: Modifier = Modifier) {
     val colors = AstridTheme.colors
     val tint = parseColor(chip.color)
-    val shape = RoundedCornerShape(12.dp)
+    val shape = RoundedCornerShape(Radius.large)
     Row(
         modifier.clip(shape).background(colors.chipBg).border(1.dp, colors.chipBorder, shape).padding(horizontal = 10.dp, vertical = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically,

@@ -64,6 +64,7 @@ import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.tasks.parseColor
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -171,7 +172,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.publicSection(
         Group(Position.Last) {
             Text(
                 stringResource(seeAll), style = TextStyles.caption, color = AstridTheme.colors.accent,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s8).clip(RoundedCornerShape(8.dp))
+                modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s8).clip(RoundedCornerShape(Radius.medium))
                     .clickable(role = androidx.compose.ui.semantics.Role.Button, onClick = onSeeAll)
                     .testTag("sidebar:$key-see-all").padding(start = Spacing.s12, top = 13.dp, bottom = 13.dp),
             )
@@ -199,7 +200,7 @@ private fun BrandHeader(onSearch: () -> Unit) {
         Modifier.fillMaxWidth().padding(start = Spacing.s16, end = Spacing.s8, top = 4.dp, bottom = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Image(painterResource(R.drawable.astrid_character), null, Modifier.size(LogoColumn).clip(RoundedCornerShape(6.dp)))
+        Image(painterResource(R.drawable.astrid_character), null, Modifier.size(LogoColumn).clip(RoundedCornerShape(Radius.small)))
         Spacer(Modifier.width(LogoGap))
         Text(
             stringResource(R.string.brand_wordmark), fontSize = 21.6.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
@@ -267,7 +268,7 @@ private fun RowShell(
     @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
     Row(
         Modifier.fillMaxWidth().padding(horizontal = Spacing.s8, vertical = 1.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(Radius.medium))
             .background(if (selected) (if (colors.isDark) colors.bgTertiary else colors.accent.copy(alpha = 0.1f)) else Color.Transparent)
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
             .testTag(tag)
