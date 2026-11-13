@@ -29,8 +29,7 @@ class PublicListsTest {
     ]"""
 
     private fun core() = FakeCore().apply {
-        answer("lists", """[{"id":"l1","name":"Home"}]""")
-        answer("myTasksList", """{"id":"my-tasks","name":"My Tasks","isVirtual":true}""")
+        answer("sidebar", """{"myTasks":{"id":"my-tasks","name":"My Tasks","isVirtual":true},"lists":[{"id":"l1","name":"Home"}]}""")
         answer("publicLists", catalogue)
     }
 

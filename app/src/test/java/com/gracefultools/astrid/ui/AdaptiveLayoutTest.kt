@@ -33,8 +33,7 @@ class AdaptiveLayoutTest {
     @get:Rule val compose = createComposeRule()
 
     private fun core() = FakeCore().apply {
-        answer("lists", """[{"id":"l1","name":"Home"}]""")
-        answer("myTasksList", """{"id":"virtual:my-tasks","name":"My Tasks","isVirtual":true}""")
+        answer("sidebar", """{"myTasks":{"id":"virtual:my-tasks","name":"My Tasks","isVirtual":true},"lists":[{"id":"l1","name":"Home"}]}""")
         answer("rowsForList", """{"total":1,"rows":[{"id":"t1","title":"Water plants"}]}""")
         answer("taskDetail", """{"task":{"id":"t1","title":"Water plants"},"descriptionBlocks":[],"comments":[],"subtasks":[]}""")
     }
