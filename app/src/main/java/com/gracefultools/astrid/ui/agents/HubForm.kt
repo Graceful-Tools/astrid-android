@@ -140,7 +140,7 @@ internal fun FormSection(
 }
 
 @Composable
-internal fun formCard(): Color = AstridTheme.colors.let { if (it.isDark) it.bgSecondary else Color.White }
+internal fun formCard(): Color = AstridTheme.colors.sheet
 
 @Composable
 internal fun FormDivider() = HorizontalDivider(color = AstridTheme.colors.divider, thickness = 0.5.dp)

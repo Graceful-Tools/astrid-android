@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.Accent
+import com.gracefultools.astrid.ui.theme.AccentText
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.DarkColors
 import com.gracefultools.astrid.ui.theme.LightColors
@@ -95,7 +96,7 @@ fun SignInScreen(
             SignInState.WaitingForBrowser -> {
                 Text(stringResource(R.string.auth_waiting_for_browser), style = TextStyles.body, color = palette.textPrimary, textAlign = TextAlign.Center)
                 Column(buttons, verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
-                    ProviderButton(R.string.auth_open_browser_again, Icons.Filled.OpenInBrowser, Accent, Color.White, onOpenAgain)
+                    ProviderButton(R.string.auth_open_browser_again, Icons.Filled.OpenInBrowser, Accent, AccentText, onOpenAgain)
                 }
                 TextButton(onClick = onCancel) { Text(stringResource(R.string.common_cancel), color = palette.textPrimary) }
             }
@@ -118,7 +119,7 @@ fun SignInScreen(
                     val neutral = if (palette.isDark) Color(0.2f, 0.2f, 0.2f) else Color(0.95f, 0.95f, 0.95f)
                     val onNeutral = if (palette.isDark) Color.White else Color.Black
                     for (provider in look.providers) when (provider) {
-                        "google" -> ProviderButton(R.string.auth_continue_with_google, Icons.Filled.Language, Accent, Color.White) { onProvider("google") }
+                        "google" -> ProviderButton(R.string.auth_continue_with_google, Icons.Filled.Language, Accent, AccentText) { onProvider("google") }
                         // The hand-off page offers every way in; a passkey is one of them.
                         "passkey" -> ProviderButton(R.string.auth_continue_with_passkey, Icons.Filled.Key, neutral, onNeutral) { onProvider(null) }
                         "github" -> ProviderButton(R.string.auth_continue_with_github, Icons.Filled.Code, neutral, onNeutral) { onProvider("github") }

@@ -46,7 +46,7 @@ import com.gracefultools.astrid.ui.theme.TextStyles
 
 /** The card colour a Form row sits on: white in light themes, the secondary background in dark. */
 @Composable
-internal fun formCard(): Color = AstridTheme.colors.let { if (it.isDark) it.bgSecondary else Color.White }
+internal fun formCard(): Color = AstridTheme.colors.sheet
 
 @Composable
 internal fun FormSection(

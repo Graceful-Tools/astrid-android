@@ -70,7 +70,6 @@ import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.CheckboxArt
 import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.tasks.dueText
-import com.gracefultools.astrid.ui.theme.Accent
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
@@ -247,9 +246,9 @@ private fun TriageDeck(state: ReminderState, vm: ReminderViewModel, onOpenTask: 
                     Text(stringResource(R.string.reminders_triage_caught_up), fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
                     Spacer(Modifier.size(Spacing.s16))
                     Box(
-                        Modifier.clip(RoundedCornerShape(12.dp)).background(Accent).clickable(role = Role.Button, onClick = vm::close)
+                        Modifier.clip(RoundedCornerShape(12.dp)).background(colors.accent).clickable(role = Role.Button, onClick = vm::close)
                             .padding(horizontal = Spacing.s32, vertical = Spacing.s12),
-                    ) { Text(stringResource(R.string.reminders_triage_done), style = TextStyles.headline, color = Color.White) }
+                    ) { Text(stringResource(R.string.reminders_triage_done), style = TextStyles.headline, color = colors.accentText) }
                 }
             } else {
                 var pending by remember(task.task.id) { mutableStateOf<TriageAction?>(null) }

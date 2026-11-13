@@ -147,7 +147,7 @@ fun CustomRepeatDialog(
                             ) {
                                 Text(
                                     day.getDisplayName(TextStyle.NARROW, locale), fontSize = 12.sp, fontWeight = FontWeight.SemiBold,
-                                    color = if (chosen) Color.White else colors.textMuted,
+                                    color = if (chosen) colors.accentText else colors.textMuted,
                                 )
                             }
                         }

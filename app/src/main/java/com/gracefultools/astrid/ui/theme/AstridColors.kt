@@ -52,6 +52,8 @@ data class AstridColors(
     /** A text field inside a floating bar: white with a 1pt border on Ocean and Light, black on Dark. */
     val field: Color = inputBg,
     val fieldBorder: Color = inputBorder,
+    /** Sheets, dialogs and grouped form cards: white on the light themes, `bg-secondary` on Dark (Material's surface). */
+    val sheet: Color = if (isDark) bgSecondary else Color.White,
     /** List chips on rows (getBadgeBackground / getBorderColor). */
     val chipBg: Color = bgTertiary,
     val chipBorder: Color = border,

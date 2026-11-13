@@ -56,7 +56,7 @@ object Radius {
  * lavender shows through in a picker or a switch track (AATD-33).
  */
 fun materialScheme(c: AstridColors): androidx.compose.material3.ColorScheme {
-    val sheet = if (c.isDark) c.bgSecondary else androidx.compose.ui.graphics.Color.White
+    val sheet = c.sheet
     val base = if (c.isDark) darkColorScheme() else lightColorScheme()
     return base.copy(
         primary = c.accent, onPrimary = c.accentText,
