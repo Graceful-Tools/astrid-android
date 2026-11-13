@@ -23,8 +23,14 @@ astrid-core = { version = "0.1", git = "https://github.com/Graceful-Tools/astrid
 uniffi = "0.32"
 
 [profile.release]
+# Size over the last few percent of speed (AATD-91): arm64 shipped 13.51 MB at opt-level 3, 11.38 MB
+# at "s". "z" (10.59 MB) gives up loop vectorisation sqlite and serde lean on, and fat LTO saved 4 KB.
+# scripts/check-native-size.sh holds the budget.
+opt-level = "s"
 lto = "thin"
 codegen-units = 1
+# The symbol table stays here (~3.5 MB per ABI) for the app's packaging to move into the bundle's
+# native-debug-symbols for Play, stripping it from what ships (app/build.gradle.kts, AATD-91).
 strip = "debuginfo"
 # Unwind, not abort: every door catches a panic and answers with a failure, which only works if a
 # panic unwinds to the catch.

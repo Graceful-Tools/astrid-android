@@ -29,12 +29,20 @@ if [[ -f core/Cargo.toml ]]; then
   step "bindings are what the core generates"
   git diff --exit-code -- corebridge/src/main/java/uniffi \
     || { echo "generated bindings changed: commit them with the core change that caused it" >&2; exit 1; }
+  if [[ "$mode" != "--quick" ]]; then
+    # What a release APK ships (the debug one ships the unoptimised `jni` profile), measured as the
+    # app's packaging strips it. arm64 only: x86_64 is emulators, and the two move together.
+    step "core: the release arm64 library is within its size budget (AATD-91)"
+    (cd core && cargo ndk -t arm64-v8a --platform 28 build -p astrid-android --release)
+    scripts/check-native-size.sh core/target/aarch64-linux-android/release/libastrid_android.so arm64-v8a
+  fi
 fi
 
 # The scheduled loop runs under launchd on the dev Mac only (docs/AUTOMATION.md), and its test
 # drives the real zsh script against stubs, so CI (ubuntu) skips it.
-step "scripts: a brand from its profile, and the literal audit (AATD-90)"
+step "scripts: a brand from its profile, the literal audit (AATD-90), the size budget (AATD-91)"
 scripts/test-make-brand-variant.sh
+scripts/test-check-native-size.sh
 # brands/acme is generated from astrid-web's acme profile: stale when that profile has moved on.
 web="${ASTRID_WEB_DIR:-../astrid-web}"
 if [[ -f "$web/brands/acme.brand.json" ]]; then
