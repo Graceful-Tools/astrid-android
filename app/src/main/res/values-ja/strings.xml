@@ -24,6 +24,8 @@
     <string name="detail_back">戻る</string>
     <string name="detail_title_label">タイトル</string>
     <string name="detail_description">説明</string>
+    <string name="task_detail_description_full_screen">全画面で開く</string>
+    <string name="task_detail_description_preview">プレビュー</string>
     <string name="detail_assignee">誰</string>
     <string name="detail_unassigned">未割り当て</string>
     <string name="detail_when">日時</string>

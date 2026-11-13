@@ -24,6 +24,8 @@
     <string name="detail_back">Voltar</string>
     <string name="detail_title_label">Título</string>
     <string name="detail_description">Descrição</string>
+    <string name="task_detail_description_full_screen">Abrir em tela cheia</string>
+    <string name="task_detail_description_preview">Visualização</string>
     <string name="detail_assignee">Quem</string>
     <string name="detail_unassigned">Não atribuído</string>
     <string name="detail_when">Quando</string>

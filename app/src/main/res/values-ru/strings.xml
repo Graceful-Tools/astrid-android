@@ -24,6 +24,8 @@
     <string name="detail_back">Назад</string>
     <string name="detail_title_label">Название</string>
     <string name="detail_description">Описание</string>
+    <string name="task_detail_description_full_screen">Открыть на весь экран</string>
+    <string name="task_detail_description_preview">Просмотр</string>
     <string name="detail_assignee">Кто</string>
     <string name="detail_unassigned">Не назначено</string>
     <string name="detail_when">Когда</string>
