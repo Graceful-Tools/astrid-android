@@ -190,4 +190,26 @@ echo "Synced with astrid.cc" > "$txt/listings/en-US/full-description.txt"
 ! audit --budget 2 --text "$txt" || fail "a listing naming Astrid did not count"
 audit --budget 3 --text "$txt" || fail "the listing's one hit did not make three"
 
+# --apk reads the dex string pool, where most strings are names: a name literal counts only as a
+# whole word in its own case, a domain in any case. A minimal dex: header, string ids, string data.
+python3 -I - "$work/brand.apk" <<'PY'
+import sys, zipfile
+strings = ["Acme", "Astrid", "AstridTheme", "astridModel", "Lcom/gracefultools/astrid/AstridApp;",
+           "astrid.sqlite", "help@ASTRID.CC", "notastrid.cc"]
+header = 0x70
+data = bytearray(header + 4 * len(strings))
+data[:4] = b"dex\n"
+data[0x38:0x3C] = len(strings).to_bytes(4, "little")
+data[0x3C:0x40] = header.to_bytes(4, "little")
+for i, text in enumerate(strings):
+    data[header + 4 * i:header + 4 * i + 4] = len(data).to_bytes(4, "little")
+    data += bytes([len(text)]) + text.encode() + b"\0"
+with zipfile.ZipFile(sys.argv[1], "w") as z:
+    z.writestr("classes.dex", bytes(data))
+    z.writestr("assets/notes.dex", bytes(data))  # not a classes*.dex: not read
+PY
+audit --budget 3 --text "$txt" --apk "$work/brand.apk" && fail "the APK's dex was not audited"
+audit --budget 5 --text "$txt" --apk "$work/brand.apk" \
+  || fail "the dex should add two (\"Astrid\" and help@ASTRID.CC), not its names"
+
 echo "✓ make-brand-variant and the brand literal audit"

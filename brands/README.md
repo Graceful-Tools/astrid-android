@@ -58,8 +58,12 @@ wants neither cyan nor Astrid's look starts on another theme (`defaultTheme`).
 **Literal audit.** `scripts/check-brand-literals.py` lists every string in a brand build's merged
 resources and manifest that contains one of the profile's `expect.forbidLiterals`. Predeploy runs it
 on acme, including its Play listing (`--text brands/acme/play`), against a budget that only goes
-down (24: the webhook hint's `ASTRID_WEBHOOK_SECRET` and `npx astrid-agent`, in 12 locales). Auditing the dex
-is still to come in AATD-90. Anything else a partner supplies in `res/` by hand, as below.
+down (24: the webhook hint's `ASTRID_WEBHOOK_SECRET` and `npx astrid-agent`, in 12 locales). It also
+reads the packaged APK's dex (`--apk`), where a fallback in Kotlin would hide from a resource audit. The
+dex is mostly names (`AstridTheme`, `astrid.sqlite`), so there a name counts only as a whole word in its
+own case, and a domain in any case: acme's dex has none. That is why `Brand.kt` names no Astrid value of
+its own: Gradle gives every key Astrid's value when it is unset. The core library's strings are still to
+come in AATD-90. Anything else a partner supplies in `res/` by hand, as below.
 
 Any key can also be passed alone as `-P<key>=<value>` without a brand directory. A blank value is
 unset. With nothing set, every value is Astrid's and the build is the one it always was.

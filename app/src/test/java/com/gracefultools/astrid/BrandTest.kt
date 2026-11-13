@@ -18,10 +18,9 @@ class BrandTest {
     }
 
     @Test
-    fun `AATD-71 a configured value is trimmed and loses a trailing slash, a blank one falls back`() {
-        assertEquals("https://tasks.example.com", Brand.origin("  https://tasks.example.com/ ", "https://astrid.cc"))
-        assertEquals("https://astrid.cc", Brand.origin("", "https://astrid.cc"))
-        assertEquals("https://astrid.cc", Brand.origin(null, "https://astrid.cc"))
+    fun `AATD-71 a configured value is trimmed and loses a trailing slash`() {
+        // A blank one never gets here: Gradle's brand() makes it Astrid's (AATD-90).
+        assertEquals("https://tasks.example.com", Brand.origin("  https://tasks.example.com/ "))
         assertEquals("https://tasks.example.com/s/abc", Brand.webUrl("/s/abc", base = "https://tasks.example.com"))
     }
 
@@ -31,6 +30,16 @@ class BrandTest {
             .filter { it.isFile && it.extension == "kt" && it.name != "Brand.kt" }
             .flatMap { f -> f.readLines().mapIndexedNotNull { i, line -> if ("https://astrid.cc" in line) "${f.name}:${i + 1}" else null } }
             .toList()
+        assertEquals(emptyList<String>(), leaks)
+    }
+
+    @Test
+    fun `AATD-90 Brand holds no Astrid value of its own, so a partner's dex carries none`() {
+        // Gradle gives every brand field a value (Astrid's when unset); a fallback here is dead code
+        // that still ships "Astrid" and astrid.cc in every partner's APK (check-brand-literals --apk).
+        val brand = File("src/main/java/com/gracefultools/astrid/Brand.kt").readLines()
+            .filterNot { line -> listOf("/*", "*", "//").any { line.trimStart().startsWith(it) } }
+        val leaks = brand.filter { "astrid.cc" in it || "\"Astrid\"" in it }
         assertEquals(emptyList<String>(), leaks)
     }
 }

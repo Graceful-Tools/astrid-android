@@ -46,7 +46,7 @@ if [[ "$mode" != "--quick" ]]; then
   step "native libraries: every shipped ABI carries the core (AATD-88)"
   scripts/check-native-abis.sh app/build/outputs/apk/debug/app-debug.apk
   # A white-label brand still merges: its manifest placeholders, resources and generated shortcut
-  # (AATD-72, brands/README.md). Stops short of packaging, so the APK above stays the Astrid one.
+  # (AATD-72, brands/README.md). Stops short of packaging; only the acme audit below packages.
   step "gradle: the example brand's manifest and resources"
   ./gradlew --console=plain -PastridBrand=example :app:processDebugResources
   # Its links verify (astridLinkAutoVerify=true, AATD-76); Astrid's are checked in BrandIdentityTest.
@@ -71,17 +71,21 @@ if [[ "$mode" != "--quick" ]]; then
   fi
   # A partner's build should name the partner, not Astrid. Not there yet: the budget is how many
   # strings still do, and it only goes down (check-brand-literals.py; the goal is 0, AATD-90).
-  step "gradle: the acme brand names no Astrid (budget 24)"
+  # Packaged, so the dex is audited too: Kotlin's own strings and any fallback left in it.
+  step "gradle: the acme brand names no Astrid, in resources or dex (budget 24)"
   # The version is per build too (AATD-90): what -P passes is what the package says.
   ./gradlew --console=plain -PastridBrand=acme -PastridVersionCode=42 -PastridVersionName=4.2.0 \
-    :app:processDebugResources
+    :app:assembleDebug
+  # Moved aside, so app-debug.apk is never a partner's build mistaken for Astrid's.
+  acme_apk=app/build/outputs/apk/debug/acme-debug.apk
+  mv app/build/outputs/apk/debug/app-debug.apk "$acme_apk"
   acme_manifest=app/build/intermediates/merged_manifests/debug/processDebugManifest/AndroidManifest.xml
   grep -q 'android:versionCode="42"' "$acme_manifest" && grep -q 'android:versionName="4.2.0"' "$acme_manifest" \
     || { echo "-PastridVersionCode/-PastridVersionName did not reach the manifest (AATD-90)" >&2; exit 1; }
   # Its Play listing is text a person reads as well.
   scripts/check-brand-literals.py brands/acme/profile.brand.json \
     app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir "$acme_manifest" \
-    --text brands/acme/play --budget 24
+    --text brands/acme/play --apk "$acme_apk" --budget 24
 fi
 if [[ "$mode" == "--full" ]]; then
   step "gradle: instrumented smoke tests (needs a device or emulator)"
