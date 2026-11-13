@@ -190,7 +190,7 @@ private fun UserCard(image: String?, name: String, initials: String, email: Stri
                 if (onEdit != null) Box(
                     Modifier.align(Alignment.BottomEnd).offset(x = (-4).dp, y = (-4).dp).size(24.dp).clip(CircleShape).background(colors.accent),
                     contentAlignment = Alignment.Center,
-                ) { Icon(Icons.Filled.PhotoCamera, null, tint = Color.White, modifier = Modifier.size(12.dp)) }
+                ) { Icon(Icons.Filled.PhotoCamera, null, tint = colors.accentText, modifier = Modifier.size(12.dp)) }
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
@@ -201,7 +201,7 @@ private fun UserCard(image: String?, name: String, initials: String, email: Stri
                     )
                     if (isAIAgent) {
                         Text(
-                            stringResource(R.string.profile_ai_agent), fontSize = 10.sp, fontWeight = FontWeight.SemiBold, color = Color.White,
+                            stringResource(R.string.profile_ai_agent), fontSize = 10.sp, fontWeight = FontWeight.SemiBold, color = colors.accentText,
                             modifier = Modifier.clip(RoundedCornerShape(Radius.small)).background(colors.accent).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
                         )
                     }
@@ -380,7 +380,7 @@ private fun EditProfileSheet(user: AccountUser, saving: Boolean, vm: ProfileView
                     IconButton(
                         onClick = pick,
                         modifier = Modifier.align(Alignment.BottomEnd).offset(x = (-4).dp, y = (-4).dp).size(36.dp).clip(CircleShape).background(colors.accent),
-                    ) { Icon(Icons.Filled.PhotoCamera, stringResource(R.string.account_change_photo), tint = Color.White, modifier = Modifier.size(16.dp)) }
+                    ) { Icon(Icons.Filled.PhotoCamera, stringResource(R.string.account_change_photo), tint = colors.accentText, modifier = Modifier.size(16.dp)) }
                 }
                 Text(stringResource(R.string.profile_change_photo), style = TextStyles.footnote, color = colors.textMuted)
             }
@@ -405,10 +405,10 @@ private fun EditProfileSheet(user: AccountUser, saving: Boolean, vm: ProfileView
                 horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (saving) {
-                    CircularProgressIndicator(Modifier.size(16.dp), color = Color.White, strokeWidth = 2.dp)
+                    CircularProgressIndicator(Modifier.size(16.dp), color = colors.accentText, strokeWidth = 2.dp)
                     Spacer(Modifier.width(Spacing.s8))
                 }
-                Text(label, style = TextStyles.body, fontWeight = FontWeight.SemiBold, color = Color.White)
+                Text(label, style = TextStyles.body, fontWeight = FontWeight.SemiBold, color = colors.accentText)
             }
         }
     }

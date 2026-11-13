@@ -80,7 +80,7 @@ fun ChatPanel(vm: ChatViewModel, modifier: Modifier = Modifier) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = if (message.isMine) Arrangement.End else Arrangement.Start) {
                         Column(
                             Modifier.widthIn(max = 300.dp).clip(RoundedCornerShape(14.dp))
-                                .background(if (message.isMine) colors.accent.copy(alpha = 0.16f) else if (colors.isDark) colors.bgSecondary else Color.White)
+                                .background(if (message.isMine) colors.accent.copy(alpha = 0.16f) else colors.sheet)
                                 .padding(horizontal = 12.dp, vertical = 8.dp),
                         ) {
                             if (!message.isMine) Text(message.authorName ?: message.initials, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = colors.textSecondary)

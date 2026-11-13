@@ -87,7 +87,7 @@ internal fun SettingsPage(
 }
 
 /** The row background of an inset-grouped list: white, or the raised grey in dark. */
-internal val formRowBackground: Color @Composable get() = AstridTheme.colors.let { if (it.isDark) it.bgSecondary else Color.White }
+internal val formRowBackground: Color @Composable get() = AstridTheme.colors.sheet
 
 /** One section: header, rows on a card (a hairline between each), footer. */
 @Composable

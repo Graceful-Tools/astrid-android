@@ -80,7 +80,7 @@ fun FiltersPanel(vm: FiltersViewModel, modifier: Modifier = Modifier, extra: @Co
 }
 
 @Composable
-private fun cardColor(): Color = if (AstridTheme.colors.isDark) AstridTheme.colors.bgSecondary else Color.White
+private fun cardColor(): Color = AstridTheme.colors.sheet
 
 @Composable
 private fun SectionTitle(text: String) = Text(

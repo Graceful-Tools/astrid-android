@@ -85,7 +85,7 @@ internal fun PickerSheet(title: String, onDismiss: () -> Unit, content: @Composa
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = if (colors.isDark) colors.bgSecondary else Color.White,
+        containerColor = colors.sheet,
     ) {
         Row(Modifier.fillMaxWidth().padding(horizontal = Spacing.s16), verticalAlignment = Alignment.CenterVertically) {
             Text(title, style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.weight(1f))

@@ -410,7 +410,7 @@ private fun QuickAddBar(
         )
     }
     if (picker) {
-        ModalBottomSheet(onDismissRequest = { picker = false }, containerColor = if (colors.isDark) colors.bgSecondary else Color.White) {
+        ModalBottomSheet(onDismissRequest = { picker = false }, containerColor = colors.sheet) {
             QuickAddPicker(
                 defaults,
                 onPriority = { onPickPriority(it); picker = false },
