@@ -120,11 +120,13 @@ import com.gracefultools.astrid.ui.common.RowFaceShape
 import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.tasks.parseColor
+import com.gracefultools.astrid.ui.theme.AstridShadows
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Overdue
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.shadow
 import com.gracefultools.astrid.ui.theme.TypeSize
 import kotlinx.coroutines.launch
 
@@ -745,7 +747,7 @@ private fun CommentComposer(
     var attachMenu by remember { mutableStateOf(false) }
     Column(
         Modifier.navigationBarsPadding().imePadding().padding(start = Spacing.s8, end = Spacing.s8, bottom = Spacing.s8).fillMaxWidth()
-            .shadow(6.dp, shape, ambientColor = Color.Black.copy(alpha = 0.1f), spotColor = Color.Black.copy(alpha = 0.1f))
+            .shadow(AstridShadows.bottomBar, shape)
             .clip(shape).background(colors.floatingBar).padding(horizontal = Spacing.s12, vertical = Spacing.s8),
     ) {
         if (state.suggestions.isNotEmpty()) SuggestionList(state.suggestions) { item ->

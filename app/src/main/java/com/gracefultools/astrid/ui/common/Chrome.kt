@@ -45,11 +45,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.gracefultools.astrid.R
+import com.gracefultools.astrid.ui.theme.AstridShadows
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.shadow
 
 /**
  * iOS's FloatingHeader: content padded 16x12 on a card (white on Ocean, glass on Light, headerBg on
@@ -65,7 +67,7 @@ fun FloatingHeader(modifier: Modifier = Modifier, content: @Composable RowScope.
             .statusBarsPadding()
             .padding(start = Spacing.s8, end = Spacing.s8, top = Spacing.s8)
             .fillMaxWidth()
-            .shadow(4.dp, shape, ambientColor = Color.Black.copy(alpha = 0.08f), spotColor = Color.Black.copy(alpha = 0.08f))
+            .shadow(AstridShadows.floatingHeader, shape)
             .clip(shape)
             .background(colors.floating)
             .padding(horizontal = Spacing.s16, vertical = Spacing.s12),
