@@ -112,8 +112,9 @@ if [[ "$mode" != "--quick" ]]; then
   # A partner's build should name the partner, not Astrid. Not there yet: the budget is how many
   # strings still do, and it only goes down (check-brand-literals.py; the goal is 0, AATD-90).
   # Packaged, so the dex is audited too: Kotlin's own strings and any fallback left in it. And the
-  # native core: its default server, https://astrid.cc, is 2 of the 26 until AWTD-1627.
-  step "gradle: the acme brand names no Astrid, in resources, dex or core (budget 26)"
+  # native core: its default server, https://astrid.cc, is the 2 left, until AWTD-1627. The webhook
+  # hints' wire names (ASTRID_WEBHOOK_SECRET, npx astrid-agent serve) are exempt (WIRE_NAMES).
+  step "gradle: the acme brand names no Astrid, in resources, dex or core (budget 2)"
   # The version is per build too (AATD-90): what -P passes is what the package says.
   ./gradlew --console=plain -PastridBrand=acme -PastridVersionCode=42 -PastridVersionName=4.2.0 \
     :app:assembleDebug
@@ -126,7 +127,7 @@ if [[ "$mode" != "--quick" ]]; then
   # Its Play listing is text a person reads as well.
   scripts/check-brand-literals.py brands/acme/profile.brand.json \
     app/build/intermediates/incremental/debug/mergeDebugResources/merged.dir "$acme_manifest" \
-    --text brands/acme/play --apk "$acme_apk" --budget 26
+    --text brands/acme/play --apk "$acme_apk" --budget 2
 fi
 if [[ "$mode" == "--full" ]]; then
   step "gradle: instrumented smoke tests (needs a device or emulator)"

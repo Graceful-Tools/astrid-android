@@ -59,7 +59,9 @@ starts on another theme (`defaultTheme`).
 **Literal audit.** `scripts/check-brand-literals.py` lists every string in a brand build's merged
 resources and manifest that contains one of the profile's `expect.forbidLiterals`. Predeploy runs it
 on acme, including its Play listing (`--text brands/acme/play`), against a budget that only goes
-down (26: 24 are the webhook hint's `ASTRID_WEBHOOK_SECRET` and `npx astrid-agent`, in 12 locales; 2 are the core's, below). It also
+down (2, both the core's, below). Two wire names are exempt, exactly and in their own case: the
+webhook hints' `ASTRID_WEBHOOK_SECRET` and `npx astrid-agent serve` are what a partner's developer
+really types, so the text keeps them (Jon, 2026-11-13; `WIRE_NAMES` in the script). It also
 reads the packaged APK's dex (`--apk`), where a fallback in Kotlin would hide from a resource audit. The
 dex is mostly names (`AstridTheme`, `astrid.sqlite`), so there a name counts only as a whole word in its
 own case, and a domain in any case: acme's dex has none. That is why `Brand.kt` names no Astrid value of
