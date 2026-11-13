@@ -14,4 +14,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "astrid-android"
-include(":app", ":corebridge")
+include(":app", ":corebridge", ":baselineprofile")

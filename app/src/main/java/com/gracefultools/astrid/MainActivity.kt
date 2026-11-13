@@ -24,20 +24,51 @@ import com.gracefultools.astrid.ui.signin.SignInViewModel
 import com.gracefultools.astrid.ui.theme.AstridTheme
 
 class MainActivity : ComponentActivity() {
-    private val graph get() = (application as AstridApplication).graph
+    private val app get() = application as AstridApplication
+    /** Set once the core has started; nothing here reads it before (AATD-93). */
+    private lateinit var graph: AppGraph
     private val signIn: SignInViewModel by viewModels { factory { SignInViewModel(graph.core) } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        signIn.load()
-        handle(intent)
-        setContent {
-            val theme by graph.preferences.theme.collectAsStateWithLifecycle()
-            AstridTheme(theme) {
-                SystemBars()
-                Root()
+        holdFirstFrameUntilCoreStarts()
+        whenCoreStarted {
+            signIn.load()
+            handle(intent)
+            setContent {
+                val theme by graph.preferences.theme.collectAsStateWithLifecycle()
+                AstridTheme(theme) {
+                    SystemBars()
+                    Root()
+                }
             }
+        }
+    }
+
+    /**
+     * The core starts off the main thread (AstridApplication, AATD-93). Until it has, the launch
+     * window (the system splash) stays: the first frame waits, the main thread does not.
+     */
+    private fun holdFirstFrameUntilCoreStarts() {
+        val content = findViewById<android.view.View>(android.R.id.content)
+        content.viewTreeObserver.addOnPreDrawListener(object : android.view.ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                if (!::graph.isInitialized) return false
+                content.viewTreeObserver.removeOnPreDrawListener(this)
+                return true
+            }
+        })
+    }
+
+    /**
+     * Runs [block] once the core has started — at once when it already has (a rotation), else in
+     * arrival order after it, so an intent that comes while it starts is not handled before the launch.
+     */
+    private fun whenCoreStarted(block: () -> Unit) {
+        lifecycleScope.launch {
+            if (!::graph.isInitialized) graph = app.awaitGraph()
+            block()
         }
     }
 
@@ -53,7 +84,6 @@ class MainActivity : ComponentActivity() {
             com.gracefultools.astrid.ui.common.SplashLookalike()
         } else if (state == SignInState.SignedIn) {
             com.gracefultools.astrid.platform.NotificationPrompting(graph.notificationPrompt, graph.preferences)
-            val app = application as AstridApplication
             if (!app.suppressesInterruptingPrompts) {
                 com.gracefultools.astrid.platform.ReviewPrompting(graph.reviewPrompt)
                 com.gracefultools.astrid.platform.AppUpdatePrompting(app.appUpdatePrompt, app.playUpdates)
@@ -91,7 +121,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        handle(intent)
+        whenCoreStarted { handle(intent) }
     }
 
     /**

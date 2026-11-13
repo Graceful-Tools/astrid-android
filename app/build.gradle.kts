@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.baselineprofile)
 }
 
 /**
@@ -226,6 +227,10 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     implementation(libs.play.review.ktx)
     implementation(libs.play.app.update.ktx)
+    // Installs the committed baseline profile (src/release/generated/baselineProfiles) on devices
+    // that did not get it from Play, so startup code is compiled ahead of time (AATD-93).
+    implementation(libs.androidx.profileinstaller)
+    "baselineProfile"(project(":baselineprofile"))
     debugImplementation(libs.compose.ui.test.manifest)
 
     testImplementation(libs.junit)

@@ -81,7 +81,8 @@ app/Astrid (Compose)  ──  corebridge (Kotlin facade + UniFFI bindings)  ─�
 |---|---|
 | Native crate | `core/astrid-android/` |
 | Bindings + facade | `corebridge/src/main/java/` (`uniffi/` generated; `com/gracefultools/astrid/core/` hand-written) |
-| App entry, DI | `app/.../AstridApplication.kt`, `AppGraph.kt` |
+| App entry, DI | `app/.../AstridApplication.kt`, `AppGraph.kt` — the core starts on its own thread; `MainActivity` holds its first frame until it has (AATD-93) |
+| Startup profile | `baselineprofile/` (generator + cold-start benchmark) → committed `app/src/release/generated/baselineProfiles/` |
 | Screens | `app/.../ui/<feature>/` — one `*Screen.kt` + `*ViewModel.kt` per feature |
 | Theme | `app/.../ui/theme/` — colours from astrid-core `design/tokens.json`; today a hand copy (taken from iOS `Theme.swift`) that lags the tokens until it is generated (AATD-85) |
 | Strings | `app/src/main/res/values/strings.xml` |
