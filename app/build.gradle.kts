@@ -222,6 +222,8 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons)
     implementation(libs.coil.compose)
+    // Coil 3 fetches http(s) images only with a network module (Coil 2 bundled OkHttp itself).
+    implementation(libs.coil.network.okhttp)
     implementation(libs.play.review.ktx)
     implementation(libs.play.app.update.ktx)
     debugImplementation(libs.compose.ui.test.manifest)

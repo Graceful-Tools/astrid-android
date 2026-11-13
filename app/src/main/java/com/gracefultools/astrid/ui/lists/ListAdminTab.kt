@@ -40,7 +40,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.detail.PickRow
 import com.gracefultools.astrid.ui.detail.PickerSheet

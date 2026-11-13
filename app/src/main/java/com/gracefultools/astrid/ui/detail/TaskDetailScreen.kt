@@ -827,7 +827,7 @@ private fun QueuedFiles(files: List<QueuedFile>, onRemove: (String) -> Unit) {
                     contentAlignment = Alignment.Center,
                 ) {
                     if (file.mimeType?.startsWith("image/") == true) {
-                        coil.compose.AsyncImage(
+                        coil3.compose.AsyncImage(
                             model = java.io.File(file.path), contentDescription = file.name,
                             contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.fillMaxSize(),
                         )

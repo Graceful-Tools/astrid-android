@@ -20,12 +20,13 @@ androidxTestRunner = "1.6.2"
 androidxTestCore = "1.6.1"
 androidxTestRules = "1.6.1"
 espresso = "3.6.1"
-coil = "2.7.0"
+coil = "3.6.3"
 playReview = "2.0.2"
 playAppUpdate = "2.1.0"
 
 [libraries]
-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "playReview" }
 play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "playAppUpdate" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
