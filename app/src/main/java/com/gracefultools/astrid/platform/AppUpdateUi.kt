@@ -2,6 +2,7 @@ package com.gracefultools.astrid.platform
 
 import android.app.Activity
 import android.content.Context
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -28,7 +29,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -100,7 +100,7 @@ class PlayUpdates(context: Context) : UpdateSource {
  */
 @Composable
 fun AppUpdatePrompting(prompt: AppUpdatePrompt, play: PlayUpdates) {
-    val activity = LocalContext.current as? Activity ?: return
+    val activity = LocalActivity.current ?: return
     val update by prompt.available.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) { prompt.check() }
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) { play.installIfDownloaded() }

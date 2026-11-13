@@ -3,7 +3,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -54,7 +53,7 @@ val brandLinkAutoVerify: Boolean = brand("astridLinkAutoVerify", "false").lowerc
 
 android {
     namespace = "com.gracefultools.astrid"
-    compileSdk = 35
+    compileSdk = 37
     // The NDK scripts/build-core.sh builds the core with (~/dev-tools/android-env.sh, CI's android-setup).
     // Without it AGP cannot strip libastrid_android.so and packages it as-is, symbol table and all
     // (~3.5 MB per ABI), and cannot extract the symbols Play needs to read a native crash (AATD-91).
@@ -63,7 +62,7 @@ android {
     defaultConfig {
         applicationId = brand("astridApplicationId", "com.gracefultools.astrid")
         minSdk = 28
-        targetSdk = 35
+        targetSdk = 36
         // Per build (AATD-90): `-PastridVersionCode` from CI (or ORG_GRADLE_PROJECT_astridVersionCode),
         // or a brand's profile. Play needs a higher versionCode for every upload of each package.
         versionCode = brand("astridVersionCode", "1").let { code ->
@@ -161,7 +160,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildFeatures { compose = true; buildConfig = true }
+    buildFeatures { compose = true; buildConfig = true; resValues = true }
     testOptions { unitTests.isIncludeAndroidResources = true }
     lint {
         warningsAsErrors = false
@@ -215,26 +214,24 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.work.runtime)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
     implementation(libs.compose.material.icons)
     implementation(libs.coil.compose)
+    // Coil 3 fetches http(s) images only with a network module (Coil 2 bundled OkHttp itself).
+    implementation(libs.coil.network.okhttp)
     implementation(libs.play.review.ktx)
     implementation(libs.play.app.update.ktx)
-    debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.test.core)
-    testImplementation(libs.turbine)
     testImplementation(platform(libs.compose.bom))
     testImplementation(libs.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.test.ext.junit)
@@ -248,6 +245,9 @@ dependencies {
 
 tasks.withType<Test>().configureEach {
     systemProperty("jna.library.path", rootProject.file("corebridge/src/test/resources/native").absolutePath)
+    // Robolectric's SDK 36 runtime sets FileDescriptor internals through SharedSecrets, which JDK 21
+    // does not export; without this every Robolectric test fails in setup (AATD-92).
+    jvmArgs("--add-exports=java.base/jdk.internal.access=ALL-UNNAMED")
     // PlayListingTest reads the listing draft as files; an edit to it alone must re-run the tests.
     inputs.dir("src/main/play").withPathSensitivity(PathSensitivity.RELATIVE)
 }

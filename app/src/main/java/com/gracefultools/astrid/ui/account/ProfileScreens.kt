@@ -90,7 +90,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.AccountUser
 import com.gracefultools.astrid.model.Passkey

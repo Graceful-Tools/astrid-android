@@ -75,7 +75,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.gracefultools.astrid.Brand
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridTheme

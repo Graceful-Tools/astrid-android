@@ -2,13 +2,12 @@
 // libraries scripts/build-core.sh puts in src/main/jniLibs, and the small Kotlin facade the app calls.
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "com.gracefultools.astrid.core"
-    compileSdk = 35
+    compileSdk = 37
     // Same NDK as the app and scripts/build-core.sh, so AGP can strip the core here too (AATD-91).
     ndkVersion = "27.2.12479018"
     defaultConfig {

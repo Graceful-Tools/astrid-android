@@ -2,7 +2,7 @@
 
 ## Toolchain (macOS, arm64)
 
-- JDK 21 (Temurin), Android SDK with `platforms;android-35`, `build-tools;35.0.0`,
+- JDK 21 (Temurin), Android SDK with `platforms;android-37.0`, `build-tools;36.0.0`,
   `ndk;27.2.12479018`, `emulator`, `system-images;android-35;google_apis;arm64-v8a`.
 - Rust (pinned by `core/rust-toolchain.toml`) with `aarch64-linux-android` and
   `x86_64-linux-android`, and `cargo install cargo-ndk`.
