@@ -82,7 +82,7 @@ fun ChatPanel(vm: ChatViewModel, modifier: Modifier = Modifier) {
                         Column(
                             Modifier.widthIn(max = 300.dp).clip(RoundedCornerShape(14.dp))
                                 .background(if (message.isMine) colors.accent.copy(alpha = 0.16f) else colors.sheet)
-                                .padding(horizontal = 12.dp, vertical = 8.dp),
+                                .padding(horizontal = Spacing.s12, vertical = Spacing.s8),
                         ) {
                             if (!message.isMine) Text(message.authorName ?: message.initials, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = colors.textSecondary)
                             if (message.blocks.isNotEmpty()) MarkdownView(message.blocks) else Text(message.content, color = colors.textPrimary, fontSize = 16.sp)

@@ -144,7 +144,7 @@ fun ConnectionsScreen(vm: ConnectionsViewModel, core: Core, onBack: () -> Unit) 
         actions = {
             Icon(
                 Icons.Filled.Add, stringResource(R.string.settings_connections_new), tint = colors.accent,
-                modifier = Modifier.size(32.dp).clip(CircleShape).clickable(role = Role.Button) { openings++; editor = EditorMode(null, openings) }.padding(4.dp),
+                modifier = Modifier.size(32.dp).clip(CircleShape).clickable(role = Role.Button) { openings++; editor = EditorMode(null, openings) }.padding(Spacing.s4),
             )
         },
     ) {
@@ -220,7 +220,7 @@ private data class EditorMode(val clientId: String?, val opening: Int)
 @Composable
 private fun ConnectionRow(row: Connection, ownerBadge: String?, isRevoking: Boolean, onEdit: (() -> Unit)?, onRevoke: () -> Unit) {
     val colors = AstridTheme.colors
-    Column(Modifier.padding(vertical = 2.dp).alpha(if (row.status == "active") 1f else 0.7f), verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
+    Column(Modifier.padding(vertical = Spacing.s2).alpha(if (row.status == "active") 1f else 0.7f), verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
             Text(
                 row.name.ifEmpty { kindLabel(row.kind) }, style = TextStyles.body, color = colors.textPrimary,

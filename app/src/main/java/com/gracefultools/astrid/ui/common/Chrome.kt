@@ -90,7 +90,7 @@ fun FloatingTextHeader(
         if (onBack != null) {
             Icon(
                 Icons.AutoMirrored.Filled.ArrowBackIos, stringResource(R.string.common_back), tint = colors.textPrimary,
-                modifier = Modifier.size(28.dp).clip(RoundedCornerShape(Radius.small)).clickable(onClick = onBack).padding(4.dp),
+                modifier = Modifier.size(28.dp).clip(RoundedCornerShape(Radius.small)).clickable(onClick = onBack).padding(Spacing.s4),
             )
         }
         if (icon != null) Icon(icon, null, tint = iconTint ?: colors.textPrimary, modifier = Modifier.size(20.dp))
@@ -202,7 +202,7 @@ fun AppErrorBanner(message: String, onDismiss: () -> Unit, modifier: Modifier = 
 fun SplashLookalike() {
     val colors = AstridTheme.colors
     Column(Modifier.fillMaxSize().background(colors.bgPrimary)) {
-        FloatingHeader { HamburgerIcon(Modifier.padding(start = 6.dp)); Spacer(Modifier.height(32.dp)) }
+        FloatingHeader { HamburgerIcon(Modifier.padding(start = 6.dp)); Spacer(Modifier.height(Spacing.s32)) }
         EmptyState(stringResource(R.string.tasks_loading), Modifier.weight(1f))
         Row(
             Modifier.navigationBarsPadding().padding(start = Spacing.s8, end = Spacing.s8, bottom = Spacing.s8).fillMaxWidth()

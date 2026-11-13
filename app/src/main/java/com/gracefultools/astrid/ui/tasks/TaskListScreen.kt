@@ -315,7 +315,7 @@ private fun SwipeToDelete(onDelete: () -> Unit, content: @Composable () -> Unit)
             // Only while a swipe is under way: the cards are translucent (white 0.8 on Ocean), so a
             // background drawn at rest would tint every row red.
             if (state.dismissDirection == SwipeToDismissBoxValue.EndToStart) Box(
-                Modifier.fillMaxSize().background(Error, RoundedCornerShape(Radius.medium)).padding(horizontal = 20.dp),
+                Modifier.fillMaxSize().background(Error, RoundedCornerShape(Radius.medium)).padding(horizontal = Spacing.s20),
                 contentAlignment = Alignment.CenterEnd,
             ) { Icon(Icons.Filled.Delete, stringResource(R.string.tasks_delete), tint = Color.White) }
         },
@@ -395,7 +395,7 @@ private fun QuickAddBar(
                 Box(
                     Modifier.clip(RoundedCornerShape(Radius.medium)).background(colors.field)
                         .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium))
-                        .heightIn(min = 44.dp).padding(horizontal = 12.dp, vertical = 10.dp),
+                        .heightIn(min = 44.dp).padding(horizontal = Spacing.s12, vertical = 10.dp),
                     contentAlignment = Alignment.CenterStart,
                 ) {
                     if (text.isEmpty()) Text(stringResource(R.string.tasks_add_task_placeholder), style = TextStyles.body, color = colors.inputPlaceholder)

@@ -328,7 +328,7 @@ private fun Thumbnail(file: AttachmentFile, vm: TaskDetailViewModel, size: andro
         if (file.isImage && path != null) {
             AsyncImage(model = File(path), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
         } else {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
                 Icon(Icons.AutoMirrored.Filled.InsertDriveFile, null, tint = colors.textMuted, modifier = Modifier.size(18.dp))
                 Text(file.name.substringAfterLast('.', "").uppercase().take(5), fontSize = 9.sp, fontWeight = FontWeight.Medium, color = colors.textMuted)
             }
@@ -404,12 +404,12 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
                 detail.task.title, color = Color.White.copy(alpha = 0.7f), fontSize = 24.sp, fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = Spacing.s16),
             )
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(Spacing.s48))
             Text(
                 "%d:%02d".format(seconds / 60, seconds % 60), color = Color.White, fontSize = 88.sp,
                 fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace, maxLines = 1,
             )
-            Spacer(Modifier.height(48.dp))
+            Spacer(Modifier.height(Spacing.s48))
             Box(
                 Modifier.size(100.dp).clip(CircleShape).background(Color.White)
                     .clickable(role = Role.Button) { if (running) vm.stopTimer() else vm.startTimer() },

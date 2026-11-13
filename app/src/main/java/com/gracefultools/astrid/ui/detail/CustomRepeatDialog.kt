@@ -214,7 +214,7 @@ fun CustomRepeatDialog(
                             .padding(horizontal = Spacing.s12, vertical = Spacing.s8),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
                             Text(stringResource(title), style = TextStyles.body, color = colors.textPrimary)
                             Text(stringResource(caption), style = TextStyles.caption2, color = colors.textMuted)
                         }
@@ -302,12 +302,12 @@ private fun Stepper(value: Int, range: IntRange, label: String, onChange: (Int) 
     ) {
         Icon(
             Icons.Filled.Remove, stringResource(R.string.repeating_decrease, label), tint = if (value > range.first) colors.accent else colors.textMuted,
-            modifier = Modifier.size(44.dp).clickable(enabled = value > range.first) { onChange(value - 1) }.padding(12.dp),
+            modifier = Modifier.size(44.dp).clickable(enabled = value > range.first) { onChange(value - 1) }.padding(Spacing.s12),
         )
         Text(value.toString(), style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.width(36.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         Icon(
             Icons.Filled.Add, stringResource(R.string.repeating_increase, label), tint = if (value < range.last) colors.accent else colors.textMuted,
-            modifier = Modifier.size(44.dp).clickable(enabled = value < range.last) { onChange(value + 1) }.padding(12.dp),
+            modifier = Modifier.size(44.dp).clickable(enabled = value < range.last) { onChange(value + 1) }.padding(Spacing.s12),
         )
     }
 }

@@ -187,7 +187,7 @@ fun ExternalSyncScreen(vm: ExternalSyncViewModel, onBack: () -> Unit) {
             FormSection(header = stringResource(R.string.sync_linked_lists)) {
                 state.linkedHere.forEachIndexed { index, (list, container) ->
                     if (index > 0) FormDivider()
-                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
                         Text(list, style = TextStyles.body, color = colors.textPrimary)
                         Caption2(container)
                     }

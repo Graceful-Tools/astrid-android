@@ -228,7 +228,7 @@ private fun ColumnView(
             .border(3.dp, if (hoverIndex != null) colors.accent else Color.Transparent, shape)
             .onGloballyPositioned { onBounds(it.boundsInWindow()) },
     ) {
-        Column(Modifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Column(Modifier.fillMaxWidth().padding(start = Spacing.s12, end = Spacing.s12, top = Spacing.s12, bottom = Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(column.name, style = com.gracefultools.astrid.ui.theme.TextStyles.headline, color = colors.textPrimary, modifier = Modifier.weight(1f), maxLines = 1)
                 Text(
@@ -249,7 +249,7 @@ private fun ColumnView(
         }
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(6.dp),
-            contentPadding = PaddingValues(horizontal = 6.dp, vertical = 8.dp),
+            contentPadding = PaddingValues(horizontal = 6.dp, vertical = Spacing.s8),
             modifier = Modifier.fillMaxSize(),
         ) {
             itemsIndexed(column.cards, key = { _, it -> it.id }) { index, card ->

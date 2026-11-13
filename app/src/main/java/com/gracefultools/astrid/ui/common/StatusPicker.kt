@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.StatusOptions
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.Spacing
 
 /** iOS's status quick picker: the board's columns, the current one checked. */
 @Composable
@@ -34,7 +35,7 @@ fun StatusPicker(options: StatusOptions, onPick: (String) -> Unit, onDismiss: ()
             Column {
                 options.columns.forEach { column ->
                     Row(
-                        Modifier.fillMaxWidth().clickable { onPick(column.id) }.padding(vertical = 12.dp, horizontal = 8.dp),
+                        Modifier.fillMaxWidth().clickable { onPick(column.id) }.padding(vertical = Spacing.s12, horizontal = Spacing.s8),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(column.name, fontSize = 17.sp, color = colors.textPrimary, modifier = Modifier.weight(1f))

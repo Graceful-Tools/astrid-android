@@ -36,6 +36,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.intOrNull
+import com.gracefultools.astrid.ui.theme.Spacing
 
 /**
  * Draws the core's markdown blocks (`astrid_core::markdown`, fixture-locked to the web's renderer)
@@ -43,7 +44,7 @@ import kotlinx.serialization.json.intOrNull
  */
 @Composable
 fun MarkdownView(blocks: List<JsonObject>, modifier: Modifier = Modifier, onReference: (String, String) -> Unit = { _, _ -> }) {
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
         for (block in blocks) Block(block, onReference)
     }
 }
@@ -68,7 +69,7 @@ private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
         "list" -> {
             val ordered = (block["ordered"] as? JsonPrimitive)?.booleanOrNull == true
             val start = (block["start"] as? JsonPrimitive)?.intOrNull ?: 1
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                 block.arr("items").forEachIndexed { index, item ->
                     val checked = (item["checked"] as? JsonPrimitive)?.booleanOrNull
                     val marker = when {
@@ -91,11 +92,11 @@ private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
         "rule" -> HorizontalDivider(color = colors.border)
         "table" -> Column(Modifier.horizontalScroll(rememberScrollState())) {
             val header = (block["header"] as? JsonArray)?.map { cell -> (cell as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList() } ?: emptyList()
-            Row { header.forEach { Inlines(it, 15, FontWeight.SemiBold, onReference, Modifier.width(120.dp).padding(4.dp)) } }
+            Row { header.forEach { Inlines(it, 15, FontWeight.SemiBold, onReference, Modifier.width(120.dp).padding(Spacing.s4)) } }
             (block["rows"] as? JsonArray)?.forEach { row ->
                 Row {
                     (row as? JsonArray)?.forEach { cell ->
-                        Inlines((cell as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList(), 15, FontWeight.Normal, onReference, Modifier.width(120.dp).padding(4.dp))
+                        Inlines((cell as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList(), 15, FontWeight.Normal, onReference, Modifier.width(120.dp).padding(Spacing.s4))
                     }
                 }
             }

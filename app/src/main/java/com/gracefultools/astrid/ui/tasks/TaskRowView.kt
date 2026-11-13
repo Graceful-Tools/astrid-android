@@ -153,7 +153,7 @@ private fun TitleChips(row: TaskRow) {
         text, style = TextStyles.caption, color = colors.textSecondary, maxLines = 1,
         modifier = Modifier.border(1.dp, colors.border, RoundedCornerShape(4.dp))
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .padding(horizontal = 6.dp, vertical = 2.dp),
+            .padding(horizontal = 6.dp, vertical = Spacing.s2),
     )
     if (row.isCanceled) chip(stringResource(R.string.tasks_wont_do_chip))
     when (row.syncMark) {
@@ -245,7 +245,7 @@ private fun Metadata(row: TaskRow) {
         if (identifier != null) Text(identifier, style = TextStyles.subheadline, color = colors.textMuted, maxLines = 1)
         if (due != null) Text(due, style = TextStyles.subheadline, color = colors.textMuted, maxLines = 1)
         if (row.listChips.isNotEmpty()) {
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s4), verticalAlignment = Alignment.CenterVertically) {
                 for (chip in row.listChips.take(2)) ListChipView(chip, Modifier.weight(1f, fill = false))
                 if (row.listChips.size > 2) Text("+${row.listChips.size - 2}", style = TextStyles.subheadline, color = colors.textMuted)
             }
@@ -262,8 +262,8 @@ fun ListChipView(chip: com.gracefultools.astrid.model.ListChip, modifier: Modifi
     val tint = parseColor(chip.color)
     val shape = RoundedCornerShape(Radius.large)
     Row(
-        modifier.clip(shape).background(colors.chipBg).border(1.dp, colors.chipBorder, shape).padding(horizontal = 10.dp, vertical = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically,
+        modifier.clip(shape).background(colors.chipBg).border(1.dp, colors.chipBorder, shape).padding(horizontal = 10.dp, vertical = Spacing.s4),
+        horizontalArrangement = Arrangement.spacedBy(Spacing.s4), verticalAlignment = Alignment.CenterVertically,
     ) {
         val (icon, iconTint) = when (chip.glyph) {
             "tag" -> Icons.Outlined.Sell to tint
