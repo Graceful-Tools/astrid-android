@@ -108,6 +108,7 @@ import com.gracefultools.astrid.ui.settings.SettingsPage
 import com.gracefultools.astrid.ui.settings.ValueRow
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
+import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
@@ -120,11 +121,6 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-
-/** iOS's system tints on the stat tiles. */
-private val StatGreen = Color(0xFF34C759)
-private val StatYellow = Color(0xFFFFCC00)
-private val StatBlue = Color(0xFF007AFF)
 
 /** A card the way iOS's profile draws one: bgSecondary, radius 8, a 1pt border. */
 @Composable
@@ -240,9 +236,9 @@ private fun StatCard(icon: ImageVector, tint: Color, value: Int, label: Int, tag
 @Composable
 private fun StatCards(stats: ProfileStats) {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
-        StatCard(Icons.Filled.CheckCircle, StatGreen, stats.completed, R.string.stats_completed, R.string.stats_completed_tagline)
-        StatCard(Icons.Filled.Lightbulb, StatYellow, stats.inspired, R.string.stats_inspired, R.string.stats_inspired_tagline)
-        StatCard(Icons.Filled.Favorite, StatBlue, stats.supported, R.string.stats_supported, R.string.stats_supported_tagline)
+        StatCard(Icons.Filled.CheckCircle, IosSystemColors.green, stats.completed, R.string.stats_completed, R.string.stats_completed_tagline)
+        StatCard(Icons.Filled.Lightbulb, IosSystemColors.yellow, stats.inspired, R.string.stats_inspired, R.string.stats_inspired_tagline)
+        StatCard(Icons.Filled.Favorite, IosSystemColors.blue, stats.supported, R.string.stats_supported, R.string.stats_supported_tagline)
     }
 }
 

@@ -90,6 +90,7 @@ import com.gracefultools.astrid.model.AttachmentFile
 import com.gracefultools.astrid.model.ProjectFieldRow
 import com.gracefultools.astrid.model.TaskDetail
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -423,7 +424,7 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
             Spacer(Modifier.height(Spacing.s24))
             if (!detail.task.completed && !detail.isCopyOnly) {
                 Row(
-                    Modifier.width(260.dp).height(60.dp).clip(RoundedCornerShape(30.dp)).background(Color(0xFF34C759))
+                    Modifier.width(260.dp).height(60.dp).clip(RoundedCornerShape(30.dp)).background(IosSystemColors.green)
                         .clickable(role = Role.Button) { vm.completeFromTimer(); onClose() },
                     horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
                 ) {

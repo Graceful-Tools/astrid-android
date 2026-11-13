@@ -39,7 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -50,12 +49,9 @@ import com.gracefultools.astrid.model.SettingChoice
 import com.gracefultools.astrid.ui.common.AppErrorBanner
 import com.gracefultools.astrid.ui.common.coreLabel
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
-
-/** Purple and green, iOS's tints on the GitHub Issues and Google Tasks rows. */
-private val GitHubPurple = Color(0xFFAF52DE)
-private val GoogleGreen = Color(0xFF34C759)
 
 /**
  * iOS's SettingsView, in its order: Profile; Sync; Features; Exploratory Features; Preferences; Sub
@@ -119,11 +115,11 @@ fun SettingsScreen(
             NavRow(stringResource(R.string.settings_connections_title), Icons.Filled.Link) { onOpen("connections") }
             if (state.serverOffersGithub && canOpen(ROUTE_GITHUB)) {
                 FormDivider()
-                NavRow(stringResource(R.string.settings_github_issues), Icons.Filled.Code, iconTint = GitHubPurple) { onOpen(ROUTE_GITHUB) }
+                NavRow(stringResource(R.string.settings_github_issues), Icons.Filled.Code, iconTint = IosSystemColors.purple) { onOpen(ROUTE_GITHUB) }
             }
             if (state.showsGoogleTasks && canOpen(ROUTE_GOOGLE_TASKS)) {
                 FormDivider()
-                NavRow(stringResource(R.string.settings_google_tasks), Icons.Outlined.TaskAlt, iconTint = GoogleGreen) { onOpen(ROUTE_GOOGLE_TASKS) }
+                NavRow(stringResource(R.string.settings_google_tasks), Icons.Outlined.TaskAlt, iconTint = IosSystemColors.green) { onOpen(ROUTE_GOOGLE_TASKS) }
             }
         }
 

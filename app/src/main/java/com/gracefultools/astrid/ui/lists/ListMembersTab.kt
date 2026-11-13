@@ -52,13 +52,10 @@ import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.detail.PickRow
 import com.gracefultools.astrid.ui.detail.PickerSheet
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
-
-/** iOS's system `.orange` and `.purple`, which the Members tab uses for privacy and agents. */
-private val Orange = Color(0xFFFF9500)
-private val Purple = Color(0xFFAF52DE)
 
 /**
  * iOS ListMembershipTab: the roster (owner first, members, pending invitations), Add Member, Share,
@@ -95,7 +92,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
                     Column(Modifier.weight(1f)) {
                         Text(invite.email, style = TextStyles.body, color = colors.textPrimary, maxLines = 1)
                         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s4)) {
-                            Text(stringResource(R.string.lists_pending), style = TextStyles.caption2, color = Orange)
+                            Text(stringResource(R.string.lists_pending), style = TextStyles.caption2, color = IosSystemColors.orange)
                             Text("·", style = TextStyles.caption2, color = colors.textSecondary)
                             Text(roleLabel(invite.role), style = TextStyles.caption2, color = colors.textSecondary)
                         }
@@ -124,7 +121,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
             FormSection(
                 stringResource(if (github) R.string.lists_ai_coding_agents else R.string.lists_ai_agents),
                 footer = if (github) null else stringResource(R.string.lists_connect_github_description),
-                header = { Icon(Icons.Outlined.Memory, null, tint = Purple, modifier = Modifier.size(14.dp)) },
+                header = { Icon(Icons.Outlined.Memory, null, tint = IosSystemColors.purple, modifier = Modifier.size(14.dp)) },
             ) {
                 Text(
                     stringResource(R.string.lists_available_agents), style = TextStyles.caption, color = colors.textSecondary,
@@ -133,9 +130,9 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
                 agents.forEach { agent ->
                     val member = state.isMember(agent.id)
                     FormRow(Modifier.padding(vertical = Spacing.s4)) {
-                        Box(Modifier.size(40.dp).clip(CircleShape).background(Purple.copy(alpha = 0.2f)), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(40.dp).clip(CircleShape).background(IosSystemColors.purple.copy(alpha = 0.2f)), contentAlignment = Alignment.Center) {
                             if (agent.image != null) Avatar(agent.image, initialsOf(agent.name), 40.dp)
-                            else Icon(Icons.Outlined.Memory, null, tint = Purple, modifier = Modifier.size(18.dp))
+                            else Icon(Icons.Outlined.Memory, null, tint = IosSystemColors.purple, modifier = Modifier.size(18.dp))
                         }
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                             Text(agent.name, style = TextStyles.body, color = colors.textPrimary)
@@ -155,7 +152,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
         if (settings.canManageList) {
             val isPublic = settings.privacy.equals("PUBLIC", ignoreCase = true)
             FormSection(stringResource(R.string.lists_list_privacy)) {
-                if (isPublic) FormButtonRow(Icons.Outlined.Lock, stringResource(R.string.lists_make_private), Orange) { vm.togglePublic() }
+                if (isPublic) FormButtonRow(Icons.Outlined.Lock, stringResource(R.string.lists_make_private), IosSystemColors.orange) { vm.togglePublic() }
                 else FormButtonRow(Icons.Outlined.Public, stringResource(R.string.lists_make_public), AstridTheme.colors.successInk) { vm.togglePublic() }
                 Text(
                     stringResource(if (isPublic) R.string.lists_public_description else R.string.lists_private_description),
