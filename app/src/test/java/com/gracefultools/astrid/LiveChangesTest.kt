@@ -31,13 +31,13 @@ class LiveChangesTest {
 
     @Test
     fun `AATD-30 a delivered write and a task change redraw the sidebar counts`() = runTest {
-        val core = FakeCore().apply { answer("lists", "[]") }
+        val core = FakeCore().apply { answer("sidebar", "{}") }
         val vm = SidebarViewModel(core, UnconfinedTestDispatcher())
         vm.load()
-        val before = core.kinds().count { it == "lists" }
+        val before = core.kinds().count { it == "sidebar" }
         core.emit("delivered", delivered)
         core.emit("task", """{"change":"task","id":"t1"}""")
-        assertEquals(before + 2, core.kinds().count { it == "lists" })
+        assertEquals(before + 2, core.kinds().count { it == "sidebar" })
     }
 
     @Test

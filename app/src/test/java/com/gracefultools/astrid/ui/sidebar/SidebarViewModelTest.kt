@@ -9,16 +9,16 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SidebarViewModelTest {
+    /** The core's `sidebar` answer (astrid-core task e22621e2): already filtered, ordered and badged. */
     private fun core() = FakeCore().apply {
-        answer("lists", """[
-            {"id":"b","name":"beta"},
-            {"id":"col","name":"Doing","listType":"status"},
-            {"id":"lab","name":"bug","listType":"label"},
-            {"id":"f2","name":"Zed","isFavorite":true,"favoriteOrder":2},
-            {"id":"f1","name":"Home","isFavorite":true,"favoriteOrder":1},
-            {"id":"a","name":"Alpha"}
-        ]""")
-        answer("myTasksList", """{"id":"my-tasks","name":"My Tasks","isVirtual":true}""")
+        answer("sidebar", """{
+            "myTasks":{"id":"my-tasks","name":"My Tasks","isVirtual":true,"taskCount":3},
+            "favorites":[
+                {"id":"f1","name":"Home","isFavorite":true,"favoriteOrder":1,"taskCount":2},
+                {"id":"f2","name":"Zed","isFavorite":true,"favoriteOrder":2}
+            ],
+            "lists":[{"id":"a","name":"Alpha","taskCount":5},{"id":"b","name":"beta"}]
+        }""")
     }
 
     @Test
@@ -32,22 +32,29 @@ class SidebarViewModelTest {
     }
 
     @Test
-    fun `AATD-89 GitHub milestones and iterations are tags, not places, so the sidebar hides them`() = runTest {
+    fun `AATD-89 the sidebar is the core's sidebar command, drawn as it answers`() = runTest {
+        // An order no Kotlin sort would produce, so a re-sort here would show.
         val core = core().apply {
-            answer("lists", """[
-                {"id":"a","name":"Alpha"},
-                {"id":"ms","name":"v1.0","listType":"milestone"},
-                {"id":"it","name":"Sprint 4","listType":"iteration","isFavorite":true,"favoriteOrder":1},
-                {"id":"col","name":"Doing","listType":"status"},
-                {"id":"lab","name":"bug","listType":"label"},
-                {"id":"r","name":"Regular","listType":"regular"}
-            ]""")
+            answer("sidebar", """{
+                "myTasks":{"id":"my-tasks","name":"My Tasks","isVirtual":true},
+                "favorites":[{"id":"z","name":"Zed","isFavorite":true},{"id":"h","name":"Home","isFavorite":true}],
+                "lists":[{"id":"r","name":"Regular"},{"id":"a","name":"Alpha"}]
+            }""")
         }
         val vm = SidebarViewModel(core, UnconfinedTestDispatcher())
         vm.load()
         val s = vm.state.value
-        assertEquals(emptyList<String>(), s.favorites.map { it.id })
-        assertEquals(listOf("a", "r"), s.lists.map { it.id })
+        assertEquals("my-tasks", s.myTasks?.id)
+        assertEquals(listOf("z", "h"), s.favorites.map { it.id })
+        assertEquals(listOf("r", "a"), s.lists.map { it.id })
+        assertEquals(emptyList<String>(), core.kinds().filter { it in setOf("lists", "myTasksList", "listBadges") })
+    }
+
+    @Test
+    fun `AATD-89 the sidebar's numbers are the badges the core puts on each entry`() = runTest {
+        val vm = SidebarViewModel(core(), UnconfinedTestDispatcher())
+        vm.load()
+        assertEquals(mapOf("my-tasks" to 3, "f1" to 2, "a" to 5), vm.state.value.counts)
     }
 
     @Test
