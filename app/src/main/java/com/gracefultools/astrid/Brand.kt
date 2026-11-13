@@ -5,38 +5,39 @@ package com.gracefultools.astrid
  * from a Gradle property (app/build.gradle.kts), and each defaults to hosted Astrid's, so a build
  * nobody configured behaves exactly as it always has.
  *
+ * Gradle owns those defaults, and never passes a blank one. So this file names no Astrid value of its
+ * own: a fallback here would be dead code that still ships "Astrid" and astrid.cc in every partner's
+ * APK (AATD-90, `scripts/check-brand-literals.py --apk`).
+ *
  * Build-time on purpose. The server's `/api/v1/capabilities` `brand` block carries text only, and it
  * leaves out the host and agent email domain deliberately: they are trust boundaries, and a server
  * must not be able to claim them (astrid-web capabilities route; iOS `ServerCapabilities.BrandInfo`).
  */
 object Brand {
-    /** Hosted Astrid's origin: the default, and the only place the literal appears in the app. */
-    const val ASTRID_ORIGIN = "https://astrid.cc"
-
     /**
      * The server: what the core talks to (`CoreSession.start`'s `baseUrl`) and where every web link
      * points. iOS `Constants.API.baseURL` / `Brand.productionBaseURL`. No trailing slash.
      */
-    val baseUrl: String = origin(BuildConfig.ASTRID_BASE_URL, ASTRID_ORIGIN)
+    val baseUrl: String = origin(BuildConfig.ASTRID_BASE_URL)
 
     /**
      * iOS `Brand.appName`, for code that is not drawing a resource: the same value as `@string/app_name`
      * (both from `astridAppName`), which is what views use (AATD-90).
      */
-    val appName: String = BuildConfig.ASTRID_APP_NAME.trim().ifEmpty { "Astrid" }
+    val appName: String = BuildConfig.ASTRID_APP_NAME.trim()
 
     /** iOS `Brand.supportEmail`: where feedback mail goes. */
-    val supportEmail: String = BuildConfig.ASTRID_SUPPORT_EMAIL.trim().ifEmpty { "support@astrid.cc" }
+    val supportEmail: String = BuildConfig.ASTRID_SUPPORT_EMAIL.trim()
 
     /** iOS `Brand.inboundTaskEmail`: the address users email to create a task (AATD-73). */
-    val inboundTaskEmail: String = BuildConfig.ASTRID_INBOUND_TASK_EMAIL.trim().ifEmpty { "remindme@astrid.cc" }
+    val inboundTaskEmail: String = BuildConfig.ASTRID_INBOUND_TASK_EMAIL.trim()
 
     /**
      * iOS `Brand.agentEmailDomain`: the domain of agent identities (`claude@astrid.cc`), separate from
      * the host because the server lets them differ. Only for display; an agent's real address is
      * whatever the server returned (AATD-73).
      */
-    val agentEmailDomain: String = BuildConfig.ASTRID_AGENT_EMAIL_DOMAIN.trim().trimStart('@').ifEmpty { "astrid.cc" }
+    val agentEmailDomain: String = BuildConfig.ASTRID_AGENT_EMAIL_DOMAIN.trim().trimStart('@')
 
     /** Hosted Astrid's URL scheme — what the core assumes when it is told none (AWTD2-95). */
     const val ASTRID_URL_SCHEME = "astrid"
@@ -121,6 +122,6 @@ object Brand {
     /** A page on the server: `webUrl("/settings/account")` → `https://astrid.cc/settings/account`. */
     fun webUrl(path: String, base: String = baseUrl): String = base + "/" + path.trimStart('/')
 
-    /** A configured origin, trimmed and without a trailing slash; [fallback] when unset or blank. */
-    fun origin(raw: String?, fallback: String): String = raw?.trim()?.trimEnd('/')?.takeIf { it.isNotEmpty() } ?: fallback
+    /** A configured origin, trimmed and without a trailing slash. */
+    fun origin(raw: String): String = raw.trim().trimEnd('/')
 }

@@ -2,7 +2,7 @@
 """The brand literal audit (AATD-90): what a partner's build shows that still names Astrid.
 
     scripts/check-brand-literals.py <profile.brand.json> <merged res dir> [<merged manifest>]
-                                    [--text <dir>]… [--budget N]
+                                    [--text <dir>]… [--apk <apk>] [--budget N]
 
 Reads the profile's `expect.forbidLiterals` (astrid-web `brands/*.brand.json`, the same list web's
 brand matrix checks) and looks for each one, ignoring case as web does, in the text a person can be
@@ -15,12 +15,21 @@ The goal is none. Until then, --budget N is the most this build may have: one mo
 fewer fails too, saying to lower the budget, so the number only ever goes down. With no budget, any
 hit fails. Each hit is printed with its file and resource name.
 
-Not yet: strings compiled into the dex and the core library, which only a packaged APK has.
+--apk adds every string compiled into the packaged APK's dex: Kotlin's own text, and the defaults
+and fallbacks in it that a resource audit cannot see. The dex is mostly names (classes, fields,
+JSON keys, preference files: `astridModel`, `com.gracefultools.astrid…`), which a person is never
+shown, so there a name literal ("Astrid") counts only as a whole word in its own case, and a
+domain or address literal ("astrid.cc") in any case but not inside a longer word. `AstridTheme`
+and `astrid.sqlite` are names; `"Astrid"` and `support@astrid.cc` are text.
+
+Not yet: the core library (lib/*/libastrid_core.so), which carries the core's own defaults.
 """
 import json
 import os
+import re
 import sys
 import xml.etree.ElementTree as ET
+import zipfile
 
 
 def text_of(element):
@@ -64,12 +73,56 @@ def plain_texts(text_dir):
                     yield where, f"line {n}", line
 
 
+def uleb128(data, at):
+    value, shift = 0, 0
+    while True:
+        byte = data[at]
+        at += 1
+        value |= (byte & 0x7F) << shift
+        if byte < 0x80:
+            return value, at
+        shift += 7
+
+
+def dex_strings(data):
+    """Every entry of a dex file's string pool (string_ids_size at 0x38, string_ids_off at 0x3C)."""
+    if data[:4] != b"dex\n":
+        raise ValueError("not a dex file")
+    count = int.from_bytes(data[0x38:0x3C], "little")
+    table = int.from_bytes(data[0x3C:0x40], "little")
+    for i in range(count):
+        offset = int.from_bytes(data[table + 4 * i:table + 4 * i + 4], "little")
+        _, start = uleb128(data, offset)  # the length in UTF-16 units; the bytes end at a NUL
+        # Modified UTF-8: close enough to UTF-8 for matching ASCII literals.
+        yield data[start:data.index(b"\0", start)].decode("utf-8", "replace")
+
+
+def apk_texts(apk):
+    with zipfile.ZipFile(apk) as z:
+        for name in sorted(n for n in z.namelist() if re.fullmatch(r"classes\d*\.dex", n)):
+            for text in dex_strings(z.read(name)):
+                yield name, "string", text
+
+
+def dex_pattern(literal):
+    """A literal as it would appear in text inside the dex's names: see the module docstring."""
+    edge = r"(?<![A-Za-z0-9_]){}(?![A-Za-z0-9_])"
+    if re.search(r"[.@]", literal):
+        return re.compile(edge.format(re.escape(literal)), re.IGNORECASE)
+    return re.compile(edge.format(re.escape(literal)))
+
+
 def main(argv):
     budget = None
     text_dirs = []
     while "--text" in argv:
         i = argv.index("--text")
         text_dirs.append(argv[i + 1])
+        argv = argv[:i] + argv[i + 2:]
+    apk = None
+    if "--apk" in argv:
+        i = argv.index("--apk")
+        apk = argv[i + 1]
         argv = argv[:i] + argv[i + 2:]
     if "--budget" in argv:
         i = argv.index("--budget")
@@ -98,6 +151,12 @@ def main(argv):
     # One hit per string, however many literals it holds: "astrid.cc" is also "Astrid".
     hits = [(where, name, found, text) for where, name, text in texts
             if (found := [l for l in literals if l.lower() in text.lower()])]
+    if apk:
+        patterns = [(l, dex_pattern(l)) for l in literals]
+        dex = list(apk_texts(apk))
+        texts += dex
+        hits += [(where, name, found, text) for where, name, text in dex
+                 if (found := [l for l, pattern in patterns if pattern.search(text)])]
 
     label = os.path.basename(profile_path)
     for where, name, found, text in hits:
