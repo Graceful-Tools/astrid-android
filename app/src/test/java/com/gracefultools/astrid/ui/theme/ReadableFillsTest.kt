@@ -84,6 +84,29 @@ class ReadableFillsTest {
         }
     }
 
+    @Test
+    fun `AATD-90 a brand's own accent ink replaces the derived one only while it stays readable`() {
+        val purple = rgb(168, 85, 247)
+        val derived = accentInk(purple, Color.White, 0)
+        assertEquals(rgb(107, 33, 168), brandInk("#6b21a8", purple, Color.White, derived))
+        assertEquals(rgb(216, 180, 254), brandInk("#d8b4fe", purple, rgb(31, 41, 55), derived))
+        // Unset, malformed (Brand passes null) or under 4.5:1: the derived ink, as before.
+        assertEquals(derived, brandInk(null, purple, Color.White, derived))
+        assertEquals(derived, brandInk("#f3e8ff", purple, Color.White, derived))
+        assertEquals(derived, brandInk("#3b0764", purple, rgb(31, 41, 55), derived))
+    }
+
+    @Test
+    fun `AATD-90 an unconfigured build has no brand ink and keeps Astrid's token inks`() {
+        assertEquals(null, Brand.accentInkHex)
+        assertEquals(null, Brand.accentInkDarkHex)
+        assertEquals(null, Brand.optionalHex(""))
+        assertEquals(null, Brand.optionalHex("purple"))
+        assertEquals("#6b21a8", Brand.optionalHex(" #6B21A8 "))
+        assertEquals(rgb(29, 78, 216), AccentInk)
+        assertEquals(rgb(96, 165, 250), AccentInkDark)
+    }
+
     private fun contrast(a: Color, b: Color): Double {
         val (hi, lo) = listOf(a.luminance(), b.luminance()).sortedDescending()
         return (hi + 0.05) / (lo + 0.05)

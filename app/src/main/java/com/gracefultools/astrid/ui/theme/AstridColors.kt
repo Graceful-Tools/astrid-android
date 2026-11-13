@@ -102,10 +102,17 @@ val AccentText = brandColor(Brand.accentTextColorHex)
 /**
  * The accent as text on a light card and on a dark one: tokens `brand.accent-ink` /
  * `accent-ink-dark` for Astrid. The tokens cannot derive a partner's, so a partner accent's is
- * worked out from it as astrid-web does (`lib/brand/css-vars.ts`).
+ * worked out from it as astrid-web does (`lib/brand/css-vars.ts`) — unless the brand sets its own
+ * (`astridAccentInkColor` / `astridAccentInkDarkColor`, AATD-90).
  */
-val AccentInk = if (Brand.accentColorHex == Brand.DEFAULT_ACCENT_HEX) rgb(29, 78, 216) else accentInk(Accent, Color.White, 0)
-val AccentInkDark = if (Brand.accentColorHex == Brand.DEFAULT_ACCENT_HEX) rgb(96, 165, 250) else accentInk(Accent, rgb(31, 41, 55), 255)
+val AccentInk = brandInk(
+    Brand.accentInkHex, Accent, Color.White,
+    if (Brand.accentColorHex == Brand.DEFAULT_ACCENT_HEX) rgb(29, 78, 216) else accentInk(Accent, Color.White, 0),
+)
+val AccentInkDark = brandInk(
+    Brand.accentInkDarkHex, Accent, rgb(31, 41, 55),
+    if (Brand.accentColorHex == Brand.DEFAULT_ACCENT_HEX) rgb(96, 165, 250) else accentInk(Accent, rgb(31, 41, 55), 255),
+)
 
 val Success = rgb(34, 197, 94)
 val Warning = rgb(245, 158, 11)
@@ -126,18 +133,33 @@ internal fun contrast(a: Color, b: Color): Float {
     return (maxOf(la, lb) + 0.05f) / (minOf(la, lb) + 0.05f)
 }
 
+/** Whether [ink] reads at 4.5:1 on [card] and on [accent]'s wash there. */
+private fun inkReads(ink: Color, accent: Color, card: Color): Boolean {
+    val wash = accent.copy(alpha = WASH_OPACITY).compositeOver(card)
+    return contrast(ink, card) >= INK_CONTRAST && contrast(ink, wash) >= INK_CONTRAST
+}
+
+/**
+ * A brand's own accent ink ([configuredHex], from `Brand`) if it reads on [card] and the accent's
+ * wash there, else [derived]. make-brand-variant.sh refuses an unreadable one; this keeps a
+ * hand-edited brand.properties from shipping unreadable text.
+ */
+fun brandInk(configuredHex: String?, accent: Color, card: Color, derived: Color): Color {
+    val ink = configuredHex?.let(::brandColor) ?: return derived
+    return if (inkReads(ink, accent.copy(alpha = 1f), card)) ink else derived
+}
+
 /**
  * astrid-web `accentInk`: [accent] moved towards [toward] (0 on a light card, 255 on a dark one) in
  * twentieths until it reads at 4.5:1 on [card] and on its own wash there.
  */
 fun accentInk(accent: Color, card: Color, toward: Int): Color {
     val solid = accent.copy(alpha = 1f)
-    val wash = solid.copy(alpha = WASH_OPACITY).compositeOver(card)
     val channels = listOf(solid.red, solid.green, solid.blue).map { (it * 255).roundToInt() }
     for (step in 0..20) {
         val (r, g, b) = channels.map { (it + (toward - it) * (step / 20f)).roundToInt() }
         val ink = Color(r, g, b)
-        if (contrast(ink, card) >= INK_CONTRAST && contrast(ink, wash) >= INK_CONTRAST) return ink
+        if (inkReads(ink, solid, card)) return ink
     }
     return Color(toward, toward, toward)
 }

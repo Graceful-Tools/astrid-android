@@ -95,6 +95,10 @@ android {
         brandField("ASTRID_ACCENT_COLOR", brand("astridAccentColor", ""))
         brandField("ASTRID_ACCENT_HOVER_COLOR", brand("astridAccentHoverColor", ""))
         brandField("ASTRID_ACCENT_TEXT_COLOR", brand("astridAccentTextColor", ""))
+        // The accent as text on a light and a dark card (tokens brand.accent-ink / -dark, AATD-90).
+        // Blank: Astrid's tokens, or a partner's ink derived from its accent.
+        brandField("ASTRID_ACCENT_INK_COLOR", brand("astridAccentInkColor", ""))
+        brandField("ASTRID_ACCENT_INK_DARK_COLOR", brand("astridAccentInkDarkColor", ""))
         brandField("ASTRID_APP_NAME", brand("astridAppName", "Astrid"))   // Brand.appName, for code (AATD-90)
         resValue("string", "app_name", brand("astridAppName", "Astrid"))
         resValue("string", "brand_wordmark", brand("astridWordmark", "astrid"))

@@ -66,6 +66,11 @@ PY2
 "$root/scripts/make-brand-variant.sh" "$work/acme.brand.json" --out "$work/out" >/dev/null
 has "$p" "astridVersionCode=42"
 has "$p" "astridVersionName=4.2.0"
+lacks "$p" astridAccentInkColor                      # no android.accentInk: the app derives it
+python3 -I -c "import json,sys; p=json.load(open(sys.argv[1])); p['android'].update(accentInk='#6B21A8', accentInkDark='#d8b4fe'); json.dump(p, open(sys.argv[1],'w'))" "$work/acme.brand.json"
+"$root/scripts/make-brand-variant.sh" "$work/acme.brand.json" --out "$work/out" >/dev/null
+has "$p" "astridAccentInkColor=#6b21a8"              # AATD-90: the accent as text, light and dark
+has "$p" "astridAccentInkDarkColor=#d8b4fe"
 has "$pl/listings/en-US/title.txt" "Acme Tasks: Team To-dos"
 has "$pl/listings/en-US/short-description.txt" "Acme's lists."
 has "$pl/listings/en-US/full-description.txt" "Line two."
@@ -80,6 +85,9 @@ bad "a['play']['title']='x'*31" "a title over Play's 30 characters was accepted"
 bad "a['play']['shortDescription']='x'*81" "a short description over 80 was accepted"
 bad "a['versionCode']='1.5'" "a versionCode that is not a whole number was accepted"
 bad "a['versionCode']=0" "versionCode 0 was accepted"
+bad "a['accentInk']='purple'" "a malformed accent ink was accepted"
+bad "a['accentInk']='#f3e8ff'" "an accent ink under 4.5:1 on a light card was accepted"
+bad "a['accentInkDark']='#3b0764'" "a dark-theme accent ink under 4.5:1 on a dark card was accepted"
 
 echo '{"env":{"BRAND_ANDROID_APP_LINKS":"not a package:AA"}}' > "$work/bad.brand.json"
 ! "$root/scripts/make-brand-variant.sh" "$work/bad.brand.json" --out "$work/bad" 2>/dev/null \
