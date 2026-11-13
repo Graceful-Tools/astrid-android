@@ -53,6 +53,11 @@ fi
 
 # Hand-written colours, sizes and copy in ui/ (AATD-86): a count may fall, never rise. Lower the
 # budget with --update when yours falls; raising one is an edit to the JSON with its reason.
+# The palette, spacing and type are astrid-core's generated tokens, vendored (AATD-85): unedited,
+# and the pinned core's own file once the core has been fetched.
+step "design: the tokens are the pinned core's, unedited (AATD-85)"
+scripts/test-check-design-tokens.sh
+scripts/check-design-tokens.sh
 step "design: no hand-written colour, size or copy count rose (AATD-86)"
 scripts/test-report-design-metrics.sh
 python3 -I scripts/report-design-metrics.py --check
