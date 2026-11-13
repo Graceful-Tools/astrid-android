@@ -22,7 +22,11 @@ shown, so there a name literal ("Astrid") counts only as a whole word in its own
 domain or address literal ("astrid.cc") in any case but not inside a longer word. `AstridTheme`
 and `astrid.sqlite` are names; `"Astrid"` and `support@astrid.cc` are text.
 
-Not yet: the core library (lib/*/libastrid_core.so), which carries the core's own defaults.
+--apk also reads the APK's native libraries (lib/<abi>/*.so): the core, which carries the core's
+own defaults. Their strings are packed with nothing between them ("…androidastridhttps://astrid.cc
+temp_…"), so a name cannot be told from part of an identifier (`setAstridModel`) and is not
+counted there. A domain or address literal is, in any case and wherever it appears. One library
+built for several ABIs is one library: its hits count once (the ABI with the most).
 """
 import json
 import os
@@ -104,6 +108,32 @@ def apk_texts(apk):
                 yield name, "string", text
 
 
+def printable_runs(data):
+    """Every run of 4+ printable ASCII bytes: a native library's strings, packed together."""
+    for match in re.finditer(rb"[\x20-\x7e]{4,}", data):
+        yield match.group().decode("ascii")
+
+
+def native_hits(apk, literals):
+    """(file, "native", [literal], context) for each domain/address literal in lib/<abi>/*.so."""
+    addresses = [l for l in literals if re.search(r"[.@]", l)]
+    by_library = {}
+    with zipfile.ZipFile(apk) as z:
+        for name in sorted(n for n in z.namelist() if re.fullmatch(r"lib/[^/]+/[^/]+\.so", n)):
+            hits = []
+            for run in printable_runs(z.read(name)):
+                lowered = run.lower()
+                for literal in addresses:
+                    at = lowered.find(literal.lower())
+                    while at >= 0:
+                        hits.append((name, "native", [literal], run[max(0, at - 30):at + len(literal) + 30]))
+                        at = lowered.find(literal.lower(), at + 1)
+            library = os.path.basename(name)
+            if len(hits) > len(by_library.get(library, [])):
+                by_library[library] = hits
+    return [hit for library in sorted(by_library) for hit in by_library[library]]
+
+
 def dex_pattern(literal):
     """A literal as it would appear in text inside the dex's names: see the module docstring."""
     edge = r"(?<![A-Za-z0-9_]){}(?![A-Za-z0-9_])"
@@ -157,6 +187,7 @@ def main(argv):
         texts += dex
         hits += [(where, name, found, text) for where, name, text in dex
                  if (found := [l for l, pattern in patterns if pattern.search(text)])]
+        hits += native_hits(apk, literals)
 
     label = os.path.basename(profile_path)
     for where, name, found, text in hits:
