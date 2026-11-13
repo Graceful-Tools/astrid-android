@@ -126,6 +126,7 @@ import com.gracefultools.astrid.ui.theme.Overdue
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.TypeSize
 import kotlinx.coroutines.launch
 
 /**
@@ -414,7 +415,7 @@ private fun WhoRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailVie
                 Text(who.display, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             } else {
                 Box(Modifier.size(24.dp).clip(CircleShape).border(1.5.dp, colors.textMuted, CircleShape), contentAlignment = Alignment.Center) {
-                    Text(stringResource(R.string.tasks_unassigned_glyph), fontSize = 11.sp, fontWeight = FontWeight.SemiBold, color = colors.textMuted)
+                    Text(stringResource(R.string.tasks_unassigned_glyph), fontSize = TypeSize.caption2, fontWeight = FontWeight.SemiBold, color = colors.textMuted)
                 }
                 Text(stringResource(R.string.assignee_unassigned), style = TextStyles.body, color = colors.textMuted, modifier = Modifier.weight(1f))
             }

@@ -75,6 +75,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.TypeSize
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -243,7 +244,7 @@ private fun TriageDeck(state: ReminderState, vm: ReminderViewModel, onOpenTask: 
                 Column(Modifier.weight(1f).fillMaxWidth(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(Icons.Filled.Verified, null, tint = Success, modifier = Modifier.size(56.dp))
                     Spacer(Modifier.size(Spacing.s16))
-                    Text(stringResource(R.string.reminders_triage_caught_up), fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
+                    Text(stringResource(R.string.reminders_triage_caught_up), fontSize = TypeSize.title3, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
                     Spacer(Modifier.size(Spacing.s16))
                     Box(
                         Modifier.clip(RoundedCornerShape(Radius.large)).background(colors.accent).clickable(role = Role.Button, onClick = vm::close)
@@ -306,7 +307,7 @@ private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (Tria
         verticalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         task.listChips.firstOrNull()?.let { Text(it.name, style = TextStyles.caption, color = colors.textMuted) }
-        Text(task.task.title, fontSize = 22.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
+        Text(task.task.title, fontSize = TypeSize.title3, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
             val dueColor = if (task.isOverdue) com.gracefultools.astrid.ui.theme.Overdue else colors.textMuted
             Icon(Icons.Filled.CalendarToday, null, tint = dueColor, modifier = Modifier.size(16.dp))

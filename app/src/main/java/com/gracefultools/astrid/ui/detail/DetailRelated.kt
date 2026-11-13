@@ -94,6 +94,7 @@ import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.TypeSize
 import kotlinx.coroutines.delay
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
@@ -434,7 +435,7 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
             }
             (timer?.lastValue ?: detail.task.lastTimerValue)?.let { last ->
                 Spacer(Modifier.height(Spacing.s16))
-                Text(stringResource(R.string.task_edit_last_timer, last), color = Color.White.copy(alpha = 0.5f), fontSize = 16.sp)
+                Text(stringResource(R.string.task_edit_last_timer, last), color = Color.White.copy(alpha = 0.5f), fontSize = TypeSize.callout)
             }
             Spacer(Modifier.weight(2f))
         }

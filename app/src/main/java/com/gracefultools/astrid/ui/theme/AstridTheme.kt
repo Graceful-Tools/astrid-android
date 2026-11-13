@@ -113,6 +113,14 @@ object TextStyles {
     val rowTitle = style(Type.rowTitle)
 }
 
+/** The tokens' type sizes (comfortable scale), for text that sets only its size. */
+object TypeSize {
+    val title1 = Type.title1.size; val title2 = Type.title2.size; val title3 = Type.title3.size
+    val body = Type.body.size; val callout = Type.callout.size; val subheadline = Type.subheadline.size
+    val footnote = Type.footnote.size; val caption1 = Type.caption1.size; val caption2 = Type.caption2.size
+    val rowTitle = Type.rowTitle.size
+}
+
 /** iOS Theme.shadowSmall/Medium/Large as Compose elevations, and the floating header's own. */
 object Elevation {
     val small = 1.dp; val medium = 3.dp; val large = 10.dp; val floating = 4.dp
