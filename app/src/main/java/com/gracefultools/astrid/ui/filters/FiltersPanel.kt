@@ -24,7 +24,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,6 +40,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.coreLabel
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
@@ -131,7 +131,7 @@ fun MyTasksFilterSheet(vm: FiltersViewModel, onDismiss: () -> Unit) {
     ) {
         Row(Modifier.fillMaxWidth().padding(horizontal = Spacing.s16), verticalAlignment = Alignment.CenterVertically) {
             Text(stringResource(R.string.my_tasks_filters_title), style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.weight(1f))
-            TextButton(onClick = onDismiss) { Text(stringResource(R.string.actions_done)) }
+            AstridTextButton(onClick = onDismiss) { Text(stringResource(R.string.actions_done)) }
         }
         FiltersPanel(vm, Modifier.verticalScroll(rememberScrollState()).padding(horizontal = Spacing.s16).padding(bottom = Spacing.s24))
     }

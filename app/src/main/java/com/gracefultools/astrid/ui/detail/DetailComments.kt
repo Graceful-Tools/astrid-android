@@ -28,7 +28,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -47,6 +46,7 @@ import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.CommentRow
 import com.gracefultools.astrid.model.FileRow
 import com.gracefultools.astrid.model.TaskDetail
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.theme.AstridTheme
@@ -220,8 +220,8 @@ private fun CommentBubble(
             onDismissRequest = { editing = false },
             title = { Text(stringResource(R.string.comments_edit)) },
             text = { OutlinedTextField(text, { text = it }, minLines = 3, modifier = Modifier.fillMaxWidth()) },
-            confirmButton = { TextButton(onClick = { editing = false; onEdit(comment.id, text) }, enabled = text.isNotBlank()) { Text(stringResource(R.string.detail_save)) } },
-            dismissButton = { TextButton(onClick = { editing = false }) { Text(stringResource(R.string.common_cancel)) } },
+            confirmButton = { AstridTextButton(onClick = { editing = false; onEdit(comment.id, text) }, enabled = text.isNotBlank()) { Text(stringResource(R.string.detail_save)) } },
+            dismissButton = { AstridTextButton(onClick = { editing = false }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
     if (confirmingDelete) {
@@ -229,8 +229,8 @@ private fun CommentBubble(
             onDismissRequest = { confirmingDelete = false },
             title = { Text(stringResource(R.string.comments_delete_comment)) },
             text = { Text(stringResource(R.string.comments_delete_confirm)) },
-            confirmButton = { TextButton(onClick = { confirmingDelete = false; onDelete(comment.id) }) { Text(stringResource(R.string.actions_delete), color = AstridTheme.colors.errorInk) } },
-            dismissButton = { TextButton(onClick = { confirmingDelete = false }) { Text(stringResource(R.string.common_cancel)) } },
+            confirmButton = { AstridTextButton(onClick = { confirmingDelete = false; onDelete(comment.id) }) { Text(stringResource(R.string.actions_delete), color = AstridTheme.colors.errorInk) } },
+            dismissButton = { AstridTextButton(onClick = { confirmingDelete = false }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
 }

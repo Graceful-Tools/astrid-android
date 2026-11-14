@@ -30,7 +30,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,6 +46,7 @@ import com.gracefultools.astrid.BuildConfig
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.SettingChoice
 import com.gracefultools.astrid.ui.common.AppErrorBanner
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.coreLabel
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.IosSystemColors
@@ -182,9 +182,9 @@ fun SettingsScreen(
             onDismissRequest = vm::cancelSignOut,
             title = { Text(stringResource(R.string.settings_sign_out)) },
             text = { Text(stringResource(R.string.settings_are_you_sure_sign_out)) },
-            dismissButton = { TextButton(onClick = vm::cancelSignOut) { Text(stringResource(R.string.common_cancel)) } },
+            dismissButton = { AstridTextButton(onClick = vm::cancelSignOut) { Text(stringResource(R.string.common_cancel)) } },
             confirmButton = {
-                TextButton(onClick = vm::signOut) { Text(stringResource(R.string.settings_sign_out), color = AstridTheme.colors.errorInk, fontWeight = FontWeight.SemiBold) }
+                AstridTextButton(onClick = vm::signOut) { Text(stringResource(R.string.settings_sign_out), color = AstridTheme.colors.errorInk, fontWeight = FontWeight.SemiBold) }
             },
         )
     }
@@ -212,7 +212,7 @@ private fun OutboxRows(state: SettingsState, vm: SettingsViewModel) {
             stringResource(R.string.settings_outbox_summary, outbox.completed, outbox.pending + outbox.running, outbox.failed),
             style = TextStyles.caption2, color = colors.textSecondary, modifier = Modifier.weight(1f),
         )
-        TextButton(onClick = vm::refreshOutbox) { Text(stringResource(R.string.settings_outbox_refresh), style = TextStyles.caption2, color = colors.accentInk) }
+        AstridTextButton(onClick = vm::refreshOutbox) { Text(stringResource(R.string.settings_outbox_refresh), style = TextStyles.caption2, color = colors.accentInk) }
     }
     outbox.deadLetters.forEach { letter ->
         FormDivider(inset = false)

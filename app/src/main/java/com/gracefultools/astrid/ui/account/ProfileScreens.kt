@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.account
 
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.tasks.TaskRowView
 import com.gracefultools.astrid.ui.common.rememberPhotoPicker
 import com.gracefultools.astrid.model.ProfileStats
@@ -62,7 +63,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -281,7 +281,7 @@ fun PersonProfileScreen(vm: PersonProfileViewModel, onBack: () -> Unit, onOwnPro
                     stringResource(if (state.error == FailureKind.NOT_FOUND) R.string.profile_error_not_found else R.string.profile_error_load_failed),
                     style = TextStyles.body, color = colors.textMuted,
                 )
-                TextButton(onClick = onBack) { Text(stringResource(R.string.profile_go_back)) }
+                AstridTextButton(onClick = onBack) { Text(stringResource(R.string.profile_go_back)) }
             }
         }
     }
@@ -580,7 +580,7 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
             onDismissRequest = vm::dismissSuccess,
             title = { Text(stringResource(R.string.messages_success)) },
             text = { if (message.isNotBlank()) Text(message) },
-            confirmButton = { TextButton(onClick = vm::dismissSuccess) { Text(stringResource(R.string.actions_ok)) } },
+            confirmButton = { AstridTextButton(onClick = vm::dismissSuccess) { Text(stringResource(R.string.actions_ok)) } },
         )
     }
 }
@@ -731,9 +731,9 @@ fun DeleteAccountScreen(vm: ProfileViewModel, onBack: () -> Unit, onSignedOut: (
             onDismissRequest = vm::cancelDelete,
             title = { Text(stringResource(R.string.account_delete_final_confirmation)) },
             text = { Text(stringResource(R.string.account_delete_final_warning)) },
-            dismissButton = { TextButton(onClick = vm::cancelDelete) { Text(stringResource(R.string.common_cancel)) } },
+            dismissButton = { AstridTextButton(onClick = vm::cancelDelete) { Text(stringResource(R.string.common_cancel)) } },
             confirmButton = {
-                TextButton(onClick = vm::deleteAccount) { Text(stringResource(R.string.account_delete_forever), color = AstridTheme.colors.errorInk, fontWeight = FontWeight.SemiBold) }
+                AstridTextButton(onClick = vm::deleteAccount) { Text(stringResource(R.string.account_delete_forever), color = AstridTheme.colors.errorInk, fontWeight = FontWeight.SemiBold) }
             },
         )
     }

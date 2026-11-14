@@ -20,7 +20,6 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.gracefultools.astrid.R
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.detail.PickRow
 import com.gracefultools.astrid.ui.detail.PickerSheet
 import com.gracefultools.astrid.ui.tasks.parseColor
@@ -117,7 +117,7 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel, i
                         Text(stringResource(R.string.lists_list_image), style = TextStyles.body, color = colors.textPrimary)
                         Text(stringResource(R.string.lists_list_image_description), style = TextStyles.caption2, color = colors.textSecondary)
                     }
-                    TextButton(onClick = pickImage, enabled = !state.imageUploading) {
+                    AstridTextButton(onClick = pickImage, enabled = !state.imageUploading) {
                         Text(stringResource(R.string.actions_change), style = TextStyles.body, color = colors.accentInk)
                     }
                 }
@@ -235,7 +235,7 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel, i
             DatePickerDialog(
                 onDismissRequest = close,
                 confirmButton = {
-                    TextButton(onClick = {
+                    AstridTextButton(onClick = {
                         dateState.selectedDateMillis?.let { millis ->
                             val picked = java.time.Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate()
                             vm.setRecentlyCompleted(RecentlyCompletedPreset.SINCE_SPECIFIC_DATE, picked.toString())
@@ -243,7 +243,7 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel, i
                         close()
                     }) { Text(stringResource(R.string.actions_done)) }
                 },
-                dismissButton = { TextButton(onClick = close) { Text(stringResource(R.string.common_cancel)) } },
+                dismissButton = { AstridTextButton(onClick = close) { Text(stringResource(R.string.common_cancel)) } },
             ) { DatePicker(dateState) }
         }
         AdminPicker.CUSTOM_COLOR -> CustomColorSheet(settings.color, vm::pickCustomColor) { vm.flushEdits(); close() }

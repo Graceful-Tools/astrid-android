@@ -16,7 +16,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,6 +36,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.core.CoreRules
 import com.gracefultools.astrid.core.command
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Spacing
@@ -71,7 +71,7 @@ fun DescriptionReaderScreen(
         Column(Modifier.fillMaxSize().background(colors.bgPrimary).safeDrawingPadding()) {
             Box(Modifier.fillMaxWidth().padding(horizontal = Spacing.s8)) {
                 if (!isReadOnly) {
-                    TextButton(
+                    AstridTextButton(
                         onClick = { mode = if (mode == DescriptionReader.Mode.READING) DescriptionReader.Mode.EDITING else DescriptionReader.Mode.READING },
                         modifier = Modifier.align(Alignment.CenterStart).testTag("descriptionReader.toggleMode"),
                     ) {
@@ -82,7 +82,7 @@ fun DescriptionReaderScreen(
                     }
                 }
                 Text(stringResource(R.string.detail_description), style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.align(Alignment.Center))
-                TextButton(onClick = close, modifier = Modifier.align(Alignment.CenterEnd).testTag("descriptionReader.done")) {
+                AstridTextButton(onClick = close, modifier = Modifier.align(Alignment.CenterEnd).testTag("descriptionReader.done")) {
                     Text(stringResource(R.string.actions_done), style = TextStyles.body, fontWeight = FontWeight.SemiBold, color = colors.accentInk)
                 }
             }

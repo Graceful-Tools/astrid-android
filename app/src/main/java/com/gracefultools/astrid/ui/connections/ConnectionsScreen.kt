@@ -19,7 +19,6 @@ import androidx.compose.material.icons.filled.Public
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,6 +58,7 @@ import com.gracefultools.astrid.Brand
 import com.gracefultools.astrid.ui.agents.WebSessionRequiredRow
 import com.gracefultools.astrid.ui.agents.displayDate
 import com.gracefultools.astrid.ui.agents.openInCustomTab
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
@@ -195,8 +195,8 @@ fun ConnectionsScreen(vm: ConnectionsViewModel, core: Core, onBack: () -> Unit) 
                     ),
                 )
             },
-            confirmButton = { TextButton(onClick = vm::confirmRevoke) { Text(stringResource(R.string.connections_revoke), color = AstridTheme.colors.errorInk) } },
-            dismissButton = { TextButton(onClick = vm::cancelRevoke) { Text(stringResource(R.string.common_cancel)) } },
+            confirmButton = { AstridTextButton(onClick = vm::confirmRevoke) { Text(stringResource(R.string.connections_revoke), color = AstridTheme.colors.errorInk) } },
+            dismissButton = { AstridTextButton(onClick = vm::cancelRevoke) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
 
@@ -291,10 +291,10 @@ private fun OAuthClientEditorSheet(vm: OAuthClientEditorViewModel, onFinished: (
     HubSheet(
         stringResource(if (state.isEditing) R.string.settings_connections_edit_title else R.string.settings_connections_new_title),
         onDismiss = { if (!state.isSaving) onCancel() },
-        leadingAction = { TextButton(onClick = onCancel, enabled = !state.isSaving) { Text(stringResource(R.string.common_cancel)) } },
+        leadingAction = { AstridTextButton(onClick = onCancel, enabled = !state.isSaving) { Text(stringResource(R.string.common_cancel)) } },
         trailingAction = {
             if (state.isSaving) SmallSpinner() else {
-                TextButton(onClick = vm::save, enabled = state.check.canSend && !state.isLoading) {
+                AstridTextButton(onClick = vm::save, enabled = state.check.canSend && !state.isLoading) {
                     Text(stringResource(if (state.isEditing) R.string.agents_actions_save else R.string.settings_connections_create))
                 }
             }

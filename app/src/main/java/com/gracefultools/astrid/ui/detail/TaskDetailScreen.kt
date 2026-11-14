@@ -71,7 +71,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -112,6 +111,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.TaskDetail
 import com.gracefultools.astrid.ui.common.AppErrorBanner
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.CheckboxArt
 import com.gracefultools.astrid.ui.common.completionPop
@@ -296,8 +296,8 @@ private fun DetailHeader(detail: TaskDetail?, vm: TaskDetailViewModel, onBack: (
         AlertDialog(
             onDismissRequest = { confirmingDelete = false },
             title = { Text(stringResource(R.string.tasks_delete_confirm)) },
-            confirmButton = { TextButton(onClick = { confirmingDelete = false; vm.delete() }) { Text(stringResource(R.string.actions_delete), color = AstridTheme.colors.errorInk) } },
-            dismissButton = { TextButton(onClick = { confirmingDelete = false }) { Text(stringResource(R.string.common_cancel)) } },
+            confirmButton = { AstridTextButton(onClick = { confirmingDelete = false; vm.delete() }) { Text(stringResource(R.string.actions_delete), color = AstridTheme.colors.errorInk) } },
+            dismissButton = { AstridTextButton(onClick = { confirmingDelete = false }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
     if (copying && detail != null) CopyTaskSheet(vm, onDismiss = { copying = false })
@@ -363,12 +363,12 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
             title = { Text(stringResource(R.string.task_detail_complete_subtasks_title)) },
             text = {
                 Column {
-                    TextButton(onClick = { askSubtasks = false; pop.tapped(completes = true); vm.completeWithSubtasks(true) }) { Text(stringResource(R.string.task_detail_complete_all_subtasks)) }
-                    TextButton(onClick = { askSubtasks = false; pop.tapped(completes = true); vm.completeWithSubtasks(false) }) { Text(stringResource(R.string.task_detail_complete_only_this)) }
+                    AstridTextButton(onClick = { askSubtasks = false; pop.tapped(completes = true); vm.completeWithSubtasks(true) }) { Text(stringResource(R.string.task_detail_complete_all_subtasks)) }
+                    AstridTextButton(onClick = { askSubtasks = false; pop.tapped(completes = true); vm.completeWithSubtasks(false) }) { Text(stringResource(R.string.task_detail_complete_only_this)) }
                 }
             },
             confirmButton = {},
-            dismissButton = { TextButton(onClick = { askSubtasks = false }) { Text(stringResource(R.string.common_cancel)) } },
+            dismissButton = { AstridTextButton(onClick = { askSubtasks = false }) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
 }

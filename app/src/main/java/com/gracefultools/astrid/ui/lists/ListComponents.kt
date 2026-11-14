@@ -28,7 +28,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -59,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.UserSummary
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.detail.PickRow
@@ -176,9 +176,9 @@ internal fun AddMemberSheet(
         containerColor = colors.bgPrimary,
     ) {
         Row(Modifier.fillMaxWidth().padding(horizontal = Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-            TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
+            AstridTextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
             Text(stringResource(R.string.members_add_member), style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.weight(1f), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
-            TextButton(onClick = { onAdd(email.trim(), role) }, enabled = email.contains('@')) { Text(stringResource(R.string.actions_add), fontWeight = FontWeight.SemiBold) }
+            AstridTextButton(onClick = { onAdd(email.trim(), role) }, enabled = email.contains('@')) { Text(stringResource(R.string.actions_add), fontWeight = FontWeight.SemiBold) }
         }
         Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(bottom = Spacing.s24), verticalArrangement = Arrangement.spacedBy(Spacing.s24)) {
             FormSection(stringResource(R.string.members_email_address)) {

@@ -31,7 +31,6 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -54,6 +53,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.SharedFile
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.share.ShareTaskViewModel
 import com.gracefultools.astrid.ui.theme.Accent
 import com.gracefultools.astrid.ui.theme.AstridTheme
@@ -91,12 +91,12 @@ fun NewTaskSheet(
     ) {
         Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).imePadding().padding(bottom = Spacing.s24)) {
             Row(Modifier.fillMaxWidth().padding(horizontal = Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
+                AstridTextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
                 Text(
                     stringResource(R.string.share_create_task), style = TextStyles.headline, color = colors.textPrimary,
                     modifier = Modifier.weight(1f).semantics { heading() }, textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                 )
-                TextButton(onClick = { onSave(title, description, priority) }, enabled = title.isNotBlank() && !saving) {
+                AstridTextButton(onClick = { onSave(title, description, priority) }, enabled = title.isNotBlank() && !saving) {
                     Text(stringResource(R.string.share_save), fontWeight = FontWeight.SemiBold)
                 }
             }
