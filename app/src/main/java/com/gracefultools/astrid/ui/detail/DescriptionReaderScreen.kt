@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.detail
 
 import androidx.activity.compose.BackHandler
+import com.gracefultools.astrid.Brand
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -110,6 +111,7 @@ fun DescriptionReaderScreen(
     }
 }
 
+/** `origin`: a relative link opens on this build's server; unnamed, it stays relative (AWTD-1630). */
 private fun rendered(markdown: String): List<JsonObject>? = runCatching {
-    (CoreRules.ask(command("renderMarkdown", "text" to markdown)) as JsonArray).map { it as JsonObject }
+    (CoreRules.ask(command("renderMarkdown", "text" to markdown, "origin" to Brand.baseUrl)) as JsonArray).map { it as JsonObject }
 }.getOrNull()

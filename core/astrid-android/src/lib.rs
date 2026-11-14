@@ -336,7 +336,7 @@ mod tests {
     #[test]
     fn a_listener_hears_changes_in_the_cores_words() {
         let core = CoreClient::start(
-            r#"{"cachePath":":memory:","platform":"android-app"}"#.into(),
+            r#"{"cachePath":":memory:","baseUrl":"https://nowhere.invalid","platform":"android-app"}"#.into(),
             Arc::new(MemoryCredentials::default()),
             false,
         )
@@ -355,18 +355,33 @@ mod tests {
     /// AATD-4. A config with no platform is Android's, not the core's Windows default.
     #[test]
     fn aatd_4_a_config_without_a_platform_is_android() {
-        let config = android_config(r#"{"cachePath":":memory:"}"#).expect("reads");
+        let config =
+            android_config(r#"{"cachePath":":memory:","baseUrl":"https://nowhere.invalid"}"#)
+                .expect("reads");
         assert_eq!(config.platform.wire(), "android-app");
         let named =
-            android_config(r#"{"cachePath":":memory:","platform":"android-app"}"#).expect("reads");
+            android_config(r#"{"cachePath":":memory:","baseUrl":"https://nowhere.invalid","platform":"android-app"}"#).expect("reads");
         assert_eq!(named.platform.wire(), "android-app");
         assert!(android_config("not json").is_err());
+    }
+
+    /// AATD-90 (AWTD-1627). A core started without a server is refused, never quietly pointed at
+    /// Astrid's: a partner build that forgot its server must fail at start, not talk to astrid.cc.
+    #[test]
+    fn aatd_90_a_core_without_a_server_is_refused() {
+        let refused = CoreClient::start(
+            r#"{"cachePath":":memory:","platform":"android-app"}"#.into(),
+            Arc::new(MemoryCredentials::default()),
+            false,
+        );
+        let error = refused.err().expect("refused").to_string();
+        assert!(error.contains("CONFIG_BASE_URL_REQUIRED"), "{error}");
     }
 
     #[test]
     fn a_blocking_read_answers_on_the_calling_thread() {
         let core = CoreClient::start(
-            r#"{"cachePath":":memory:"}"#.into(),
+            r#"{"cachePath":":memory:","baseUrl":"https://nowhere.invalid"}"#.into(),
             Arc::new(MemoryCredentials::default()),
             false,
         )
@@ -378,7 +393,7 @@ mod tests {
     #[test]
     fn the_client_door_runs_a_command_on_its_own_pool() {
         let core = CoreClient::start(
-            r#"{"cachePath":":memory:"}"#.into(),
+            r#"{"cachePath":":memory:","baseUrl":"https://nowhere.invalid"}"#.into(),
             Arc::new(MemoryCredentials::default()),
             false,
         )

@@ -64,7 +64,7 @@ class CoreSession private constructor(private val client: CoreClient) : Core {
     @Serializable
     private data class Config(
         val cachePath: String,
-        val baseUrl: String? = null,
+        val baseUrl: String,
         val platform: String,
         val urlScheme: String? = null,
         val handoffClientId: String? = null,
@@ -73,7 +73,8 @@ class CoreSession private constructor(private val client: CoreClient) : Core {
     companion object {
         /**
          * @param cachePath the SQLite file the cache lives in, or `":memory:"` for a test.
-         * @param baseUrl the server; the core's default (astrid.cc) when null.
+         * @param baseUrl the server. Required: the core has no default and refuses to start without
+         *   one (`CONFIG_BASE_URL_REQUIRED`, AWTD-1627), so a partner build can never talk to astrid.cc.
          * @param background start the loops that keep the app current. Tests pass `false`.
          * @param urlScheme the scheme the sign-in callback arrives on; the core's (`astrid`) when null.
          * @param handoffClientId the server's id for this app; the core's (`android`) when null.
@@ -82,7 +83,7 @@ class CoreSession private constructor(private val client: CoreClient) : Core {
             cachePath: String,
             credentials: CredentialStore,
             background: Boolean,
-            baseUrl: String? = null,
+            baseUrl: String,
             urlScheme: String? = null,
             handoffClientId: String? = null,
         ): CoreSession =
@@ -91,7 +92,7 @@ class CoreSession private constructor(private val client: CoreClient) : Core {
         /** What [start] hands the core (astrid-core `Config`, AWTD2-95's `urlScheme` / `handoffClientId`). */
         internal fun configJson(
             cachePath: String,
-            baseUrl: String? = null,
+            baseUrl: String,
             urlScheme: String? = null,
             handoffClientId: String? = null,
         ): String = CoreJson.encodeToString(
