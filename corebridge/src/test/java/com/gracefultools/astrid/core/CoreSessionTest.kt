@@ -23,7 +23,10 @@ class CoreSessionTest {
         override fun delete(key: String): Boolean { map.remove(key); return true }
     }
 
-    private fun session() = CoreSession.start(":memory:", Memory(), background = false)
+    /** A server that is never reached: these tests run against the cache (core CONTRACTS.md §4). */
+    private val nowhere = "https://nowhere.invalid"
+
+    private fun session() = CoreSession.start(":memory:", Memory(), background = false, baseUrl = nowhere)
 
     @Test
     fun `AATD-4 the client door answers a cache read`() = runBlocking {
@@ -48,12 +51,14 @@ class CoreSessionTest {
     }
 
     @Test
-    fun `AATD-77 the pinned core knows listInsights, so signed out it is a sign-in refusal, not an unknown command`() = runBlocking {
+    fun `AATD-77 the pinned core knows listInsights, so it goes to the server rather than refusing an unknown command`() = runBlocking {
+        // The server is never reached (AATD-90: no test talks to astrid.cc), so a known command
+        // fails as offline; an unknown one would be refused before any request.
         try {
             session().run(command("listInsights", "listId" to "l1", "days" to 7, "timeZone" to "UTC"))
             fail("expected a failure")
         } catch (failure: CoreFailure) {
-            assertEquals(failure.message, FailureKind.UNAUTHORIZED, failure.kind)
+            assertEquals(failure.message, FailureKind.OFFLINE, failure.kind)
         }
     }
 
@@ -82,10 +87,10 @@ class CoreSessionTest {
     @Test
     fun `AATD-72 a partner build signs in on its own scheme as its own client`() = runBlocking {
         assertEquals(
-            """{"cachePath":":memory:","platform":"android-app","urlScheme":"partner","handoffClientId":"partner-android"}""",
-            CoreSession.configJson(":memory:", urlScheme = "partner", handoffClientId = "partner-android"),
+            """{"cachePath":":memory:","baseUrl":"https://tasks.partner.example","platform":"android-app","urlScheme":"partner","handoffClientId":"partner-android"}""",
+            CoreSession.configJson(":memory:", "https://tasks.partner.example", urlScheme = "partner", handoffClientId = "partner-android"),
         )
-        val core = CoreSession.start(":memory:", Memory(), background = false, urlScheme = "partner", handoffClientId = "partner-android")
+        val core = CoreSession.start(":memory:", Memory(), background = false, baseUrl = "https://tasks.partner.example", urlScheme = "partner", handoffClientId = "partner-android")
         val answer = core.run(command("beginSignIn", "provider" to "google")) as JsonObject
         val url = (answer["authorizeUrl"] as JsonPrimitive).content
         assertTrue(url, url.contains("client=partner-android"))

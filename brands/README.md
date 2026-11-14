@@ -67,9 +67,9 @@ dex is mostly names (`AstridTheme`, `astrid.sqlite`), so there a name counts onl
 own case, and a domain in any case: acme's dex has none. That is why `Brand.kt` names no Astrid value of
 its own: Gradle gives every key Astrid's value when it is unset. `--apk` reads the native libraries
 (`lib/<abi>/*.so`) as well. Their strings are packed with no gap between them, so there only a domain
-or address counts (any case), and one library for several ABIs counts once. The core still has
-`https://astrid.cc` twice, its default server for a shell that names none: removing it is a
-cross-client core change (AWTD-1627; Windows relies on it). Anything else a partner supplies in
+or address counts (any case), and one library for several ABIs counts once. The core carries no
+Astrid address: it has no default server (AWTD-1627) and is built with `require-base-url`, which drops
+the Markdown link fallback too (AWTD-1630), so acme's count, and predeploy's budget, is 0. Anything else a partner supplies in
 `res/` by hand, as below.
 
 Any key can also be passed alone as `-P<key>=<value>` without a brand directory. A blank value is

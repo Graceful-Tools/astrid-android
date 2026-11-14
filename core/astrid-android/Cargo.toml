@@ -14,7 +14,9 @@ crate-type = ["cdylib", "lib"]
 name = "astrid_android"
 
 [dependencies]
-astrid-core = { workspace = true }
+# require-base-url (AATD-90, AWTD-1627/1630): no Astrid address is compiled into the library, so a
+# partner build carries none. Every start names its server; relative Markdown links resolve on it.
+astrid-core = { workspace = true, features = ["require-base-url"] }
 uniffi = { workspace = true }
 tokio = { version = "1", features = ["rt-multi-thread"] }
 async-trait = "0.1"

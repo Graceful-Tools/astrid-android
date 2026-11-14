@@ -73,7 +73,7 @@ class TestAstridApplication : AstridApplication() {
             override fun set(key: String, value: String): Boolean { map[key] = value; return true }
             override fun delete(key: String): Boolean { map.remove(key); return true }
         }
-        val core = CoreSession.start(":memory:", credentials, background = false)
+        val core = CoreSession.start(":memory:", credentials, background = false, baseUrl = Brand.baseUrl)
         runBlocking { core.run(CoreJson.parseToJsonElement(SEED).jsonObject) }
         return AppGraph(core, CoroutineScope(SupervisorJob() + Dispatchers.Default), Preferences(this))
     }
