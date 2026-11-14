@@ -233,6 +233,9 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                         onDismiss = { if (fromBoard) boardVm.dismissStatusPicker() else tasks.dismissStatusPicker() },
                     )
                 }
+                // AATD-98: a move into Waiting with nothing to wait on asks what it waits for.
+                com.gracefultools.astrid.ui.common.WaitingConditionPrompt(tasks.waiting)
+                com.gracefultools.astrid.ui.common.WaitingConditionPrompt(boardVm.waiting)
                 var filtering by remember { mutableStateOf(false) }
                 val myFilters: com.gracefultools.astrid.ui.filters.FiltersViewModel? = if (isMyTasks) viewModel(
                     key = "filters-my-tasks", factory = factory { com.gracefultools.astrid.ui.filters.FiltersViewModel(graph.core, MY_TASKS_FILTER_ID) },

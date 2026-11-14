@@ -46,6 +46,11 @@ class CoreFailure(
     override val message: String,
     val status: Int? = null,
     val id: String? = null,
+    /**
+     * The refusal's name when the core gives one (`WAITING_NEEDS_CONDITION`, AATD-98): unlike
+     * [message], this is for branching — it is the cue for a screen to ask rather than to fail.
+     */
+    val code: String? = null,
 ) : Exception(message) {
     val needsSignIn: Boolean get() = kind == FailureKind.UNAUTHORIZED
     val isStillPending: Boolean get() = kind == FailureKind.OFFLINE
@@ -65,6 +70,7 @@ fun answerOf(envelope: String): JsonElement {
         message = error?.get("message")?.jsonPrimitive?.contentOrNull ?: "the core refused without saying why",
         status = error?.get("status")?.jsonPrimitive?.contentOrNull?.toIntOrNull(),
         id = error?.get("id")?.jsonPrimitive?.contentOrNull,
+        code = error?.get("code")?.jsonPrimitive?.contentOrNull,
     )
 }
 

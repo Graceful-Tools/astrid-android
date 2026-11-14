@@ -14,7 +14,7 @@ sealed interface LeadingOutcome {
     data class Refused(val message: String) : LeadingOutcome
 }
 
-class RowActions(private val core: Core) {
+class RowActions(private val core: Core, private val waiting: WaitingMoves = WaitingMoves(core)) {
     /** `complete` completes or reopens; `openPicker` offers the board's columns; `copy` copies it to you. */
     suspend fun leading(row: TaskRow): LeadingOutcome = try {
         when (row.action) {
@@ -32,9 +32,8 @@ class RowActions(private val core: Core) {
         if (failure.isStillPending) LeadingOutcome.Done else LeadingOutcome.Refused(failure.message)
     }
 
-    suspend fun setStatus(taskId: String, columnId: String): String? = try {
-        core.run(command("setTaskStatus", "taskId" to taskId, "columnId" to columnId)); null
-    } catch (failure: CoreFailure) {
-        if (failure.isStillPending) null else failure.message
+    /** A column from the status picker. Into Waiting with nothing to wait on, [waiting] asks (AATD-98). */
+    suspend fun setStatus(taskId: String, columnId: String): String? = waiting.move(taskId) { wait ->
+        core.run(command("setTaskStatus", "taskId" to taskId, "columnId" to columnId, "dueDateTime" to wait?.dueDateTime, "isAllDay" to wait?.isAllDay, "waitOnTaskId" to wait?.waitOnTaskId, "keepAssignee" to (wait?.keepAssignee == true)))
     }
 }

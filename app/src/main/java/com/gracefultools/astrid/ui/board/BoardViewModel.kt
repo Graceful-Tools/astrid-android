@@ -53,11 +53,10 @@ class BoardViewModel(private val core: Core, dispatcher: CoroutineDispatcher = D
     /** "Move to…": the core writes what a move to that column means for this board. */
     fun moveTo(taskId: String, columnId: String) = work {
         val listId = _state.value.listId ?: return@work
-        try {
-            core.run(command("moveTaskToColumn", "taskId" to taskId, "columnId" to columnId, "listId" to listId))
-        } catch (failure: CoreFailure) {
-            if (!failure.isStillPending) _state.update { it.copy(error = failure.message) }
-        }
+        // Into Waiting with nothing to wait on, the core refuses and `waiting` asks (AATD-98).
+        waiting.move(taskId) { wait ->
+            core.run(command("moveTaskToColumn", "taskId" to taskId, "columnId" to columnId, "listId" to listId, "dueDateTime" to wait?.dueDateTime, "isAllDay" to wait?.isAllDay, "waitOnTaskId" to wait?.waitOnTaskId, "keepAssignee" to (wait?.keepAssignee == true)))
+        }?.let { message -> _state.update { it.copy(error = message) } }
         reload()
     }
 
@@ -67,11 +66,14 @@ class BoardViewModel(private val core: Core, dispatcher: CoroutineDispatcher = D
      */
     fun drop(taskId: String, columnId: String, index: Int) = work {
         val listId = _state.value.listId ?: return@work
-        try {
-            core.run(command("dropBoardCard", "taskId" to taskId, "columnId" to columnId, "listId" to listId, "index" to index.coerceAtLeast(0)))
-        } catch (failure: CoreFailure) {
-            if (!failure.isStillPending) _state.update { it.copy(error = failure.message) }
-        }
+        waiting.move(taskId) { wait ->
+            core.run(
+                command(
+                    "dropBoardCard", "taskId" to taskId, "columnId" to columnId, "listId" to listId, "index" to index.coerceAtLeast(0),
+                    "dueDateTime" to wait?.dueDateTime, "isAllDay" to wait?.isAllDay, "waitOnTaskId" to wait?.waitOnTaskId, "keepAssignee" to (wait?.keepAssignee == true),
+                ),
+            )
+        }?.let { message -> _state.update { it.copy(error = message) } }
         reload()
     }
 
@@ -80,7 +82,10 @@ class BoardViewModel(private val core: Core, dispatcher: CoroutineDispatcher = D
         reload()
     }
 
-    private val rowActions = com.gracefultools.astrid.ui.common.RowActions(core)
+    /** AATD-98: asks what a task moved into Waiting waits for. */
+    val waiting = com.gracefultools.astrid.ui.common.WaitingMoves(core) { reload() }
+
+    private val rowActions = com.gracefultools.astrid.ui.common.RowActions(core, waiting)
 
     /** A tap on a row's leading control — whatever the core says that control does. */
     fun leading(row: com.gracefultools.astrid.model.TaskRow) = work {

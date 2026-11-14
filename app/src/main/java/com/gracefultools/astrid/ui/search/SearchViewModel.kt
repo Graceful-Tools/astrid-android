@@ -53,7 +53,10 @@ class SearchViewModel(
         if (_state.value.query == query) _state.value = _state.value.copy(rows = rowsOf(answer), searched = true)
     }
 
-    private val rowActions = com.gracefultools.astrid.ui.common.RowActions(core)
+    /** AATD-98: asks what a task moved into Waiting waits for. */
+    val waiting = com.gracefultools.astrid.ui.common.WaitingMoves(core)
+
+    private val rowActions = com.gracefultools.astrid.ui.common.RowActions(core, waiting)
 
     /** A result's leading control does what it does in the list — complete, pick a status, copy (AATD-31). */
     fun leading(row: TaskRow) = work {
