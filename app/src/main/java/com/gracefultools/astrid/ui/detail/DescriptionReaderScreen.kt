@@ -112,6 +112,6 @@ fun DescriptionReaderScreen(
 }
 
 /** `origin`: a relative link opens on this build's server; unnamed, it stays relative (AWTD-1630). */
-private fun rendered(markdown: String): List<JsonObject>? = runCatching {
+internal fun rendered(markdown: String): List<JsonObject>? = runCatching {
     (CoreRules.ask(command("renderMarkdown", "text" to markdown, "origin" to Brand.baseUrl)) as JsonArray).map { it as JsonObject }
 }.getOrNull()
