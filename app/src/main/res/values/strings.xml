@@ -951,4 +951,11 @@
     <string name="settings_custom_agents_change_photo">Change profile photo</string>
     <string name="settings_custom_agents_photo_updated">Profile photo updated</string>
     <string name="settings_custom_agents_photo_failed">Failed to update profile photo</string>
+    <string name="tradeoff_very_poor">Very poor</string>
+    <string name="tradeoff_poor">Poor</string>
+    <string name="tradeoff_mixed">Mixed</string>
+    <string name="tradeoff_good">Good</string>
+    <string name="tradeoff_very_good">Very good</string>
+    <string name="tradeoff_unrated">Not rated</string>
+    <string name="tradeoff_full_screen">Full screen</string>
 </resources>

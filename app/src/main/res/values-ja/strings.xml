@@ -744,6 +744,13 @@
     <string name="list_insights_duration_minutes">%1$s 分</string>
     <string name="list_insights_duration_hours">%1$s 時間</string>
     <string name="list_insights_duration_days">%1$s 日</string>
+    <string name="tradeoff_very_poor">非常に悪い</string>
+    <string name="tradeoff_poor">悪い</string>
+    <string name="tradeoff_mixed">どちらとも言えない</string>
+    <string name="tradeoff_good">良い</string>
+    <string name="tradeoff_very_good">非常に良い</string>
+    <string name="tradeoff_unrated">未評価</string>
+    <string name="tradeoff_full_screen">全画面表示</string>
     <string name="core_picker_no_due_date" formatted="false">期限なし</string>
     <string name="core_picker_today" formatted="false">今日</string>
     <string name="core_picker_tomorrow" formatted="false">明日</string>

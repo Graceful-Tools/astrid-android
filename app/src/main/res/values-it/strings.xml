@@ -744,6 +744,13 @@
     <string name="list_insights_duration_minutes">%1$s min</string>
     <string name="list_insights_duration_hours">%1$s h</string>
     <string name="list_insights_duration_days">%1$s g</string>
+    <string name="tradeoff_very_poor">Pessimo</string>
+    <string name="tradeoff_poor">Scarso</string>
+    <string name="tradeoff_mixed">Misto</string>
+    <string name="tradeoff_good">Buono</string>
+    <string name="tradeoff_very_good">Ottimo</string>
+    <string name="tradeoff_unrated">Non valutato</string>
+    <string name="tradeoff_full_screen">Schermo intero</string>
     <string name="core_picker_no_due_date" formatted="false">Nessuna scadenza</string>
     <string name="core_picker_today" formatted="false">Oggi</string>
     <string name="core_picker_tomorrow" formatted="false">Domani</string>

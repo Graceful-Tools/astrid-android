@@ -744,6 +744,13 @@
     <string name="list_insights_duration_minutes">%1$s 分钟</string>
     <string name="list_insights_duration_hours">%1$s 小时</string>
     <string name="list_insights_duration_days">%1$s 天</string>
+    <string name="tradeoff_very_poor">很差</string>
+    <string name="tradeoff_poor">差</string>
+    <string name="tradeoff_mixed">一般</string>
+    <string name="tradeoff_good">好</string>
+    <string name="tradeoff_very_good">很好</string>
+    <string name="tradeoff_unrated">未评分</string>
+    <string name="tradeoff_full_screen">全屏</string>
     <string name="core_picker_no_due_date" formatted="false">无截止日期</string>
     <string name="core_picker_today" formatted="false">今天</string>
     <string name="core_picker_tomorrow" formatted="false">明天</string>
