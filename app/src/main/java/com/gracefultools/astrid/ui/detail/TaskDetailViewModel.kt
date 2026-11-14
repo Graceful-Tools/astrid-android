@@ -152,9 +152,14 @@ class TaskDetailViewModel(
         }
     }
 
+    /** AATD-98: asks what a task moved into Waiting waits for. */
+    val waiting = com.gracefultools.astrid.ui.common.WaitingMoves(core) { load() }
+
     /** The project state chips: the core moves the task to that column. */
     fun setStatus(columnId: String) = work {
-        runCommand { core.run(command("setTaskStatus", "taskId" to id, "columnId" to columnId)) }
+        waiting.move(id) { wait ->
+            core.run(command("setTaskStatus", "taskId" to id, "columnId" to columnId, "dueDateTime" to wait?.dueDateTime, "isAllDay" to wait?.isAllDay, "waitOnTaskId" to wait?.waitOnTaskId, "keepAssignee" to (wait?.keepAssignee == true)))
+        }?.let { message -> _state.update { it.copy(error = message) } }
         load()
     }
 

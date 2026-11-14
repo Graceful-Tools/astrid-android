@@ -57,4 +57,47 @@ class BoardViewModelTest {
         org.junit.Assert.assertEquals(kotlinx.serialization.json.JsonPrimitive("doing"), sent["columnId"])
         org.junit.Assert.assertEquals(kotlinx.serialization.json.JsonPrimitive("Ship it"), sent["title"])
     }
+
+    @Test
+    fun `AATD-98 Move to Waiting with nothing to wait on asks, then sends the move again with the answer`() = runTest {
+        val core = FakeCore().apply {
+            answer("board", board)
+            answer("taskDetail", """{"task":{"id":"t1","title":"Draft"},"descriptionBlocks":[],"comments":[],"subtasks":[]}""")
+            answer("moveTaskToColumn") { sent ->
+                if (sent["waitOnTaskId"] == null || sent["waitOnTaskId"] is kotlinx.serialization.json.JsonNull) throw com.gracefultools.astrid.core.CoreFailure(com.gracefultools.astrid.core.FailureKind.REFUSED, "Waiting needs a date or a task", code = "WAITING_NEEDS_CONDITION")
+                kotlinx.serialization.json.JsonNull
+            }
+        }
+        val vm = BoardViewModel(core, UnconfinedTestDispatcher())
+        vm.open("l1")
+        vm.moveTo("t1", "waiting")
+        assertEquals(null, vm.state.value.error)
+        assertEquals("t1", vm.waiting.state.value.request?.taskId)
+        org.junit.Assert.assertTrue(vm.waiting.confirm(com.gracefultools.astrid.ui.common.WaitCondition.on("t9", "Upstream", keepAssignee = false)))
+        val sent = core.last("moveTaskToColumn")!!
+        assertEquals(JsonPrimitive("t9"), sent["waitOnTaskId"])
+        assertEquals(JsonPrimitive("l1"), sent["listId"])
+    }
+
+    @Test
+    fun `AATD-98 a card dropped on Waiting asks too, and keeps its drop position`() = runTest {
+        val core = FakeCore().apply {
+            answer("board", board)
+            answer("dueDateOnDay", """{"dueDateTime":"2026-11-20T00:00:00Z","isAllDay":true}""")
+            answer("dropBoardCard") { sent ->
+                if (sent["dueDateTime"] == null || sent["dueDateTime"] is kotlinx.serialization.json.JsonNull) throw com.gracefultools.astrid.core.CoreFailure(com.gracefultools.astrid.core.FailureKind.REFUSED, "Waiting needs a date or a task", code = "WAITING_NEEDS_CONDITION")
+                kotlinx.serialization.json.JsonNull
+            }
+        }
+        val vm = BoardViewModel(core, UnconfinedTestDispatcher())
+        vm.open("l1")
+        vm.drop("t1", "waiting", 2)
+        assertEquals("t1", vm.waiting.state.value.request?.taskId)
+        vm.waiting.confirm(com.gracefultools.astrid.ui.common.WaitCondition.until(java.time.LocalDate.of(2026, 11, 20), keepAssignee = true))
+        val sent = core.last("dropBoardCard")!!
+        assertEquals(JsonPrimitive("2026-11-20T00:00:00Z"), sent["dueDateTime"])
+        assertEquals(JsonPrimitive(2), sent["index"])
+        assertEquals(JsonPrimitive(true), sent["keepAssignee"])
+    }
+
 }

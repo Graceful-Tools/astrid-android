@@ -151,4 +151,22 @@ class TaskDetailViewModelTest {
         assertEquals(JsonPrimitive("2026-12-25T21:30:00Z"), changes["dueDateTime"])
         assertEquals(JsonPrimitive(false), changes["isAllDay"])
     }
+
+    @Test
+    fun `AATD-98 the state chips ask what a task in Waiting waits for, instead of failing`() = runTest {
+        val core = FakeCore().apply {
+            answer("taskDetail", detail)
+            answer("setTaskStatus") { sent ->
+                if (sent["waitOnTaskId"] == null || sent["waitOnTaskId"] is kotlinx.serialization.json.JsonNull) throw com.gracefultools.astrid.core.CoreFailure(com.gracefultools.astrid.core.FailureKind.REFUSED, "Waiting needs a date or a task", code = "WAITING_NEEDS_CONDITION")
+                kotlinx.serialization.json.JsonNull
+            }
+        }
+        val vm = vm(core)
+        vm.setStatus("waiting")
+        assertEquals(null, vm.state.value.error)
+        assertEquals("Water plants", vm.waiting.state.value.request?.title)
+        assertTrue(vm.waiting.confirm(com.gracefultools.astrid.ui.common.WaitCondition.on("t9", "Upstream", keepAssignee = false)))
+        assertEquals(JsonPrimitive("t9"), core.last("setTaskStatus")!!["waitOnTaskId"])
+    }
+
 }

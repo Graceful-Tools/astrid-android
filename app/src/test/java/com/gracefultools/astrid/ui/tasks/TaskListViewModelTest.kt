@@ -190,4 +190,18 @@ class TaskListViewModelTest {
         vm.open("l1")
         assertFalse(vm.state.value.canAdd)
     }
+
+    @Test
+    fun `AATD-98 picking Waiting from a row's status picker asks for its condition`() = runTest {
+        val core = FakeCore().apply {
+            answer("taskStatusOptions", """{"current":"doing","columns":[{"id":"doing","name":"Doing","isCurrent":true},{"id":"waiting","name":"Waiting"}]}""")
+            answer("setTaskStatus") { _ -> throw com.gracefultools.astrid.core.CoreFailure(com.gracefultools.astrid.core.FailureKind.REFUSED, "Waiting needs a date or a task", code = "WAITING_NEEDS_CONDITION") }
+        }
+        val vm = vm(core)
+        vm.leading(com.gracefultools.astrid.model.TaskRow(id = "t1", title = "Ship", action = "openPicker"))
+        vm.pickStatus("waiting")
+        assertEquals(null, vm.state.value.error)
+        assertEquals("t1", vm.waiting.state.value.request?.taskId)
+    }
+
 }

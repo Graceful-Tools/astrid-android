@@ -290,6 +290,8 @@ private fun DetailHeader(detail: TaskDetail?, vm: TaskDetailViewModel, onBack: (
             }
         }
     }
+    // AATD-98: the state chips' move into Waiting asks what it waits for.
+    com.gracefultools.astrid.ui.common.WaitingConditionPrompt(vm.waiting)
     if (confirmingDelete) {
         AlertDialog(
             onDismissRequest = { confirmingDelete = false },

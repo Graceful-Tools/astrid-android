@@ -256,7 +256,10 @@ class TaskListViewModel(
         reload()
     }
 
-    private val rowActions = com.gracefultools.astrid.ui.common.RowActions(core)
+    /** AATD-98: asks what a task moved into Waiting waits for. */
+    val waiting = com.gracefultools.astrid.ui.common.WaitingMoves(core) { reload() }
+
+    private val rowActions = com.gracefultools.astrid.ui.common.RowActions(core, waiting)
 
     /** A tap on a row's leading control — whatever the core says that control does. */
     fun leading(row: com.gracefultools.astrid.model.TaskRow) = work {
