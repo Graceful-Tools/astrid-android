@@ -50,7 +50,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -89,6 +88,7 @@ import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.AttachmentFile
 import com.gracefultools.astrid.model.ProjectFieldRow
 import com.gracefultools.astrid.model.TaskDetail
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Radius
@@ -244,12 +244,12 @@ private fun ProjectFieldEditor(row: ProjectFieldRow, readOnly: Boolean, onSave: 
                 DatePickerDialog(
                     onDismissRequest = { picking = false },
                     confirmButton = {
-                        TextButton(onClick = {
+                        AstridTextButton(onClick = {
                             picking = false
                             picker.selectedDateMillis?.let { onSave(JsonPrimitive(Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC).toLocalDate().toString())) }
                         }) { Text(stringResource(R.string.detail_done)) }
                     },
-                    dismissButton = { TextButton(onClick = { picking = false }) { Text(stringResource(R.string.common_cancel)) } },
+                    dismissButton = { AstridTextButton(onClick = { picking = false }) { Text(stringResource(R.string.common_cancel)) } },
                 ) { DatePicker(picker) }
             }
         }
@@ -357,7 +357,7 @@ private fun AttachmentGallery(files: List<AttachmentFile>, start: Int, vm: TaskD
                         else -> Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s16)) {
                             Icon(Icons.AutoMirrored.Filled.InsertDriveFile, null, tint = Color.White.copy(alpha = 0.7f), modifier = Modifier.size(64.dp))
                             Text(file.name, color = Color.White, style = TextStyles.body, textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = Spacing.s24))
-                            TextButton(onClick = { openFile(context, path, file.mimeType) }) { Text(stringResource(R.string.attachments_open), color = Color.White) }
+                            AstridTextButton(onClick = { openFile(context, path, file.mimeType) }) { Text(stringResource(R.string.attachments_open), color = Color.White) }
                         }
                     }
                 }

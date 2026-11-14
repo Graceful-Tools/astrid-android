@@ -33,7 +33,6 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
@@ -57,6 +56,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.platform.TestReminder
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.coreLabel
 import com.gracefultools.astrid.ui.detail.PickerSheet
 import com.gracefultools.astrid.ui.detail.PickRow
@@ -208,7 +208,7 @@ fun ReminderSettingsScreen(vm: SettingsViewModel, onBack: () -> Unit) {
             onDismissRequest = { testAlert = null },
             title = { Text(stringResource(R.string.settings_reminders_test_reminder)) },
             text = { Text(message) },
-            confirmButton = { TextButton(onClick = { testAlert = null }) { Text(stringResource(R.string.actions_done)) } },
+            confirmButton = { AstridTextButton(onClick = { testAlert = null }) { Text(stringResource(R.string.actions_done)) } },
         )
     }
 }
@@ -236,9 +236,9 @@ private fun TimePickDialog(initial: String, onDismiss: () -> Unit, onPick: (Stri
     AlertDialog(
         onDismissRequest = onDismiss,
         text = { Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { TimePicker(clock) } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
+        dismissButton = { AstridTextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
         confirmButton = {
-            TextButton(onClick = { onPick("%02d:%02d".format(clock.hour, clock.minute)) }) {
+            AstridTextButton(onClick = { onPick("%02d:%02d".format(clock.hour, clock.minute)) }) {
                 Text(stringResource(R.string.actions_set), fontWeight = FontWeight.SemiBold)
             }
         },

@@ -22,7 +22,6 @@ import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -169,13 +168,13 @@ fun WaitingConditionPrompt(moves: WaitingMoves) {
             }
         },
         confirmButton = {
-            TextButton(
+            AstridTextButton(
                 onClick = { condition?.let { scope.launch { moves.confirm(it) } } },
                 enabled = condition != null && !state.sending,
                 modifier = Modifier.testTag("waiting.prompt.confirm"),
             ) { Text(stringResource(R.string.waiting_prompt_confirm)) }
         },
-        dismissButton = { TextButton(onClick = moves::cancel) { Text(stringResource(R.string.common_cancel)) } },
+        dismissButton = { AstridTextButton(onClick = moves::cancel) { Text(stringResource(R.string.common_cancel)) } },
     )
 
     if (choosingDay) {
@@ -190,12 +189,12 @@ fun WaitingConditionPrompt(moves: WaitingMoves) {
         DatePickerDialog(
             onDismissRequest = { choosingDay = false },
             confirmButton = {
-                TextButton(onClick = {
+                AstridTextButton(onClick = {
                     dateState.selectedDateMillis?.let { day = Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC).toLocalDate() }
                     choosingDay = false
                 }) { Text(stringResource(R.string.actions_done)) }
             },
-            dismissButton = { TextButton(onClick = { choosingDay = false }) { Text(stringResource(R.string.common_cancel)) } },
+            dismissButton = { AstridTextButton(onClick = { choosingDay = false }) { Text(stringResource(R.string.common_cancel)) } },
         ) { DatePicker(dateState) }
     }
 }

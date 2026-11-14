@@ -36,7 +36,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -67,6 +66,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.TaskDetail
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.coreLabel
 import com.gracefultools.astrid.ui.theme.AstridTheme
@@ -88,7 +88,7 @@ internal fun PickerSheet(title: String, onDismiss: () -> Unit, content: @Composa
     ) {
         Row(Modifier.fillMaxWidth().padding(horizontal = Spacing.s16), verticalAlignment = Alignment.CenterVertically) {
             Text(title, style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.weight(1f))
-            TextButton(onClick = onDismiss) { Text(stringResource(R.string.actions_close)) }
+            AstridTextButton(onClick = onDismiss) { Text(stringResource(R.string.actions_close)) }
         }
         Column(
             Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = Spacing.s16).padding(bottom = Spacing.s24),
@@ -189,7 +189,7 @@ private fun SomeoneElseSection(section: SomeoneElse, vm: TaskDetailViewModel) {
                 modifier = Modifier.fillMaxWidth().semantics { contentDescription = inviteLabel },
             )
         }
-        TextButton(onClick = { vm.assignByEmail(email) }, enabled = assignable) { Text(stringResource(R.string.actions_assign)) }
+        AstridTextButton(onClick = { vm.assignByEmail(email) }, enabled = assignable) { Text(stringResource(R.string.actions_assign)) }
     }
     section.suggestions.forEach { person ->
         Row(
@@ -256,7 +256,7 @@ internal fun TimeSheet(detail: TaskDetail, state: TaskDetailState, vm: TaskDetai
             is24Hour = android.text.format.DateFormat.is24HourFormat(LocalContext.current),
         )
         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { TimePicker(clock) }
-        TextButton(onClick = { vm.pickTime(clock.hour, clock.minute); onDismiss() }, modifier = Modifier.align(Alignment.End)) {
+        AstridTextButton(onClick = { vm.pickTime(clock.hour, clock.minute); onDismiss() }, modifier = Modifier.align(Alignment.End)) {
             Text(stringResource(R.string.actions_set), fontWeight = FontWeight.SemiBold)
         }
     }

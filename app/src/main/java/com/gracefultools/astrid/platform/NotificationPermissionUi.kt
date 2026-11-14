@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,6 +36,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.Preferences
 import com.gracefultools.astrid.R
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.TypeSize
 
@@ -88,9 +88,9 @@ fun NotificationPrompting(prompt: NotificationPrompt, preferences: Preferences) 
             onDismissRequest = prompt::dismiss,
             title = { Text(stringResource(R.string.notifications_enable_push)) },
             text = { Text(stringResource(R.string.notifications_enable_message)) },
-            dismissButton = { TextButton(onClick = prompt::dismiss) { Text(stringResource(R.string.notifications_not_now)) } },
+            dismissButton = { AstridTextButton(onClick = prompt::dismiss) { Text(stringResource(R.string.notifications_not_now)) } },
             confirmButton = {
-                TextButton(onClick = {
+                AstridTextButton(onClick = {
                     prompt.dismiss()
                     if (Build.VERSION.SDK_INT >= 33) {
                         preferences.askedSystemPermission = true
@@ -105,9 +105,9 @@ fun NotificationPrompting(prompt: NotificationPrompt, preferences: Preferences) 
             onDismissRequest = prompt::dismiss,
             title = { Text(stringResource(R.string.notifications_disabled)) },
             text = { Text(stringResource(R.string.notifications_disabled_message)) },
-            dismissButton = { TextButton(onClick = prompt::dismiss) { Text(stringResource(R.string.notifications_not_now)) } },
+            dismissButton = { AstridTextButton(onClick = prompt::dismiss) { Text(stringResource(R.string.notifications_not_now)) } },
             confirmButton = {
-                TextButton(onClick = { prompt.dismiss(); openNotificationSettings(context) }) {
+                AstridTextButton(onClick = { prompt.dismiss(); openNotificationSettings(context) }) {
                     Text(stringResource(R.string.notifications_open_settings))
                 }
             },

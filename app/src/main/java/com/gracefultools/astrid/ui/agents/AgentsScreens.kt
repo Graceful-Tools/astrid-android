@@ -48,7 +48,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -80,6 +79,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.gracefultools.astrid.Brand
 import com.gracefultools.astrid.R
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.rememberPhotoPicker
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.IosSystemColors
@@ -530,8 +530,8 @@ fun WebhookSettingsScreen(vm: WebhookViewModel, onBack: () -> Unit) {
         AlertDialog(
             onDismissRequest = vm::cancelRemove,
             text = { Text(stringResource(R.string.settings_agents_webhook_remove_confirm)) },
-            confirmButton = { TextButton(onClick = vm::confirmRemove) { Text(stringResource(R.string.settings_agents_webhook_remove), color = AstridTheme.colors.errorInk) } },
-            dismissButton = { TextButton(onClick = vm::cancelRemove) { Text(stringResource(R.string.common_cancel)) } },
+            confirmButton = { AstridTextButton(onClick = vm::confirmRemove) { Text(stringResource(R.string.settings_agents_webhook_remove), color = AstridTheme.colors.errorInk) } },
+            dismissButton = { AstridTextButton(onClick = vm::cancelRemove) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
     state.minted?.let { TransportCredentialsSheet(it, onDone = vm::dismissMinted) }
@@ -572,7 +572,7 @@ internal fun HubSheet(
 internal fun TransportCredentialsSheet(minted: MintedClient, onDone: () -> Unit) {
     HubSheet(
         stringResource(R.string.settings_agents_webhook_credentials_title), onDismiss = onDone,
-        trailingAction = { TextButton(onClick = onDone) { Text(stringResource(R.string.actions_done)) } },
+        trailingAction = { AstridTextButton(onClick = onDone) { Text(stringResource(R.string.actions_done)) } },
     ) {
         FormSection { ProblemLabel(stringResource(R.string.settings_agents_webhook_credentials_warning), AstridTheme.colors.warningInk) }
         FormSection {
@@ -671,8 +671,8 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
             onDismissRequest = vm::cancelDelete,
             title = { Text(stringResource(R.string.settings_openclaw_delete_agent)) },
             text = { Text(stringResource(R.string.settings_openclaw_delete_confirm, agent.email)) },
-            confirmButton = { TextButton(onClick = vm::confirmDelete) { Text(stringResource(R.string.settings_openclaw_delete_agent), color = AstridTheme.colors.errorInk) } },
-            dismissButton = { TextButton(onClick = vm::cancelDelete) { Text(stringResource(R.string.common_cancel)) } },
+            confirmButton = { AstridTextButton(onClick = vm::confirmDelete) { Text(stringResource(R.string.settings_openclaw_delete_agent), color = AstridTheme.colors.errorInk) } },
+            dismissButton = { AstridTextButton(onClick = vm::cancelDelete) { Text(stringResource(R.string.common_cancel)) } },
         )
     }
 }
@@ -728,10 +728,10 @@ private fun RegisterAgentSheet(vm: CustomAgentsViewModel, state: CustomAgentsSta
     var name by remember { mutableStateOf("") }
     HubSheet(
         stringResource(R.string.settings_openclaw_register_title), onDismiss = { if (!state.isRegistering) onDismiss() },
-        leadingAction = { TextButton(onClick = onDismiss, enabled = !state.isRegistering) { Text(stringResource(R.string.common_cancel)) } },
+        leadingAction = { AstridTextButton(onClick = onDismiss, enabled = !state.isRegistering) { Text(stringResource(R.string.common_cancel)) } },
         trailingAction = {
             if (state.isRegistering) SmallSpinner() else {
-                TextButton(onClick = { vm.register(name) }, enabled = name.isNotBlank()) { Text(stringResource(R.string.settings_openclaw_create_agent)) }
+                AstridTextButton(onClick = { vm.register(name) }, enabled = name.isNotBlank()) { Text(stringResource(R.string.settings_openclaw_create_agent)) }
             }
         },
     ) {
@@ -754,7 +754,7 @@ private fun RegisterAgentSheet(vm: CustomAgentsViewModel, state: CustomAgentsSta
 private fun CredentialsSheet(result: CustomAgentRegistration, onDone: () -> Unit) {
     HubSheet(
         stringResource(R.string.settings_openclaw_credentials_title), onDismiss = onDone,
-        trailingAction = { TextButton(onClick = onDone) { Text(stringResource(R.string.actions_done)) } },
+        trailingAction = { AstridTextButton(onClick = onDone) { Text(stringResource(R.string.actions_done)) } },
     ) {
         FormSection { ProblemLabel(stringResource(R.string.settings_openclaw_credentials_warning), AstridTheme.colors.warningInk) }
         FormSection {

@@ -7,7 +7,6 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,6 +19,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.gracefultools.astrid.R
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import kotlinx.coroutines.launch
 
 /**
@@ -46,9 +46,9 @@ fun ReviewPrompting(prompt: ReviewPrompt, onArrive: (com.gracefultools.astrid.Ar
             onDismissRequest = prompt::dismiss,
             title = { Text(stringResource(R.string.review_loving_title, stringResource(R.string.app_name))) },
             text = { Text(stringResource(R.string.review_loving_message, stringResource(R.string.app_name))) },
-            dismissButton = { TextButton(onClick = prompt::notReally) { Text(stringResource(R.string.review_not_really)) } },
+            dismissButton = { AstridTextButton(onClick = prompt::notReally) { Text(stringResource(R.string.review_not_really)) } },
             confirmButton = {
-                TextButton(onClick = { prompt.love(); requestStoreReview(activity) }) { Text(stringResource(R.string.review_love_it)) }
+                AstridTextButton(onClick = { prompt.love(); requestStoreReview(activity) }) { Text(stringResource(R.string.review_love_it)) }
             },
         )
         ReviewDialog.FEEDBACK -> AlertDialog(
@@ -58,9 +58,9 @@ fun ReviewPrompting(prompt: ReviewPrompt, onArrive: (com.gracefultools.astrid.Ar
             // Three choices: Android's dialog has two button slots, so the two routes stack in one.
             confirmButton = {
                 Column {
-                    TextButton(onClick = { prompt.dismiss(); scope.launch { onArrive(prompt.reportIssueDestination()) } }) { Text(stringResource(R.string.review_report_issue)) }
-                    TextButton(onClick = { prompt.dismiss(); sendFeedback(context) }) { Text(stringResource(R.string.review_send_feedback)) }
-                    TextButton(onClick = prompt::dismiss) { Text(stringResource(R.string.review_maybe_later)) }
+                    AstridTextButton(onClick = { prompt.dismiss(); scope.launch { onArrive(prompt.reportIssueDestination()) } }) { Text(stringResource(R.string.review_report_issue)) }
+                    AstridTextButton(onClick = { prompt.dismiss(); sendFeedback(context) }) { Text(stringResource(R.string.review_send_feedback)) }
+                    AstridTextButton(onClick = prompt::dismiss) { Text(stringResource(R.string.review_maybe_later)) }
                 }
             },
         )

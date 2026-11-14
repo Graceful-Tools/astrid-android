@@ -29,7 +29,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.gracefultools.astrid.R
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.theme.Accent
 import com.gracefultools.astrid.ui.theme.AccentText
 import com.gracefultools.astrid.ui.theme.AstridTheme
@@ -98,7 +98,7 @@ fun SignInScreen(
                 Column(buttons, verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
                     ProviderButton(R.string.auth_open_browser_again, Icons.Filled.OpenInBrowser, Accent, AccentText, onOpenAgain)
                 }
-                TextButton(onClick = onCancel) { Text(stringResource(R.string.common_cancel), color = palette.textPrimary) }
+                AstridTextButton(onClick = onCancel) { Text(stringResource(R.string.common_cancel), color = palette.textPrimary) }
             }
             is SignInState.SignedOut -> {
                 Column(Modifier.fillMaxWidth().padding(horizontal = Spacing.s32), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s16)) {

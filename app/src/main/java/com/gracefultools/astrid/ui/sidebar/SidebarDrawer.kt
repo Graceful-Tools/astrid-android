@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.ListSummary
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.tasks.parseColor
@@ -186,8 +187,8 @@ private fun CreateListDialog(onDismiss: () -> Unit, onCreate: (String) -> Unit) 
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.lists_new_list)) },
         text = { androidx.compose.material3.OutlinedTextField(name, { name = it }, label = { Text(stringResource(R.string.lists_new_name)) }, singleLine = true) },
-        confirmButton = { androidx.compose.material3.TextButton(onClick = { onCreate(name) }, enabled = name.isNotBlank()) { Text(stringResource(R.string.lists_create)) } },
-        dismissButton = { androidx.compose.material3.TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
+        confirmButton = { AstridTextButton(onClick = { onCreate(name) }, enabled = name.isNotBlank()) { Text(stringResource(R.string.lists_create)) } },
+        dismissButton = { AstridTextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) } },
     )
 }
 

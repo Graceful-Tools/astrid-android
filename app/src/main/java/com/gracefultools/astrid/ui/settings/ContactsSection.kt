@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,6 +32,7 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.platform.DeviceContacts
+import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.IosSystemColors
 
@@ -99,8 +99,8 @@ internal fun ContactsSection(vm: ContactsViewModel) {
         title = { Text(stringResource(R.string.contacts_add_collaborators)) },
         text = { Text(stringResource(R.string.contacts_footer_text)) },
         confirmButton = {
-            TextButton(onClick = { explaining = false; ask.launch(Manifest.permission.READ_CONTACTS) }) { Text(stringResource(R.string.contacts_add_collaborators)) }
+            AstridTextButton(onClick = { explaining = false; ask.launch(Manifest.permission.READ_CONTACTS) }) { Text(stringResource(R.string.contacts_add_collaborators)) }
         },
-        dismissButton = { TextButton(onClick = { explaining = false }) { Text(stringResource(R.string.notifications_not_now)) } },
+        dismissButton = { AstridTextButton(onClick = { explaining = false }) { Text(stringResource(R.string.notifications_not_now)) } },
     )
 }
