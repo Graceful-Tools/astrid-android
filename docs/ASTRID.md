@@ -63,6 +63,14 @@ app/Astrid (Compose)  ──  corebridge (Kotlin facade + UniFFI bindings)  ─�
 - **Generated Kotlin is committed** (`corebridge/src/main/java/uniffi/`) and never hand-edited; the
   gate fails if it differs from what the pinned core generates. Native `.so` files are built, not
   committed.
+- **What the app says to the core is held against the core's wire schema** (AATD-94). The pinned
+  core's `generated/schema/*.json` is copied to `app/src/test/resources/core-schema/`
+  (`core/astrid-android/tests/wire_schema.rs` fails when the copy is stale; `UPDATE_SCHEMA=1` rewrites
+  it). `WireSchemaContractTest` then checks that every `command("kind", "field" to …)` names a kind
+  and fields the core declares, and that each response DTO paired with a core type decodes only
+  names that type has. Write requests as literal pairs, `*listOfNotNull("f" to …)` or a same-file
+  helper so the scanner can read them. Pair a new DTO when the core types its projection; list and
+  board rows aren't typed in the core yet, so they can't be paired.
 
 ## 2. Platform adapters (the only Android-specific code with behaviour)
 

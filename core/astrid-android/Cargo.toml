@@ -23,3 +23,10 @@ thiserror = "2"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+
+# The core's wire schema (AATD-94), for `tests/wire_schema.rs` only. A DEV dependency, so under
+# resolver 2 `schemars` never reaches the library the app ships. Sectioned rather than inline, as
+# astrid-windows found: tools that read the pin line by line must still see exactly one.
+[dev-dependencies.astrid-core]
+workspace = true
+features = ["schema"]

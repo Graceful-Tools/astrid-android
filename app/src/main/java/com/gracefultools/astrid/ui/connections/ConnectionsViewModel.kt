@@ -206,9 +206,14 @@ class OAuthClientEditorViewModel(
 
     private suspend fun check(toggleGrant: String?) {
         val draft = _state.value.draft
-        val fields = fields(draft).toMutableList()
-        if (toggleGrant != null) fields += "toggleGrant" to toggleGrant
-        val answer = runCatching { decode(DraftCheck.serializer(), core.run(command("checkOAuthClientDraft", *fields.toTypedArray()))) }.getOrNull() ?: return
+        val answer = runCatching {
+            val request = command(
+                "checkOAuthClientDraft",
+                *fields(draft).toTypedArray(),
+                *listOfNotNull(toggleGrant?.let { "toggleGrant" to it }).toTypedArray(),
+            )
+            decode(DraftCheck.serializer(), core.run(request))
+        }.getOrNull() ?: return
         _state.update { it.copy(check = answer, draft = if (toggleGrant != null) it.draft.copy(grantTypes = answer.grantTypes) else it.draft) }
     }
 

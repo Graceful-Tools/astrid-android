@@ -129,7 +129,7 @@ data class DuePick(val titleKey: String = "", val dueDateTime: String? = null, v
 data class DueDateOptions(val isAllDay: Boolean = false, val dueDateTime: String? = null, val dates: List<DuePick> = emptyList(), val times: List<DuePick> = emptyList())
 
 @Serializable
-data class ListPick(val id: String = "", val name: String = "", val color: String = "#3b82f6", val isSelected: Boolean = false)
+data class ListPick(val id: String = "", val name: String = "", val color: String = "#3b82f6")
 
 @Serializable
 data class ListPicks(val selected: List<ListPick> = emptyList(), val options: List<ListPick> = emptyList(), val createName: String? = null)
