@@ -239,6 +239,8 @@ dependencies {
     testImplementation(libs.androidx.test.core)
     testImplementation(platform(libs.compose.bom))
     testImplementation(libs.compose.ui.test.junit4)
+    // JNA's desktop dispatch library, so a JVM test can call the real core through jna.library.path (AATD-105).
+    testImplementation(libs.jna.jvm)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.core)
