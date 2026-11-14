@@ -744,6 +744,13 @@
     <string name="list_insights_duration_minutes">%1$s분</string>
     <string name="list_insights_duration_hours">%1$s시간</string>
     <string name="list_insights_duration_days">%1$s일</string>
+    <string name="tradeoff_very_poor">매우 나쁨</string>
+    <string name="tradeoff_poor">나쁨</string>
+    <string name="tradeoff_mixed">보통</string>
+    <string name="tradeoff_good">좋음</string>
+    <string name="tradeoff_very_good">매우 좋음</string>
+    <string name="tradeoff_unrated">평가 없음</string>
+    <string name="tradeoff_full_screen">전체 화면</string>
     <string name="core_picker_no_due_date" formatted="false">마감일 없음</string>
     <string name="core_picker_today" formatted="false">오늘</string>
     <string name="core_picker_tomorrow" formatted="false">내일</string>

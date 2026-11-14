@@ -14,7 +14,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -49,8 +49,8 @@ fun MarkdownView(blocks: List<JsonObject>, modifier: Modifier = Modifier, onRefe
     }
 }
 
-private fun JsonObject.str(name: String) = (this[name] as? JsonPrimitive)?.contentOrNull
-private fun JsonObject.arr(name: String) = (this[name] as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList()
+internal fun JsonObject.str(name: String) = (this[name] as? JsonPrimitive)?.contentOrNull
+internal fun JsonObject.arr(name: String) = (this[name] as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList()
 
 @Composable
 private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
@@ -90,6 +90,7 @@ private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
             MarkdownView(block.arr("blocks"), Modifier.padding(start = 10.dp), onReference)
         }
         "rule" -> HorizontalDivider(color = colors.border)
+        "tradeoffGrid" -> TradeoffGrid(block, onReference)
         "table" -> Column(Modifier.horizontalScroll(rememberScrollState())) {
             val header = (block["header"] as? JsonArray)?.map { cell -> (cell as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList() } ?: emptyList()
             Row { header.forEach { Inlines(it, 15, FontWeight.SemiBold, onReference, Modifier.width(120.dp).padding(Spacing.s4)) } }
@@ -107,9 +108,19 @@ private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
 
 @Composable
 private fun Inlines(inlines: List<JsonObject>, size: Int, weight: FontWeight, onReference: (String, String) -> Unit, modifier: Modifier = Modifier) {
+    Text(inlineText(inlines, onReference), fontSize = size.sp, fontWeight = weight, color = AstridTheme.colors.textPrimary, modifier = modifier)
+}
+
+/**
+ * A run of the core's inlines as styled text, with links and task references tappable. On a
+ * coloured fill, [onFill] draws links in that colour, underlined, as web's `td a { color: inherit }`.
+ */
+@Composable
+internal fun inlineText(inlines: List<JsonObject>, onReference: (String, String) -> Unit, onFill: Color? = null): AnnotatedString {
     val colors = AstridTheme.colors
-    val uri = LocalUriHandler.current
-    val text: AnnotatedString = buildAnnotatedString {
+    val linkStyle = SpanStyle(color = onFill ?: colors.accentInk, textDecoration = TextDecoration.Underline)
+    val referenceStyle = if (onFill != null) linkStyle else SpanStyle(color = colors.accentInk)
+    return buildAnnotatedString {
         for (inline in inlines) {
             when (inline.str("kind")) {
                 "text" -> {
@@ -122,7 +133,7 @@ private fun Inlines(inlines: List<JsonObject>, size: Int, weight: FontWeight, on
                     )
                     val link = inline.str("link")
                     if (link != null) {
-                        withLink(LinkAnnotation.Url(link, TextLinkStyles(SpanStyle(color = colors.accentInk, textDecoration = TextDecoration.Underline)))) {
+                        withLink(LinkAnnotation.Url(link, TextLinkStyles(linkStyle))) {
                             withStyle(style) { append(inline.str("text").orEmpty()) }
                         }
                     } else {
@@ -133,13 +144,11 @@ private fun Inlines(inlines: List<JsonObject>, size: Int, weight: FontWeight, on
                     val kind = inline.str("reference").orEmpty()
                     val id = inline.str("id").orEmpty()
                     withLink(
-                        LinkAnnotation.Clickable("$kind:$id", TextLinkStyles(SpanStyle(color = colors.accentInk))) { onReference(kind, id) },
+                        LinkAnnotation.Clickable("$kind:$id", TextLinkStyles(referenceStyle)) { onReference(kind, id) },
                     ) { append(inline.str("label").orEmpty()) }
                 }
                 "lineBreak" -> append("\n")
             }
         }
     }
-    @Suppress("UNUSED_VARIABLE") val unused = uri
-    Text(text, fontSize = size.sp, fontWeight = weight, color = colors.textPrimary, modifier = modifier)
 }
