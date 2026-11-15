@@ -16,15 +16,20 @@
 #     tsx and ITS .env.local (`cd "$WEB"`). Nothing here re-implements "which
 #     tasks are ready": a second copy drifts, and the drift is silent, because a
 #     wrong queue looks exactly like a quiet day.
-#   * THE BOARD IS RESOLVED BY NAME, never by a hardcoded id:
-#     `ready-tasks.ts android` and `release-stuck-doing.ts --board android`. An id
-#     is account data and a stale one fails by answering "nothing to do".
-#     Consequence, same as Windows: agent-queue-status.ts and post-list-message.ts
-#     need a list id, so this loop does NOT wake on the inbox (unanswered
-#     comments) and does not post to list chat. What it has to say goes on a TASK
-#     as a comment: a died run on the task it claimed, a stall on the top Ready
-#     task that is waiting behind it. Adopt the richer preflight the day it can
-#     name a board.
+#   * THE BOARD IS PINNED BY ID (AATD-81), overridable with FIXALL_LIST_ID. It
+#     used to be resolved by name, but two lists are called "Astrid Android To-do"
+#     (an empty duplicate appeared 2026-10-25), and a duplicate name is an error,
+#     never a reason to pick the first match (FIXALL_WORKFLOW.md: explicit list ids
+#     take precedence). The SAME id goes to every board call — the queue, the
+#     stall alarm, both Doing sweeps and the wake acknowledgement — so one tick can
+#     never read one board and act on another.
+#   * IT WAKES ON REPLIES, not just Ready (AATD-81). Guard 3 is the shared
+#     preflight, astrid-web's agent-queue-status.ts: Ready ∪ `attention` (task
+#     comments and list chat nobody answered). Until then this loop read only
+#     `ready-tasks.ts`, so a question Jon answered on a handed-back task waited
+#     for some unrelated Ready task to start a run. What the loop itself has to
+#     say still goes on a TASK as a comment: a died run on the task it claimed, a
+#     stall on the top Ready task that is waiting behind it.
 #   * The Android toolchain is not on launchd's PATH. JDK, SDK and NDK live
 #     under ~/dev-tools and ~/Library/Android/sdk (Homebrew is not writable on
 #     this Mac), so the loop sources ~/dev-tools/android-env.sh before the run —
@@ -76,6 +81,10 @@
 #   FIXALL_STALL_STATE  consecutive-skip state (default: beside the log)
 #   FIXALL_STALL_ALERT_AFTER  skips in a row before saying so (default: 3)
 #   FIXALL_STALE_DOING_MINUTES  idle Doing claim released at tick start (default: 180)
+#   FIXALL_LIST_ID      the board (default: the AATD board's id — see the header)
+#   FIXALL_SEEN_FILE    which inbox items already woke a run (default: the shared
+#                       preflight's own default path, so switching to it re-wakes nothing)
+#   FIXALL_PREFLIGHT_DIR  where the preflight artifact goes (default: $TMPDIR)
 
 set -u
 export PATH="/opt/homebrew/bin:$HOME/.local/bin:$PATH"
@@ -93,6 +102,11 @@ ANDROID_ENV="${FIXALL_ANDROID_ENV-$HOME/dev-tools/android-env.sh}"
 STALL_STATE="${FIXALL_STALL_STATE:-$HOME/Library/Logs/astrid-fixall-android-stall.state}"
 STALL_ALERT_AFTER="${FIXALL_STALL_ALERT_AFTER:-3}"
 LOG_HINT="~/Library/Logs/astrid-fixall-android.log"
+# The one board this loop works. Pinned, not looked up by name (header, AATD-81).
+LIST_ID="${FIXALL_LIST_ID:-85eef4ce-3d4d-4072-9ca7-bd631ca815b1}"
+# Machine-local, outside any checkout, so `npm ci` and a re-clone keep it: the
+# path agent-queue-status.ts itself defaults to (astrid-web scripts/lib/fixall-seen-file.ts).
+SEEN_FILE="${FIXALL_SEEN_FILE:-$HOME/Library/Caches/astrid-fixall/seen-claude-$LIST_ID.json}"
 
 echo "──────── fixall loop (android) $(date '+%Y-%m-%d %H:%M:%S') ────────"
 
@@ -114,10 +128,10 @@ comment_on_task() {  # comment_on_task <taskId> <markdown>
     || echo "  (could not comment on task $1)"
 }
 
-# The queue, by board name. Prints the JSON verdict line; exit status is
-# ready-tasks.ts's (non-zero = could not tell).
+# The Ready queue on the pinned board, for the stall alarm's "top Ready task".
+# Prints the JSON verdict line; exit status is ready-tasks.ts's (non-zero = could not tell).
 read_queue() {
-  web_tool scripts/ready-tasks.ts android --json --harness claude-code 2>/dev/null \
+  web_tool scripts/ready-tasks.ts android --json --harness claude-code --list "$LIST_ID" 2>/dev/null \
     | grep -E '^\{.*"tasks"' | tail -1
   return ${pipestatus[1]}
 }
@@ -306,29 +320,53 @@ fi
 
 # ── Doing must not be a dead end ─────────────────────────────────────────────
 # A claim idle past the watchdog goes back to Ready naming its branch (astrid-web,
-# 2026-09-28). By board NAME, like the queue. Before guard 3, so a released task
-# is work for this tick. Never fatal.
-web_tool scripts/release-stuck-doing.ts --agent claude --board android \
+# 2026-09-28). On the pinned board, like the queue. Before guard 3, so a released
+# task is work for this tick. Never fatal.
+web_tool scripts/release-stuck-doing.ts --agent claude --list "$LIST_ID" \
   --stale-minutes "${FIXALL_STALE_DOING_MINUTES:-180}" --repo "$REPO" 2>&1 | sed 's/^/ /'
 
 # ── Guard 3: is there actually any work? ─────────────────────────────────────
-# A few HTTP requests instead of a whole session that finds an empty queue.
-# `ready-tasks.ts android` sweeps the lanes first (a Waiting task whose date came
-# or whose blockers closed returns to Ready), and RECHECK/REVIEW items count.
-# Could-not-tell is NOT empty: run, and let the agent report properly.
-QUEUE_JSON=$(read_queue)
+# A few HTTP requests instead of a whole session that finds an empty queue, and
+# the SAME question the web loop asks (astrid-web scripts/agent-queue-status.ts,
+# AWTD-963) — both halves of it (AATD-81):
+#
+#   queue  — Ready ∩ (assigned to claude ∪ unassigned) ∩ due. Waiting is the
+#            server's: its settle job wakes a task, which then simply arrives here.
+#   inbox  — `attention`: task comments and list chat nobody answered. A reply
+#            on a handed-back task is work even when Ready is empty.
+#
+# Exit 0 = work, 3 = idle (skip), anything else = could not tell — which is NOT
+# idle: run, and let the agent report properly.
+#
+# Waking is two-phase. The preflight never writes the seen-file
+# (--no-write-seen); it hands back the keys that woke it, and the run's outcome
+# records exactly those after the run ("Acknowledge", below). A run that dies
+# must not mute what woke it on the first failure, and new comments that arrive
+# DURING the run were never in the keys, so they wake the next tick.
+PREFLIGHT=$(mktemp "${FIXALL_PREFLIGHT_DIR:-${TMPDIR:-/tmp}}/fixall-android-preflight.XXXXXX") || PREFLIGHT=""
+# An array, not ${PREFLIGHT:+--output "$PREFLIGHT"}: zsh does not split that, and
+# the helper would get "--output <path>" as ONE argument.
+OUTPUT_ARGS=()
+[ -n "$PREFLIGHT" ] && OUTPUT_ARGS=(--output "$PREFLIGHT")
+QUEUE_OUT=$(web_tool scripts/agent-queue-status.ts --agent claude --list "$LIST_ID" --board android \
+  --include-unassigned --no-write-seen --seen "$SEEN_FILE" "${OUTPUT_ARGS[@]}" 2>&1)
 QUEUE_STATUS=$?
-if [ "$QUEUE_STATUS" -ne 0 ] || [ -z "$QUEUE_JSON" ]; then
-  echo "  QUEUE: unknown — ready-tasks.ts exited $QUEUE_STATUS; running anyway so the agent can report"
-else
-  QUEUE_COUNT=$(echo "$QUEUE_JSON" | grep -o '"action":"[a-z]*"' | wc -l | tr -d ' ')
-  QUEUE_ACTIONS=$(echo "$QUEUE_JSON" | grep -o '"action":"[a-z]*"' | sed 's/"action":"\(.*\)"/\1/' | sort | uniq -c | awk '{printf "%s%s %s", (NR>1?", ":""), $1, $2}')
-  echo "  QUEUE: $QUEUE_COUNT item(s)${QUEUE_ACTIONS:+ — $QUEUE_ACTIONS}"
-  if [ "$QUEUE_COUNT" -eq 0 ]; then
-    echo "RESULT: SKIPPED — nothing to do for claude (no Ready task, no lane work)"
-    exit 0
-  fi
+QUEUE_LINES=$(echo "$QUEUE_OUT" | grep -E '^(QUEUE|SEEN|ATTENTION):')
+QUEUE_KEYS=$(echo "$QUEUE_OUT" | sed -n 's/^KEYS: //p' | head -1)
+echo "${QUEUE_LINES:-QUEUE: no verdict}" | sed 's/^/  /'
+if [ "$QUEUE_STATUS" -eq 3 ]; then
+  [ -n "$PREFLIGHT" ] && rm -f "$PREFLIGHT"
+  echo "RESULT: SKIPPED — nothing to do for claude (no Ready task, no new reply)"
+  exit 0
+elif [ "$QUEUE_STATUS" -ne 0 ]; then
+  echo "  QUEUE: unknown — agent-queue-status.ts exited $QUEUE_STATUS; running anyway so the agent can report"
+  QUEUE_KEYS=""
 fi
+# Nothing acknowledges a tick that never starts claude: drop the artifact on the
+# way out unless the acknowledgement below decided to keep it.
+KEEP_PREFLIGHT=0
+drop_preflight() { [ -n "$PREFLIGHT" ] && [ "$KEEP_PREFLIGHT" != "1" ] && rm -f "$PREFLIGHT"; return 0; }
+trap 'drop_preflight; release_lock' EXIT INT TERM
 
 # ── The toolchain launchd does not give us ───────────────────────────────────
 # Without it every gradle and cargo-ndk step of predeploy fails, and the run
@@ -361,8 +399,13 @@ else
   echo "  ⚠️  no astrid-core checkout at ${CORE:-(none)} — a task whose fix is in the core cannot be worked this run"
 fi
 
+# The prompt (AATD-81): /fixall, and say outright that the inbox is part of the
+# run — a reply-only wake has an EMPTY Ready queue, and "Ready is empty, stop"
+# would answer nobody.
+PROMPT="/fixall Read get_agent_queue's attention (task replies and list chat) as well as its queue, and answer it on the task even when the Ready queue is empty."
+
 if [ "${FIXALL_DRY_RUN:-0}" = "1" ]; then
-  echo "  would run: $CLAUDE -p /fixall --model $MODEL --permission-mode ${FIXALL_PERMISSION_MODE:-acceptEdits} ${ADD_DIRS[*]}${MAX_USD:+ --max-budget-usd $MAX_USD}"
+  echo "  would run: $CLAUDE -p \"$PROMPT\" --model $MODEL --permission-mode ${FIXALL_PERMISSION_MODE:-acceptEdits} ${ADD_DIRS[*]}${MAX_USD:+ --max-budget-usd $MAX_USD}"
   echo "RESULT: SKIPPED — dry run, every guard passed and claude was not started"
   exit 0
 fi
@@ -381,7 +424,7 @@ CLAIMS_FILE=$(mktemp "${TMPDIR:-/tmp}/fixall-android-claims.XXXXXX")
 export ASTRID_FIXALL_CLAIMS_FILE="$CLAIMS_FILE"
 
 echo "→ /fixall ($MODEL, watchdog ${MAX_MINUTES}m${MAX_USD:+, cap \$$MAX_USD})"
-"$CLAUDE" -p "/fixall" \
+"$CLAUDE" -p "$PROMPT" \
   --model "$MODEL" \
   --permission-mode "${FIXALL_PERMISSION_MODE:-acceptEdits}" \
   "${ADD_DIRS[@]}" \
@@ -542,6 +585,27 @@ fi
 # Anything this run claimed that is STILL in Doing was abandoned mid-task.
 web_tool scripts/release-stuck-doing.ts --agent claude --claims-file "$CLAIMS_FILE" --repo "$REPO" 2>&1 | sed 's/^/ /'
 rm -f "$CLAIMS_FILE"
+
+# ── Acknowledge what woke the run (phase two, AATD-81) ───────────────────────
+# Exactly the preflight's keys, never a recomputed set. A finished run had its
+# chance at them: seen. A failed or killed one gets a strike (--failed), and a
+# key out of strikes is muted (astrid-web scripts/lib/wake-keys.ts), so a run
+# that keeps dying on one comment cannot start a session every tick forever.
+# An acknowledgement that does not land fails the tick and KEEPS the preflight
+# artifact: otherwise the same reply silently wakes run after run.
+if [ -n "$QUEUE_KEYS" ]; then
+  ACK_ARGS=(--mark-seen)
+  [ "$STATUS" -ne 0 ] && ACK_ARGS+=(--failed)
+  ACK_OUT=$(web_tool scripts/agent-queue-status.ts --agent claude --list "$LIST_ID" --seen "$SEEN_FILE" \
+    "${ACK_ARGS[@]}" --seen-keys "$QUEUE_KEYS" 2>&1)
+  ACK_STATUS=$?
+  [ -n "$ACK_OUT" ] && echo "$ACK_OUT" | sed 's/^/  /'
+  if [ "$ACK_STATUS" -ne 0 ]; then
+    KEEP_PREFLIGHT=1
+    ACK_REASON="could not acknowledge the wake keys (exit $ACK_STATUS) — preflight kept at ${PREFLIGHT:-(none)}"
+    if [ "$STATUS" -eq 0 ]; then STATUS=92; REASON="$ACK_REASON"; else REASON="$REASON; $ACK_REASON"; fi
+  fi
+fi
 
 if [ "$STATUS" -eq 0 ]; then
   echo "RESULT: OK — run finished (see the tasks for what changed)"

@@ -73,19 +73,32 @@ answer a prompt); by hand the loop uses `acceptEdits`. Re-run `install.sh` after
    commits on `main`; a dirty `../astrid-core`; a 5-minute load average over cores × 4.
    Three skips in a row are reported **once**, as a comment on the top Ready task.
 2. Fast-forward `main`; restart if the loop itself changed.
-3. Release Doing claims idle for 3 hours (`release-stuck-doing.ts --board android`).
-4. **Is there work?** `ready-tasks.ts android --json --harness claude-code` (lane sweep included).
-   Empty → `SKIPPED`. The board is resolved **by name**; no id lives in the loop.
+3. Release Doing claims idle for 3 hours (`release-stuck-doing.ts --list <board>`).
+4. **Is there work?** The shared preflight, astrid-web `agent-queue-status.ts --agent claude
+   --list <board> --board android --include-unassigned --no-write-seen` (AATD-81). It checks Ready
+   tasks **and** `attention`, the task replies and list chat nobody has answered, so a reply on a
+   handed-back task starts a run even when Ready is empty. Exit 3 means idle → `SKIPPED`. Any other
+   failure means "could not tell", and the run still happens. It never writes the seen-file. It
+   hands back its `KEYS:` and writes a version-1 artifact.
+   **The board is pinned by id** (`FIXALL_LIST_ID`, default `85eef4ce-…`), because two lists are
+   named "Astrid Android To-do". Every board call in the tick uses that one id.
 5. Source `~/dev-tools/android-env.sh` (JDK, SDK, NDK, cargo — launchd's PATH has none of them).
-6. `claude -p /fixall --add-dir ../astrid-web --add-dir ../astrid-core`, one task, 75-minute
-   watchdog, `$10` CLI budget bound, `caffeinate -w` on the run.
+6. `claude -p "/fixall …"` with `--add-dir ../astrid-web --add-dir ../astrid-core`: one task,
+   a 75-minute watchdog, a `$10` CLI budget bound and `caffeinate -w` on the run. The prompt also
+   tells the run to answer `attention` even when Ready is empty.
 7. Afterwards: unfinished work on a task branch is committed as `UNFINISHED, UNVERIFIED` and
    pushed; leftovers on `main` or in astrid-core are only *copied* to a pushed `wip/` branch and
    left in place. PRs are opened for finished task branches, abandoned claims released, and a
    died run says why on the task it claimed.
+8. **Acknowledge what woke it**, using exactly the preflight's keys and never a re-read, so a
+   comment that arrives during the run wakes the next tick. A finished run sends `--mark-seen`. A
+   failed or killed run sends `--mark-seen --failed`, a strike, so one comment cannot wake a dying
+   run forever. A dry run, or a tick that never started claude, acknowledges nothing. If the
+   acknowledgement fails, the tick is `FAILED` and the preflight artifact is kept, with its path
+   in the log. The seen-file is `~/Library/Caches/astrid-fixall/seen-claude-<board>.json`
+   (`FIXALL_SEEN_FILE`).
 
-Not covered, by design (same as astrid-windows): the loop holds no board id, so it does not wake
-on unanswered comments (`agent-queue-status.ts` needs a list id) and does not post to list chat.
+The loop still does not post to list chat. What it has to say goes on a task.
 
 No astrid MCP server is registered for this repo in `~/.claude.json`, so unattended runs read the
 board through astrid-web's OAuth scripts (the documented fallback). Registering the server for
