@@ -8,12 +8,13 @@ file holds only what is different **here**.
 
 ## Steps
 
-1. **Pull the board.** Resolved by name, never by a hardcoded id:
+1. **Pull the board.** It is pinned by id, because two lists are named "Astrid Android To-do"
+   (an empty duplicate appeared 2026-10-25) and lookup by name refuses:
    ```
-   get_lists {}                                   → "Astrid Android To-do", take its id
-   get_agent_queue { agent: "claude", listId: <that id> }
+   get_agent_queue { agent: "claude", listId: "85eef4ce-3d4d-4072-9ca7-bd631ca815b1", includeUnassigned: true }
    ```
-   Queue debugging only: `cd ../astrid-web && npx tsx scripts/ready-tasks.ts android --harness claude-code`.
+   `queue` is the work, and `attention` is the unanswered replies. Answer those too.
+   Queue debugging only: `cd ../astrid-web && npx tsx scripts/ready-tasks.ts android --harness claude-code --list <that id>`.
 2. **Present the tasks** by title and ask which to work on.
 3. **For each task:**
    - Post the session link (`cd ../astrid-web && npx tsx scripts/post-session-link.ts <taskId>`) and a

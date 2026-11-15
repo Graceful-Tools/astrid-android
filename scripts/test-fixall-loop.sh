@@ -42,6 +42,26 @@ case "$*" in
       fail)  exit 1 ;;
     esac
     exit 0 ;;
+  *agent-queue-status.ts*--mark-seen*)
+    [ "${STUB_ACK_EXIT:-0}" = "0" ] && echo "SEEN: marked keys as seen" || echo "SEEN: (not recorded)"
+    exit "${STUB_ACK_EXIT:-0}" ;;
+  *agent-queue-status.ts*)
+    # The shared preflight (AATD-81): queue AND inbox, keys handed back, never written.
+    out=""; prev=""
+    for a in "$@"; do
+      [ "$prev" = "--output" ] && out="$a"
+      case "$a" in "--output "*) echo "STUB: --output arrived glued to its value" >&2; exit 64 ;; esac
+      prev="$a"
+    done
+    case "${STUB_PREFLIGHT:-work}" in
+      work)  keys='["task:11111111","comment:c1"]'; echo "QUEUE: 1 ready, 1 reply — work"; code=0 ;;
+      reply) keys='["comment:c1","chat:m1"]';      echo "QUEUE: 0 ready, 2 replies — work"; code=0 ;;
+      idle)  keys='[]';                            echo "QUEUE: nothing for claude"; code=3 ;;
+      fail)  echo "QUEUE: unknown — HTTP 503 from /api/v1/agent-queue" >&2; exit 1 ;;
+    esac
+    [ -n "$out" ] && echo "{\"version\":1,\"wakeKeys\":$keys}" > "$out"
+    echo "KEYS: $keys"
+    exit "$code" ;;
   *add-task-comment.ts*)       exit 0 ;;
   *release-stuck-doing.ts*)    exit 0 ;;
   *open-fixall-prs.ts*)        exit 0 ;;
@@ -109,6 +129,7 @@ sgit() { git -C "$REPO" "$@"; }
 cgit() { git -C "$CORE_DIR" "$@"; }
 
 STALL_STATE="$TMP/stall.state"
+BOARD_ID=85eef4ce-3d4d-4072-9ca7-bd631ca815b1   # the real AATD board; a duplicate shares its name
 PASS=0; FAIL=0
 ok()  { PASS=$((PASS+1)); }
 bad() { FAIL=$((FAIL+1)); echo "✗ $1"; [ -n "${2:-}" ] && echo "$2" | sed 's/^/    /'; return 0; }
@@ -123,6 +144,8 @@ run() {  # run   (env vars set by the caller select the stub behaviour)
   STUB_LOAD="${STUB_LOAD-1.50}" \
   FIXALL_ANDROID_ENV="${FIXALL_ANDROID_ENV-$TMP/android-env.sh}" \
   FIXALL_STALL_STATE="$STALL_STATE" \
+  FIXALL_SEEN_FILE="$TMP/seen.json" \
+  FIXALL_PREFLIGHT_DIR="$TMP" \
   FIXALL_STALL_ALERT_AFTER=3 \
   FIXALL_MAX_MINUTES=1 \
   FIXALL_MAX_USD= \
@@ -146,9 +169,11 @@ called "--scheduled" "…as --scheduled, so the loops cannot pause each other"
 if grep "fixall-session.ts acquire" "$CALLS" | grep -q "cwd=astrid-android"; then ok
 else bad "…from THIS checkout (the lock keys on the cwd's git dir)" "$(cat "$CALLS")"; fi
 called "fixall-pause.ts yield --self-pid" "the loop asks whether to stand down, about OTHER sessions"
-called "ready-tasks.ts android --json --harness claude-code" "the queue is read by board NAME (ready-tasks.ts android)"
-if grep "ready-tasks.ts" "$CALLS" | grep -q "cwd=astrid-web"; then ok
+called "agent-queue-status.ts --agent claude --list $BOARD_ID --board android --include-unassigned --no-write-seen" \
+  "AATD-81: the queue AND the inbox are read by the shared preflight, on the pinned board, without writing seen"
+if grep "agent-queue-status.ts" "$CALLS" | grep -q "cwd=astrid-web"; then ok
 else bad "…from astrid-web, whose .env.local the scripts read" "$(cat "$CALLS")"; fi
+not_called "ready-tasks.ts" "AATD-81: a tick that gets to the queue never asks ready-tasks.ts (Ready-only, no replies)"
 called "claude -p /fixall" "the run is claude -p /fixall"
 called "--add-dir $SANDBOX/astrid-web" "the session may reach astrid-web (board scripts)"
 called "--add-dir $CORE_DIR" "…and astrid-core"
@@ -157,19 +182,19 @@ called "LOCK_HELD=1" "the session is told the launcher holds the lock"
 called "TOOLCHAIN=sourced" "the Android toolchain env is sourced before the run"
 out_has "toolchain: JAVA_HOME=/stub/jdk" "…and the log says which toolchain"
 out_has "load ok — 5-minute average 1.50 against a budget of 32" "the load guard reports what it saw"
-if grep -qE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' "$LOOP_SRC"; then
-  bad "no board id in the loop — it is resolved by name" "$(grep -nE '[0-9a-f]{8}-[0-9a-f]{4}-' "$LOOP_SRC")"
-else ok; fi
-not_called "--list " "nothing is addressed by list id"
+# AATD-81: two lists share the board's name, so the board is pinned by id, once.
+if [ "$(grep -oE '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}' "$LOOP_SRC" | sort -u)" = "$BOARD_ID" ]; then ok
+else bad "AATD-81: the loop pins exactly one board id, the real AATD board" "$(grep -nE '[0-9a-f]{8}-[0-9a-f]{4}-' "$LOOP_SRC")"; fi
+not_called "--board android --stale" "AATD-81: nothing is addressed by the (ambiguous) board name alone"
 
 # ── Doing is not a dead end; PRs; claims ────────────────────────────────────
-STALE=$(line_of "release-stuck-doing.ts --agent claude --board android --stale-minutes 180")
-QUEUE=$(line_of "ready-tasks.ts android")
+STALE=$(line_of "release-stuck-doing.ts --agent claude --list $BOARD_ID --stale-minutes 180")
+QUEUE=$(line_of "agent-queue-status.ts")
 CLAUDE_L=$(line_of "claude -p")
 PRS=$(line_of "open-fixall-prs.ts --claims-file")
 CLAIMS=$(line_of "release-stuck-doing.ts --agent claude --claims-file")
 if [ -n "$STALE" ] && [ -n "$QUEUE" ] && [ "$STALE" -lt "$QUEUE" ]; then ok
-else bad "abandoned Doing claims are released at tick start, by board name, before the queue" "$(cat "$CALLS")"; fi
+else bad "abandoned Doing claims are released at tick start, on the pinned board, before the queue" "$(cat "$CALLS")"; fi
 if [ -n "$PRS" ] && [ -n "$CLAIMS" ] && [ "$CLAUDE_L" -lt "$PRS" ] && [ "$PRS" -lt "$CLAIMS" ]; then ok
 else bad "after the run: open PRs, then release the run's own claims" "$(cat "$CALLS")"; fi
 if grep "open-fixall-prs.ts" "$CALLS" | grep -q -- "--repo $REPO "; then ok
@@ -184,14 +209,57 @@ else bad "caffeinate -w names the run's own pid" "$(cat "$CALLS")"; fi
 if grep '^caffeinate ' "$CALLS" | grep -q -- ' -d'; then bad "no -d on caffeinate" "$(cat "$CALLS")"; else ok; fi
 
 # ── Quiet ticks ─────────────────────────────────────────────────────────────
-clean; STUB_QUEUE=empty run
-last_is "RESULT: SKIPPED — nothing to do" "an empty queue is a skip"
+clean; STUB_PREFLIGHT=idle run
+last_is "RESULT: SKIPPED — nothing to do" "AATD-81: idle (no Ready task, no new reply) is a skip"
 not_called "claude -p" "…that starts no session"
-out_has "QUEUE: 0 item(s)" "…and says what it read"
+out_has "QUEUE: nothing for claude" "…and says what it read"
+not_called "--mark-seen" "…and acknowledges nothing: no run was started"
 
-clean; STUB_QUEUE=fail run
-out_has "QUEUE: unknown" "a queue nobody could read is reported"
-called "claude -p" "…and is NOT read as empty: the run happens"
+clean; STUB_PREFLIGHT=fail run
+out_has "QUEUE: unknown" "AATD-81: a queue nobody could read is reported"
+called "claude -p" "…and is NOT read as idle: the run happens"
+not_called "--mark-seen" "…with no keys, so nothing is acknowledged"
+
+# ── AATD-81: a reply wakes a run, and wakes it once ─────────────────────────
+clean; STUB_PREFLIGHT=reply run
+called "claude -p /fixall" "AATD-81: a reply alone (empty Ready) starts a run"
+called "attention" "…whose prompt says to drain get_agent_queue attention"
+last_is "RESULT: OK" "…and a finished reply run is OK"
+ACKLINE=$(grep -- "--mark-seen" "$CALLS")
+if echo "$ACKLINE" | grep -qF -- '--mark-seen --seen-keys ["comment:c1","chat:m1"]' && echo "$ACKLINE" | grep -qF -- "--list $BOARD_ID"; then ok
+else bad "…and acknowledges exactly the preflight's original keys, on the pinned board" "$(cat "$CALLS")"; fi
+not_called "--failed" "…as finished, not failed"
+if [ "$(grep "agent-queue-status.ts" "$CALLS" | grep -vc -- "--mark-seen")" = 1 ]; then ok
+else bad "AATD-81: the queue is read once — keys are never recomputed after the run (new arrivals stay unread)" "$(cat "$CALLS")"; fi
+CL=$(line_of "claude -p"); ACK=$(line_of "--mark-seen")
+if [ -n "$ACK" ] && [ "$CL" -lt "$ACK" ]; then ok
+else bad "AATD-81: keys are acknowledged after the run, never before" "$(cat "$CALLS")"; fi
+if grep "agent-queue-status.ts" "$CALLS" | grep -v -- "--mark-seen" | grep -q -- "--seen $TMP/seen.json"; then ok
+else bad "AATD-81: the preflight reads the durable seen-file it is given" "$(cat "$CALLS")"; fi
+if grep "agent-queue-status.ts" "$CALLS" | grep -v -- "--mark-seen" | grep -q -- "--output "; then ok
+else bad "AATD-81: the preflight writes its version-1 artifact" "$(cat "$CALLS")"; fi
+
+clean; STUB_PREFLIGHT=reply STUB_CLAUDE_EXIT=3 run
+called "--mark-seen --failed --seen-keys [\"comment:c1\",\"chat:m1\"]" "AATD-81: a failed run gives its keys a strike (bounded retry)"
+clean; STUB_PREFLIGHT=reply STUB_CLAUDE_EXIT=143 run
+called "--mark-seen --failed --seen-keys" "AATD-81: so does a watchdog-killed run"
+
+clean; STUB_PREFLIGHT=reply FIXALL_DRY_RUN=1 run
+not_called "--mark-seen" "AATD-81: a dry run acknowledges nothing"
+
+clean; STUB_PREFLIGHT=reply STUB_ACK_EXIT=1 run
+last_is "RESULT: FAILED — could not acknowledge" "AATD-81: an acknowledgement that fails fails the tick"
+[ "$STATUS" != 0 ] && ok || bad "…and exits non-zero" "$OUT"
+KEPT=$(echo "$OUT" | sed -n 's/.*preflight kept at \([^ ]*\).*/\1/p' | head -1)
+if [ -n "$KEPT" ] && grep -q "comment:c1" "$KEPT" 2>/dev/null; then ok
+else bad "…and keeps the preflight artifact as recovery evidence" "$OUT"; fi
+
+# ── AATD-81: board isolation — one id, everywhere ───────────────────────────
+clean; FIXALL_LIST_ID=99999999-9999-9999-9999-999999999999 STUB_PREFLIGHT=reply run
+BOARD_CALLS=$(grep -E "agent-queue-status.ts|release-stuck-doing.ts --agent claude --(list|board)" "$CALLS")
+if [ -n "$BOARD_CALLS" ] && ! echo "$BOARD_CALLS" | grep -v -q -- "--list 99999999-9999-9999-9999-999999999999" \
+   && ! grep -q "$BOARD_ID" "$CALLS"; then ok
+else bad "AATD-81: FIXALL_LIST_ID reaches the queue, the sweep and the acknowledgement, and the default reaches none" "$(cat "$CALLS")"; fi
 
 clean; FIXALL_DRY_RUN=1 run
 last_is "RESULT: SKIPPED — dry run" "a dry run passes every guard and stops"
@@ -239,6 +307,7 @@ last_is "RESULT: SKIPPED — working tree is dirty" "a dirty tree is a skip"
 run; not_called "add-task-comment.ts" "the second is still quiet"
 run
 called "add-task-comment.ts 11111111-1111-1111-1111-111111111111" "the third skip in a row says so on the top Ready task"
+called "ready-tasks.ts android --json --harness claude-code --list $BOARD_ID" "AATD-81: …read from the pinned board"
 called "work-in-progress.txt" "…naming what is in the way"
 run; not_called "add-task-comment.ts" "a fourth does not post again — once per stall"
 rm -f "$REPO/work-in-progress.txt"
