@@ -1,3 +1,6 @@
 # Bytes: the stripped libastrid_android.so per ABI, as the app packages it (scripts/check-native-size.sh,
 # AATD-91). Lower a budget when the core shrinks; raising one is a decision, said in the commit.
-arm64-v8a=11600000
+# 2026-11-14, raised 11.60 -> 11.83 MB (AATD-100): Android now verifies certificates with the device's
+# trust store (rustls-platform-verifier + jni, about +142 KB) instead of a bundled Mozilla set, and the
+# pin moved 35 core commits (b83f179 -> 143cfd17). Measured 11,814,600 bytes.
+arm64-v8a=11830000

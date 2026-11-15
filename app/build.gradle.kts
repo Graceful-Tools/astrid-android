@@ -1,5 +1,6 @@
 import java.net.URI
 import java.util.Properties
+import java.util.zip.ZipFile
 
 plugins {
     alias(libs.plugins.android.application)
@@ -204,6 +205,51 @@ androidComponents {
             urlScheme.set(brandUrlScheme)
         }
         variant.sources.res?.addGeneratedSourceDirectory(task, BrandShortcuts::outputDir)
+    }
+}
+
+/**
+ * The network-security config (AATD-100). The core checks certificates through Android's trust
+ * manager (rustls-platform-verifier), and that check's revocation fetches go over the app's own
+ * networking, which this config governs.
+ *
+ * The verifier's AAR ships a config of its own that lets Android's revocation check fetch CRLs over
+ * plain HTTP from the CA hosts that publish them. Without that, every certificate with no OCSP URL
+ * (Let's Encrypt, Google Trust Services, and astrid.cc's own) reads as revoked. An app's config
+ * replaces a library's, so this one is generated from the template, which adds user-installed roots,
+ * plus the AAR's CRL hosts, at whatever version core/Cargo.lock pins. Nothing is copied by hand, so
+ * nothing drifts.
+ */
+abstract class NetworkSecurityConfig : DefaultTask() {
+    @get:InputFile abstract val template: RegularFileProperty
+    @get:InputFiles abstract val verifierAar: ConfigurableFileCollection
+    @get:OutputDirectory abstract val outputDir: DirectoryProperty
+
+    @TaskAction fun write() {
+        val aar = ZipFile(verifierAar.singleFile)
+        val theirs = aar.use { zip ->
+            zip.getInputStream(zip.getEntry("res/xml/network_security_config.xml")).bufferedReader().readText()
+        }
+        val crlHosts = Regex("""<domain-config\b.*?</domain-config>""", RegexOption.DOT_MATCHES_ALL).find(theirs)?.value
+            ?: throw GradleException("AATD-100: the verifier's network_security_config.xml has no <domain-config> of CRL hosts")
+        val xml = template.get().asFile.readText().replace("<!-- @VERIFIER_CRL_HOSTS@ -->", crlHosts)
+        outputDir.get().asFile.resolve("xml").apply { mkdirs() }.resolve("network_security_config.xml").writeText(xml)
+    }
+}
+
+@Suppress("UNCHECKED_CAST")
+val rustlsPlatformVerifierVersion = rootProject.extra["rustlsPlatformVerifierVersion"] as Provider<String>
+val rustlsPlatformVerifierAar = configurations.detachedConfiguration(
+    dependencies.create("org.rustls:rustls-platform-verifier:${rustlsPlatformVerifierVersion.get()}@aar"),
+).apply { isTransitive = false }
+
+androidComponents {
+    onVariants { variant ->
+        val task = tasks.register<NetworkSecurityConfig>("generate${variant.name.replaceFirstChar(Char::titlecase)}NetworkSecurityConfig") {
+            template.set(layout.projectDirectory.file("tls/network_security_config.xml"))
+            verifierAar.from(rustlsPlatformVerifierAar)
+        }
+        variant.sources.res?.addGeneratedSourceDirectory(task, NetworkSecurityConfig::outputDir)
     }
 }
 

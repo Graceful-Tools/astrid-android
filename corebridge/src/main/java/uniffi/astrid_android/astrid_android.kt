@@ -742,6 +742,8 @@ internal object IntegrityCheckingUniffiLib {
     internal fun ensureInitialized() = Unit
     external fun uniffi_astrid_android_checksum_func_core_version(
     ): Int
+    external fun uniffi_astrid_android_checksum_func_platform_tls_ready(
+    ): Int
     external fun uniffi_astrid_android_checksum_func_run_rule(
     ): Int
     external fun uniffi_astrid_android_checksum_method_changelistener_on_change(
@@ -820,6 +822,8 @@ internal object UniffiLib {
     ): Byte
     external fun uniffi_astrid_android_fn_func_core_version(uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
+    external fun uniffi_astrid_android_fn_func_platform_tls_ready(uniffi_out_err: UniffiRustCallStatus, 
+    ): Byte
     external fun uniffi_astrid_android_fn_func_run_rule(`request`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
     external fun ffi_astrid_android_rustbuffer_alloc(`size`: Long,uniffi_out_err: UniffiRustCallStatus, 
@@ -942,6 +946,9 @@ private fun uniffiCheckContractApiVersion(lib: IntegrityCheckingUniffiLib) {
 @Suppress("UNUSED_PARAMETER")
 private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
     if ((lib.uniffi_astrid_android_checksum_func_core_version() and 0xFFFF) != 27499) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if ((lib.uniffi_astrid_android_checksum_func_platform_tls_ready() and 0xFFFF) != 6006) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if ((lib.uniffi_astrid_android_checksum_func_run_rule() and 0xFFFF) != 45881) {
@@ -2503,6 +2510,22 @@ public object FfiConverterOptionalString: FfiConverterRustBuffer<kotlin.String?>
             return FfiConverterString.lift(
     uniffiRustCall() { _status ->
     UniffiLib.uniffi_astrid_android_fn_func_core_version(
+    
+        _status)
+}
+    )
+    }
+    
+
+        /**
+         * Whether this process can verify a TLS certificate yet (AATD-100): always on the host build the
+         * JVM tests load, and on Android once the app has called [`Java_com_gracefultools_astrid_core_PlatformTls_initialize`].
+         * Until then every request fails offline with the core's `TlsNotInitialized`, rather than reaching a
+         * verifier that would panic.
+         */ fun `platformTlsReady`(): kotlin.Boolean {
+            return FfiConverterBoolean.lift(
+    uniffiRustCall() { _status ->
+    UniffiLib.uniffi_astrid_android_fn_func_platform_tls_ready(
     
         _status)
 }
