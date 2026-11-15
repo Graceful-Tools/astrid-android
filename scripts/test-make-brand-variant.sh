@@ -251,8 +251,8 @@ rodata = (b"\x7fELF\0\0windowsiosandroidastridhttps://astrid.cctemp_AstridModels
 with zipfile.ZipFile(sys.argv[1]) as src, zipfile.ZipFile(sys.argv[2], "w") as z:
     for name in src.namelist():
         z.writestr(name, src.read(name))
-    z.writestr("lib/arm64-v8a/libastrid_android.so", rodata)
-    z.writestr("lib/x86_64/libastrid_android.so", rodata)
+    z.writestr("lib/arm64-v8a/libastrid_uniffi.so", rodata)
+    z.writestr("lib/x86_64/libastrid_uniffi.so", rodata)
     z.writestr("assets/plugin.so", rodata)  # not under lib/: not read
 PY
 audit --budget 5 --text "$txt" --apk "$work/native.apk" && fail "the APK's native libraries were not audited (AATD-90)"

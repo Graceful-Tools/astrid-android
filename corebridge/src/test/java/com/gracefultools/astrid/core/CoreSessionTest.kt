@@ -9,11 +9,12 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
-import uniffi.astrid_android.CredentialStore
+import uniffi.astrid_uniffi.CredentialStore
 
 /**
- * AATD-4. The bridge against the REAL core: the host build of core/astrid-android, loaded through
- * JNA (`jna.library.path`, set in corebridge/build.gradle.kts). No stand-in decides anything here.
+ * AATD-4. The bridge against the REAL core: the host build of astrid-core's astrid-uniffi (AATD-99),
+ * loaded through JNA (`jna.library.path`, set in corebridge/build.gradle.kts). No stand-in decides
+ * anything here.
  */
 class CoreSessionTest {
     private class Memory : CredentialStore {
@@ -160,5 +161,15 @@ class CoreSessionTest {
             ).jsonObject,
         ) as JsonArray
         assertTrue("$parts", parts.isNotEmpty())
+    }
+
+    @Test
+    fun `AATD-99 the version names the core revision this build pins`() {
+        // core/Cargo.toml pins astrid-core by revision; the shared UniFFI crate reports it.
+        val pin = Regex("""astrid-core\.git", rev = "([0-9a-f]{40})"""")
+            .find(java.io.File("../core/Cargo.toml").readText())?.groupValues?.get(1)
+            ?: return fail("core/Cargo.toml pins no astrid-core revision")
+        val version = CoreSession.coreVersion
+        assertTrue(version, version.endsWith("(core ${pin.take(12)})"))
     }
 }

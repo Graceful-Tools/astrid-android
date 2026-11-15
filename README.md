@@ -13,7 +13,7 @@ Native Android app for [Astrid](https://astrid.cc) task management.
 ```
 app/            Kotlin, Jetpack Compose   screens, navigation, Android platform adapters
 corebridge/     Kotlin                    UniFFI-generated bindings + a small facade (CoreSession, CoreRules)
-core/           Rust                      astrid-android: the UniFFI crate over astrid-core
+core/           Rust                      selects core's astrid-uniffi crate; contract tests
 astrid-core     Rust (own repo)           models, API client, SQLite cache, Outbox, sync, every shared rule
       |
       v  HTTPS /api/v1/*
@@ -23,7 +23,7 @@ astrid-web (astrid.cc)
 The shell renders and dispatches; **it decides nothing**. Everything that must read the same on
 web, iOS, Mac, Windows and Android lives once in astrid-core and is locked by fixtures generated
 from astrid-web. This is the arrangement the Windows app proved, with the binding layer the Apple
-apps use (UniFFI), whose Kotlin generator is first-party.
+apps use: core's own `crates/astrid-uniffi`, one UniFFI crate for Swift and Kotlin (AATD-99).
 
 ## Getting started
 

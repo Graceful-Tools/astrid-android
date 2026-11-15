@@ -33,8 +33,8 @@ if [[ -f core/Cargo.toml ]]; then
     # What a release APK ships (the debug one ships the unoptimised `jni` profile), measured as the
     # app's packaging strips it. arm64 only: x86_64 is emulators, and the two move together.
     step "core: the release arm64 library is within its size budget (AATD-91)"
-    (cd core && cargo ndk -t arm64-v8a --platform 28 build -p astrid-android --release)
-    scripts/check-native-size.sh core/target/aarch64-linux-android/release/libastrid_android.so arm64-v8a
+    (cd core && cargo ndk --manifest-path Cargo.toml -t arm64-v8a --platform 28 rustc -p astrid-uniffi --crate-type cdylib --release)
+    scripts/check-native-size.sh core/target/aarch64-linux-android/release/libastrid_uniffi.so arm64-v8a
   fi
 fi
 

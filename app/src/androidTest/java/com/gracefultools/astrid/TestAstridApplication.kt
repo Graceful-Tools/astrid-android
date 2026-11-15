@@ -8,7 +8,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.jsonObject
-import uniffi.astrid_android.CredentialStore
+import uniffi.astrid_uniffi.CredentialStore
 
 /**
  * The REAL core on the device, with the network loops off and an in-memory cache seeded with a list

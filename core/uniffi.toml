@@ -1,0 +1,9 @@
+# Kotlin generation settings, passed to the bindgen by scripts/build-core.sh (`--config`, a global
+# config file). They lived in core/astrid-android/uniffi.toml until the app moved onto core's
+# astrid-uniffi (AATD-99), which ships no Kotlin settings of its own.
+#
+# `android` selects the Android-compatible cleaner (java.lang.ref.Cleaner is API 33; the app's
+# minSdk is 28) and Android-friendly defaults.
+[defaults.bindings.kotlin]
+android = true
+android_cleaner = true

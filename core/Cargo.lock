@@ -83,16 +83,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "astrid-android"
+name = "astrid-android-contracts"
 version = "0.1.0"
 dependencies = [
  "astrid-core",
- "async-trait",
- "jni",
+ "astrid-uniffi",
  "serde_json",
- "thiserror",
- "tokio",
- "uniffi",
 ]
 
 [[package]]
@@ -136,6 +132,20 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "astrid-uniffi"
+version = "0.1.0"
+source = "git+https://github.com/Graceful-Tools/astrid-core.git?rev=143cfd17ba9f8758e4f04562ff5dfdcd342c90a9#143cfd17ba9f8758e4f04562ff5dfdcd342c90a9"
+dependencies = [
+ "astrid-core",
+ "async-trait",
+ "jni",
+ "serde_json",
+ "thiserror",
+ "tokio",
+ "uniffi",
 ]
 
 [[package]]

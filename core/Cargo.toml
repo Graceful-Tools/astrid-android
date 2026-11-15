@@ -1,15 +1,15 @@
 # The Android app's bindings to astrid-core.
 #
-# astrid-core is the shared client core (https://github.com/Graceful-Tools/astrid-core). Its rule 8
-# puts each platform's binding layer in that platform's repository: astrid-windows keeps its C ABI,
-# astrid-ios its UniFFI crate, and this is Android's — UniFFI again, whose Kotlin generator is
-# first-party.
+# astrid-core is the shared client core (https://github.com/Graceful-Tools/astrid-core). The binding
+# layer is core's `crates/astrid-uniffi` too (AATD-99): one UniFFI crate for the Apple and Android
+# apps, so this workspace only selects it, builds its cdylib for the app and keeps the contract
+# tests that judge this repository against the core it pins (`contracts/`).
 #
 # The core is pinned by revision and bumped deliberately. Building against a local checkout instead
 # is `scripts/build-core.sh --core ../astrid-core`, which patches the dependency for that build only.
 [workspace]
 resolver = "2"
-members = ["astrid-android", "bindgen"]
+members = ["contracts", "bindgen"]
 
 [workspace.package]
 version = "0.1.0"
@@ -20,6 +20,9 @@ publish = false
 
 [workspace.dependencies]
 astrid-core = { version = "0.1", git = "https://github.com/Graceful-Tools/astrid-core.git", rev = "143cfd17ba9f8758e4f04562ff5dfdcd342c90a9" }
+# The binding crate, from the same revision. Default features keep SQLite compiled in (an NDK link
+# finds no libsqlite3); `contracts/` adds `require-base-url`.
+astrid-uniffi = { version = "0.1", git = "https://github.com/Graceful-Tools/astrid-core.git", rev = "143cfd17ba9f8758e4f04562ff5dfdcd342c90a9" }
 uniffi = "0.32"
 
 [profile.release]

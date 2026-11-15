@@ -5,7 +5,7 @@
 //! fails when the copy is not what the pinned crate produces, so a pin bump that changes the wire
 //! changes the copy in the same commit, and the Kotlin gate then judges the app against it.
 //!
-//! `UPDATE_SCHEMA=1 cargo test -p astrid-android --test wire_schema` rewrites the copy.
+//! `UPDATE_SCHEMA=1 cargo test -p astrid-android-contracts --test wire_schema` rewrites the copy.
 
 use std::path::PathBuf;
 
@@ -30,7 +30,7 @@ fn the_committed_schema_is_the_pinned_cores_aatd_94() {
     assert!(
         stale.is_empty(),
         "app/src/test/resources/core-schema is not the pinned core's schema ({}): run \
-         `UPDATE_SCHEMA=1 cargo test -p astrid-android --test wire_schema` in core/ and commit it",
+         `UPDATE_SCHEMA=1 cargo test -p astrid-android-contracts --test wire_schema` in core/ and commit it",
         stale.join(", ")
     );
 }

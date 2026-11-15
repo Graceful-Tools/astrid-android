@@ -7,7 +7,7 @@ import android.util.Log
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import com.gracefultools.astrid.core.CoreJson
-import uniffi.astrid_android.CredentialStore
+import uniffi.astrid_uniffi.CredentialStore
 import java.io.File
 import java.security.KeyStore
 import javax.crypto.Cipher

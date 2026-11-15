@@ -12,9 +12,9 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
-import uniffi.astrid_android.ChangeListener
-import uniffi.astrid_android.CoreClient
-import uniffi.astrid_android.CredentialStore
+import uniffi.astrid_uniffi.ChangeListener
+import uniffi.astrid_uniffi.CoreClient
+import uniffi.astrid_uniffi.CredentialStore
 
 /**
  * A running astrid-core client — its cache, its Outbox and, when started with [background], the
@@ -101,11 +101,11 @@ class CoreSession private constructor(private val client: CoreClient) : Core {
         )
 
         /** The version of astrid-core this build links. */
-        val coreVersion: String get() = uniffi.astrid_android.coreVersion()
+        val coreVersion: String get() = uniffi.astrid_uniffi.coreVersion()
     }
 }
 
 /** The rules door: pure, synchronous, safe while composing. */
 object CoreRules {
-    fun ask(command: JsonObject): JsonElement = answerOf(uniffi.astrid_android.runRule(command.toString()))
+    fun ask(command: JsonObject): JsonElement = answerOf(uniffi.astrid_uniffi.runRule(command.toString()))
 }

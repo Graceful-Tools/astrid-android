@@ -14,7 +14,8 @@
 
 | Layer | Where | Runs in |
 |---|---|---|
-| Native crate | `core/astrid-android/src/lib.rs` `#[cfg(test)]` | `cargo test` |
+| Binding crate | astrid-core's `crates/astrid-uniffi` — tested in astrid-core | core's CI |
+| Contracts against the pinned core | `core/contracts/tests/` (wire schema, deny.toml, start refusals) | `cargo test` |
 | Bridge against the real core | `corebridge/src/test/` — loads the host build of the crate through JNA | `testDebugUnitTest` |
 | View models over a fake core | `app/src/test/` | `testDebugUnitTest` |
 | Compose screens | `app/src/test/` with Robolectric | `testDebugUnitTest` |
