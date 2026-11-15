@@ -35,9 +35,7 @@ open class AstridApplication : Application() {
 
     private fun start() {
         val graph = try {
-            // Before any core starts: until the certificate verifier has the app's Context, every
-            // request fails offline (AATD-100). Here rather than in makeGraph, so a test graph gets it too.
-            PlatformTls.initialize(applicationContext)
+            initializeTls()
             makeGraph().also {
                 NetworkWatch.start(this, it.core, it.scope)
                 if (schedulesBackgroundWork) BackgroundSync.schedule(this)
@@ -51,6 +49,13 @@ open class AstridApplication : Application() {
         }
         graphStarted.complete(graph)
     }
+
+    /**
+     * Before any core starts: until the certificate verifier has the app's Context, every request
+     * fails offline (AATD-100). Not in makeGraph, so a device test's graph gets it too. A JVM test,
+     * which has no JNI library, overrides it.
+     */
+    protected open fun initializeTls() = PlatformTls.initialize(applicationContext)
 
     /** The real graph, made off the main thread. The instrumented tests replace it with an offline, seeded one. */
     protected open fun makeGraph(): AppGraph = AppGraph.start(this)

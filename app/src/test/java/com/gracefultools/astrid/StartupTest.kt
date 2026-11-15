@@ -31,6 +31,9 @@ class StartupTest {
         val release = CountDownLatch(1)
         @Volatile var startedOn: Thread? = null
 
+        /** The JVM has no JNI library to hand a Context to, and this graph never reaches the network. */
+        override fun initializeTls() = Unit
+
         override fun makeGraph(): AppGraph {
             startedOn = Thread.currentThread()
             // Bounded, so the old synchronous start fails this test rather than hanging it.
