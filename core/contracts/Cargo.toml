@@ -1,0 +1,30 @@
+[package]
+name = "astrid-android-contracts"
+description = "Selects core's astrid-uniffi for the Android build, and holds the tests that judge this repository against the core it pins."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# Ships nothing: the app loads astrid-uniffi's cdylib (scripts/build-core.sh). This crate is the
+# workspace member that puts that crate, with Android's features, into the build graph, and the
+# home of the contract tests that used to live in core/astrid-android (AATD-99).
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+# require-base-url (AATD-90, AWTD-1627/1630): no Astrid address is compiled into the library, so a
+# partner build carries none. Every start names its server; relative Markdown links resolve on it.
+astrid-uniffi = { workspace = true, features = ["require-base-url"] }
+
+[dev-dependencies]
+serde_json = "1"
+
+# The core's wire schema (AATD-94) and generated deny.toml (AATD-112), for `tests/` only. A DEV
+# dependency, so under resolver 2 `schemars` never reaches the library the app ships. Sectioned
+# rather than inline, as astrid-windows found: tools that read the pin line by line must still see
+# exactly one.
+[dev-dependencies.astrid-core]
+workspace = true
+features = ["schema"]

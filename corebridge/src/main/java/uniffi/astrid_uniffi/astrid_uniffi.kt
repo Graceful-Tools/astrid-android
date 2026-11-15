@@ -3,7 +3,7 @@
 
 @file:Suppress("NAME_SHADOWING")
 
-package uniffi.astrid_android
+package uniffi.astrid_uniffi
 
 // Common helper code.
 //
@@ -68,7 +68,7 @@ open class RustBuffer : Structure() {
     companion object {
         internal fun alloc(size: ULong = 0UL) = uniffiRustCall() { status ->
             // Note: need to convert the size to a `Long` value to make this work with JVM.
-            UniffiLib.ffi_astrid_android_rustbuffer_alloc(size.toLong(), status)
+            UniffiLib.ffi_astrid_uniffi_rustbuffer_alloc(size.toLong(), status)
         }.also {
             if(it.data == null) {
                throw RuntimeException("RustBuffer.alloc() returned null data pointer (size=${size})")
@@ -84,7 +84,7 @@ open class RustBuffer : Structure() {
         }
 
         internal fun free(buf: RustBuffer.ByValue) = uniffiRustCall() { status ->
-            UniffiLib.ffi_astrid_android_rustbuffer_free(buf, status)
+            UniffiLib.ffi_astrid_uniffi_rustbuffer_free(buf, status)
         }
     }
 
@@ -401,7 +401,7 @@ private fun findLibraryName(componentName: String): String {
     if (libOverride != null) {
         return libOverride
     }
-    return "astrid_android"
+    return "astrid_uniffi"
 }
 
 // Define FFI callback types
@@ -734,37 +734,37 @@ internal open class UniffiVTableCallbackInterfaceCredentialStore(
 // We now use JNA's "direct mapping" - unclear if same considerations apply exactly.
 internal object IntegrityCheckingUniffiLib {
     init {
-        Native.register(IntegrityCheckingUniffiLib::class.java, findLibraryName(componentName = "astrid_android"))
+        Native.register(IntegrityCheckingUniffiLib::class.java, findLibraryName(componentName = "astrid_uniffi"))
         uniffiCheckContractApiVersion(this)
         uniffiCheckApiChecksums(this)
     }
 
     internal fun ensureInitialized() = Unit
-    external fun uniffi_astrid_android_checksum_func_core_version(
+    external fun uniffi_astrid_uniffi_checksum_func_core_version(
     ): Int
-    external fun uniffi_astrid_android_checksum_func_platform_tls_ready(
+    external fun uniffi_astrid_uniffi_checksum_func_platform_tls_ready(
     ): Int
-    external fun uniffi_astrid_android_checksum_func_run_rule(
+    external fun uniffi_astrid_uniffi_checksum_func_run_rule(
     ): Int
-    external fun uniffi_astrid_android_checksum_method_changelistener_on_change(
+    external fun uniffi_astrid_uniffi_checksum_method_changelistener_on_change(
     ): Int
-    external fun uniffi_astrid_android_checksum_method_coreclient_run(
+    external fun uniffi_astrid_uniffi_checksum_method_coreclient_run(
     ): Int
-    external fun uniffi_astrid_android_checksum_method_coreclient_run_blocking(
+    external fun uniffi_astrid_uniffi_checksum_method_coreclient_run_blocking(
     ): Int
-    external fun uniffi_astrid_android_checksum_method_coreclient_stop(
+    external fun uniffi_astrid_uniffi_checksum_method_coreclient_stop(
     ): Int
-    external fun uniffi_astrid_android_checksum_method_coreclient_subscribe(
+    external fun uniffi_astrid_uniffi_checksum_method_coreclient_subscribe(
     ): Int
-    external fun uniffi_astrid_android_checksum_method_credentialstore_get(
+    external fun uniffi_astrid_uniffi_checksum_method_credentialstore_get(
     ): Int
-    external fun uniffi_astrid_android_checksum_method_credentialstore_set(
+    external fun uniffi_astrid_uniffi_checksum_method_credentialstore_set(
     ): Int
-    external fun uniffi_astrid_android_checksum_method_credentialstore_delete(
+    external fun uniffi_astrid_uniffi_checksum_method_credentialstore_delete(
     ): Int
-    external fun uniffi_astrid_android_checksum_constructor_coreclient_start(
+    external fun uniffi_astrid_uniffi_checksum_constructor_coreclient_start(
     ): Int
-    external fun ffi_astrid_android_uniffi_contract_version(
+    external fun ffi_astrid_uniffi_uniffi_contract_version(
     ): Int
 
         
@@ -779,156 +779,156 @@ internal object UniffiLib {
     
 
     init {
-        Native.register(UniffiLib::class.java, findLibraryName(componentName = "astrid_android"))
+        Native.register(UniffiLib::class.java, findLibraryName(componentName = "astrid_uniffi"))
         uniffiCallbackInterfaceChangeListener.register(this)
         uniffiCallbackInterfaceCredentialStore.register(this)
         
     }
 
     internal fun ensureInitialized() = Unit
-    external fun uniffi_astrid_android_fn_clone_changelistener(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_clone_changelistener(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Long
-    external fun uniffi_astrid_android_fn_free_changelistener(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_free_changelistener(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Unit
-    external fun uniffi_astrid_android_fn_init_callback_vtable_changelistener(`vtable`: UniffiVTableCallbackInterfaceChangeListener,
+    external fun uniffi_astrid_uniffi_fn_init_callback_vtable_changelistener(`vtable`: UniffiVTableCallbackInterfaceChangeListener,
     ): Unit
-    external fun uniffi_astrid_android_fn_method_changelistener_on_change(`ptr`: Long,`changeJson`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_method_changelistener_on_change(`ptr`: Long,`changeJson`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): Unit
-    external fun uniffi_astrid_android_fn_clone_coreclient(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_clone_coreclient(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Long
-    external fun uniffi_astrid_android_fn_free_coreclient(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_free_coreclient(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Unit
-    external fun uniffi_astrid_android_fn_constructor_coreclient_start(`configJson`: RustBuffer.ByValue,`credentials`: Long,`background`: Byte,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_constructor_coreclient_start(`configJson`: RustBuffer.ByValue,`credentials`: Long,`background`: Byte,uniffi_out_err: UniffiRustCallStatus, 
     ): Long
-    external fun uniffi_astrid_android_fn_method_coreclient_run(`ptr`: Long,`request`: RustBuffer.ByValue,
+    external fun uniffi_astrid_uniffi_fn_method_coreclient_run(`ptr`: Long,`request`: RustBuffer.ByValue,
     ): Long
-    external fun uniffi_astrid_android_fn_method_coreclient_run_blocking(`ptr`: Long,`request`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_method_coreclient_run_blocking(`ptr`: Long,`request`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
-    external fun uniffi_astrid_android_fn_method_coreclient_stop(`ptr`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_method_coreclient_stop(`ptr`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Unit
-    external fun uniffi_astrid_android_fn_method_coreclient_subscribe(`ptr`: Long,`listener`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_method_coreclient_subscribe(`ptr`: Long,`listener`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Unit
-    external fun uniffi_astrid_android_fn_clone_credentialstore(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_clone_credentialstore(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Long
-    external fun uniffi_astrid_android_fn_free_credentialstore(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_free_credentialstore(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Unit
-    external fun uniffi_astrid_android_fn_init_callback_vtable_credentialstore(`vtable`: UniffiVTableCallbackInterfaceCredentialStore,
+    external fun uniffi_astrid_uniffi_fn_init_callback_vtable_credentialstore(`vtable`: UniffiVTableCallbackInterfaceCredentialStore,
     ): Unit
-    external fun uniffi_astrid_android_fn_method_credentialstore_get(`ptr`: Long,`key`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_method_credentialstore_get(`ptr`: Long,`key`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
-    external fun uniffi_astrid_android_fn_method_credentialstore_set(`ptr`: Long,`key`: RustBuffer.ByValue,`value`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_method_credentialstore_set(`ptr`: Long,`key`: RustBuffer.ByValue,`value`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): Byte
-    external fun uniffi_astrid_android_fn_method_credentialstore_delete(`ptr`: Long,`key`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_method_credentialstore_delete(`ptr`: Long,`key`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): Byte
-    external fun uniffi_astrid_android_fn_func_core_version(uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_func_core_version(uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
-    external fun uniffi_astrid_android_fn_func_platform_tls_ready(uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_func_platform_tls_ready(uniffi_out_err: UniffiRustCallStatus, 
     ): Byte
-    external fun uniffi_astrid_android_fn_func_run_rule(`request`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun uniffi_astrid_uniffi_fn_func_run_rule(`request`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
-    external fun ffi_astrid_android_rustbuffer_alloc(`size`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rustbuffer_alloc(`size`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
-    external fun ffi_astrid_android_rustbuffer_from_bytes(`bytes`: ForeignBytes.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rustbuffer_from_bytes(`bytes`: ForeignBytes.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
-    external fun ffi_astrid_android_rustbuffer_free(`buf`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rustbuffer_free(`buf`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
     ): Unit
-    external fun ffi_astrid_android_rustbuffer_reserve(`buf`: RustBuffer.ByValue,`additional`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rustbuffer_reserve(`buf`: RustBuffer.ByValue,`additional`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
-    external fun ffi_astrid_android_rust_future_poll_u8(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_u8(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_u8(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_u8(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_u8(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_u8(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_u8(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_u8(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Int
-    external fun ffi_astrid_android_rust_future_poll_i8(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_i8(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_i8(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_i8(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_i8(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_i8(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_i8(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_i8(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Byte
-    external fun ffi_astrid_android_rust_future_poll_u16(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_u16(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_u16(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_u16(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_u16(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_u16(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_u16(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_u16(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Int
-    external fun ffi_astrid_android_rust_future_poll_i16(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_i16(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_i16(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_i16(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_i16(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_i16(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_i16(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_i16(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Short
-    external fun ffi_astrid_android_rust_future_poll_u32(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_u32(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_u32(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_u32(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_u32(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_u32(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_u32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_u32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Int
-    external fun ffi_astrid_android_rust_future_poll_i32(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_i32(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_i32(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_i32(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_i32(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_i32(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_i32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_i32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Int
-    external fun ffi_astrid_android_rust_future_poll_u64(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_u64(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_u64(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_u64(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_u64(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_u64(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_u64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_u64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Long
-    external fun ffi_astrid_android_rust_future_poll_i64(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_i64(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_i64(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_i64(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_i64(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_i64(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_i64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_i64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Long
-    external fun ffi_astrid_android_rust_future_poll_f32(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_f32(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_f32(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_f32(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_f32(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_f32(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_f32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_f32(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Float
-    external fun ffi_astrid_android_rust_future_poll_f64(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_f64(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_f64(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_f64(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_f64(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_f64(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_f64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_f64(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Double
-    external fun ffi_astrid_android_rust_future_poll_rust_buffer(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_rust_buffer(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_rust_buffer(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_rust_buffer(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_rust_buffer(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_rust_buffer(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_rust_buffer(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_rust_buffer(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): RustBuffer.ByValue
-    external fun ffi_astrid_android_rust_future_poll_void(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
+    external fun ffi_astrid_uniffi_rust_future_poll_void(`handle`: Long,`callback`: UniffiRustFutureContinuationCallback,`callbackData`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_cancel_void(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_cancel_void(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_free_void(`handle`: Long,
+    external fun ffi_astrid_uniffi_rust_future_free_void(`handle`: Long,
     ): Unit
-    external fun ffi_astrid_android_rust_future_complete_void(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
+    external fun ffi_astrid_uniffi_rust_future_complete_void(`handle`: Long,uniffi_out_err: UniffiRustCallStatus, 
     ): Unit
 
         
@@ -938,47 +938,47 @@ private fun uniffiCheckContractApiVersion(lib: IntegrityCheckingUniffiLib) {
     // Get the bindings contract version from our ComponentInterface
     val bindings_contract_version = 30
     // Get the scaffolding contract version by calling the into the dylib
-    val scaffolding_contract_version = lib.ffi_astrid_android_uniffi_contract_version()
+    val scaffolding_contract_version = lib.ffi_astrid_uniffi_uniffi_contract_version()
     if (bindings_contract_version != scaffolding_contract_version) {
         throw RuntimeException("UniFFI contract version mismatch: try cleaning and rebuilding your project")
     }
 }
 @Suppress("UNUSED_PARAMETER")
 private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
-    if ((lib.uniffi_astrid_android_checksum_func_core_version() and 0xFFFF) != 27499) {
+    if ((lib.uniffi_astrid_uniffi_checksum_func_core_version() and 0xFFFF) != 52825) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_astrid_android_checksum_func_platform_tls_ready() and 0xFFFF) != 6006) {
+    if ((lib.uniffi_astrid_uniffi_checksum_func_platform_tls_ready() and 0xFFFF) != 54842) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_astrid_android_checksum_func_run_rule() and 0xFFFF) != 45881) {
+    if ((lib.uniffi_astrid_uniffi_checksum_func_run_rule() and 0xFFFF) != 40909) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_astrid_android_checksum_method_changelistener_on_change() and 0xFFFF) != 1132) {
+    if ((lib.uniffi_astrid_uniffi_checksum_method_changelistener_on_change() and 0xFFFF) != 55532) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_astrid_android_checksum_method_coreclient_run() and 0xFFFF) != 31612) {
+    if ((lib.uniffi_astrid_uniffi_checksum_method_coreclient_run() and 0xFFFF) != 56543) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_astrid_android_checksum_method_coreclient_run_blocking() and 0xFFFF) != 25939) {
+    if ((lib.uniffi_astrid_uniffi_checksum_method_coreclient_run_blocking() and 0xFFFF) != 65011) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_astrid_android_checksum_method_coreclient_stop() and 0xFFFF) != 55710) {
+    if ((lib.uniffi_astrid_uniffi_checksum_method_coreclient_stop() and 0xFFFF) != 19552) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_astrid_android_checksum_method_coreclient_subscribe() and 0xFFFF) != 55972) {
+    if ((lib.uniffi_astrid_uniffi_checksum_method_coreclient_subscribe() and 0xFFFF) != 7516) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_astrid_android_checksum_method_credentialstore_get() and 0xFFFF) != 54320) {
+    if ((lib.uniffi_astrid_uniffi_checksum_method_credentialstore_get() and 0xFFFF) != 21623) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_astrid_android_checksum_method_credentialstore_set() and 0xFFFF) != 53675) {
+    if ((lib.uniffi_astrid_uniffi_checksum_method_credentialstore_set() and 0xFFFF) != 52710) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_astrid_android_checksum_method_credentialstore_delete() and 0xFFFF) != 1387) {
+    if ((lib.uniffi_astrid_uniffi_checksum_method_credentialstore_delete() and 0xFFFF) != 34922) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if ((lib.uniffi_astrid_android_checksum_constructor_coreclient_start() and 0xFFFF) != 1636) {
+    if ((lib.uniffi_astrid_uniffi_checksum_constructor_coreclient_start() and 0xFFFF) != 36189) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
 }
@@ -1390,9 +1390,11 @@ public object FfiConverterString: FfiConverter<String, RustBuffer.ByValue> {
  * reminder coming due. `change_json` is the core's own vocabulary — `{"change":"task","id":…}`,
  * `{"change":"synced","taskIds":[…],"listIds":[…]}` and so on (`Change::to_json`).
  *
+ * A due reminder arrives here too (`{"change":"remindersDue"}`), for a shell that posts its
+ * notification while it runs; one that schedules every reminder ahead (Apple's
+ * UserNotifications) ignores it.
+ *
  * Called on one of the core's threads, never the main one: the app hops to where it draws.
- * A due reminder arrives here too (`{"change":"reminder",…}`), which is how the app learns to
- * post its notification while it is running.
  */
 public interface ChangeListener {
     
@@ -1406,9 +1408,11 @@ public interface ChangeListener {
  * reminder coming due. `change_json` is the core's own vocabulary — `{"change":"task","id":…}`,
  * `{"change":"synced","taskIds":[…],"listIds":[…]}` and so on (`Change::to_json`).
  *
+ * A due reminder arrives here too (`{"change":"remindersDue"}`), for a shell that posts its
+ * notification while it runs; one that schedules every reminder ahead (Apple's
+ * UserNotifications) ignores it.
+ *
  * Called on one of the core's threads, never the main one: the app hops to where it draws.
- * A due reminder arrives here too (`{"change":"reminder",…}`), which is how the app learns to
- * post its notification while it is running.
  */
 open class ChangeListenerImpl: Disposable, AutoCloseable, ChangeListener
 {
@@ -1494,7 +1498,7 @@ open class ChangeListenerImpl: Disposable, AutoCloseable, ChangeListener
                 return;
             }
             uniffiRustCall { status ->
-                UniffiLib.uniffi_astrid_android_fn_free_changelistener(handle, status)
+                UniffiLib.uniffi_astrid_uniffi_fn_free_changelistener(handle, status)
             }
         }
     }
@@ -1507,7 +1511,7 @@ open class ChangeListenerImpl: Disposable, AutoCloseable, ChangeListener
             throw InternalException("uniffiCloneHandle() called on NoHandle object");
         }
         return uniffiRustCall() { status ->
-            UniffiLib.uniffi_astrid_android_fn_clone_changelistener(handle, status)
+            UniffiLib.uniffi_astrid_uniffi_fn_clone_changelistener(handle, status)
         }
     }
 
@@ -1515,7 +1519,7 @@ open class ChangeListenerImpl: Disposable, AutoCloseable, ChangeListener
         = 
     callWithHandle {
     uniffiRustCall() { _status ->
-    UniffiLib.uniffi_astrid_android_fn_method_changelistener_on_change(
+    UniffiLib.uniffi_astrid_uniffi_fn_method_changelistener_on_change(
         it,
         
         FfiConverterString.lower(`changeJson`),_status)
@@ -1576,7 +1580,7 @@ internal object uniffiCallbackInterfaceChangeListener {
     // Registers the foreign callback with the Rust side.
     // This method is generated for each callback interface.
     internal fun register(lib: UniffiLib) {
-        lib.uniffi_astrid_android_fn_init_callback_vtable_changelistener(vtable)
+        lib.uniffi_astrid_uniffi_fn_init_callback_vtable_changelistener(vtable)
     }
 }
 
@@ -1842,7 +1846,7 @@ open class CoreClient: Disposable, AutoCloseable, CoreClientInterface
                 return;
             }
             uniffiRustCall { status ->
-                UniffiLib.uniffi_astrid_android_fn_free_coreclient(handle, status)
+                UniffiLib.uniffi_astrid_uniffi_fn_free_coreclient(handle, status)
             }
         }
     }
@@ -1855,7 +1859,7 @@ open class CoreClient: Disposable, AutoCloseable, CoreClientInterface
             throw InternalException("uniffiCloneHandle() called on NoHandle object");
         }
         return uniffiRustCall() { status ->
-            UniffiLib.uniffi_astrid_android_fn_clone_coreclient(handle, status)
+            UniffiLib.uniffi_astrid_uniffi_fn_clone_coreclient(handle, status)
         }
     }
 
@@ -1870,15 +1874,15 @@ open class CoreClient: Disposable, AutoCloseable, CoreClientInterface
     override suspend fun `run`(`request`: kotlin.String) : kotlin.String {
         return uniffiRustCallAsync(
         callWithHandle { uniffiHandle ->
-            UniffiLib.uniffi_astrid_android_fn_method_coreclient_run(
+            UniffiLib.uniffi_astrid_uniffi_fn_method_coreclient_run(
                 uniffiHandle,
                 
         FfiConverterString.lower(`request`),
             )
         },
-        { future, callback, continuation -> UniffiLib.ffi_astrid_android_rust_future_poll_rust_buffer(future, callback, continuation) },
-        { future, continuation -> UniffiLib.ffi_astrid_android_rust_future_complete_rust_buffer(future, continuation) },
-        { future -> UniffiLib.ffi_astrid_android_rust_future_free_rust_buffer(future) },
+        { future, callback, continuation -> UniffiLib.ffi_astrid_uniffi_rust_future_poll_rust_buffer(future, callback, continuation) },
+        { future, continuation -> UniffiLib.ffi_astrid_uniffi_rust_future_complete_rust_buffer(future, continuation) },
+        { future -> UniffiLib.ffi_astrid_uniffi_rust_future_free_rust_buffer(future) },
         // lift function
         { FfiConverterString.lift(it) },
         // Error FFI converter
@@ -1903,7 +1907,7 @@ open class CoreClient: Disposable, AutoCloseable, CoreClientInterface
             return FfiConverterString.lift(
     callWithHandle {
     uniffiRustCall() { _status ->
-    UniffiLib.uniffi_astrid_android_fn_method_coreclient_run_blocking(
+    UniffiLib.uniffi_astrid_uniffi_fn_method_coreclient_run_blocking(
         it,
         
         FfiConverterString.lower(`request`),_status)
@@ -1920,7 +1924,7 @@ open class CoreClient: Disposable, AutoCloseable, CoreClientInterface
         = 
     callWithHandle {
     uniffiRustCall() { _status ->
-    UniffiLib.uniffi_astrid_android_fn_method_coreclient_stop(
+    UniffiLib.uniffi_astrid_uniffi_fn_method_coreclient_stop(
         it,
         _status)
 }
@@ -1935,7 +1939,7 @@ open class CoreClient: Disposable, AutoCloseable, CoreClientInterface
         = 
     callWithHandle {
     uniffiRustCall() { _status ->
-    UniffiLib.uniffi_astrid_android_fn_method_coreclient_subscribe(
+    UniffiLib.uniffi_astrid_uniffi_fn_method_coreclient_subscribe(
         it,
         
         FfiConverterTypeChangeListener.lower(`listener`),_status)
@@ -1956,14 +1960,15 @@ open class CoreClient: Disposable, AutoCloseable, CoreClientInterface
      * Open the cache at `config_json`'s `cachePath` (`":memory:"` for a test) and wire everything
      * to it.
      *
-     * `background` starts the loops that keep the app current without being asked — the sync
-     * pass, the Outbox delivery, the live stream. A test, and a UI-test build that must never
+     * `background` starts the loops that keep the app current without being asked —
+     * [`LoopSet::ALL`]: the sync pass, the Outbox delivery, the live stream, due reminders and the
+     * Google mirror, the same five on every platform. A test, and a UI-test build that must never
      * reach the network, passes `false`.
      */
     @Throws(StartException::class) fun `start`(`configJson`: kotlin.String, `credentials`: CredentialStore, `background`: kotlin.Boolean): CoreClient {
             return FfiConverterTypeCoreClient.lift(
     uniffiRustCallWithError(StartException) { _status ->
-    UniffiLib.uniffi_astrid_android_fn_constructor_coreclient_start(
+    UniffiLib.uniffi_astrid_uniffi_fn_constructor_coreclient_start(
     
         
         FfiConverterString.lower(`configJson`),
@@ -2100,9 +2105,10 @@ public object FfiConverterTypeCoreClient: FfiConverter<CoreClient, Long> {
 
 
 /**
- * Credentials at rest, implemented by the app over the Android Keystore.
+ * Credentials at rest, implemented by the app over its platform's secure store — the Keychain,
+ * the Android Keystore.
  *
- * Synchronous because a sealed file read is a local call that answers in microseconds, and making
+ * Synchronous because those are: a read is a local call that answers in microseconds, and making
  * it async would buy nothing but a hop.
  */
 public interface CredentialStore {
@@ -2123,9 +2129,10 @@ public interface CredentialStore {
 }
 
 /**
- * Credentials at rest, implemented by the app over the Android Keystore.
+ * Credentials at rest, implemented by the app over its platform's secure store — the Keychain,
+ * the Android Keystore.
  *
- * Synchronous because a sealed file read is a local call that answers in microseconds, and making
+ * Synchronous because those are: a read is a local call that answers in microseconds, and making
  * it async would buy nothing but a hop.
  */
 open class CredentialStoreImpl: Disposable, AutoCloseable, CredentialStore
@@ -2212,7 +2219,7 @@ open class CredentialStoreImpl: Disposable, AutoCloseable, CredentialStore
                 return;
             }
             uniffiRustCall { status ->
-                UniffiLib.uniffi_astrid_android_fn_free_credentialstore(handle, status)
+                UniffiLib.uniffi_astrid_uniffi_fn_free_credentialstore(handle, status)
             }
         }
     }
@@ -2225,7 +2232,7 @@ open class CredentialStoreImpl: Disposable, AutoCloseable, CredentialStore
             throw InternalException("uniffiCloneHandle() called on NoHandle object");
         }
         return uniffiRustCall() { status ->
-            UniffiLib.uniffi_astrid_android_fn_clone_credentialstore(handle, status)
+            UniffiLib.uniffi_astrid_uniffi_fn_clone_credentialstore(handle, status)
         }
     }
 
@@ -2233,7 +2240,7 @@ open class CredentialStoreImpl: Disposable, AutoCloseable, CredentialStore
             return FfiConverterOptionalString.lift(
     callWithHandle {
     uniffiRustCall() { _status ->
-    UniffiLib.uniffi_astrid_android_fn_method_credentialstore_get(
+    UniffiLib.uniffi_astrid_uniffi_fn_method_credentialstore_get(
         it,
         
         FfiConverterString.lower(`key`),_status)
@@ -2250,7 +2257,7 @@ open class CredentialStoreImpl: Disposable, AutoCloseable, CredentialStore
             return FfiConverterBoolean.lift(
     callWithHandle {
     uniffiRustCall() { _status ->
-    UniffiLib.uniffi_astrid_android_fn_method_credentialstore_set(
+    UniffiLib.uniffi_astrid_uniffi_fn_method_credentialstore_set(
         it,
         
         FfiConverterString.lower(`key`),
@@ -2268,7 +2275,7 @@ open class CredentialStoreImpl: Disposable, AutoCloseable, CredentialStore
             return FfiConverterBoolean.lift(
     callWithHandle {
     uniffiRustCall() { _status ->
-    UniffiLib.uniffi_astrid_android_fn_method_credentialstore_delete(
+    UniffiLib.uniffi_astrid_uniffi_fn_method_credentialstore_delete(
         it,
         
         FfiConverterString.lower(`key`),_status)
@@ -2357,7 +2364,7 @@ internal object uniffiCallbackInterfaceCredentialStore {
     // Registers the foreign callback with the Rust side.
     // This method is generated for each callback interface.
     internal fun register(lib: UniffiLib) {
-        lib.uniffi_astrid_android_fn_init_callback_vtable_credentialstore(vtable)
+        lib.uniffi_astrid_uniffi_fn_init_callback_vtable_credentialstore(vtable)
     }
 }
 
@@ -2505,11 +2512,12 @@ public object FfiConverterOptionalString: FfiConverterRustBuffer<kotlin.String?>
 
         /**
          * The version of astrid-core these bindings were built from, for an about box and a crash
-         * report.
+         * report: `0.1.0 (core a8591a93c022)` — the crate version and [`astrid_core::BUILD_REV`], the
+         * same string astrid-windows reports.
          */ fun `coreVersion`(): kotlin.String {
             return FfiConverterString.lift(
     uniffiRustCall() { _status ->
-    UniffiLib.uniffi_astrid_android_fn_func_core_version(
+    UniffiLib.uniffi_astrid_uniffi_fn_func_core_version(
     
         _status)
 }
@@ -2518,14 +2526,14 @@ public object FfiConverterOptionalString: FfiConverterRustBuffer<kotlin.String?>
     
 
         /**
-         * Whether this process can verify a TLS certificate yet (AATD-100): always on the host build the
-         * JVM tests load, and on Android once the app has called [`Java_com_gracefultools_astrid_core_PlatformTls_initialize`].
-         * Until then every request fails offline with the core's `TlsNotInitialized`, rather than reaching a
-         * verifier that would panic.
+         * Whether this process can verify a TLS certificate yet: always on Apple, and on Android once the
+         * app has called its TLS init, `Java_com_gracefultools_astrid_core_PlatformTls_initialize`
+         * (AWTD-1673). Until then every request fails with the core's offline failure naming the missing
+         * init, rather than reaching a verifier that would panic.
          */ fun `platformTlsReady`(): kotlin.Boolean {
             return FfiConverterBoolean.lift(
     uniffiRustCall() { _status ->
-    UniffiLib.uniffi_astrid_android_fn_func_platform_tls_ready(
+    UniffiLib.uniffi_astrid_uniffi_fn_func_platform_tls_ready(
     
         _status)
 }
@@ -2539,7 +2547,7 @@ public object FfiConverterOptionalString: FfiConverterRustBuffer<kotlin.String?>
          */ fun `runRule`(`request`: kotlin.String): kotlin.String {
             return FfiConverterString.lift(
     uniffiRustCall() { _status ->
-    UniffiLib.uniffi_astrid_android_fn_func_run_rule(
+    UniffiLib.uniffi_astrid_uniffi_fn_func_run_rule(
     
         
         FfiConverterString.lower(`request`),_status)

@@ -45,7 +45,7 @@ in Rust (astrid-core) so it could follow the same rule; the Apple apps now run o
 Android is the third client on it. One port of the shell, no second copy of the rules.
 
 ```
-app/Astrid (Compose)  ──  corebridge (Kotlin facade + UniFFI bindings)  ──  core/astrid-android (Rust, UniFFI)
+app/Astrid (Compose)  ──  corebridge (Kotlin facade + UniFFI bindings)  ──  astrid-uniffi (core's crate, Rust)
                                                                                  │
                                          astrid_core::rules::run_json  ──────────┤  pure rules, synchronous
                                          astrid_core::app::App::run_json ────────┘  cache, Outbox, sync, network
@@ -65,7 +65,7 @@ app/Astrid (Compose)  ──  corebridge (Kotlin facade + UniFFI bindings)  ─�
   committed.
 - **What the app says to the core is held against the core's wire schema** (AATD-94). The pinned
   core's `generated/schema/*.json` is copied to `app/src/test/resources/core-schema/`
-  (`core/astrid-android/tests/wire_schema.rs` fails when the copy is stale; `UPDATE_SCHEMA=1` rewrites
+  (`core/contracts/tests/wire_schema.rs` fails when the copy is stale; `UPDATE_SCHEMA=1` rewrites
   it). `WireSchemaContractTest` then checks that every `command("kind", "field" to …)` names a kind
   and fields the core declares, and that each response DTO paired with a core type decodes only
   names that type has. Write requests as literal pairs, `*listOfNotNull("f" to …)` or a same-file
@@ -88,7 +88,7 @@ app/Astrid (Compose)  ──  corebridge (Kotlin facade + UniFFI bindings)  ─�
 
 | Area | Path |
 |---|---|
-| Native crate | `core/astrid-android/` |
+| Native crate | astrid-core's `crates/astrid-uniffi` (shared with the Apple apps, AATD-99), pinned in `core/Cargo.toml`; `core/contracts/` selects it and holds the contract tests |
 | Bindings + facade | `corebridge/src/main/java/` (`uniffi/` generated; `com/gracefultools/astrid/core/` hand-written) |
 | App entry, DI | `app/.../AstridApplication.kt`, `AppGraph.kt` — the core starts on its own thread; `MainActivity` holds its first frame until it has (AATD-93) |
 | Startup profile | `baselineprofile/` (generator + cold-start benchmark) → committed `app/src/release/generated/baselineProfiles/` |

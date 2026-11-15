@@ -15,7 +15,7 @@ import java.io.File
  * `serde` ignores an unknown request field, so a field the core renames used to fail silently:
  * the app kept sending the old name, the core read it as absent, and nothing was written. The
  * schema is derived from the core's own types (astrid-core `generated/schema/`), and
- * `core/astrid-android/tests/wire_schema.rs` keeps the copy in `src/test/resources/core-schema`
+ * `core/contracts/tests/wire_schema.rs` keeps the copy in `src/test/resources/core-schema`
  * equal to the pinned crate's, so this gate judges the app against the core it actually links.
  *
  * Two questions, each answered per type:

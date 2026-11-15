@@ -57,7 +57,7 @@ android {
     namespace = "com.gracefultools.astrid"
     compileSdk = 37
     // The NDK scripts/build-core.sh builds the core with (~/dev-tools/android-env.sh, CI's android-setup).
-    // Without it AGP cannot strip libastrid_android.so and packages it as-is, symbol table and all
+    // Without it AGP cannot strip libastrid_uniffi.so and packages it as-is, symbol table and all
     // (~3.5 MB per ABI), and cannot extract the symbols Play needs to read a native crash (AATD-91).
     ndkVersion = "27.2.12479018"
 
@@ -76,7 +76,7 @@ android {
 
         // Exactly the ABIs scripts/build-core.sh builds the core for. JNA alone ships seven, and an
         // unfiltered package advertised them all, so Play would install it on a 32-bit phone where
-        // libastrid_android.so does not exist and the app dies at startup (AATD-88). Adding an ABI
+        // libastrid_uniffi.so does not exist and the app dies at startup (AATD-88). Adding an ABI
         // means adding it to build-core.sh too; scripts/check-native-abis.sh holds the two together.
         ndk { abiFilters += listOf("arm64-v8a", "x86_64") }
 

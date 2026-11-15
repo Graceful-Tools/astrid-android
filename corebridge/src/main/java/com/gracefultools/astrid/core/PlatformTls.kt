@@ -13,12 +13,12 @@ import android.content.Context
  * Call [initialize] once, before the first request. Until then every request fails offline with the
  * core's `TlsNotInitialized`. A second call is harmless.
  *
- * A raw JNI function in the same library JNA loads (`core/astrid-android/src/lib.rs`), because it
+ * A raw JNI function in the same library JNA loads (core's `crates/astrid-uniffi/src/lib.rs`), because it
  * needs the caller's `JNIEnv`, which UniFFI over JNA can't pass. The verifier's own Kotlin half is
  * the `org.rustls:rustls-platform-verifier` artifact (corebridge/build.gradle.kts).
  */
 object PlatformTls {
-    init { System.loadLibrary("astrid_android") }
+    init { System.loadLibrary("astrid_uniffi") }
 
     /**
      * Hand the verifier [context], which it keeps for the life of the process, so pass the
@@ -27,5 +27,5 @@ object PlatformTls {
     @JvmStatic external fun initialize(context: Context)
 
     /** Whether the core can verify a certificate yet. */
-    val isReady: Boolean get() = uniffi.astrid_android.platformTlsReady()
+    val isReady: Boolean get() = uniffi.astrid_uniffi.platformTlsReady()
 }

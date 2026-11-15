@@ -18,7 +18,7 @@ Without the four variables a release build is signed with the debug key: install
 Measured 2026-10-18 on the API 35 emulator: R8-minified release starts cold in ~0.7 s (debug ~2.9 s);
 the universal APK is 37 MB (two ABIs), and Play's per-ABI splits roughly halve what a phone downloads.
 
-**The core library** (AATD-91, measured 2026-11-12): the bundle ships arm64 `libastrid_android.so` at
+**The core library** (AATD-91, measured 2026-11-12): the bundle ships arm64 `libastrid_android.so` (since AATD-99 `libastrid_uniffi.so`) at
 11.37 MB and x86_64 at 12.31 MB, down from 17.19 MB and ~16.9 MB. It is built at `opt-level = "s"`,
 and the packaging strips its symbol table into the bundle's
 `BUNDLE-METADATA/com.android.tools.build.debugsymbols/`, which Play reads for native crash reports

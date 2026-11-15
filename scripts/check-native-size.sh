@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 # The core library stays within its size budget (AATD-91).
 #
-#   scripts/check-native-size.sh <libastrid_android.so> <abi>
+#   scripts/check-native-size.sh <libastrid_uniffi.so> <abi>
 #
 # Measures what ships: a copy stripped with the NDK's llvm-strip --strip-unneeded, which is what the
 # app's packaging does to it (app/build.gradle.kts sets ndkVersion so it can). The symbols it drops
 # go to Play in the bundle's native-debug-symbols instead. Budgets, in bytes, are
 # core/native-size-budget.txt: lower one when the core shrinks; raising one is a decision.
 set -euo pipefail
-[[ $# -eq 2 ]] || { echo "usage: $0 <libastrid_android.so> <abi>" >&2; exit 64; }
+[[ $# -eq 2 ]] || { echo "usage: $0 <libastrid_uniffi.so> <abi>" >&2; exit 64; }
 lib="$1"; abi="$2"
 root="$(cd "$(dirname "$0")/.." && pwd)"
 budget_file="${NATIVE_SIZE_BUDGET_FILE:-$root/core/native-size-budget.txt}"
@@ -27,7 +27,7 @@ work="$(mktemp -d)"; trap 'rm -rf "$work"' EXIT
 size="$(wc -c < "$work/lib.so" | tr -d ' ')"
 mb() { awk -v b="$1" 'BEGIN { printf "%.2f MB", b / 1000000 }'; }
 if (( size > budget )); then
-  echo "AATD-91: $abi libastrid_android.so is $(mb "$size") stripped, over its budget of $(mb "$budget") by $((size - budget)) bytes" >&2
+  echo "AATD-91: $abi libastrid_uniffi.so is $(mb "$size") stripped, over its budget of $(mb "$budget") by $((size - budget)) bytes" >&2
   exit 1
 fi
-echo "$abi libastrid_android.so: $(mb "$size") stripped (budget $(mb "$budget"))"
+echo "$abi libastrid_uniffi.so: $(mb "$size") stripped (budget $(mb "$budget"))"

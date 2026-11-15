@@ -19,7 +19,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Test
-import uniffi.astrid_android.CredentialStore
+import uniffi.astrid_uniffi.CredentialStore
 
 /**
  * AATD-100: the core checks certificates with the DEVICE's trust store, through

@@ -4,7 +4,7 @@
 #   scripts/check-native-abis.sh <app.apk|app.aab> ...
 #
 # JNA's AAR brings libjnidispatch.so for seven ABIs; scripts/build-core.sh builds
-# libastrid_android.so for two. Without app ndk.abiFilters the package advertised all seven, so Play
+# libastrid_uniffi.so for two. Without app ndk.abiFilters the package advertised all seven, so Play
 # would install it on a 32-bit phone where the core fails to load at startup.
 set -euo pipefail
 [[ $# -gt 0 ]] || { echo "usage: $0 <app.apk|app.aab> ..." >&2; exit 64; }
@@ -16,8 +16,8 @@ for pkg in "$@"; do
   abis="$(sed -E 's#^(.*/)?lib/([^/]+)/[^/]+$#\2#' <<<"$entries" | sort -u | grep -v '^$' || true)"
   [[ -n "$abis" ]] || { echo "AATD-88: $pkg ships no native libraries" >&2; status=1; continue; }
   for abi in $abis; do
-    grep -qE "(^|/)lib/$abi/libastrid_android\.so$" <<<"$entries" \
-      || { echo "AATD-88: $pkg ships lib/$abi/ without libastrid_android.so — set ndk.abiFilters to the ABIs scripts/build-core.sh builds" >&2; status=1; }
+    grep -qE "(^|/)lib/$abi/libastrid_uniffi\.so$" <<<"$entries" \
+      || { echo "AATD-88: $pkg ships lib/$abi/ without libastrid_uniffi.so — set ndk.abiFilters to the ABIs scripts/build-core.sh builds" >&2; status=1; }
   done
   [[ $status -ne 0 ]] || echo "native ABIs in $(basename "$pkg"): $(echo $abis)"
 done
