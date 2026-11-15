@@ -1,6 +1,7 @@
 package com.gracefultools.astrid
 
 import android.app.Application
+import com.gracefultools.astrid.core.PlatformTls
 import com.gracefultools.astrid.platform.BackgroundSync
 import com.gracefultools.astrid.platform.NetworkWatch
 import com.gracefultools.astrid.platform.ReminderAlarm
@@ -34,6 +35,9 @@ open class AstridApplication : Application() {
 
     private fun start() {
         val graph = try {
+            // Before any core starts: until the certificate verifier has the app's Context, every
+            // request fails offline (AATD-100). Here rather than in makeGraph, so a test graph gets it too.
+            PlatformTls.initialize(applicationContext)
             makeGraph().also {
                 NetworkWatch.start(this, it.core, it.scope)
                 if (schedulesBackgroundWork) BackgroundSync.schedule(this)

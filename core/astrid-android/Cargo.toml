@@ -23,6 +23,11 @@ async-trait = "0.1"
 serde_json = "1"
 thiserror = "2"
 
+# The JNI door for Android's TLS init (AATD-100): the one call UniFFI cannot carry. The same `jni`
+# astrid-core and rustls-platform-verifier use, so there is one `Env` type.
+[target.'cfg(target_os = "android")'.dependencies]
+jni = { version = "0.22", default-features = false }
+
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 

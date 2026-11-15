@@ -23,12 +23,18 @@ android {
 
 kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }
 
+@Suppress("UNCHECKED_CAST")
+val rustlsPlatformVerifierVersion = rootProject.extra["rustlsPlatformVerifierVersion"] as Provider<String>
+
 dependencies {
     api(libs.kotlinx.coroutines.android)
     // The generated bindings mark the API-34 cleaner @RequiresApi.
     implementation(libs.androidx.annotation)
     api(libs.kotlinx.serialization.json)
     implementation("${libs.jna.aar.get().module}:${libs.versions.jna.get()}@aar")
+    // The certificate verifier's Kotlin half, which the core calls through JNI (AATD-100), at exactly
+    // the version core/Cargo.lock has (the root build script).
+    implementation(rustlsPlatformVerifierVersion.map { "org.rustls:rustls-platform-verifier:$it" })
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.jna.jvm)
