@@ -224,7 +224,7 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                 )
             }) else ({
                 val title = selected?.let { if (isMyTasks) stringResource(R.string.navigation_my_tasks) else it.name } ?: ""
-                if (mode == com.gracefultools.astrid.ui.tasks.ViewMode.BOARD) LaunchedEffect(selected!!.id) { boardVm.open(selected.id) }
+                if (mode == com.gracefultools.astrid.ui.tasks.ViewMode.BOARD) LaunchedEffect(selected!!.id) { boardVm.open(selected.id, isVirtual = selected.isVirtual == true) }
                 (list.statusPicker ?: boardState.statusPicker)?.let { picker ->
                     val fromBoard = boardState.statusPicker != null
                     StatusPicker(

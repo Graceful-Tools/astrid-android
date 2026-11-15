@@ -1,6 +1,6 @@
 package com.gracefultools.astrid.ui.board
 
-import com.gracefultools.astrid.core.movesTasks
+import com.gracefultools.astrid.core.touchesList
 import com.gracefultools.astrid.core.ChangeKind
 import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.update
 
 data class BoardState(
     val listId: String? = null,
+    /** A filter, not a stored list: it is in no task's `listIds`, so every task change re-reads it. */
+    val isVirtual: Boolean = false,
     val board: Board? = null,
     val error: String? = null,
     val statusPicker: com.gracefultools.astrid.ui.common.LeadingOutcome.PickStatus? = null,
@@ -31,12 +33,19 @@ class BoardViewModel(private val core: Core, dispatcher: CoroutineDispatcher = D
     val state: StateFlow<BoardState> = _state.asStateFlow()
 
     init {
-        work { core.changes.collect { if ((it.movesTasks || it.kind == ChangeKind.LIST) && _state.value.listId != null) reload() } }
+        // A task change that names only other lists skips the read (AATD-113).
+        work {
+            core.changes.collect { change ->
+                val open = _state.value
+                val listId = open.listId ?: return@collect
+                if (change.kind == ChangeKind.LIST || change.touchesList(listId, open.isVirtual)) reload()
+            }
+        }
     }
 
-    fun open(listId: String) {
+    fun open(listId: String, isVirtual: Boolean = false) {
         if (_state.value.listId == listId) return
-        _state.value = BoardState(listId = listId)
+        _state.value = BoardState(listId = listId, isVirtual = isVirtual)
         reload()
     }
 

@@ -343,12 +343,16 @@ mod tests {
         .expect("starts");
         let heard = Arc::new(Heard::default());
         core.subscribe(heard.clone());
+        // AATD-113: a task change names its lists, which is what lets a list screen skip it.
         core.app
             .realtime()
-            .publish(astrid_core::realtime::Change::Task("t1".into()));
+            .publish(astrid_core::realtime::Change::Task {
+                id: "t1".into(),
+                list_ids: vec!["l1".into(), "l2".into()],
+            });
         assert_eq!(
             heard.0.lock().unwrap().as_slice(),
-            [r#"{"change":"task","id":"t1"}"#.to_string()]
+            [r#"{"change":"task","id":"t1","listIds":["l1","l2"]}"#.to_string()]
         );
     }
 

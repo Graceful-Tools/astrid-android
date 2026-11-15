@@ -24,6 +24,21 @@ class BoardViewModelTest {
     }
 
     @Test
+    fun `AATD-113 a board skips a task change in another list and re-reads one in its own`() = runTest {
+        val core = FakeCore().apply { answer("board", board) }
+        val vm = BoardViewModel(core, UnconfinedTestDispatcher())
+        vm.open("l1")
+        fun reads() = core.kinds().count { it == "board" }
+        val before = reads()
+        core.emit("task", """{"change":"task","id":"t9","listIds":["l2"]}""")
+        assertEquals(before, reads())
+        core.emit("task", """{"change":"task","id":"t9","listIds":["l1"]}""")
+        assertEquals(before + 1, reads())
+        core.emit("task", """{"change":"task","id":"t9","listIds":[]}""")
+        assertEquals(before + 2, reads())
+    }
+
+    @Test
     fun `AATD-12 Move to sends moveTaskToColumn for this board's list`() = runTest {
         val core = FakeCore().apply { answer("board", board) }
         val vm = BoardViewModel(core, UnconfinedTestDispatcher())

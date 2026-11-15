@@ -39,6 +39,19 @@ val CoreChange.movesTasks: Boolean
 val CoreChange.movesLists: Boolean
     get() = movesTasks || kind == ChangeKind.LIST
 
+/**
+ * The rows of list [listId] may have moved: a list screen or a board re-reads only then (AATD-113).
+ * A `task` change names the lists the task is in and any it just left (astrid-core b83f179), so one
+ * in a list nobody is drawing costs nothing. Two guards, both from the core's contract:
+ * - an **empty** (or absent) `listIds` means "could not say", which is refresh — never "no list";
+ * - a [virtual] list (My Tasks, Today) is assembled across the account and is in no task's
+ *   `listIds`, so membership alone would freeze the view the app opens on.
+ */
+fun CoreChange.touchesList(listId: String, virtual: Boolean): Boolean = when (kind) {
+    ChangeKind.TASK -> virtual || ids("listIds").let { it.isEmpty() || listId in it }
+    else -> movesTasks
+}
+
 /** This task, or its comments, may have moved. */
 fun CoreChange.concernsTask(id: String): Boolean = when (kind) {
     ChangeKind.SYNCED -> true

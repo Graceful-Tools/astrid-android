@@ -1,6 +1,6 @@
 package com.gracefultools.astrid.ui.tasks
 
-import com.gracefultools.astrid.core.movesTasks
+import com.gracefultools.astrid.core.touchesList
 import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
 import com.gracefultools.astrid.core.CoreJson
@@ -68,8 +68,14 @@ class TaskListViewModel(
     private var generation = 0
 
     init {
-        // A colleague's edit, a sync pass, a write landing: re-read what is on screen.
-        work { core.changes.collect { if (it.movesTasks && _state.value.listId != null) reload() } }
+        // A colleague's edit, a sync pass, a write landing: re-read what is on screen — unless the
+        // change names only lists that are not this one (AATD-113).
+        work {
+            core.changes.collect { change ->
+                val open = _state.value
+                if (open.listId != null && change.touchesList(open.listId, open.isVirtual)) reload()
+            }
+        }
     }
 
     /**

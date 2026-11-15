@@ -104,6 +104,49 @@ class TaskListViewModelTest {
         assertEquals(before + 1, core.kinds().count { it == "rowsForList" })
     }
 
+    private fun FakeCore.reads() = kinds().count { it == "rowsForList" }
+
+    @Test
+    fun `AATD-113 a task change in another list reads nothing`() = runTest {
+        val core = FakeCore().apply { answer("rowsForList", rows) }
+        val vm = vm(core)
+        vm.open("l1")
+        val before = core.reads()
+        core.emit("task", """{"change":"task","id":"t9","listIds":["l2","l3"]}""")
+        assertEquals(before, core.reads())
+    }
+
+    @Test
+    fun `AATD-113 a task change naming the open list re-reads it`() = runTest {
+        val core = FakeCore().apply { answer("rowsForList", rows) }
+        val vm = vm(core)
+        vm.open("l1")
+        val before = core.reads()
+        core.emit("task", """{"change":"task","id":"t9","listIds":["l2","l1"]}""")
+        assertEquals(before + 1, core.reads())
+    }
+
+    @Test
+    fun `AATD-113 a task change naming no list re-reads, because empty means could not say`() = runTest {
+        val core = FakeCore().apply { answer("rowsForList", rows) }
+        val vm = vm(core)
+        vm.open("l1")
+        val before = core.reads()
+        core.emit("task", """{"change":"task","id":"t9","listIds":[]}""")
+        core.emit("task", """{"change":"task","id":"t9"}""")
+        assertEquals(before + 2, core.reads())
+    }
+
+    @Test
+    fun `AATD-113 a virtual list is in no task's listIds, so every task change re-reads it`() = runTest {
+        val core = FakeCore().apply { answer("rowsForList", rows) }
+        val vm = vm(core)
+        vm.open("my-tasks", isVirtual = true)
+        val before = core.reads()
+        core.emit("task", """{"change":"task","id":"t9","listIds":["l2"]}""")
+        assertEquals(before + 1, core.reads())
+    }
+
     @Test
     fun `AATD-8 a task added in My Tasks is assigned as the core's quick-add default says, so it stays in My Tasks`() = runTest {
         val core = FakeCore().apply {
