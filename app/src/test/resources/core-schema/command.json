@@ -1447,6 +1447,13 @@
             "null"
           ]
         },
+        "agentClaimRequired": {
+          "description": "Whether an agent must take a claim lease before working a task on this list (astrid-web\nAWTD-1688). Carried so a cached list round-trips; the claim itself is the server's.",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
         "aiAgentConfig": {
           "anyOf": [
             {
@@ -2097,13 +2104,6 @@
             "null"
           ]
         },
-        "displayMode": {
-          "default": null,
-          "type": [
-            "string",
-            "null"
-          ]
-        },
         "idsOnly": {
           "default": false,
           "description": "Answer with the ids in order (`ids`) instead of projected rows: for a shell that draws its\nown rows from tasks it already holds, the projection is work nobody reads.",
@@ -2263,7 +2263,7 @@
       "type": "object"
     },
     {
-      "description": "The sidebar, whole: My Tasks, the favourites and the rest of the places, each in order and\ncarrying the badge `listBadges` would give it (task e22621e2).\n\nOne command rather than three calls and a filter, because \"which of these is somewhere to\ngo\" is a product question and every shell had been answering it in its own language —\nAndroid's answer (`SidebarViewModel.kt`) hid board columns and labels but offered GitHub\nmilestones and iterations as lists you could file a task into. The rule is\n`astrid_rules::rows::sidebar::sections`.",
+      "description": "The sidebar, whole: My Tasks, the favourites, the Projects section (with the `project_mode`\nflag, over the cached projects — AWTD-1681) and the rest of the places, each in order and\ncarrying the badge `listBadges` would give it (task e22621e2).\n\nOne command rather than three calls and a filter, because \"which of these is somewhere to\ngo\" is a product question and every shell had been answering it in its own language —\nAndroid's answer (`SidebarViewModel.kt`) hid board columns and labels but offered GitHub\nmilestones and iterations as lists you could file a task into. The rule is\n`astrid_rules::rows::sidebar::sections`.",
       "properties": {
         "currentUserId": {
           "default": null,
@@ -2326,13 +2326,6 @@
     {
       "description": "Everything one task's detail screen needs: the task, its comments, its subtasks, its list\nchips, and the order to lay the fields out in.\n\nOne command rather than five, because the field order is a cross-platform product decision\nand a shell that assembled the screen itself would be the fifth place to get it wrong.",
       "properties": {
-        "displayMode": {
-          "default": null,
-          "type": [
-            "string",
-            "null"
-          ]
-        },
         "kind": {
           "const": "taskDetail",
           "type": "string"
@@ -2803,6 +2796,14 @@
     {
       "description": "Add a card at the bottom of a column (task 95c7a68f).\n\nOne request, not a create followed by a move: the column decides the card's lists, its role\nand — for Done — that it is finished, and [`crate::board::resolve_create`] is what says so.\nA card created bare and moved afterwards is the Mac's AITD-328.",
       "properties": {
+        "assigneeId": {
+          "default": null,
+          "description": "What its assignee picker chose — a user id, or `unassigned`. Absent, as above.\n\nDeliberately no `quickAdd` or `locale` beside these (Jon, 2026-11-14): the column\nalready decides the list and completion, so a date or a `#list` tag read out of the\nsentence would be fighting it.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "columnId": {
           "type": "string"
         },
@@ -2831,6 +2832,15 @@
         "listId": {
           "description": "The list the board was opened from: the card's own list, and where the project's\ncolumns come from.",
           "type": "string"
+        },
+        "priority": {
+          "default": null,
+          "description": "What the column field's priority picker chose, if anything (task `71ad20a0`). Absent\nleaves the list's own default to fill it, which is what this command always did.",
+          "format": "int64",
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "title": {
           "type": "string"
@@ -4050,11 +4060,63 @@
           ],
           "default": null,
           "description": "`PRIVATE`, `SHARED` or `PUBLIC`; the server's default when absent."
+        },
+        "projectId": {
+          "default": null,
+          "description": "The project the list is born in (astrid-ios AITD-680), sent on the create so it is\none request, never create-then-move. Refused locally unless the person is owner,\nadmin or member of the project (D68).",
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "required": [
         "kind",
         "name"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "Move a list into a project, or out of one with `projectId: null` (astrid-ios AITD-680).\n\nChecked against D68 first — owner or admin of the list, and of every project it touches —\nand refused locally with `code: \"LIST_PROJECT_MOVE_FORBIDDEN\"`. Otherwise applied at once\n(the boards and rows re-derive from the list's `projectId`) and sent through the Outbox as\n`PUT /api/v1/lists/{id} { projectId }`; a refusal there puts the list back where it was.",
+      "properties": {
+        "kind": {
+          "const": "setListProject",
+          "type": "string"
+        },
+        "listId": {
+          "type": "string"
+        },
+        "projectId": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "listId"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "What a list's \"Project\" control offers — `{ canLeave, destinations, creatableIn }`, the\nrules door's `listProjectMoves` over the signed-in person and the cached projects\n(astrid-ios AITD-680, D68). Without `listId`, only where a new list may be created.",
+      "properties": {
+        "kind": {
+          "const": "listProjectMoves",
+          "type": "string"
+        },
+        "listId": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind"
       ],
       "type": "object"
     },
@@ -4262,7 +4324,7 @@
       "type": "object"
     },
     {
-      "description": "A featured public list's rows (AATD-46): its tasks fetched from the server (not cached),\nwith this account's own unsent ones for it, projected as `rowsForList` projects — other\npeople's tasks read-only, their control copying. `list` is the public list as the shell\nholds it, when this account does not.",
+      "description": "A featured public list's rows (AATD-46): its tasks fetched from the server (not cached),\nwith this account's own unsent ones for it, projected as `rowsForList` projects — other\npeople's tasks read-only, their control copying. `list` is the public list as the shell\nholds it, when this account does not. The answer carries those tasks whole as well, as\n`tasks` (AITD-634), for a shell that draws task models.",
       "properties": {
         "kind": {
           "const": "featuredRows",
@@ -5878,7 +5940,7 @@
       "type": "object"
     },
     {
-      "description": "Change the account's task defaults or its task-detail layout (task c0f3db19). The fields\nare the server's — `emailToTaskEnabled`, `defaultTaskDueOffset`, `defaultDueTime`,\n`taskDisplayMode`, `subtaskDisplay`, `smartTaskCreationEnabled` — merged into what is\nstored, and refused here when the server would refuse them. Answers with the account screen.",
+      "description": "Change the account's task defaults (task c0f3db19). The fields\nare the server's — `emailToTaskEnabled`, `defaultTaskDueOffset`, `defaultDueTime`,\n`subtaskDisplay`, `smartTaskCreationEnabled` — merged into what is\nstored, and refused here when the server would refuse them. Answers with the account screen.",
       "properties": {
         "changes": true,
         "kind": {
@@ -6881,6 +6943,44 @@
       "type": "object"
     },
     {
+      "description": "Edit a board's name, description and colour (ADEV-69; web `PATCH /api/v1/projects/{id}`,\nthe owner or a project admin). Only the fields named are sent and changed; an empty\n`description` clears it. The cache takes the edit first and is put back if the server\nrefuses (403 `PROJECT_RENAME_FORBIDDEN`, 400 `PROJECT_COLOR_INVALID` /\n`PROJECT_NAME_REQUIRED`). Online only. Answers the board as cached.",
+      "properties": {
+        "color": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "description": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "const": "updateProject",
+          "type": "string"
+        },
+        "name": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "projectId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "projectId"
+      ],
+      "type": "object"
+    },
+    {
       "description": "Turn a list into a board in one request. Online only.",
       "properties": {
         "kind": {
@@ -6911,6 +7011,100 @@
       "required": [
         "kind",
         "projectId"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "Which lists this person's multi-list board for a project draws as rows, and which could be\nadded (AWTD-1676; web AWTD-1660). Read from `GET /api/v1/projects/{id}/board-rows`; offline,\nthe last answer, with `fromCache: true`. Answers `{ projectId, savedListIds, rowListIds,\ncandidateListIds, canAddRow, fromCache }` — `savedListIds` is the server's (`null` for\nnothing saved), `rowListIds` the rows to draw, in order ([`crate::board_rows::resolve`]).",
+      "properties": {
+        "kind": {
+          "const": "projectBoardRows",
+          "type": "string"
+        },
+        "projectId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "projectId"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "Save a project board's rows (AWTD-1676): exactly one of the whole ordered `listIds`, a list\nto add at the end (`addListId`) or one to remove (`removeListId`) — the core does the\narithmetic against the rows it last drew. Online only, like web: it is a view preference\nthe server checks against what this person can see, not task data. Answers as\n[`Command::ProjectBoardRows`].",
+      "properties": {
+        "addListId": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "const": "saveProjectBoardRows",
+          "type": "string"
+        },
+        "listIds": {
+          "default": null,
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "projectId": {
+          "type": "string"
+        },
+        "removeListId": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "projectId"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "One row of a project's multi-list board: `listId`'s cards under the PROJECT's columns, in\n[`Command::Board`]'s shape (AWTD-1676, D67). The row list's manual order and Done window\narrange it; a role the project has no column for is Inbox.",
+      "properties": {
+        "idsOnly": {
+          "default": false,
+          "description": "Each column's card ids rather than rows.",
+          "type": "boolean"
+        },
+        "kind": {
+          "const": "projectBoardRow",
+          "type": "string"
+        },
+        "limit": {
+          "default": null,
+          "description": "How many cards to carry per column. The count comes back whole.",
+          "format": "uint",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "listId": {
+          "type": "string"
+        },
+        "projectId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "projectId",
+        "listId"
       ],
       "type": "object"
     },

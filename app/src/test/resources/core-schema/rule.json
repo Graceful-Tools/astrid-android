@@ -1,5 +1,92 @@
 {
   "$defs": {
+    "Action": {
+      "description": "The action classes a policy decides.",
+      "oneOf": [
+        {
+          "const": "merge",
+          "description": "Merge a pull request.",
+          "type": "string"
+        },
+        {
+          "const": "deploy",
+          "description": "Deploy to production.",
+          "type": "string"
+        },
+        {
+          "const": "migrate",
+          "description": "Apply a database migration; its [`MigrationKind`] decides which answer applies.",
+          "type": "string"
+        },
+        {
+          "const": "release",
+          "description": "Submit a release (an App Store or Microsoft Store submission, a signed build).",
+          "type": "string"
+        },
+        {
+          "const": "spend",
+          "description": "Spend money or act as a person outside the repositories.",
+          "type": "string"
+        }
+      ]
+    },
+    "AskInput": {
+      "description": "Q1: everything [`ask`] reads.",
+      "properties": {
+        "answererId": {
+          "type": "string"
+        },
+        "askerId": {
+          "type": "string"
+        },
+        "askerIsAgent": {
+          "default": false,
+          "type": "boolean"
+        },
+        "listId": {
+          "type": "string"
+        },
+        "now": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "openQuestionId": {
+          "default": null,
+          "description": "The id of the question already open on the task, if any.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "questionCommentId": {
+          "type": "string"
+        },
+        "questionId": {
+          "type": "string"
+        },
+        "resumeStatusRole": {
+          "type": "string"
+        },
+        "taskCompleted": {
+          "default": false,
+          "type": "boolean"
+        },
+        "taskId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "questionId",
+        "taskId",
+        "listId",
+        "askerId",
+        "answererId",
+        "questionCommentId",
+        "resumeStatusRole",
+        "now"
+      ],
+      "type": "object"
+    },
     "Attachment": {
       "description": "A legacy file attachment. Superseded by [`SecureFile`]; still returned on older tasks.",
       "properties": {
@@ -40,6 +127,75 @@
       "required": [
         "id"
       ],
+      "type": "object"
+    },
+    "Autonomy": {
+      "description": "What an agent may do about one action class. Ordered from most to least autonomous, so the\nstricter of two is the greater.",
+      "oneOf": [
+        {
+          "const": "allowed",
+          "description": "Do it.",
+          "type": "string"
+        },
+        {
+          "const": "ask",
+          "description": "Ask the escalation target first, and do it once a person approves.",
+          "type": "string"
+        },
+        {
+          "const": "never",
+          "description": "Never; a person does it.",
+          "type": "string"
+        }
+      ]
+    },
+    "AutonomyOverride": {
+      "description": "[`AutonomyPolicy`], each field optional.",
+      "properties": {
+        "deploy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Autonomy"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "merge": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Autonomy"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "migrate": {
+          "$ref": "#/$defs/MigrationOverride"
+        },
+        "release": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Autonomy"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "spend": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Autonomy"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
       "type": "object"
     },
     "Blocker": {
@@ -318,6 +474,57 @@
         "month"
       ],
       "type": "string"
+    },
+    "Escalation": {
+      "description": "Who receives a question or an approval request (O5).",
+      "oneOf": [
+        {
+          "description": "The owner of the list the task is on.",
+          "properties": {
+            "to": {
+              "const": "listOwner",
+              "type": "string"
+            }
+          },
+          "required": [
+            "to"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "Whoever created the task; the list owner when that is unknown.",
+          "properties": {
+            "to": {
+              "const": "taskCreator",
+              "type": "string"
+            }
+          },
+          "required": [
+            "to"
+          ],
+          "type": "object"
+        },
+        {
+          "description": "These people (by user id), in order; the first is handed the task.",
+          "properties": {
+            "to": {
+              "const": "people",
+              "type": "string"
+            },
+            "userIds": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "to",
+            "userIds"
+          ],
+          "type": "object"
+        }
+      ]
     },
     "Identifiers": {
       "description": "What a reader can see, for [`Rule::RenderMarkdown`]: [`crate::identifier::LinkContext`] in the\nweb's names (`lib/task-identifier-links.ts`, `IdentifierLinkContext`).",
@@ -681,6 +888,47 @@
       },
       "type": "object"
     },
+    "MigrationKind": {
+      "description": "What a migration does to existing data.",
+      "oneOf": [
+        {
+          "const": "additive",
+          "description": "A new table, a nullable column, an index: nothing existing changes.",
+          "type": "string"
+        },
+        {
+          "const": "destructive",
+          "description": "`DROP`, `RENAME`, `SET NOT NULL`, `UPDATE`, `DELETE`, `TRUNCATE`: applied before the new\ncode is live, and a redeploy cannot undo it.",
+          "type": "string"
+        }
+      ]
+    },
+    "MigrationOverride": {
+      "description": "[`MigrationAutonomy`], each field optional.",
+      "properties": {
+        "additive": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Autonomy"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "destructive": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Autonomy"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "type": "object"
+    },
     "MonthWeekday": {
       "properties": {
         "weekOfMonth": {
@@ -740,6 +988,28 @@
           "type": "object"
         }
       ]
+    },
+    "PolicyOverride": {
+      "description": "What a project or a list stores: any subset of a [`Policy`]. An absent key inherits.\n\nFor the two routing fields `null` is a value — \"any agent\" — so it overrides an inherited one;\nonly an absent key inherits.",
+      "properties": {
+        "autonomy": {
+          "$ref": "#/$defs/AutonomyOverride"
+        },
+        "escalation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Escalation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "routing": {
+          "$ref": "#/$defs/RoutingOverride"
+        }
+      },
+      "type": "object"
     },
     "Preferences": {
       "description": "What My Tasks is filtered and sorted by, for this account, on every device.\n\nHeld by the account rather than the machine, which is the whole reason this exists as its own\nendpoint: filters set on a laptop are the filters on the desktop.",
@@ -801,6 +1071,97 @@
       ],
       "type": "string"
     },
+    "Project": {
+      "properties": {
+        "color": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "createdAt": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "customStates": {
+          "description": "The board's own columns, and renames of the three defaults.\n\nFree-form JSON on the wire, and read rather than typed: an entry a newer web writes must not\nstop a board drawing. [`crate::board::parse_custom_states`] is the only place that reads it."
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "type": "string"
+        },
+        "imageUrl": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "key": {
+          "description": "The prefix this project's task identifiers carry — `AWTD` in `AWTD-1007`.\n\nUnique across astrid.cc, and `None` for a project made before identifiers existed. The\nserver is the only minter; this is read so a client knows which keys the reader can see,\nwhich is what decides whether `AWTD-1007` in a comment becomes a link\n([`crate::identifier::find_links`], task 5f3453e2).",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "lists": {
+          "items": {
+            "$ref": "#/$defs/TaskList"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "members": {
+          "items": {
+            "$ref": "#/$defs/ProjectMember"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "name": {
+          "default": "",
+          "type": "string"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/User"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ownerId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
     "ProjectAccess": {
       "description": "The part of a list's project that decides access to the list — what astrid-web's\n`PROJECT_ACCESS_INCLUDE` loads.",
       "properties": {
@@ -858,6 +1219,58 @@
       ],
       "type": "object"
     },
+    "ProjectMember": {
+      "properties": {
+        "createdAt": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "id": {
+          "description": "Omitted by the embedded member arrays, like [`super::list::ListMember`].",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "projectId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "role": {
+          "default": "",
+          "type": "string"
+        },
+        "updatedAt": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "user": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/User"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "userId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "userId"
+      ],
+      "type": "object"
+    },
     "ProjectMembership": {
       "properties": {
         "role": {
@@ -876,6 +1289,78 @@
         "userId"
       ],
       "type": "object"
+    },
+    "Question": {
+      "description": "The recorded question: what a server stores on the task.",
+      "properties": {
+        "answerCommentId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "answeredAt": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "answererId": {
+          "type": "string"
+        },
+        "askedAt": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "askerId": {
+          "type": "string"
+        },
+        "askerIsAgent": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "string"
+        },
+        "listId": {
+          "type": "string"
+        },
+        "questionCommentId": {
+          "description": "The comment that states the question.",
+          "type": "string"
+        },
+        "resumeStatusRole": {
+          "description": "What the asker needs to resume: `ready` or `doing`.",
+          "type": "string"
+        },
+        "state": {
+          "$ref": "#/$defs/QuestionState"
+        },
+        "taskId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "taskId",
+        "listId",
+        "askerId",
+        "askerIsAgent",
+        "answererId",
+        "questionCommentId",
+        "resumeStatusRole",
+        "askedAt",
+        "state"
+      ],
+      "type": "object"
+    },
+    "QuestionState": {
+      "description": "Whether a question is still waiting.",
+      "enum": [
+        "open",
+        "answered"
+      ],
+      "type": "string"
     },
     "RecentlyCompletedWindow": {
       "description": "How far back \"Recently completed\" reaches for one list.\n\nMirrors `astrid-web/lib/recently-completed-window.ts`, discriminated by `kind`. The same\nsetting drives the list view's default completion filter and the board's Done column, so the\ntwo views can never disagree. `None` on the list means the legacy 24-hour default.",
@@ -953,6 +1438,34 @@
         }
       ]
     },
+    "Rect": {
+      "description": "A rectangle in the window's coordinates, y increasing downward.",
+      "properties": {
+        "height": {
+          "format": "double",
+          "type": "number"
+        },
+        "left": {
+          "format": "double",
+          "type": "number"
+        },
+        "top": {
+          "format": "double",
+          "type": "number"
+        },
+        "width": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "left",
+        "top",
+        "width",
+        "height"
+      ],
+      "type": "object"
+    },
     "ReminderType": {
       "enum": [
         "push",
@@ -988,6 +1501,48 @@
         "custom"
       ],
       "type": "string"
+    },
+    "Reply": {
+      "description": "What a person's reply is, for [`answer`].",
+      "properties": {
+        "at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "authorId": {
+          "type": "string"
+        },
+        "commentId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "commentId",
+        "authorId",
+        "at"
+      ],
+      "type": "object"
+    },
+    "RoutingOverride": {
+      "description": "[`Routing`], each field absent (inherit), `null` (any) or set.",
+      "properties": {
+        "agents": {
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        },
+        "assignTo": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
     },
     "SecureFile": {
       "description": "A file held by the server's secure-file store. The wire names differ from the field names, and\nthose aliases are the whole reason this type is hand-mapped.",
@@ -1410,6 +1965,13 @@
           },
           "type": [
             "array",
+            "null"
+          ]
+        },
+        "agentClaimRequired": {
+          "description": "Whether an agent must take a claim lease before working a task on this list (astrid-web\nAWTD-1688). Carried so a cached list round-trips; the claim itself is the server's.",
+          "type": [
+            "boolean",
             "null"
           ]
         },
@@ -2170,7 +2732,7 @@
       "type": "object"
     },
     {
-      "description": "A description, comment or chat message as blocks to draw — see [`crate::markdown`].\nWith `identifiers` (the reader's project keys), task ids in the prose link as well —\n[`crate::markdown::render_with_identifiers`]; without it nothing links, as on the web.\n`origin` is the reader's server, which a relative link (`/lists/…`, an id's `/t/…`)\nresolves against (AWTD-1630) — see [`UNNAMED_ORIGIN`] for a request that leaves it out.",
+      "description": "A description, comment or chat message as blocks to draw — see [`crate::markdown`].\nWith `identifiers` (the reader's project keys), task ids in the prose link as well —\n[`crate::markdown::render_with_identifiers`]; without it nothing links, as on the web.\n`origin` is the reader's server, which a relative link (`/lists/…`, an id's `/t/…`)\nresolves against (AWTD-1630) — see [`UNNAMED_ORIGIN`] for a request that leaves it out.\n\nGone without the `markdown` feature, which is how the browser build is made: the web has\nits own renderer, and this rule is for the clients that do not (task 4d05306d). A request\nfor it then fails to decode, which is the same answer the door gives any rule it has no\nvariant for — a build that cannot do it says so rather than answering emptily.",
       "properties": {
         "identifiers": {
           "anyOf": [
@@ -2336,6 +2898,169 @@
       "type": "object"
     },
     {
+      "description": "Which lists a project's multi-list board draws as rows, in order, and which lists could be\nadded — see [`crate::board_rows`] (AWTD-1676). `saved_list_ids` is what\n`GET /api/v1/projects/{id}/board-rows` answered: absent or `null` for nothing saved (the\nproject's own lists), `[]` for a board emptied on purpose.",
+      "properties": {
+        "kind": {
+          "const": "boardRows",
+          "type": "string"
+        },
+        "lists": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TaskList"
+          },
+          "type": "array"
+        },
+        "projectId": {
+          "type": "string"
+        },
+        "savedListIds": {
+          "default": null,
+          "items": {
+            "type": "string"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "projectId"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "What a list's \"Project\" control offers: whether it may leave its project, which projects\nit may move into, and which projects a new list may be made in — see\n[`crate::list_project_moves`] (astrid-ios AITD-680, D68). `projects` is every project the\nperson can see; `list` is absent when only asking where a list may be created.",
+      "properties": {
+        "kind": {
+          "const": "listProjectMoves",
+          "type": "string"
+        },
+        "list": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TaskList"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "projects": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Project"
+          },
+          "type": "array"
+        },
+        "userId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "userId"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "The sidebar, whole — My Tasks, Favorites, the Projects section and Lists, in order, each\nentry badged — see [`crate::rows::sidebar::sections`] (AWTD-1681, D70). The App door's\n`sidebar` answers the same over the cache; this one is for a shell that holds its own\nlists, as web does. `projects` is absent or `null` without Project Mode, and otherwise every\nproject the reader can see. `badges` is the number per list id, as `listBadges` answers.",
+      "properties": {
+        "badges": {
+          "additionalProperties": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "default": {},
+          "type": "object"
+        },
+        "kind": {
+          "const": "sidebar",
+          "type": "string"
+        },
+        "lists": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TaskList"
+          },
+          "type": "array"
+        },
+        "myTasks": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TaskList"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "projects": {
+          "default": null,
+          "items": {
+            "$ref": "#/$defs/Project"
+          },
+          "type": [
+            "array",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "One row of the multi-list board: `row_list_id`'s cards under the project's columns, in\n[`Rule::Board`]'s shape — see [`crate::board_rows::row_columns`] (AWTD-1676, D67).\n`custom_states` is the PROJECT's; the row list's manual order and Done window arrange it.",
+      "properties": {
+        "customStates": {
+          "default": null
+        },
+        "kind": {
+          "const": "boardRow",
+          "type": "string"
+        },
+        "lists": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TaskList"
+          },
+          "type": "array"
+        },
+        "now": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "rowListId": {
+          "type": "string"
+        },
+        "tasks": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Task"
+          },
+          "type": "array"
+        },
+        "utcOffsetMinutes": {
+          "default": 0,
+          "description": "The person's offset from UTC now, in minutes: where their day starts for Done's window.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "rowListId",
+        "now"
+      ],
+      "type": "object"
+    },
+    {
       "description": "What dropping `task` on the column `column` (an id from [`Rule::Board`]) writes — see\n[`crate::board::resolve_move`]. A drop on Done answers `completed: true`; a shell completes\nthrough [`Rule::Completion`] so a repeating task rolls forward.",
       "properties": {
         "column": {
@@ -2386,6 +3111,14 @@
         "now": {
           "format": "date-time",
           "type": "string"
+        },
+        "returnAssigneeId": {
+          "default": null,
+          "description": "R8: the holder a handoff remembered for this task. A write that wakes it answers\n`assignee: \"return\"` with this id, unless somebody is assigned (AWTD-1686).",
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "task": {
           "$ref": "#/$defs/Task"
@@ -2445,6 +3178,14 @@
           "format": "date-time",
           "type": "string"
         },
+        "returnAssigneeId": {
+          "default": null,
+          "description": "R8: the holder a handoff remembered; waking answers `assignee: \"return\"` with it.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "task": {
           "$ref": "#/$defs/Task"
         }
@@ -2470,6 +3211,293 @@
       "required": [
         "kind",
         "assigneeId"
+      ],
+      "type": "object"
+    },
+    {
+      "$ref": "#/$defs/AskInput",
+      "description": "Q1 of [`crate::questions`]: record a question to a person and hand the task to them\n(AWTD-1687). Answers `{ question, handBack, notify }`; refused with a `QUESTION_*` code.",
+      "properties": {
+        "kind": {
+          "const": "questionAsk",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "Q2: close `question` with the answerer's `reply` and return the task to the asker.\nAnswers `{ question, write, notify, resume? }`; refused with a `QUESTION_*` code.",
+      "properties": {
+        "kind": {
+          "const": "questionAnswer",
+          "type": "string"
+        },
+        "question": {
+          "$ref": "#/$defs/Question"
+        },
+        "reply": {
+          "$ref": "#/$defs/Reply"
+        }
+      },
+      "required": [
+        "kind",
+        "question",
+        "reply"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "Q4: the open questions `person_id` must answer, oldest first, across every list.",
+      "properties": {
+        "kind": {
+          "const": "questionsWaitingOn",
+          "type": "string"
+        },
+        "personId": {
+          "type": "string"
+        },
+        "questions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Question"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind",
+        "personId"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "Q5: the mailbox a comment's `AGENT-HANDBACK:` line names, or `null`.",
+      "properties": {
+        "comment": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "questionMarker",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "comment"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "O1 of [`crate::orchestration`]: the effective policy for a list — the default, then the\nproject's stored override, then the list's (AWTD-1685). Either may be absent or `null`.\nGone without the `orchestration` feature (the browser build), like `renderMarkdown`.",
+      "properties": {
+        "kind": {
+          "const": "orchestrationPolicy",
+          "type": "string"
+        },
+        "list": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PolicyOverride"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "project": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PolicyOverride"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "O3: may `agent` (a mailbox) take an unassigned Ready task on this list —\n[`crate::orchestration::route`]. Answers `{ take, reason }`.",
+      "properties": {
+        "agent": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "orchestrationRoute",
+          "type": "string"
+        },
+        "list": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PolicyOverride"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "project": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PolicyOverride"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "kind",
+        "agent"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "O4: may `agent` do `action` on its own — [`crate::orchestration::may`]. Answers\n`{ decision: \"allowed\" | \"ask\" | \"never\", mustAsk, reason }`. `migration` is read only for\n`action: \"migrate\"`, and a migrate without it is answered as destructive.",
+      "properties": {
+        "action": {
+          "$ref": "#/$defs/Action"
+        },
+        "agent": {
+          "type": "string"
+        },
+        "kind": {
+          "const": "orchestrationMay",
+          "type": "string"
+        },
+        "list": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PolicyOverride"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "migration": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MigrationKind"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "project": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PolicyOverride"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "kind",
+        "agent",
+        "action"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "O5: who receives a question or approval request, and the hand-back write —\n[`crate::orchestration::escalate`]. Answers `{ notify, handBack }`.",
+      "properties": {
+        "kind": {
+          "const": "orchestrationEscalate",
+          "type": "string"
+        },
+        "list": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PolicyOverride"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "listOwnerId": {
+          "type": "string"
+        },
+        "project": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PolicyOverride"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "taskCreatorId": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "listOwnerId"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "R8: what handing `source` off to another list writes — [`crate::waiting::handoff`]: the\nhalf (Ready, the source as its origin), the source's write (Waiting, unassigned), and the\nholder to remember. Refused with `{kind: \"refused\", code: \"HANDOFF_SOURCE_DONE\"}` for a\nfinished source (AWTD-1686).",
+      "properties": {
+        "blockers": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Blocker"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "const": "waitingHandoff",
+          "type": "string"
+        },
+        "now": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "returnAssigneeId": {
+          "default": null,
+          "description": "The holder an earlier handoff remembered for `source`, if any.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "source": {
+          "$ref": "#/$defs/Task"
+        }
+      },
+      "required": [
+        "kind",
+        "source",
+        "now"
       ],
       "type": "object"
     },
@@ -2961,14 +3989,6 @@
             "null"
           ]
         },
-        "displayMode": {
-          "default": null,
-          "description": "`list` or `project`; anything else reads as `list`.",
-          "type": [
-            "string",
-            "null"
-          ]
-        },
         "idsOnly": {
           "default": false,
           "description": "Ids and counts only, no rows - what a caller that already holds the tasks wants.",
@@ -3210,6 +4230,166 @@
         "locale",
         "form",
         "count"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "Where a task callout opens from its row, and where its arrow points -\n[`crate::rows::callout::place`] (task `011080d4`).\n\nA multi-column screen -- a board, a list beside a detail pane, a tablet in landscape --\nhas to pick a side and aim an arrow before it can draw one. Both are arithmetic, and every\nsuch client repeats them. All coordinates are logical pixels in the window's space, y\nincreasing downward; the caller has already divided by its scale factor.\n\nThe callout's SIZE is the caller's: how big a detail pane wants to be is a design decision\nper platform, and a rule that returned one would be choosing the layout rather than\nplacing it.",
+      "properties": {
+        "anchor": {
+          "$ref": "#/$defs/Rect",
+          "description": "The row the callout belongs to."
+        },
+        "height": {
+          "format": "double",
+          "type": "number"
+        },
+        "kind": {
+          "const": "calloutPlacement",
+          "type": "string"
+        },
+        "viewport": {
+          "$ref": "#/$defs/Rect",
+          "description": "What the callout has to fit inside - the window, or the pane it is confined to."
+        },
+        "width": {
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "kind",
+        "anchor",
+        "viewport",
+        "width",
+        "height"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "What a task's detail draws: its field order, and whether the board-state and blockers rows\nappear - [`crate::rows::detail`] (AWTD2-216; iOS's `TaskDetailFieldOrder`,\n`TaskDetailProjectStateRow.isVisible`, tasks c8a1ff51, AITD-327/332/555).\n\nAsked on its own because the Apple detail views do not read the App door's `taskDetail`.",
+      "properties": {
+        "hasBlockers": {
+          "default": false,
+          "type": "boolean"
+        },
+        "isInProject": {
+          "default": false,
+          "type": "boolean"
+        },
+        "isReadOnly": {
+          "default": false,
+          "type": "boolean"
+        },
+        "kind": {
+          "const": "detailLayout",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "What the leading control's picker offers, and whose task this is -\n[`crate::rows::LeadingControl::picker_shows_project_state`] and\n[`crate::rows::LeadingControl::is_someone_elses_task`] (AWTD2-216; tasks AITD-375, 42013da7).",
+      "properties": {
+        "assigneeId": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "currentUserId": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "const": "leadingPicker",
+          "type": "string"
+        },
+        "surface": {
+          "default": null,
+          "description": "`listRow`, `boardCard` or `detail`; anything else reads as `listRow`.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "The lists a row draws as chips - [`crate::rows::list_chips`] (AWTD2-216; iOS's\n`chipListsForTaskRow`). `hidden_list_ids` are the lists the surrounding view already shows.",
+      "properties": {
+        "hiddenListIds": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "kind": {
+          "const": "listChips",
+          "type": "string"
+        },
+        "listIds": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "lists": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TaskList"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "type": "object"
+    },
+    {
+      "description": "Whole days from the reader's today to `date` - [`crate::rows::day_offset`] (AWTD2-216; iOS's\n`DueDateLabel.dayOffset`). An all-day date is compared as a calendar date, a timed one as\nan instant in the reader's zone.",
+      "properties": {
+        "date": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "isAllDay": {
+          "default": false,
+          "type": "boolean"
+        },
+        "kind": {
+          "const": "dayOffset",
+          "type": "string"
+        },
+        "now": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "utcOffsetMinutes": {
+          "default": 0,
+          "description": "The person's offset from UTC now, in minutes.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "date",
+        "now"
       ],
       "type": "object"
     },

@@ -115,4 +115,21 @@ class BoardViewModelTest {
         assertEquals(JsonPrimitive(true), sent["keepAssignee"])
     }
 
+    @Test
+    fun `Done cards decode the core's completedOn day and keep the core's newest-first order`() = runTest {
+        val core = FakeCore().apply {
+            answer("board", """{"columns":[
+                {"id":"todo","name":"To do","kind":"status","total":1,"cards":[{"id":"t1","title":"Draft"}]},
+                {"id":"done","name":"Done","kind":"done","total":2,"cards":[
+                    {"id":"t3","title":"Newest","completed":true,"completedOn":"2026-11-19"},
+                    {"id":"t2","title":"Older","completed":true,"completedOn":"2025-11-19"}]}]}""")
+        }
+        val vm = BoardViewModel(core, UnconfinedTestDispatcher())
+        vm.open("l1")
+        val columns = vm.state.value.board!!.columns
+        assertEquals(null, columns[0].cards[0].completedOn)
+        assertEquals(listOf("t3", "t2"), columns[1].cards.map { it.id })
+        assertEquals(listOf("2026-11-19", "2025-11-19"), columns[1].cards.map { it.completedOn })
+    }
+
 }

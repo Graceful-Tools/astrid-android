@@ -85,6 +85,8 @@ fun TaskRowView(
     compact: Boolean = false,
     /** A board card's host draws the card; the row draws only its content. */
     embedded: Boolean = false,
+    /** Drawn directly under the title (a Done card's completed-date pill). */
+    underTitle: (@Composable () -> Unit)? = null,
 ) {
     val colors = AstridTheme.colors
     val shape = RoundedCornerShape(AstridTokens.Layout.Comfortable.rowRadius)
@@ -129,6 +131,7 @@ fun TaskRowView(
                     )
                     TitleChips(row)
                 }
+                underTitle?.invoke()
                 Metadata(row)
             }
         }

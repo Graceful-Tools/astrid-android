@@ -187,7 +187,11 @@ fun BoardContent(
             Box(
                 Modifier.zIndex(1f).offset { IntOffset(topLeft.x.roundToInt(), topLeft.y.roundToInt()) }
                     .width(284.dp).shadow(8.dp, RoundedCornerShape(Radius.medium)),
-            ) { TaskRowView(lifted.card, onLeading = {}, onOpen = {}) }
+            ) {
+                val fromDone = columns.firstOrNull { it.id == lifted.from }?.kind == "done"
+                val completedLabel = if (fromDone) completedOnLabel(lifted.card.completedOn) else null
+                TaskRowView(lifted.card, onLeading = {}, onOpen = {}, underTitle = completedLabel?.let { label -> { CompletedPill(label) } })
+            }
         }
         state.error?.let { message ->
             com.gracefultools.astrid.ui.common.AppErrorBanner(message, onDismissError, Modifier.align(Alignment.BottomCenter).padding(bottom = Spacing.s16))
@@ -272,7 +276,11 @@ private fun ColumnView(
                             customActions = others.map { target -> CustomAccessibilityAction("$moveLabel ${target.name}") { onMove(card.id, target.id); true } }
                         },
                 ) {
-                    TaskRowView(card, onLeading = { onComplete(card) }, onOpen = { onOpenTask(card.id) }, modifier = Modifier.fillMaxWidth(), isSelected = card.id == selectedTaskId)
+                    val completedLabel = if (column.kind == "done") completedOnLabel(card.completedOn) else null
+                    TaskRowView(
+                        card, onLeading = { onComplete(card) }, onOpen = { onOpenTask(card.id) }, modifier = Modifier.fillMaxWidth(), isSelected = card.id == selectedTaskId,
+                        underTitle = completedLabel?.let { label -> { CompletedPill(label) } },
+                    )
                     DropdownMenu(menuFor == card.id, onDismissRequest = { onMenu(null) }) {
                         others.forEach { target ->
                             DropdownMenuItem(text = { Text("$moveLabel ${target.name}") }, onClick = { onMenu(null); onMove(card.id, target.id) })
@@ -285,6 +293,39 @@ private fun ColumnView(
         }
         if (column.kind != "done") ColumnQuickAdd(column.id, onAddCard)
     }
+}
+
+/** The Done column's completed-date pill, in the reader's locale (see [completedPillLabel]). */
+@Composable
+private fun completedOnLabel(completedOn: String?): String? {
+    val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
+    return completedPillLabel(completedOn, java.time.LocalDate.now(), locale)
+}
+
+/**
+ * A Done card's completed day under its title, as on every platform: a small tonal capsule,
+ * secondary text — the same treatment as the column's count badge.
+ */
+@Composable
+private fun CompletedPill(label: String) {
+    val colors = AstridTheme.colors
+    Text(
+        label, style = com.gracefultools.astrid.ui.theme.TextStyles.caption, color = colors.textSecondary, maxLines = 1,
+        modifier = Modifier.testTag("completedPill").clip(androidx.compose.foundation.shape.CircleShape)
+            .background(if (colors.isDark) colors.bgTertiary else colors.neutral.copy(alpha = 0.1f))
+            .padding(horizontal = Spacing.s8, vertical = Spacing.s2),
+    )
+}
+
+/**
+ * The core's `completedOn` day (`YYYY-MM-DD`) as a pill label: the locale's short month and day
+ * ("Nov 19"), with the year only when it is not this year ("Nov 19, 2025"). Null without a day.
+ */
+internal fun completedPillLabel(completedOn: String?, today: java.time.LocalDate, locale: java.util.Locale): String? {
+    val day = completedOn?.let { runCatching { java.time.LocalDate.parse(it) }.getOrNull() } ?: return null
+    val skeleton = if (day.year == today.year) "MMMd" else "yMMMd"
+    val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, skeleton)
+    return day.format(java.time.format.DateTimeFormatter.ofPattern(pattern, locale))
 }
 
 /** iOS's insertion line: 3 accent where the card would land. */
