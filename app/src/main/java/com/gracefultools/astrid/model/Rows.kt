@@ -42,6 +42,8 @@ data class TaskRow(
     val isCanceled: Boolean = false,
     val syncMark: String? = null,
     val remote: RemoteChip? = null,
+    /** The reader's local day the task was completed, `YYYY-MM-DD` (core `completedOn`); null while open. */
+    val completedOn: String? = null,
 )
 
 @Serializable
