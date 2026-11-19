@@ -265,7 +265,6 @@
     <string name="settings_reminders_test_message">Una notifica di test apparirà tra 5 secondi</string>
     <string name="settings_appearance_theme">Tema</string>
     <string name="settings_appearance_task_details">Dettagli compito</string>
-    <string name="settings_appearance_task_details_footer">Scegli come vengono disposti i dettagli dell\'attività. Elenco assegna a priorità e assegnatario righe proprie. Progetto è compatto e la casella apre un selettore invece di completare l\'attività.</string>
     <string name="core_smart_layout_list">Lista</string>
     <string name="core_smart_layout_project">Progetto</string>
     <string name="settings_appearance_email_to_task">Email-a-Compito</string>

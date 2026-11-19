@@ -265,7 +265,6 @@
     <string name="settings_reminders_test_message">5秒後にテスト通知が表示されます</string>
     <string name="settings_appearance_theme">テーマ</string>
     <string name="settings_appearance_task_details">タスクの詳細</string>
-    <string name="settings_appearance_task_details_footer">タスク詳細のレイアウトを選びます。リストでは優先度と担当者がそれぞれの行に表示されます。プロジェクトはコンパクトで、チェックボックスはタスクを完了せずに選択メニューを開きます。</string>
     <string name="core_smart_layout_list">リスト</string>
     <string name="core_smart_layout_project">プロジェクト</string>
     <string name="settings_appearance_email_to_task">メールからタスク作成</string>

@@ -158,4 +158,5 @@
     <string name="settings_custom_agents_change_photo">Profielfoto wijzigen</string>
     <string name="settings_custom_agents_photo_updated">Profielfoto bijgewerkt</string>
     <string name="settings_custom_agents_photo_failed">Profielfoto kon niet worden bijgewerkt</string>
+    <string name="settings_appearance_task_details_footer">Kies hoe taakdetails worden weergegeven. Lijst geeft prioriteit en toegewezene een eigen rij. Project is compact en het vakje opent een keuzemenu in plaats van de taak te voltooien.</string>
 </resources>

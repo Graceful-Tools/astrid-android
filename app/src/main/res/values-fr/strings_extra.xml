@@ -158,4 +158,5 @@
     <string name="settings_custom_agents_change_photo">Changer la photo de profil</string>
     <string name="settings_custom_agents_photo_updated">Photo de profil mise à jour</string>
     <string name="settings_custom_agents_photo_failed">Impossible de mettre à jour la photo de profil</string>
+    <string name="settings_appearance_task_details_footer">Choisissez la présentation des détails de la tâche. Liste donne à la priorité et au responsable leurs propres lignes. Projet est compact, et la case ouvre un sélecteur au lieu de terminer la tâche.</string>
 </resources>

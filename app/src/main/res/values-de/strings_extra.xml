@@ -158,4 +158,5 @@
     <string name="settings_custom_agents_change_photo">Profilbild ändern</string>
     <string name="settings_custom_agents_photo_updated">Profilbild aktualisiert</string>
     <string name="settings_custom_agents_photo_failed">Profilbild konnte nicht aktualisiert werden</string>
+    <string name="settings_appearance_task_details_footer">Wähle das Layout der Aufgabendetails. Liste gibt Priorität und zugewiesener Person eigene Zeilen. Projekt ist kompakt, und das Kästchen öffnet eine Auswahl, statt die Aufgabe abzuschließen.</string>
 </resources>
