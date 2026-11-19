@@ -63,6 +63,8 @@
     <string name="reminders_due_now">Напоминание</string>
     <string name="reminders_complete">Завершить</string>
     <string name="reminders_snooze_hour">Отложить на 1 час</string>
+    <string name="board_card_completed_pill">✓ %1$s</string>
+    <string name="board_card_completed_on">Выполнено %1$s</string>
     <string name="navigation_add_list">Добавить список</string>
     <string name="lists_new_name">Название списка</string>
     <string name="lists_create">Создать</string>

@@ -63,6 +63,8 @@
     <string name="reminders_due_now">Lembrete</string>
     <string name="reminders_complete">Concluir</string>
     <string name="reminders_snooze_hour">Adiar 1 hora</string>
+    <string name="board_card_completed_pill">✓ em %1$s</string>
+    <string name="board_card_completed_on">Concluída em %1$s</string>
     <string name="navigation_add_list">Adicionar Lista</string>
     <string name="lists_new_name">Nome da Lista</string>
     <string name="lists_create">Criar</string>

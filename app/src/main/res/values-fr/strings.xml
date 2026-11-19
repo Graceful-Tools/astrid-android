@@ -63,6 +63,8 @@
     <string name="reminders_due_now">Rappel</string>
     <string name="reminders_complete">Terminer</string>
     <string name="reminders_snooze_hour">Reporter d\'1 heure</string>
+    <string name="board_card_completed_pill">✓ le %1$s</string>
+    <string name="board_card_completed_on">Terminée le %1$s</string>
     <string name="navigation_add_list">Ajouter une liste</string>
     <string name="lists_new_name">Nom de la liste</string>
     <string name="lists_create">Créer</string>

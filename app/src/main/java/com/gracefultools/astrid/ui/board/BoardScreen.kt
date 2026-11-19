@@ -56,6 +56,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -295,7 +296,7 @@ private fun ColumnView(
     }
 }
 
-/** The Done column's completed-date pill, in the reader's locale (see [completedPillLabel]). */
+/** The Done column's completed date, in the reader's locale (see [completedPillLabel]); the pill words it. */
 @Composable
 private fun completedOnLabel(completedOn: String?): String? {
     val locale = androidx.compose.ui.platform.LocalConfiguration.current.locales[0]
@@ -303,15 +304,19 @@ private fun completedOnLabel(completedOn: String?): String? {
 }
 
 /**
- * A Done card's completed day under its title, as on every platform: a small tonal capsule,
- * secondary text — the same treatment as the column's count badge.
+ * A Done card's completed day under its title, as on every platform: "✓ on Nov 19" in a small
+ * tonal capsule, secondary text — the same treatment as the column's count badge.
  */
 @Composable
 private fun CompletedPill(label: String) {
     val colors = AstridTheme.colors
+    // "✓ on Nov 19": the check is part of the copy and takes the pill's colour; TalkBack reads
+    // "Completed Nov 19" instead of the glyph (iOS board.card.completed_pill / completed_on).
+    val spoken = stringResource(R.string.board_card_completed_on, label)
     Text(
-        label, style = com.gracefultools.astrid.ui.theme.TextStyles.caption, color = colors.textSecondary, maxLines = 1,
-        modifier = Modifier.testTag("completedPill").clip(androidx.compose.foundation.shape.CircleShape)
+        stringResource(R.string.board_card_completed_pill, label), style = com.gracefultools.astrid.ui.theme.TextStyles.caption, color = colors.textSecondary, maxLines = 1,
+        modifier = Modifier.testTag("completedPill").clearAndSetSemantics { contentDescription = spoken }
+            .clip(androidx.compose.foundation.shape.CircleShape)
             .background(if (colors.isDark) colors.bgTertiary else colors.neutral.copy(alpha = 0.1f))
             .padding(horizontal = Spacing.s8, vertical = Spacing.s2),
     )
