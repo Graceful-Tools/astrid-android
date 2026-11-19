@@ -79,6 +79,9 @@
     <string name="board_move_to">Move to</string>
     <string name="board_show_board">Show as board</string>
     <string name="board_show_list">Show as list</string>
+    <!-- The Done card's completed-date pill: the check is part of the copy (U+2713, never U+2714 or an emoji). iOS board.card.completed_pill / completed_on. -->
+    <string name="board_card_completed_pill">✓ on %1$s</string>
+    <string name="board_card_completed_on">Completed %1$s</string>
     <!-- Lists: iOS navigation.add_list / lists.* -->
     <string name="navigation_add_list">Add List</string>
     <string name="lists_new_name">List name</string>

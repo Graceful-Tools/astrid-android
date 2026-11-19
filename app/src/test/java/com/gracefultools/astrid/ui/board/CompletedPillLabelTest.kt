@@ -36,4 +36,27 @@ class CompletedPillLabelTest {
         assertNull(completedPillLabel(null, today, Locale.US))
         assertNull(completedPillLabel("soon", today, Locale.US))
     }
+
+    private val context get() = androidx.test.core.app.ApplicationProvider.getApplicationContext<android.content.Context>()
+
+    @Test
+    fun `the pill reads a plain check and the date, and TalkBack hears Completed`() {
+        val day = completedPillLabel("2026-11-14", today, Locale.US)!!
+        val pill = context.getString(com.gracefultools.astrid.R.string.board_card_completed_pill, day)
+        assertEquals("\u2713 on Nov 14", pill)
+        org.junit.Assert.assertFalse("never the emoji-prone heavy check", pill.contains('\u2714'))
+        assertEquals("Completed Nov 14", context.getString(com.gracefultools.astrid.R.string.board_card_completed_on, day))
+    }
+
+    @Test
+    @Config(qualifiers = "de")
+    fun `a translation carries the same check`() {
+        assertEquals("\u2713 am 14. Nov.", context.getString(com.gracefultools.astrid.R.string.board_card_completed_pill, "14. Nov."))
+    }
+
+    @Test
+    @Config(qualifiers = "ja")
+    fun `a language without a preposition is the check and the date`() {
+        assertEquals("\u2713 11月14日", context.getString(com.gracefultools.astrid.R.string.board_card_completed_pill, "11月14日"))
+    }
 }

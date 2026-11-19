@@ -63,6 +63,8 @@
     <string name="reminders_due_now">Promemoria</string>
     <string name="reminders_complete">Completa</string>
     <string name="reminders_snooze_hour">Posponi 1 ora</string>
+    <string name="board_card_completed_pill">✓ il %1$s</string>
+    <string name="board_card_completed_on">Completata il %1$s</string>
     <string name="navigation_add_list">Aggiungi lista</string>
     <string name="lists_new_name">Nome lista</string>
     <string name="lists_create">Crea</string>

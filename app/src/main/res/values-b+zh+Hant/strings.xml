@@ -63,6 +63,8 @@
     <string name="reminders_due_now">提醒</string>
     <string name="reminders_complete">完成</string>
     <string name="reminders_snooze_hour">延後1小時</string>
+    <string name="board_card_completed_pill">✓ %1$s</string>
+    <string name="board_card_completed_on">完成於 %1$s</string>
     <string name="navigation_add_list">添加清單</string>
     <string name="lists_new_name">清單名稱</string>
     <string name="lists_create">創建</string>

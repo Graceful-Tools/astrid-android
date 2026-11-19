@@ -63,6 +63,8 @@
     <string name="reminders_due_now">リマインダー</string>
     <string name="reminders_complete">完了</string>
     <string name="reminders_snooze_hour">1時間スヌーズ</string>
+    <string name="board_card_completed_pill">✓ %1$s</string>
+    <string name="board_card_completed_on">%1$s に完了</string>
     <string name="navigation_add_list">リストを追加</string>
     <string name="lists_new_name">リスト名</string>
     <string name="lists_create">作成</string>

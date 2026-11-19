@@ -63,6 +63,8 @@
     <string name="reminders_due_now">알림</string>
     <string name="reminders_complete">완료</string>
     <string name="reminders_snooze_hour">1시간 다시 알림</string>
+    <string name="board_card_completed_pill">✓ %1$s</string>
+    <string name="board_card_completed_on">%1$s 완료</string>
     <string name="navigation_add_list">목록 추가</string>
     <string name="lists_new_name">목록 이름</string>
     <string name="lists_create">생성</string>

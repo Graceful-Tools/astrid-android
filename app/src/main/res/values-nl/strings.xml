@@ -63,6 +63,8 @@
     <string name="reminders_due_now">Herinnering</string>
     <string name="reminders_complete">Voltooien</string>
     <string name="reminders_snooze_hour">1 uur snoozen</string>
+    <string name="board_card_completed_pill">✓ op %1$s</string>
+    <string name="board_card_completed_on">Voltooid op %1$s</string>
     <string name="navigation_add_list">Lijst toevoegen</string>
     <string name="lists_new_name">Lijstnaam</string>
     <string name="lists_create">Aanmaken</string>
