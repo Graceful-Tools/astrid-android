@@ -19,10 +19,10 @@ license = "MIT"
 publish = false
 
 [workspace.dependencies]
-astrid-core = { version = "0.1", git = "https://github.com/Graceful-Tools/astrid-core.git", rev = "143cfd17ba9f8758e4f04562ff5dfdcd342c90a9" }
+astrid-core = { version = "0.1", git = "https://github.com/Graceful-Tools/astrid-core.git", rev = "d8c3e5beed5d321eae860f33e86bcc19e3af89f2" }
 # The binding crate, from the same revision. Default features keep SQLite compiled in (an NDK link
 # finds no libsqlite3); `contracts/` adds `require-base-url`.
-astrid-uniffi = { version = "0.1", git = "https://github.com/Graceful-Tools/astrid-core.git", rev = "143cfd17ba9f8758e4f04562ff5dfdcd342c90a9" }
+astrid-uniffi = { version = "0.1", git = "https://github.com/Graceful-Tools/astrid-core.git", rev = "d8c3e5beed5d321eae860f33e86bcc19e3af89f2" }
 uniffi = "0.32"
 
 [profile.release]
