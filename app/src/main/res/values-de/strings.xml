@@ -265,7 +265,6 @@
     <string name="settings_reminders_test_message">Eine Testbenachrichtigung erscheint in 5 Sekunden</string>
     <string name="settings_appearance_theme">Design</string>
     <string name="settings_appearance_task_details">Aufgabendetails</string>
-    <string name="settings_appearance_task_details_footer">Wähle das Layout der Aufgabendetails. Liste gibt Priorität und zugewiesener Person eigene Zeilen. Projekt ist kompakt, und das Kästchen öffnet eine Auswahl, statt die Aufgabe abzuschließen.</string>
     <string name="core_smart_layout_list">Liste</string>
     <string name="core_smart_layout_project">Projekt</string>
     <string name="settings_appearance_email_to_task">E-Mail-zu-Aufgabe</string>

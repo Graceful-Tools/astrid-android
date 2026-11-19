@@ -158,4 +158,5 @@
     <string name="settings_custom_agents_change_photo">更換大頭貼</string>
     <string name="settings_custom_agents_photo_updated">大頭貼已更新</string>
     <string name="settings_custom_agents_photo_failed">更新大頭貼失敗</string>
+    <string name="settings_appearance_task_details_footer">選擇任務詳情的版面配置。清單為優先順序與負責人各設一列。專案較精簡，勾選框會開啟選擇器而非完成任務。</string>
 </resources>

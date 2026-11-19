@@ -265,7 +265,6 @@
     <string name="settings_reminders_test_message">Тестовое уведомление появится через 5 секунд</string>
     <string name="settings_appearance_theme">Theme</string>
     <string name="settings_appearance_task_details">Детали задачи</string>
-    <string name="settings_appearance_task_details_footer">Выберите оформление деталей задачи. «Список» отводит приоритету и исполнителю отдельные строки. «Проект» компактный, и флажок открывает выбор вместо завершения задачи.</string>
     <string name="core_smart_layout_list">Список</string>
     <string name="core_smart_layout_project">Проект</string>
     <string name="settings_appearance_email_to_task">Email-to-Task</string>

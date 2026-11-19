@@ -265,7 +265,6 @@
     <string name="settings_reminders_test_message">Una notificación de prueba aparecerá en 5 segundos</string>
     <string name="settings_appearance_theme">Tema</string>
     <string name="settings_appearance_task_details">Detalles de la Tarea</string>
-    <string name="settings_appearance_task_details_footer">Elige cómo se muestran los detalles de la tarea. Lista da a la prioridad y al responsable sus propias filas. Proyecto es compacto y la casilla abre un selector en lugar de completar la tarea.</string>
     <string name="core_smart_layout_list">Lista</string>
     <string name="core_smart_layout_project">Proyecto</string>
     <string name="settings_appearance_email_to_task">Email-a-Tarea</string>

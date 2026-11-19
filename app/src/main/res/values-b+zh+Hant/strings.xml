@@ -265,7 +265,6 @@
     <string name="settings_reminders_test_message">測試通知將在 5 秒後出現</string>
     <string name="settings_appearance_theme">主題</string>
     <string name="settings_appearance_task_details">任務詳情</string>
-    <string name="settings_appearance_task_details_footer">選擇任務詳情的版面配置。清單為優先順序與負責人各設一列。專案較精簡，勾選框會開啟選擇器而非完成任務。</string>
     <string name="core_smart_layout_list">清單</string>
     <string name="core_smart_layout_project">專案</string>
     <string name="settings_appearance_email_to_task">郵件轉任務</string>

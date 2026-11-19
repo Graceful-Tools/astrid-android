@@ -153,6 +153,14 @@ fun BoardContent(
         // iOS's boardColumnsVisible: floor(width / 300), 1...5, columns to a screen — one on a phone.
         val visible = (maxWidth.value / 300f).toInt().coerceIn(1, 5)
         val columnWidth = (maxWidth - Spacing.s8 * 2 - Spacing.s8 * (visible - 1)) / visible
+        // Open on the inbox column once the columns arrive (ADEV-135); a reload leaves the row be.
+        var opened by remember(state.board?.listId) { mutableStateOf(false) }
+        LaunchedEffect(columns.isNotEmpty(), visible) {
+            if (columns.isNotEmpty() && !opened) {
+                opened = true
+                row.scrollToItem(BoardInitialColumn.index(columns, multiColumn = visible > 1))
+            }
+        }
         LazyRow(
             state = row,
             contentPadding = PaddingValues(horizontal = Spacing.s8, vertical = Spacing.s8),

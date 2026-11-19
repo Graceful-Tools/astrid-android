@@ -265,7 +265,6 @@
     <string name="settings_reminders_test_message">Uma notificação de teste aparecerá em 5 segundos</string>
     <string name="settings_appearance_theme">Theme</string>
     <string name="settings_appearance_task_details">Detalhes da Tarefa</string>
-    <string name="settings_appearance_task_details_footer">Escolha como os detalhes da tarefa são dispostos. Lista dá à prioridade e ao responsável as suas próprias linhas. Projeto é compacto e a caixa abre um seletor em vez de concluir a tarefa.</string>
     <string name="core_smart_layout_list">Lista</string>
     <string name="core_smart_layout_project">Projeto</string>
     <string name="settings_appearance_email_to_task">Email-to-Task</string>

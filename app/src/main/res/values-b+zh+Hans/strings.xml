@@ -265,7 +265,6 @@
     <string name="settings_reminders_test_message">测试通知将在 5 秒后出现</string>
     <string name="settings_appearance_theme">主题</string>
     <string name="settings_appearance_task_details">任务详情</string>
-    <string name="settings_appearance_task_details_footer">选择任务详情的布局。列表为优先级和负责人各设一行。项目更紧凑，勾选框会打开选择器而不是完成任务。</string>
     <string name="core_smart_layout_list">清单</string>
     <string name="core_smart_layout_project">项目</string>
     <string name="settings_appearance_email_to_task">邮件转任务</string>
