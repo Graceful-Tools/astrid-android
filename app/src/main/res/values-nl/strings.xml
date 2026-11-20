@@ -21,6 +21,11 @@
     <string name="tasks_add_task_placeholder">Taak toevoegen</string>
     <string name="tasks_delete">Verwijderen</string>
     <string name="tasks_complete">Voltooien</string>
+    <string name="tasks_mark_as_done">Markeer als klaar</string>
+    <string name="tasks_mark_as_todo">Markeer als te doen</string>
+    <string name="tasks_confirm_complete_title">Deze taak voltooien?</string>
+    <string name="tasks_confirm_complete_unassigned">Aan niemand toegewezen</string>
+    <string name="mac_assigned_to">Toegewezen aan %1$s</string>
     <string name="detail_back">Terug</string>
     <string name="detail_title_label">Titel</string>
     <string name="detail_description">Beschrijving</string>

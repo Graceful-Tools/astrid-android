@@ -21,6 +21,11 @@
     <string name="tasks_add_task_placeholder">Ajouter une tâche</string>
     <string name="tasks_delete">Supprimer</string>
     <string name="tasks_complete">Terminer</string>
+    <string name="tasks_mark_as_done">Marquer comme faite</string>
+    <string name="tasks_mark_as_todo">Marquer comme à faire</string>
+    <string name="tasks_confirm_complete_title">Terminer cette tâche ?</string>
+    <string name="tasks_confirm_complete_unassigned">N\'est assignée à personne</string>
+    <string name="mac_assigned_to">Assignée à %1$s</string>
     <string name="detail_back">Retour</string>
     <string name="detail_title_label">Titre</string>
     <string name="detail_description">Description</string>

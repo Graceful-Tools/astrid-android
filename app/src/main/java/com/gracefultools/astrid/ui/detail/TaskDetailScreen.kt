@@ -304,6 +304,16 @@ private fun DetailHeader(detail: TaskDetail?, vm: TaskDetailViewModel, onBack: (
     if (sharing && detail != null) ShareTaskSheet(vm, detail, onDismiss = { sharing = false })
 }
 
+/**
+ * Whether task details' leading control is the assignee's face rather than the checkbox. A completed
+ * task is the checked box whoever holds it, as its row is (core `LeadingControl::for_row`, ADEV-147).
+ */
+internal fun detailLeadingShowsFace(detail: TaskDetail): Boolean {
+    val assignee = detail.assignee ?: return false
+    if (detail.task.completed) return false
+    return detail.fieldOrder.firstOrNull() != "assignee" && assignee.id.isNotEmpty()
+}
+
 /** The leading control (as the row's) beside the title in its box (19 medium, wraps). */
 @Composable
 private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
@@ -325,7 +335,7 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
             }
             .semantics { role = Role.Checkbox; contentDescription = label }
         val assignee = detail.assignee
-        if (assignee != null && detail.fieldOrder.firstOrNull() != "assignee" && assignee.id.isNotEmpty()) {
+        if (assignee != null && detailLeadingShowsFace(detail)) {
             Avatar(assignee.image, initialsOf(assignee.name, assignee.email), 34.dp, tap, shape = RowFaceShape,
                 border = colors.priority.getOrElse(detail.task.priority) { colors.priority[0] })
         } else {

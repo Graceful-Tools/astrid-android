@@ -21,6 +21,11 @@
     <string name="tasks_add_task_placeholder">작업 추가</string>
     <string name="tasks_delete">삭제</string>
     <string name="tasks_complete">완료</string>
+    <string name="tasks_mark_as_done">완료로 표시</string>
+    <string name="tasks_mark_as_todo">할 일로 표시</string>
+    <string name="tasks_confirm_complete_title">이 작업을 완료할까요?</string>
+    <string name="tasks_confirm_complete_unassigned">담당: 없음</string>
+    <string name="mac_assigned_to">담당: %1$s</string>
     <string name="detail_back">뒤로</string>
     <string name="detail_title_label">제목</string>
     <string name="detail_description">설명</string>

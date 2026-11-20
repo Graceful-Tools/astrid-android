@@ -76,6 +76,14 @@ class SearchViewModel(
 
     fun dismissStatusPicker() { _state.value = _state.value.copy(statusPicker = null) }
 
+    /** The picker's "Mark as done" / "Mark as to-do" row (ADEV-150). */
+    fun completeFromPicker() = work {
+        val picker = _state.value.statusPicker ?: return@work
+        _state.value = _state.value.copy(statusPicker = null)
+        rowActions.complete(picker.row)
+        if (_state.value.query.isNotBlank()) run(_state.value.query)
+    }
+
     companion object {
         /** Search answers a window of rows, or a bare array of them. */
         fun rowsOf(answer: JsonElement?): List<TaskRow> {

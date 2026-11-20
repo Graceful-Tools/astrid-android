@@ -66,7 +66,7 @@ fun SearchScreen(vm: SearchViewModel, onBack: () -> Unit, onOpenTask: (String) -
     val focus = remember { FocusRequester() }
     BackHandler(onBack = onBack)
     LaunchedEffect(Unit) { kotlinx.coroutines.delay(300); runCatching { focus.requestFocus() } }
-    state.statusPicker?.let { picker -> StatusPicker(picker.options, onPick = vm::pickStatus, onDismiss = vm::dismissStatusPicker) }
+    state.statusPicker?.let { picker -> StatusPicker(picker.options, onPick = vm::pickStatus, onDismiss = vm::dismissStatusPicker, row = picker.row, onComplete = vm::completeFromPicker) }
     com.gracefultools.astrid.ui.common.WaitingConditionPrompt(vm.waiting)
     Column(Modifier.fillMaxSize().background(colors.bgPrimary)) {
         val openSidebar = stringResource(R.string.navigation_open_sidebar)
