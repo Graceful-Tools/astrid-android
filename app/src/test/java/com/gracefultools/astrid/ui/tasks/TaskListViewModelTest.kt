@@ -247,4 +247,14 @@ class TaskListViewModelTest {
         assertEquals("t1", vm.waiting.state.value.request?.taskId)
     }
 
+    @Test
+    fun `ADEV-150 the status picker's Mark as done row completes the task it opened on, and closes`() = runTest {
+        val core = FakeCore().apply { answer("taskStatusOptions", """{"current":"ready","columns":[]}""") }
+        val vm = vm(core)
+        vm.leading(com.gracefultools.astrid.model.TaskRow(id = "t9", title = "Theirs", action = "openPicker"))
+        vm.completeFromPicker()
+        assertEquals(null, vm.state.value.statusPicker)
+        assertEquals(kotlinx.serialization.json.JsonPrimitive("t9"), core.last("completeTask")!!["taskId"])
+        assertEquals(kotlinx.serialization.json.JsonPrimitive(true), core.last("completeTask")!!["completed"])
+    }
 }

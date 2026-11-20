@@ -10,7 +10,8 @@ import com.gracefultools.astrid.model.TaskRow
 /** What tapping a row's leading control asks for — the core's `action`, never the shell's guess. */
 sealed interface LeadingOutcome {
     data object Done : LeadingOutcome
-    data class PickStatus(val taskId: String, val options: StatusOptions) : LeadingOutcome
+    /** The status picker, with the [row] it was opened from: its "Mark as done" row draws and completes that task (ADEV-150). */
+    data class PickStatus(val taskId: String, val options: StatusOptions, val row: TaskRow = TaskRow(id = taskId)) : LeadingOutcome
     data class Refused(val message: String) : LeadingOutcome
 }
 
@@ -21,13 +22,22 @@ class RowActions(private val core: Core, private val waiting: WaitingMoves = Wai
             "openPicker" -> LeadingOutcome.PickStatus(
                 row.id,
                 CoreJson.decodeFromJsonElement(StatusOptions.serializer(), core.run(command("taskStatusOptions", "taskId" to row.id))),
+                row,
             )
             "copy" -> { core.run(command("copyTask", "taskId" to row.id)); LeadingOutcome.Done }
-            else -> {
-                core.run(command("completeTask", "taskId" to row.id, "completed" to !row.completed, "source" to "android"))
-                LeadingOutcome.Done
-            }
+            else -> complete(row)
         }
+    } catch (failure: CoreFailure) {
+        if (failure.isStillPending) LeadingOutcome.Done else LeadingOutcome.Refused(failure.message)
+    }
+
+    /**
+     * Complete or reopen [row] — the picker's "Mark as done" / "Mark as to-do" row (ADEV-150) and a
+     * plain leading tap. Only through `completeTask`, which rolls a repeating task forward.
+     */
+    suspend fun complete(row: TaskRow): LeadingOutcome = try {
+        core.run(command("completeTask", "taskId" to row.id, "completed" to !row.completed, "source" to "android"))
+        LeadingOutcome.Done
     } catch (failure: CoreFailure) {
         if (failure.isStillPending) LeadingOutcome.Done else LeadingOutcome.Refused(failure.message)
     }

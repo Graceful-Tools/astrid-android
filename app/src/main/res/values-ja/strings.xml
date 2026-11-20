@@ -21,6 +21,11 @@
     <string name="tasks_add_task_placeholder">タスクを追加</string>
     <string name="tasks_delete">削除</string>
     <string name="tasks_complete">完了</string>
+    <string name="tasks_mark_as_done">完了にする</string>
+    <string name="tasks_mark_as_todo">やることに戻す</string>
+    <string name="tasks_confirm_complete_title">このタスクを完了しますか？</string>
+    <string name="tasks_confirm_complete_unassigned">担当: なし</string>
+    <string name="mac_assigned_to">担当: %1$s</string>
     <string name="detail_back">戻る</string>
     <string name="detail_title_label">タイトル</string>
     <string name="detail_description">説明</string>

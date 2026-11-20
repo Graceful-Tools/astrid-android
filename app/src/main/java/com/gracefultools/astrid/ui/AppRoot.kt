@@ -231,6 +231,8 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                         picker.options,
                         onPick = { if (fromBoard) boardVm.pickStatus(it) else tasks.pickStatus(it) },
                         onDismiss = { if (fromBoard) boardVm.dismissStatusPicker() else tasks.dismissStatusPicker() },
+                        row = picker.row,
+                        onComplete = { if (fromBoard) boardVm.completeFromPicker() else tasks.completeFromPicker() },
                     )
                 }
                 // AATD-98: a move into Waiting with nothing to wait on asks what it waits for.

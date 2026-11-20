@@ -29,6 +29,13 @@
     <string name="tasks_waiting_to_send">Waiting to send</string>
     <string name="tasks_delete">Delete</string>
     <string name="tasks_complete">Complete</string>
+    <!-- The quick changer's completion row (ADEV-146/150): web tasks.markAsDone / markAsTodo, iOS tasks.mark_as_done / mark_as_todo. -->
+    <string name="tasks_mark_as_done">Mark as done</string>
+    <string name="tasks_mark_as_todo">Mark as to-do</string>
+    <!-- Completing a task that is not yours asks first (iOS CompletionConfirmation, ADEV-79). -->
+    <string name="tasks_confirm_complete_title">Complete this task?</string>
+    <string name="tasks_confirm_complete_unassigned">Not assigned to anyone</string>
+    <string name="mac_assigned_to">Assigned to %1$s</string>
     <string name="common_dismiss">Dismiss</string>
     <!-- Task detail: iOS tasks.* / priority.* -->
     <string name="detail_back">Back</string>

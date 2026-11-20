@@ -21,6 +21,11 @@
     <string name="tasks_add_task_placeholder">Добавить задачу</string>
     <string name="tasks_delete">Удалить</string>
     <string name="tasks_complete">Завершить</string>
+    <string name="tasks_mark_as_done">Отметить сделанной</string>
+    <string name="tasks_mark_as_todo">Вернуть в список дел</string>
+    <string name="tasks_confirm_complete_title">Завершить эту задачу?</string>
+    <string name="tasks_confirm_complete_unassigned">Никому не назначено</string>
+    <string name="mac_assigned_to">Назначено: %1$s</string>
     <string name="detail_back">Назад</string>
     <string name="detail_title_label">Название</string>
     <string name="detail_description">Описание</string>

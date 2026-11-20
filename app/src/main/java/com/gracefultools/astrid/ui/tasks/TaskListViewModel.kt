@@ -285,6 +285,15 @@ class TaskListViewModel(
 
     fun dismissStatusPicker() = _state.update { it.copy(statusPicker = null) }
 
+    /** The picker's "Mark as done" / "Mark as to-do" row (ADEV-150): completes or reopens the row it opened from. */
+    fun completeFromPicker() = work {
+        val picker = _state.value.statusPicker ?: return@work
+        _state.update { it.copy(statusPicker = null) }
+        (rowActions.complete(picker.row) as? com.gracefultools.astrid.ui.common.LeadingOutcome.Refused)
+            ?.let { refused -> _state.update { it.copy(error = refused.message) } }
+        reload()
+    }
+
     fun dismissError() = _state.update { it.copy(error = null, copyListFailed = false) }
 
     /**

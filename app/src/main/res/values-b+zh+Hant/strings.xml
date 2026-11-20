@@ -21,6 +21,11 @@
     <string name="tasks_add_task_placeholder">添加任務</string>
     <string name="tasks_delete">刪除</string>
     <string name="tasks_complete">完成</string>
+    <string name="tasks_mark_as_done">標記為已完成</string>
+    <string name="tasks_mark_as_todo">標記為待辦</string>
+    <string name="tasks_confirm_complete_title">完成此任務？</string>
+    <string name="tasks_confirm_complete_unassigned">未指派給任何人</string>
+    <string name="mac_assigned_to">指派給 %1$s</string>
     <string name="detail_back">返回</string>
     <string name="detail_title_label">標題</string>
     <string name="detail_description">描述</string>
