@@ -750,11 +750,34 @@
     <string name="list_insights_duration_minutes">%1$s min</string>
     <string name="list_insights_duration_hours">%1$s h</string>
     <string name="list_insights_duration_days">%1$s j</string>
+    <string name="tradeoff_very_poor">Rédhibitoire</string>
     <string name="tradeoff_poor">Mauvais</string>
     <string name="tradeoff_mixed">Mitigé</string>
     <string name="tradeoff_good">Bon</string>
+    <string name="tradeoff_very_good">Décisif</string>
     <string name="tradeoff_unrated">Non évalué</string>
     <string name="tradeoff_full_screen">Plein écran</string>
+    <string name="project_goals_title">Objectifs et garde-fous</string>
+    <string name="project_goals_intro">À quoi sert ce projet, et ce qu\'il ne doit pas faire. Toutes les personnes et tous les agents qui y travaillent lisent les deux, pour que les instructions restent courtes.</string>
+    <string name="project_goals_goals_heading">Objectifs</string>
+    <string name="project_goals_guardrails_heading">Garde-fous</string>
+    <string name="project_goals_goal_placeholder">Un objectif, p. ex. Maximiser le rendement à long terme</string>
+    <string name="project_goals_measure_placeholder">Mesure</string>
+    <string name="project_goals_target_placeholder">Cible</string>
+    <string name="project_goals_current_placeholder">Actuel</string>
+    <string name="project_goals_guardrail_placeholder">Un garde-fou, p. ex. N\'enfreindre aucune loi applicable</string>
+    <string name="project_goals_kind_label">Comment il est vérifié</string>
+    <string name="project_goals_kind_hint">Énoncé : les personnes et les agents en jugent. Appliqué : un programme le vérifie.</string>
+    <string name="project_goals_kind_stated">Énoncé</string>
+    <string name="project_goals_kind_enforced">Appliqué</string>
+    <string name="project_goals_add_goal">Ajouter un objectif</string>
+    <string name="project_goals_add_guardrail">Ajouter un garde-fou</string>
+    <string name="project_goals_remove">Supprimer</string>
+    <string name="project_goals_save_failed">Impossible d\'enregistrer les objectifs et garde-fous. Réessayez.</string>
+    <string name="project_goals_counts">Objectifs: %1$d · Garde-fous: %2$d</string>
+    <string name="project_goals_target_value">Cible : %1$s</string>
+    <string name="project_goals_current_value">Actuel : %1$s</string>
+    <string name="actions_save">Enregistrer</string>
     <string name="core_picker_no_due_date" formatted="false">Sans échéance</string>
     <string name="core_picker_today" formatted="false">Aujourd\'hui</string>
     <string name="core_picker_tomorrow" formatted="false">Demain</string>

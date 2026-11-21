@@ -71,6 +71,10 @@ class WireSchemaContractTest {
         SidebarSections.serializer().descriptor to "Sections",
         HubAgent.serializer().descriptor to "AgentRow",
         HubCredential.serializer().descriptor to "CredentialRow",
+        // ADEV-184: getListGoals / getProjectGoals / setProjectGoals.
+        com.gracefultools.astrid.model.ProjectGoals.serializer().descriptor to "ProjectGoals",
+        com.gracefultools.astrid.model.Goal.serializer().descriptor to "Goal",
+        com.gracefultools.astrid.model.Guardrail.serializer().descriptor to "Guardrail",
     )
 
     @Test

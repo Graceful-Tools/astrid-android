@@ -9,6 +9,7 @@ import com.gracefultools.astrid.model.ListDetail
 import com.gracefultools.astrid.model.ListInvite
 import com.gracefultools.astrid.model.ListSettings
 import com.gracefultools.astrid.model.Member
+import com.gracefultools.astrid.model.ProjectGoals
 import com.gracefultools.astrid.model.TransferAvailability
 import com.gracefultools.astrid.model.UserSummary
 import com.gracefultools.astrid.ui.common.CoreViewModel
@@ -58,7 +59,15 @@ data class ListSettingsState(
     val searching: Boolean = false,
     val gone: Boolean = false,
     val error: String? = null,
+    /** The goals and guardrails being edited (ADEV-184); null unless the list is a project and the core says `canEdit`. */
+    val goalsDraft: GoalsDraft? = null,
+    /** What the draft was when read or last saved. */
+    val goalsLoaded: GoalsDraft? = null,
+    val goalsSaving: Boolean = false,
+    val goalsSaveFailed: Boolean = false,
 ) {
+    val goalsChanged: Boolean get() = goalsDraft != null && goalsDraft != goalsLoaded
+
     /** The owner first, as a person: the list's own record, else their member row. */
     val owner: UserSummary?
         get() = detail?.owner ?: settings?.let { s -> s.members.firstOrNull { it.who == s.ownerId }?.user }
@@ -124,9 +133,53 @@ class ListSettingsViewModel(
     fun load() = work {
         val answer = runCatching { core.run(command("listMembers", "listId" to listId)) }.getOrNull() ?: return@work
         runCatching { CoreJson.decodeFromJsonElement(ListSettings.serializer(), answer) }
-            .onSuccess { settings -> _state.update { it.copy(settings = settings) } }
+            .onSuccess { settings ->
+                _state.update { it.copy(settings = settings) }
+                goalsFor(settings.projectId)
+            }
         runCatching { CoreJson.decodeFromJsonElement(ListDetail.serializer(), answer) }
             .onSuccess { detail -> _state.update { it.copy(detail = detail) } }
+    }
+
+    private var goalsProjectId: String? = null
+
+    /** Read the project's goals once per project (ADEV-184); a list that stops being a project drops the editor. */
+    private fun goalsFor(projectId: String?) {
+        if (projectId == goalsProjectId) return
+        goalsProjectId = projectId
+        if (projectId == null) {
+            _state.update { it.copy(goalsDraft = null, goalsLoaded = null, goalsSaveFailed = false) }
+            return
+        }
+        work {
+            val goals = runCatching { CoreJson.decodeFromJsonElement(ProjectGoals.serializer(), core.run(command("getProjectGoals", "projectId" to projectId))) }.getOrNull()
+            if (goalsProjectId != projectId) return@work
+            // Only whoever the core says may edit them gets the editor (`canEdit`, never a role check here).
+            val draft = goals?.takeIf { it.canEdit }?.let(GoalsDraft::of)
+            _state.update { it.copy(goalsDraft = draft, goalsLoaded = draft) }
+        }
+    }
+
+    fun editGoals(draft: GoalsDraft) = _state.update { it.copy(goalsDraft = draft, goalsSaveFailed = false) }
+
+    /**
+     * Replace the project's goals and guardrails with the draft (`setProjectGoals`, the whole value).
+     * The core sends it at once and journals it only when offline; the server's echo, with the ids
+     * it assigned, becomes the new draft. A refusal says so and keeps the edit, as iOS does.
+     */
+    fun saveGoals() = work {
+        val projectId = goalsProjectId ?: return@work
+        val draft = _state.value.goalsDraft ?: return@work
+        _state.update { it.copy(goalsSaving = true, goalsSaveFailed = false) }
+        try {
+            val answer = core.run(command("setProjectGoals", "projectId" to projectId, "goals" to draft.goalsWire(), "guardrails" to draft.guardrailsWire()))
+            val echo = runCatching { CoreJson.decodeFromJsonElement(ProjectGoals.serializer(), answer) }
+                .getOrNull()?.takeIf { it.canEdit }?.let(GoalsDraft::of) ?: draft
+            _state.update { it.copy(goalsSaving = false, goalsDraft = echo, goalsLoaded = echo) }
+        } catch (failure: CoreFailure) {
+            if (failure.isStillPending) _state.update { it.copy(goalsSaving = false, goalsLoaded = draft) }
+            else _state.update { it.copy(goalsSaving = false, goalsSaveFailed = true) }
+        }
     }
 
     /** The Admin tab's network-backed choices: the coding-agent options. Best effort. */

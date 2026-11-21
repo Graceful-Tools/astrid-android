@@ -750,11 +750,34 @@
     <string name="list_insights_duration_minutes">%1$s 分鐘</string>
     <string name="list_insights_duration_hours">%1$s 小時</string>
     <string name="list_insights_duration_days">%1$s 天</string>
+    <string name="tradeoff_very_poor">一票否決</string>
     <string name="tradeoff_poor">差</string>
     <string name="tradeoff_mixed">普通</string>
     <string name="tradeoff_good">好</string>
+    <string name="tradeoff_very_good">決定性</string>
     <string name="tradeoff_unrated">未評分</string>
     <string name="tradeoff_full_screen">全螢幕</string>
+    <string name="project_goals_title">目標與護欄</string>
+    <string name="project_goals_intro">這個專案要實現什麼,以及不能做什麼。在這裡工作的人和代理都會閱讀兩者,因此指示可以保持簡短。</string>
+    <string name="project_goals_goals_heading">目標</string>
+    <string name="project_goals_guardrails_heading">護欄</string>
+    <string name="project_goals_goal_placeholder">一個目標,例如:最大化長期報酬</string>
+    <string name="project_goals_measure_placeholder">衡量指標</string>
+    <string name="project_goals_target_placeholder">目標值</string>
+    <string name="project_goals_current_placeholder">目前</string>
+    <string name="project_goals_guardrail_placeholder">一條護欄,例如:不違反任何適用法律</string>
+    <string name="project_goals_kind_label">檢查方式</string>
+    <string name="project_goals_kind_hint">聲明:由人和代理判斷。強制:由程式檢查。</string>
+    <string name="project_goals_kind_stated">聲明</string>
+    <string name="project_goals_kind_enforced">強制</string>
+    <string name="project_goals_add_goal">新增目標</string>
+    <string name="project_goals_add_guardrail">新增護欄</string>
+    <string name="project_goals_remove">移除</string>
+    <string name="project_goals_save_failed">無法儲存目標與護欄。請再試一次。</string>
+    <string name="project_goals_counts">目標:%1$d · 護欄:%2$d</string>
+    <string name="project_goals_target_value">目標值:%1$s</string>
+    <string name="project_goals_current_value">目前:%1$s</string>
+    <string name="actions_save">保存</string>
     <string name="core_picker_no_due_date" formatted="false">無截止日期</string>
     <string name="core_picker_today" formatted="false">今天</string>
     <string name="core_picker_tomorrow" formatted="false">明天</string>

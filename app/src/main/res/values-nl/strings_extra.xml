@@ -159,7 +159,4 @@
     <string name="settings_custom_agents_photo_updated">Profielfoto bijgewerkt</string>
     <string name="settings_custom_agents_photo_failed">Profielfoto kon niet worden bijgewerkt</string>
     <string name="settings_appearance_task_details_footer">Kies hoe taakdetails worden weergegeven. Lijst geeft prioriteit en toegewezene een eigen rij. Project is compact en het vakje opent een keuzemenu in plaats van de taak te voltooien.</string>
-    <!-- ADEV-184: the core catalog's rating words (astrid-core 7dcb785), ahead of astrid-ios taking them (ADEV-183). Drop these once the iOS port gives the same. -->
-    <string name="tradeoff_very_good">Doorslaggevend</string>
-    <string name="tradeoff_very_poor">Diskwalificerend</string>
 </resources>

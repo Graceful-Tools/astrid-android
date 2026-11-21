@@ -750,11 +750,34 @@
     <string name="list_insights_duration_minutes">%1$s Min.</string>
     <string name="list_insights_duration_hours">%1$s Std.</string>
     <string name="list_insights_duration_days">%1$s T.</string>
+    <string name="tradeoff_very_poor">Ausschlusskriterium</string>
     <string name="tradeoff_poor">Schlecht</string>
     <string name="tradeoff_mixed">Gemischt</string>
     <string name="tradeoff_good">Gut</string>
+    <string name="tradeoff_very_good">Entscheidend</string>
     <string name="tradeoff_unrated">Nicht bewertet</string>
     <string name="tradeoff_full_screen">Vollbild</string>
+    <string name="project_goals_title">Ziele &amp; Leitplanken</string>
+    <string name="project_goals_intro">Wofür dieses Projekt da ist und was es nicht tun darf. Alle, die hier arbeiten, Menschen wie Agenten, lesen beides, damit Anweisungen kurz bleiben können.</string>
+    <string name="project_goals_goals_heading">Ziele</string>
+    <string name="project_goals_guardrails_heading">Leitplanken</string>
+    <string name="project_goals_goal_placeholder">Ein Ziel, z. B. Langfristige Rendite maximieren</string>
+    <string name="project_goals_measure_placeholder">Kennzahl</string>
+    <string name="project_goals_target_placeholder">Zielwert</string>
+    <string name="project_goals_current_placeholder">Aktuell</string>
+    <string name="project_goals_guardrail_placeholder">Eine Leitplanke, z. B. Keine geltenden Gesetze brechen</string>
+    <string name="project_goals_kind_label">Wie sie geprüft wird</string>
+    <string name="project_goals_kind_hint">Formuliert: Menschen und Agenten beurteilen sie. Erzwungen: ein Programm prüft sie.</string>
+    <string name="project_goals_kind_stated">Formuliert</string>
+    <string name="project_goals_kind_enforced">Erzwungen</string>
+    <string name="project_goals_add_goal">Ziel hinzufügen</string>
+    <string name="project_goals_add_guardrail">Leitplanke hinzufügen</string>
+    <string name="project_goals_remove">Entfernen</string>
+    <string name="project_goals_save_failed">Ziele und Leitplanken konnten nicht gespeichert werden. Bitte erneut versuchen.</string>
+    <string name="project_goals_counts">Ziele: %1$d · Leitplanken: %2$d</string>
+    <string name="project_goals_target_value">Zielwert: %1$s</string>
+    <string name="project_goals_current_value">Aktuell: %1$s</string>
+    <string name="actions_save">Speichern</string>
     <string name="core_picker_no_due_date" formatted="false">Kein Fälligkeitsdatum</string>
     <string name="core_picker_today" formatted="false">Heute</string>
     <string name="core_picker_tomorrow" formatted="false">Morgen</string>

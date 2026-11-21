@@ -750,11 +750,34 @@
     <string name="list_insights_duration_minutes">%1$s 分</string>
     <string name="list_insights_duration_hours">%1$s 時間</string>
     <string name="list_insights_duration_days">%1$s 日</string>
+    <string name="tradeoff_very_poor">除外</string>
     <string name="tradeoff_poor">悪い</string>
     <string name="tradeoff_mixed">どちらとも言えない</string>
     <string name="tradeoff_good">良い</string>
+    <string name="tradeoff_very_good">決め手</string>
     <string name="tradeoff_unrated">未評価</string>
     <string name="tradeoff_full_screen">全画面表示</string>
+    <string name="project_goals_title">目標とガードレール</string>
+    <string name="project_goals_intro">このプロジェクトの目的と、してはいけないこと。ここで働く人もエージェントも両方を読むので、指示は短くできます。</string>
+    <string name="project_goals_goals_heading">目標</string>
+    <string name="project_goals_guardrails_heading">ガードレール</string>
+    <string name="project_goals_goal_placeholder">目標(例: 長期的なリターンを最大化する)</string>
+    <string name="project_goals_measure_placeholder">指標</string>
+    <string name="project_goals_target_placeholder">目標値</string>
+    <string name="project_goals_current_placeholder">現在</string>
+    <string name="project_goals_guardrail_placeholder">ガードレール(例: 適用される法律に違反しない)</string>
+    <string name="project_goals_kind_label">確認方法</string>
+    <string name="project_goals_kind_hint">明示: 人とエージェントが判断します。強制: プログラムが確認します。</string>
+    <string name="project_goals_kind_stated">明示</string>
+    <string name="project_goals_kind_enforced">強制</string>
+    <string name="project_goals_add_goal">目標を追加</string>
+    <string name="project_goals_add_guardrail">ガードレールを追加</string>
+    <string name="project_goals_remove">削除</string>
+    <string name="project_goals_save_failed">目標とガードレールを保存できませんでした。もう一度お試しください。</string>
+    <string name="project_goals_counts">目標: %1$d · ガードレール: %2$d</string>
+    <string name="project_goals_target_value">目標値: %1$s</string>
+    <string name="project_goals_current_value">現在: %1$s</string>
+    <string name="actions_save">保存</string>
     <string name="core_picker_no_due_date" formatted="false">期限なし</string>
     <string name="core_picker_today" formatted="false">今日</string>
     <string name="core_picker_tomorrow" formatted="false">明日</string>
