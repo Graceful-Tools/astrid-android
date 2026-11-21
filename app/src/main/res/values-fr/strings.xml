@@ -733,7 +733,7 @@
     <string name="list_insights_days90">90 jours</string>
     <string name="list_insights_activity">Activité</string>
     <string name="list_insights_created">Nouvelles</string>
-    <string name="list_insights_completed">Terminée</string>
+    <string name="list_insights_completed">Terminées</string>
     <string name="list_insights_created_total">%1$s nouvelles</string>
     <string name="list_insights_completed_total">%1$s terminées</string>
     <string name="list_insights_time_to_complete">Délai médian de réalisation</string>
@@ -750,11 +750,9 @@
     <string name="list_insights_duration_minutes">%1$s min</string>
     <string name="list_insights_duration_hours">%1$s h</string>
     <string name="list_insights_duration_days">%1$s j</string>
-    <string name="tradeoff_very_poor">Très mauvais</string>
     <string name="tradeoff_poor">Mauvais</string>
     <string name="tradeoff_mixed">Mitigé</string>
     <string name="tradeoff_good">Bon</string>
-    <string name="tradeoff_very_good">Très bon</string>
     <string name="tradeoff_unrated">Non évalué</string>
     <string name="tradeoff_full_screen">Plein écran</string>
     <string name="core_picker_no_due_date" formatted="false">Sans échéance</string>

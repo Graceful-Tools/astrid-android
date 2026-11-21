@@ -733,7 +733,7 @@
     <string name="list_insights_days90">90日間</string>
     <string name="list_insights_activity">アクティビティ</string>
     <string name="list_insights_created">新規</string>
-    <string name="list_insights_completed">完了済み</string>
+    <string name="list_insights_completed">完了</string>
     <string name="list_insights_created_total">新規 %1$s 件</string>
     <string name="list_insights_completed_total">完了 %1$s 件</string>
     <string name="list_insights_time_to_complete">完了までの時間（中央値）</string>
@@ -750,11 +750,9 @@
     <string name="list_insights_duration_minutes">%1$s 分</string>
     <string name="list_insights_duration_hours">%1$s 時間</string>
     <string name="list_insights_duration_days">%1$s 日</string>
-    <string name="tradeoff_very_poor">非常に悪い</string>
     <string name="tradeoff_poor">悪い</string>
     <string name="tradeoff_mixed">どちらとも言えない</string>
     <string name="tradeoff_good">良い</string>
-    <string name="tradeoff_very_good">非常に良い</string>
     <string name="tradeoff_unrated">未評価</string>
     <string name="tradeoff_full_screen">全画面表示</string>
     <string name="core_picker_no_due_date" formatted="false">期限なし</string>

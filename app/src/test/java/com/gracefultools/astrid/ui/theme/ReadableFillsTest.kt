@@ -37,8 +37,9 @@ class ReadableFillsTest {
     fun `AWTD-1598 light themes read the dark inks`() {
         for (c in listOf(LightColors, OceanColors)) {
             assertEquals(rgb(29, 78, 216), c.accentInk)
-            assertEquals(rgb(21, 128, 61), c.successInk)
-            assertEquals(rgb(180, 83, 9), c.warningInk)
+            // One step darker since astrid-core 059ff50 (ADEV-153): 4.5:1 on the pill's 15% wash.
+            assertEquals(rgb(22, 101, 52), c.successInk)
+            assertEquals(rgb(146, 64, 14), c.warningInk)
             assertEquals(rgb(185, 28, 28), c.errorInk)
             assertEquals(rgb(14, 116, 144), c.infoInk)
             assertEquals(Accent, c.borderFocus)

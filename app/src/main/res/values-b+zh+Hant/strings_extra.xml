@@ -159,4 +159,7 @@
     <string name="settings_custom_agents_photo_updated">大頭貼已更新</string>
     <string name="settings_custom_agents_photo_failed">更新大頭貼失敗</string>
     <string name="settings_appearance_task_details_footer">選擇任務詳情的版面配置。清單為優先順序與負責人各設一列。專案較精簡，勾選框會開啟選擇器而非完成任務。</string>
+    <!-- ADEV-184: the core catalog's rating words (astrid-core 7dcb785), ahead of astrid-ios taking them (ADEV-183). Drop these once the iOS port gives the same. -->
+    <string name="tradeoff_very_good">決定性</string>
+    <string name="tradeoff_very_poor">一票否決</string>
 </resources>
