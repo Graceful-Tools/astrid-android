@@ -159,7 +159,4 @@
     <string name="settings_custom_agents_photo_updated">プロフィール写真を更新しました</string>
     <string name="settings_custom_agents_photo_failed">プロフィール写真を更新できませんでした</string>
     <string name="settings_appearance_task_details_footer">タスク詳細のレイアウトを選びます。リストでは優先度と担当者がそれぞれの行に表示されます。プロジェクトはコンパクトで、チェックボックスはタスクを完了せずに選択メニューを開きます。</string>
-    <!-- ADEV-184: the core catalog's rating words (astrid-core 7dcb785), ahead of astrid-ios taking them (ADEV-183). Drop these once the iOS port gives the same. -->
-    <string name="tradeoff_very_good">決め手</string>
-    <string name="tradeoff_very_poor">除外</string>
 </resources>

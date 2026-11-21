@@ -750,11 +750,34 @@
     <string name="list_insights_duration_minutes">%1$s мин</string>
     <string name="list_insights_duration_hours">%1$s ч</string>
     <string name="list_insights_duration_days">%1$s д</string>
+    <string name="tradeoff_very_poor">Исключающее</string>
     <string name="tradeoff_poor">Плохо</string>
     <string name="tradeoff_mixed">Неоднозначно</string>
     <string name="tradeoff_good">Хорошо</string>
+    <string name="tradeoff_very_good">Решающее</string>
     <string name="tradeoff_unrated">Без оценки</string>
     <string name="tradeoff_full_screen">Во весь экран</string>
+    <string name="project_goals_title">Цели и ограничения</string>
+    <string name="project_goals_intro">Зачем нужен этот проект и чего он не должен делать. Все, кто здесь работает, люди и агенты, читают и то и другое, поэтому инструкции могут быть краткими.</string>
+    <string name="project_goals_goals_heading">Цели</string>
+    <string name="project_goals_guardrails_heading">Ограничения</string>
+    <string name="project_goals_goal_placeholder">Цель, например: Максимизировать долгосрочную доходность</string>
+    <string name="project_goals_measure_placeholder">Показатель</string>
+    <string name="project_goals_target_placeholder">Целевое значение</string>
+    <string name="project_goals_current_placeholder">Сейчас</string>
+    <string name="project_goals_guardrail_placeholder">Ограничение, например: Не нарушать применимые законы</string>
+    <string name="project_goals_kind_label">Как проверяется</string>
+    <string name="project_goals_kind_hint">Заявленное: оценивают люди и агенты. Принудительное: проверяет программа.</string>
+    <string name="project_goals_kind_stated">Заявленное</string>
+    <string name="project_goals_kind_enforced">Принудительное</string>
+    <string name="project_goals_add_goal">Добавить цель</string>
+    <string name="project_goals_add_guardrail">Добавить ограничение</string>
+    <string name="project_goals_remove">Удалить</string>
+    <string name="project_goals_save_failed">Не удалось сохранить цели и ограничения. Попробуйте ещё раз.</string>
+    <string name="project_goals_counts">Цели: %1$d · Ограничения: %2$d</string>
+    <string name="project_goals_target_value">Цель: %1$s</string>
+    <string name="project_goals_current_value">Сейчас: %1$s</string>
+    <string name="actions_save">Сохранить</string>
     <string name="core_picker_no_due_date" formatted="false">Без срока</string>
     <string name="core_picker_today" formatted="false">Сегодня</string>
     <string name="core_picker_tomorrow" formatted="false">Завтра</string>

@@ -750,11 +750,34 @@
     <string name="list_insights_duration_minutes">%1$s min</string>
     <string name="list_insights_duration_hours">%1$s h</string>
     <string name="list_insights_duration_days">%1$s d</string>
+    <string name="tradeoff_very_poor">Descalificante</string>
     <string name="tradeoff_poor">Mal</string>
     <string name="tradeoff_mixed">Regular</string>
     <string name="tradeoff_good">Bien</string>
+    <string name="tradeoff_very_good">Decisivo</string>
     <string name="tradeoff_unrated">Sin valorar</string>
     <string name="tradeoff_full_screen">Pantalla completa</string>
+    <string name="project_goals_title">Objetivos y límites</string>
+    <string name="project_goals_intro">Para qué es este proyecto y qué no debe hacer. Todos los que trabajan aquí, personas y agentes, leen ambos, así las instrucciones pueden ser breves.</string>
+    <string name="project_goals_goals_heading">Objetivos</string>
+    <string name="project_goals_guardrails_heading">Límites</string>
+    <string name="project_goals_goal_placeholder">Un objetivo, p. ej. Maximizar la rentabilidad a largo plazo</string>
+    <string name="project_goals_measure_placeholder">Medida</string>
+    <string name="project_goals_target_placeholder">Meta</string>
+    <string name="project_goals_current_placeholder">Actual</string>
+    <string name="project_goals_guardrail_placeholder">Un límite, p. ej. No infringir ninguna ley aplicable</string>
+    <string name="project_goals_kind_label">Cómo se comprueba</string>
+    <string name="project_goals_kind_hint">Declarado: personas y agentes lo juzgan. Aplicado: un programa lo comprueba.</string>
+    <string name="project_goals_kind_stated">Declarado</string>
+    <string name="project_goals_kind_enforced">Aplicado</string>
+    <string name="project_goals_add_goal">Añadir objetivo</string>
+    <string name="project_goals_add_guardrail">Añadir límite</string>
+    <string name="project_goals_remove">Eliminar</string>
+    <string name="project_goals_save_failed">No se pudieron guardar los objetivos y límites. Inténtalo de nuevo.</string>
+    <string name="project_goals_counts">Objetivos: %1$d · Límites: %2$d</string>
+    <string name="project_goals_target_value">Meta: %1$s</string>
+    <string name="project_goals_current_value">Ahora: %1$s</string>
+    <string name="actions_save">Guardar</string>
     <string name="core_picker_no_due_date" formatted="false">Sin fecha límite</string>
     <string name="core_picker_today" formatted="false">Hoy</string>
     <string name="core_picker_tomorrow" formatted="false">Mañana</string>

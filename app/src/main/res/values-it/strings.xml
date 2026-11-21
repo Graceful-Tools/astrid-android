@@ -750,11 +750,34 @@
     <string name="list_insights_duration_minutes">%1$s min</string>
     <string name="list_insights_duration_hours">%1$s h</string>
     <string name="list_insights_duration_days">%1$s g</string>
+    <string name="tradeoff_very_poor">Escludente</string>
     <string name="tradeoff_poor">Scarso</string>
     <string name="tradeoff_mixed">Misto</string>
     <string name="tradeoff_good">Buono</string>
+    <string name="tradeoff_very_good">Decisivo</string>
     <string name="tradeoff_unrated">Non valutato</string>
     <string name="tradeoff_full_screen">Schermo intero</string>
+    <string name="project_goals_title">Obiettivi e vincoli</string>
+    <string name="project_goals_intro">A cosa serve questo progetto e cosa non deve fare. Chi lavora qui, persone e agenti, legge entrambi, così le istruzioni possono restare brevi.</string>
+    <string name="project_goals_goals_heading">Obiettivi</string>
+    <string name="project_goals_guardrails_heading">Vincoli</string>
+    <string name="project_goals_goal_placeholder">Un obiettivo, ad es. Massimizzare il rendimento a lungo termine</string>
+    <string name="project_goals_measure_placeholder">Misura</string>
+    <string name="project_goals_target_placeholder">Traguardo</string>
+    <string name="project_goals_current_placeholder">Attuale</string>
+    <string name="project_goals_guardrail_placeholder">Un vincolo, ad es. Non violare alcuna legge applicabile</string>
+    <string name="project_goals_kind_label">Come viene verificato</string>
+    <string name="project_goals_kind_hint">Dichiarato: lo valutano persone e agenti. Applicato: lo verifica un programma.</string>
+    <string name="project_goals_kind_stated">Dichiarato</string>
+    <string name="project_goals_kind_enforced">Applicato</string>
+    <string name="project_goals_add_goal">Aggiungi obiettivo</string>
+    <string name="project_goals_add_guardrail">Aggiungi vincolo</string>
+    <string name="project_goals_remove">Rimuovi</string>
+    <string name="project_goals_save_failed">Impossibile salvare obiettivi e vincoli. Riprova.</string>
+    <string name="project_goals_counts">Obiettivi: %1$d · Vincoli: %2$d</string>
+    <string name="project_goals_target_value">Traguardo: %1$s</string>
+    <string name="project_goals_current_value">Ora: %1$s</string>
+    <string name="actions_save">Salva</string>
     <string name="core_picker_no_due_date" formatted="false">Nessuna scadenza</string>
     <string name="core_picker_today" formatted="false">Oggi</string>
     <string name="core_picker_tomorrow" formatted="false">Domani</string>

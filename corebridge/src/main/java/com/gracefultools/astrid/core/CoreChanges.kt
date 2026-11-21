@@ -23,8 +23,10 @@ object ChangeKind {
     const val DELIVERED = "delivered"
     const val NOTIFICATIONS = "notifications"
     const val STREAM = "stream"
+    /** A project's goals and guardrails moved in the cache (ADEV-187); `id` is the project. */
+    const val PROJECT_GOALS = "projectGoals"
 
-    val ALL = setOf(TASK, LIST, COMMENTS, CHAT, AGENT_TYPING, SETTINGS, REMINDERS_DUE, NEEDS_SYNC, SYNCED, DELIVERED, NOTIFICATIONS, STREAM)
+    val ALL = setOf(TASK, LIST, COMMENTS, CHAT, AGENT_TYPING, SETTINGS, REMINDERS_DUE, NEEDS_SYNC, SYNCED, DELIVERED, NOTIFICATIONS, STREAM, PROJECT_GOALS)
 }
 
 private fun CoreChange.string(key: String) = (raw[key] as? JsonPrimitive)?.contentOrNull
@@ -68,6 +70,9 @@ fun CoreChange.concernsChat(channelId: String? = null): Boolean = when (kind) {
     ChangeKind.DELIVERED -> undescribed || (if (channelId == null) ids("channelIds").isNotEmpty() else channelId in ids("channelIds"))
     else -> false
 }
+
+/** Project [projectId]'s goals and guardrails moved (ADEV-184). */
+fun CoreChange.concernsProjectGoals(projectId: String): Boolean = kind == ChangeKind.PROJECT_GOALS && string("id") == projectId
 
 /** The Outbox's counts moved. */
 val CoreChange.movesOutbox: Boolean get() = kind == ChangeKind.DELIVERED

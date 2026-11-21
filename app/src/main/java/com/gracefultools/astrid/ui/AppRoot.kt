@@ -257,16 +257,22 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                     onViewMode = { next -> selected?.let { viewModes[it.id] = next } },
                     onListSettings = selected?.takeIf { it.isVirtual != true && featured == null }?.let { list -> { nav.navigate("list/${list.id}") } },
                     board = {
-                        BoardContent(
-                            boardState,
-                            onOpenTask = openTask,
-                            onMove = boardVm::moveTo,
-                            onComplete = boardVm::leading,
-                            onDrop = boardVm::drop,
-                            onAddCard = boardVm::addCard,
-                            onDismissError = boardVm::dismissError,
-                            selectedTaskId = paneTaskId,
-                        )
+                        androidx.compose.foundation.layout.Column {
+                            // The project's goals and guardrails, folded; nothing when it has none (ADEV-184).
+                            com.gracefultools.astrid.ui.board.ProjectGoalsStrip(boardState.goals)
+                            androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.weight(1f)) {
+                                BoardContent(
+                                    boardState,
+                                    onOpenTask = openTask,
+                                    onMove = boardVm::moveTo,
+                                    onComplete = boardVm::leading,
+                                    onDrop = boardVm::drop,
+                                    onAddCard = boardVm::addCard,
+                                    onDismissError = boardVm::dismissError,
+                                    selectedTaskId = paneTaskId,
+                                )
+                            }
+                        }
                     },
                     messages = chat,
                     emptyMessage = emptyMessage(selected, isMyTasks),

@@ -179,6 +179,11 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel, i
             }
         }
 
+        // The project's goals and guardrails, for whoever the core says may edit them (ADEV-184).
+        state.goalsDraft?.let { draft ->
+            ProjectGoalsEditor(draft, state.goalsChanged, state.goalsSaving, state.goalsSaveFailed, vm::editGoals, vm::saveGoals)
+        }
+
         // Advanced — the recently completed window.
         FormSection(stringResource(R.string.lists_advanced), footer = stringResource(R.string.lists_recently_completed_footer)) {
             val preset = state.recentlyCompletedPreset

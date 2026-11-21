@@ -6,7 +6,9 @@ import com.gracefultools.astrid.core.Core
 import com.gracefultools.astrid.core.CoreFailure
 import com.gracefultools.astrid.core.CoreJson
 import com.gracefultools.astrid.core.command
+import com.gracefultools.astrid.core.concernsProjectGoals
 import com.gracefultools.astrid.model.Board
+import com.gracefultools.astrid.model.ProjectGoals
 import com.gracefultools.astrid.ui.common.CoreViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +24,8 @@ data class BoardState(
     val board: Board? = null,
     val error: String? = null,
     val statusPicker: com.gracefultools.astrid.ui.common.LeadingOutcome.PickStatus? = null,
+    /** The project's goals and guardrails (ADEV-184): `getListGoals`, null until read. */
+    val goals: com.gracefultools.astrid.model.ProjectGoals? = null,
 )
 
 /**
@@ -39,6 +43,8 @@ class BoardViewModel(private val core: Core, dispatcher: CoroutineDispatcher = D
                 val open = _state.value
                 val listId = open.listId ?: return@collect
                 if (change.kind == ChangeKind.LIST || change.touchesList(listId, open.isVirtual)) reload()
+                val projectId = open.goals?.projectId ?: open.board?.projectId
+                if (projectId != null && change.concernsProjectGoals(projectId)) loadGoals()
             }
         }
     }
@@ -47,6 +53,17 @@ class BoardViewModel(private val core: Core, dispatcher: CoroutineDispatcher = D
         if (_state.value.listId == listId) return
         _state.value = BoardState(listId = listId, isVirtual = isVirtual)
         reload()
+        if (!isVirtual) loadGoals()
+    }
+
+    /**
+     * The project's goals and guardrails (ADEV-184): the core answers from its cache when offline,
+     * and announces `projectGoals` when the value moves. Best effort: a board without them is a board.
+     */
+    private fun loadGoals() = work {
+        val listId = _state.value.listId ?: return@work
+        runCatching { CoreJson.decodeFromJsonElement(ProjectGoals.serializer(), core.run(command("getListGoals", "listId" to listId))) }
+            .onSuccess { goals -> if (_state.value.listId == listId) _state.update { it.copy(goals = goals) } }
     }
 
     fun reload() = work {

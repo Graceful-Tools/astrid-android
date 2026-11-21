@@ -750,11 +750,34 @@
     <string name="list_insights_duration_minutes">%1$s분</string>
     <string name="list_insights_duration_hours">%1$s시간</string>
     <string name="list_insights_duration_days">%1$s일</string>
+    <string name="tradeoff_very_poor">탈락</string>
     <string name="tradeoff_poor">나쁨</string>
     <string name="tradeoff_mixed">보통</string>
     <string name="tradeoff_good">좋음</string>
+    <string name="tradeoff_very_good">결정적</string>
     <string name="tradeoff_unrated">평가 없음</string>
     <string name="tradeoff_full_screen">전체 화면</string>
+    <string name="project_goals_title">목표와 가드레일</string>
+    <string name="project_goals_intro">이 프로젝트의 목적과 해서는 안 되는 일입니다. 여기서 일하는 사람과 에이전트 모두 둘 다 읽으므로 지침은 짧게 유지할 수 있습니다.</string>
+    <string name="project_goals_goals_heading">목표</string>
+    <string name="project_goals_guardrails_heading">가드레일</string>
+    <string name="project_goals_goal_placeholder">목표 (예: 장기 수익 극대화)</string>
+    <string name="project_goals_measure_placeholder">지표</string>
+    <string name="project_goals_target_placeholder">목표치</string>
+    <string name="project_goals_current_placeholder">현재</string>
+    <string name="project_goals_guardrail_placeholder">가드레일 (예: 관련 법률을 위반하지 않기)</string>
+    <string name="project_goals_kind_label">확인 방식</string>
+    <string name="project_goals_kind_hint">명시: 사람과 에이전트가 판단합니다. 강제: 프로그램이 확인합니다.</string>
+    <string name="project_goals_kind_stated">명시</string>
+    <string name="project_goals_kind_enforced">강제</string>
+    <string name="project_goals_add_goal">목표 추가</string>
+    <string name="project_goals_add_guardrail">가드레일 추가</string>
+    <string name="project_goals_remove">제거</string>
+    <string name="project_goals_save_failed">목표와 가드레일을 저장하지 못했습니다. 다시 시도하세요.</string>
+    <string name="project_goals_counts">목표: %1$d · 가드레일: %2$d</string>
+    <string name="project_goals_target_value">목표치: %1$s</string>
+    <string name="project_goals_current_value">현재: %1$s</string>
+    <string name="actions_save">저장</string>
     <string name="core_picker_no_due_date" formatted="false">마감일 없음</string>
     <string name="core_picker_today" formatted="false">오늘</string>
     <string name="core_picker_tomorrow" formatted="false">내일</string>

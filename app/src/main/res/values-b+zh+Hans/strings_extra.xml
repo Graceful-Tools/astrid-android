@@ -159,7 +159,4 @@
     <string name="settings_custom_agents_photo_updated">头像已更新</string>
     <string name="settings_custom_agents_photo_failed">更新头像失败</string>
     <string name="settings_appearance_task_details_footer">选择任务详情的布局。列表为优先级和负责人各设一行。项目更紧凑，勾选框会打开选择器而不是完成任务。</string>
-    <!-- ADEV-184: the core catalog's rating words (astrid-core 7dcb785), ahead of astrid-ios taking them (ADEV-183). Drop these once the iOS port gives the same. -->
-    <string name="tradeoff_very_good">决定性</string>
-    <string name="tradeoff_very_poor">一票否决</string>
 </resources>

@@ -968,4 +968,26 @@
     <string name="tradeoff_very_good">Decisive</string>
     <string name="tradeoff_unrated">Not rated</string>
     <string name="tradeoff_full_screen">Full screen</string>
+    <!-- ADEV-184: a project's goals and guardrails (iOS project_goals.*, web projectMode.goals.*). -->
+    <string name="project_goals_title">Goals &amp; guardrails</string>
+    <string name="project_goals_intro">What this project is for, and what it must not do. Everyone working here, people and agents, reads both, so instructions can stay short.</string>
+    <string name="project_goals_goals_heading">Goals</string>
+    <string name="project_goals_guardrails_heading">Guardrails</string>
+    <string name="project_goals_goal_placeholder">A goal, e.g. Maximise long-term returns</string>
+    <string name="project_goals_measure_placeholder">Measure</string>
+    <string name="project_goals_target_placeholder">Target</string>
+    <string name="project_goals_current_placeholder">Current</string>
+    <string name="project_goals_guardrail_placeholder">A guardrail, e.g. Break no applicable laws</string>
+    <string name="project_goals_kind_label">How it is checked</string>
+    <string name="project_goals_kind_hint">Stated: people and agents judge it. Enforced: a program checks it.</string>
+    <string name="project_goals_kind_stated">Stated</string>
+    <string name="project_goals_kind_enforced">Enforced</string>
+    <string name="project_goals_add_goal">Add goal</string>
+    <string name="project_goals_add_guardrail">Add guardrail</string>
+    <string name="project_goals_remove">Remove</string>
+    <string name="project_goals_save_failed">Could not save the goals and guardrails. Try again.</string>
+    <string name="project_goals_counts">Goals: %1$d · Guardrails: %2$d</string>
+    <string name="project_goals_target_value">Target: %1$s</string>
+    <string name="project_goals_current_value">Now: %1$s</string>
+    <string name="actions_save">Save</string>
 </resources>
