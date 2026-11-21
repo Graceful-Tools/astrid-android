@@ -733,7 +733,7 @@
     <string name="list_insights_days90">90 dias</string>
     <string name="list_insights_activity">Atividade</string>
     <string name="list_insights_created">Novas</string>
-    <string name="list_insights_completed">Concluída</string>
+    <string name="list_insights_completed">Concluídas</string>
     <string name="list_insights_created_total">%1$s novas</string>
     <string name="list_insights_completed_total">%1$s concluídas</string>
     <string name="list_insights_time_to_complete">Tempo mediano até concluir</string>
@@ -750,11 +750,9 @@
     <string name="list_insights_duration_minutes">%1$s min</string>
     <string name="list_insights_duration_hours">%1$s h</string>
     <string name="list_insights_duration_days">%1$s d</string>
-    <string name="tradeoff_very_poor">Muito ruim</string>
     <string name="tradeoff_poor">Ruim</string>
     <string name="tradeoff_mixed">Misto</string>
     <string name="tradeoff_good">Bom</string>
-    <string name="tradeoff_very_good">Muito bom</string>
     <string name="tradeoff_unrated">Sem avaliação</string>
     <string name="tradeoff_full_screen">Tela cheia</string>
     <string name="core_picker_no_due_date" formatted="false">Sem prazo</string>

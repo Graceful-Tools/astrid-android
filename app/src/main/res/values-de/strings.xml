@@ -750,11 +750,9 @@
     <string name="list_insights_duration_minutes">%1$s Min.</string>
     <string name="list_insights_duration_hours">%1$s Std.</string>
     <string name="list_insights_duration_days">%1$s T.</string>
-    <string name="tradeoff_very_poor">Sehr schlecht</string>
     <string name="tradeoff_poor">Schlecht</string>
     <string name="tradeoff_mixed">Gemischt</string>
     <string name="tradeoff_good">Gut</string>
-    <string name="tradeoff_very_good">Sehr gut</string>
     <string name="tradeoff_unrated">Nicht bewertet</string>
     <string name="tradeoff_full_screen">Vollbild</string>
     <string name="core_picker_no_due_date" formatted="false">Kein Fälligkeitsdatum</string>

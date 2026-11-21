@@ -43,6 +43,13 @@ class TradeoffGridTest {
                 {"name":[${t("Porto")}],"cells":[${cell("mixed", "fair")},${cell("good", "short")}]}],
         "key":["poor","mixed","good","veryGood"]}]"""
 
+    /** ADEV-184: one cell at each extreme. */
+    private val extremes = """[{"kind":"tradeoffGrid","alignments":["none","none"],
+        "header":[[${t("Option")}],[${t("Cost")}]],
+        "rows":[{"name":[${t("Lisbon")}],"cells":[${cell("veryGood", "cheap")}]},
+                {"name":[${t("Moscow")}],"cells":[${cell("veryPoor", "no visa")}]}],
+        "key":["veryPoor","veryGood"]}]"""
+
     /** Fixture `grid-empty-cell`, with the second row written one cell short. */
     private val emptyCells = """[{"kind":"tradeoffGrid","alignments":["none","none","none"],
         "header":[[${t("Option")}],[${t("Cost")}],[${t("Time")}]],
@@ -67,7 +74,7 @@ class TradeoffGridTest {
     @Test
     fun `AATD-103 each rated cell says its rating, then its reason`() {
         show(grid)
-        compose.onNodeWithContentDescription("Very good. cheap").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Decisive. cheap").assertIsDisplayed()
         compose.onNodeWithContentDescription("Poor. long flight").assertIsDisplayed()
         compose.onNodeWithContentDescription("Mixed. fair").assertIsDisplayed()
         compose.onNodeWithContentDescription("Good. short").assertIsDisplayed()
@@ -78,7 +85,25 @@ class TradeoffGridTest {
         show(grid)
         val key = compose.onNodeWithTag("tradeoff:key").fetchSemanticsNode()
             .config[SemanticsProperties.Text].map { it.text }
-        assertEquals(listOf("Poor", "Mixed", "Good", "Very good"), key)
+        assertEquals(listOf("Poor", "Mixed", "Good", "Decisive"), key)
+    }
+
+    @Test
+    fun `ADEV-184 the extremes read Decisive and Disqualifying, as the core catalog says`() {
+        show(extremes)
+        compose.onNodeWithContentDescription("Decisive. cheap").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Disqualifying. no visa").assertIsDisplayed()
+        val key = compose.onNodeWithTag("tradeoff:key").fetchSemanticsNode()
+            .config[SemanticsProperties.Text].map { it.text }
+        assertEquals(listOf("Disqualifying", "Decisive"), key)
+    }
+
+    @Test
+    @Config(qualifiers = "de-w400dp-h900dp")
+    fun `ADEV-184 the extremes take the core catalog's translation`() {
+        show(extremes)
+        compose.onNodeWithContentDescription("Entscheidend. cheap").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Ausschlusskriterium. no visa").assertIsDisplayed()
     }
 
     @Test

@@ -159,4 +159,7 @@
     <string name="settings_custom_agents_photo_updated">Profilbild aktualisiert</string>
     <string name="settings_custom_agents_photo_failed">Profilbild konnte nicht aktualisiert werden</string>
     <string name="settings_appearance_task_details_footer">Wähle das Layout der Aufgabendetails. Liste gibt Priorität und zugewiesener Person eigene Zeilen. Projekt ist kompakt, und das Kästchen öffnet eine Auswahl, statt die Aufgabe abzuschließen.</string>
+    <!-- ADEV-184: the core catalog's rating words (astrid-core 7dcb785), ahead of astrid-ios taking them (ADEV-183). Drop these once the iOS port gives the same. -->
+    <string name="tradeoff_very_good">Entscheidend</string>
+    <string name="tradeoff_very_poor">Ausschlusskriterium</string>
 </resources>

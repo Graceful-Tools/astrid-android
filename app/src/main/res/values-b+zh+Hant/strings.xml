@@ -750,11 +750,9 @@
     <string name="list_insights_duration_minutes">%1$s 分鐘</string>
     <string name="list_insights_duration_hours">%1$s 小時</string>
     <string name="list_insights_duration_days">%1$s 天</string>
-    <string name="tradeoff_very_poor">很差</string>
     <string name="tradeoff_poor">差</string>
     <string name="tradeoff_mixed">普通</string>
     <string name="tradeoff_good">好</string>
-    <string name="tradeoff_very_good">很好</string>
     <string name="tradeoff_unrated">未評分</string>
     <string name="tradeoff_full_screen">全螢幕</string>
     <string name="core_picker_no_due_date" formatted="false">無截止日期</string>

@@ -159,4 +159,7 @@
     <string name="settings_custom_agents_photo_updated">Foto de perfil atualizada</string>
     <string name="settings_custom_agents_photo_failed">Falha ao atualizar a foto de perfil</string>
     <string name="settings_appearance_task_details_footer">Escolha como os detalhes da tarefa são dispostos. Lista dá à prioridade e ao responsável as suas próprias linhas. Projeto é compacto e a caixa abre um seletor em vez de concluir a tarefa.</string>
+    <!-- ADEV-184: the core catalog's rating words (astrid-core 7dcb785), ahead of astrid-ios taking them (ADEV-183). Drop these once the iOS port gives the same. -->
+    <string name="tradeoff_very_good">Decisivo</string>
+    <string name="tradeoff_very_poor">Desqualificante</string>
 </resources>
