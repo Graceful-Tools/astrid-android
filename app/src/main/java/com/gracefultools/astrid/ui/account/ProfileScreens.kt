@@ -101,6 +101,7 @@ import com.gracefultools.astrid.ui.settings.NavRow
 import com.gracefultools.astrid.ui.settings.RowIcon
 import com.gracefultools.astrid.ui.settings.SettingsPage
 import com.gracefultools.astrid.ui.settings.ValueRow
+import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
@@ -172,12 +173,12 @@ private fun UserCard(image: String?, name: String, initials: String, email: Stri
     ProfileCard {
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s16), verticalAlignment = Alignment.Top) {
             Box(
-                Modifier.size(80.dp).clip(CircleShape).then(
+                Modifier.size(AvatarSize.profile).clip(CircleShape).then(
                     if (onEdit == null) Modifier
                     else Modifier.clickable(role = Role.Button, onClickLabel = editLabel, onClick = onEdit).semantics { contentDescription = editLabel },
                 ),
             ) {
-                Avatar(image, initials, 80.dp)
+                Avatar(image, initials, AvatarSize.profile)
                 if (onEdit != null) Box(
                     Modifier.align(Alignment.BottomEnd).offset(x = (-4).dp, y = (-4).dp).size(24.dp).clip(CircleShape).background(colors.accent),
                     contentAlignment = Alignment.Center,
@@ -340,11 +341,11 @@ private fun EditProfileSheet(user: AccountUser, saving: Boolean, vm: ProfileView
             verticalArrangement = Arrangement.spacedBy(Spacing.s24), horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s16)) {
-                Box(Modifier.size(120.dp)) {
+                Box(Modifier.size(AvatarSize.profileEdit)) {
                     if (photo != null) {
-                        AsyncImage(model = java.io.File(photo!!), contentDescription = null, contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.size(120.dp).clip(CircleShape))
+                        AsyncImage(model = java.io.File(photo!!), contentDescription = null, contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.size(AvatarSize.profileEdit).clip(CircleShape))
                     } else {
-                        Avatar(user.image, initialsOf(user.name, user.email), 120.dp)
+                        Avatar(user.image, initialsOf(user.name, user.email), AvatarSize.profileEdit)
                     }
                     IconButton(
                         onClick = pick,
@@ -452,11 +453,11 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
 
         FormSection(stringResource(R.string.profile_title), if (isOAuth) stringResource(R.string.account_oauth_footer) else null) {
             FormRowFrame {
-                Box(Modifier.size(60.dp).clip(CircleShape).border(2.dp, colors.accent, CircleShape)) {
+                Box(Modifier.size(AvatarSize.account).clip(CircleShape).border(2.dp, colors.accent, CircleShape)) {
                     if (photo != null) {
-                        AsyncImage(model = java.io.File(photo!!), contentDescription = null, contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.size(60.dp))
+                        AsyncImage(model = java.io.File(photo!!), contentDescription = null, contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.size(AvatarSize.account))
                     } else {
-                        Avatar(user.image, initialsOf(user.name, user.email), 60.dp)
+                        Avatar(user.image, initialsOf(user.name, user.email), AvatarSize.account)
                     }
                 }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {

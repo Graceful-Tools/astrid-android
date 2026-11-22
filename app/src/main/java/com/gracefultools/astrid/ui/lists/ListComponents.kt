@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.HueWheel
@@ -198,7 +199,7 @@ internal fun AddMemberSheet(
                 if (email.length >= 2) suggestions.forEach { person ->
                     FormDivider()
                     FormRow(onClick = { email = person.email.orEmpty(); onQuery("") }) {
-                        Avatar(person.image, initialsOf(person.name, person.email), 32.dp)
+                        Avatar(person.image, initialsOf(person.name, person.email), AvatarSize.md)
                         Column(Modifier.weight(1f)) {
                             Text(person.display, style = TextStyles.body, color = colors.textPrimary, maxLines = 1)
                             person.email?.let { Text(it, style = TextStyles.caption2, color = colors.textSecondary, maxLines = 1) }

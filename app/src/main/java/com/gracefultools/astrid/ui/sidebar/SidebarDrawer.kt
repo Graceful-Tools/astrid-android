@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.sidebar
 
+import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.AccountCardShapes
 import androidx.compose.ui.graphics.RectangleShape
@@ -381,7 +382,7 @@ private fun AccountCard(user: com.gracefultools.astrid.model.UserSummary?, onPro
             Modifier.weight(1f).clip(AccountCardShapes.profile).clickable(onClick = onProfile).testTag("sidebar:profile").padding(Spacing.s4),
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
         ) {
-            Avatar(user?.image, initialsOf(user?.name, user?.email), 40.dp)
+            Avatar(user?.image, initialsOf(user?.name, user?.email), AvatarSize.xl)
             Text(user?.display ?: "", style = TextStyles.headline, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         Icon(

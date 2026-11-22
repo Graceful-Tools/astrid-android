@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.reminders
 
+import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import androidx.compose.animation.core.Animatable
@@ -171,7 +172,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy((-8).dp)) {
                             state.countingOnYou.forEach { person ->
-                                Avatar(person.image, initialsOf(person.display), 32.dp, border = colors.onFill)
+                                Avatar(person.image, initialsOf(person.display), AvatarSize.md, border = colors.onFill)
                             }
                         }
                         Text(stringResource(R.string.reminders_counting_on_you), style = TextStyles.subheadline, fontWeight = FontWeight.Medium, color = IosSystemColors.orange)

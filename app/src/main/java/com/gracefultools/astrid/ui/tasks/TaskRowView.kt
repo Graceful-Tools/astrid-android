@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.TouchLayout
 import com.gracefultools.astrid.ui.common.reportsSelectedRow
@@ -198,7 +199,7 @@ private fun LeadingControl(row: TaskRow, onLeading: () -> Unit) {
         "avatar" -> {
             val initials = row.leading.initial ?: initialsOf(row.assignee?.name, row.assignee?.email)
             if (row.isRepeating) RepeatFrame(row, onTap, label, pop) {
-                Avatar(image = row.assignee?.image, initials = initials, size = 22.dp)
+                Avatar(image = row.assignee?.image, initials = initials, size = AvatarSize.xxs)
             } else Avatar(
                 image = row.assignee?.image, initials = initials,
                 size = TouchSize.leadingControl, shape = RowFaceShape, border = priority, modifier = tap,

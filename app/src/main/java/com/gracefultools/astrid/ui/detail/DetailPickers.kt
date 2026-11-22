@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -152,10 +153,10 @@ internal fun AssigneeSheet(state: TaskDetailState, vm: TaskDetailViewModel, onPi
                 subtitle = caption,
                 leading = {
                     if (option.userId == null) {
-                        Box(Modifier.size(32.dp).clip(CircleShape).background(colors.bgTertiary), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(AvatarSize.md).clip(CircleShape).background(colors.bgTertiary), contentAlignment = Alignment.Center) {
                             Icon(Icons.Outlined.PersonOff, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.md))
                         }
-                    } else Avatar(option.image, option.initials, 32.dp)
+                    } else Avatar(option.image, option.initials, AvatarSize.md)
                 },
             ) { if (multiple) vm.toggleAssignee(option.userId) else onPick(option.userId) }
         }
