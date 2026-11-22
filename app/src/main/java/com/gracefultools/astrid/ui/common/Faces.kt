@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -26,8 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.gracefultools.astrid.R
+import com.gracefultools.astrid.ui.theme.AstridColors
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
+import com.gracefultools.astrid.ui.theme.TouchSize
 
 /**
  * A person's face, as iOS draws it everywhere: their photo when there is one, else their initials
@@ -79,20 +82,38 @@ fun initialsOf(name: String?, email: String? = null): String {
 }
 
 /**
- * iOS's checkbox artwork, `check_box[_repeat][_checked]_<priority>` — the same 16 images, so a
- * done task shows the big green tick and a repeating one the circular arrows (AATD-36).
+ * The task checkbox, astrid-core's art (register DS21, ADEV-196), as iOS's TaskCheckboxArt and
+ * web's CheckboxArt draw it: the box, or the repeat arrows, tinted with [checkboxTint], then the
+ * check in its own green once done. The layers are vendored from the pinned core
+ * (`scripts/check-design-tokens.sh`); never edit them here. They replaced iOS's 16 fixed-colour
+ * PNGs (AATD-36), whose low-priority box was #328ACC whatever the accent or theme.
  */
 @Composable
-fun CheckboxArt(priority: Int, repeating: Boolean, checked: Boolean, modifier: Modifier = Modifier, size: Dp = 34.dp) {
-    Image(painterResource(checkboxDrawable(priority, repeating, checked)), null, modifier.size(size))
+fun CheckboxArt(priority: Int, repeating: Boolean, checked: Boolean, modifier: Modifier = Modifier, size: Dp = TouchSize.leadingControl) {
+    val tint = checkboxTint(priority, AstridTheme.colors)
+    Box(modifier.size(size)) {
+        for (layer in checkboxLayers(checked, repeating)) {
+            Image(
+                painterResource(layer), null, Modifier.size(size),
+                colorFilter = if (layer == R.drawable.checkbox_check) null else ColorFilter.tint(tint),
+            )
+        }
+    }
 }
 
-fun checkboxDrawable(priority: Int, repeating: Boolean, checked: Boolean): Int {
-    val p = priority.coerceIn(0, 3)
-    return when {
-        repeating && checked -> listOf(R.drawable.check_box_repeat_checked_0, R.drawable.check_box_repeat_checked_1, R.drawable.check_box_repeat_checked_2, R.drawable.check_box_repeat_checked_3)[p]
-        repeating -> listOf(R.drawable.check_box_repeat_0, R.drawable.check_box_repeat_1, R.drawable.check_box_repeat_2, R.drawable.check_box_repeat_3)[p]
-        checked -> listOf(R.drawable.check_box_checked_0, R.drawable.check_box_checked_1, R.drawable.check_box_checked_2, R.drawable.check_box_checked_3)[p]
-        else -> listOf(R.drawable.check_box_0, R.drawable.check_box_1, R.drawable.check_box_2, R.drawable.check_box_3)[p]
-    }
+/** The layers, bottom first: the box, or the arrows for a repeating task, then the check once done. */
+fun checkboxLayers(checked: Boolean, repeating: Boolean): List<Int> =
+    listOf(if (repeating) R.drawable.checkbox_repeat else R.drawable.checkbox_box) +
+        if (checked) listOf(R.drawable.checkbox_check) else emptyList()
+
+/**
+ * The box's colour: the priority token (low is the accent, or its lighter ink on Dark). No
+ * priority is the theme's muted text, as on iOS and web: `priority-none` is 3:1 or less on Dark's
+ * card, and most tasks have none.
+ */
+fun checkboxTint(priority: Int, colors: AstridColors): Color = when (priority) {
+    1 -> colors.tokens.priorityLow
+    2 -> colors.tokens.priorityMedium
+    3 -> colors.tokens.priorityHigh
+    else -> colors.textMuted
 }

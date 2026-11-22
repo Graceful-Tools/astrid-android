@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # scripts/check-design-tokens.sh (AATD-85): passes the vendored file, fails a hand edit, fails a
-# stale copy, and --update brings a stale copy back to the core's.
+# stale copy, and --update brings a stale copy back to the core's. The checkbox art (ADEV-196) too.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
@@ -9,10 +9,18 @@ src=app/src/main/java/com/astrid/design/AstridTokens.kt
 mkdir -p "$tmp/core/design/generated/android"
 cp "$src" "$tmp/core/design/generated/android/AstridTokens.kt"
 cp "$src" "$tmp/vendored.kt"
+mkdir -p "$tmp/core/design/generated/android/drawable" "$tmp/drawable"
+cp app/src/main/res/drawable/checkbox_*.xml "$tmp/core/design/generated/android/drawable/"
+cp app/src/main/res/drawable/checkbox_*.xml "$tmp/drawable/"
+export ASTRID_TOKENS_DRAWABLES="$tmp/drawable"
 run() { ASTRID_TOKENS_FILE="$tmp/vendored.kt" ASTRID_TOKENS_CORE="$tmp/core" scripts/check-design-tokens.sh "$@"; }
 fail() { echo "FAIL: $*" >&2; exit 1; }
 
 run >/dev/null || fail "the vendored file should pass"
+
+sed 's/#FF89A912/#FF00FF00/' app/src/main/res/drawable/checkbox_check.xml > "$tmp/drawable/checkbox_check.xml"
+if run >/dev/null 2>&1; then fail "a hand edit to the checkbox art should fail"; fi
+cp app/src/main/res/drawable/checkbox_check.xml "$tmp/drawable/"
 
 sed 's/0xFF2563EB/0xFF3B82F6/' "$src" > "$tmp/vendored.kt"
 if run >/dev/null 2>&1; then fail "a hand edit should fail"; fi
@@ -27,4 +35,6 @@ if run >/dev/null 2>&1; then fail "a copy that is not the core's should fail"; f
 
 run --update >/dev/null || fail "--update should repair it"
 cmp -s "$src" "$tmp/vendored.kt" || fail "--update should copy the core's file"
+rm "$tmp/drawable/checkbox_box.xml"; run --update >/dev/null || fail "--update should restore the art"
+cmp -s app/src/main/res/drawable/checkbox_box.xml "$tmp/drawable/checkbox_box.xml" || fail "--update should copy the core's art"
 echo "check-design-tokens: ok"
