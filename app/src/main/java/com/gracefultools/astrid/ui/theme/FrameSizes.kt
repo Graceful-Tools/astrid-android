@@ -29,4 +29,10 @@ object FrameSize {
     val stepperValue = 36.dp
     /** The # or ! in front of a list or task in the mention picker. */
     val mentionGlyph = 20.dp
+    /** The column at the sidebar's leading edge that the logo and every row's icon centre in (iOS SidebarBrandHeader). */
+    val sidebarLogoColumn = 28.8.dp
+    /** Astrid beside her speech bubble on the reminder screen. */
+    val reminderCharacter = 80.dp
+    /** How far a reply comment sits in from the side its bubble starts on. */
+    val replyIndent = 24.dp
 }

@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui
 
+import com.gracefultools.astrid.ui.theme.PaneWidth
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -25,9 +26,9 @@ object PaneLayout {
     /** iOS: the detail's share when it has no messages pane to cover. */
     const val DETAIL_SHARE = 0.5f
     /** iOS messagesRailWidth: what a hidden messages pane leaves — room for its show button. */
-    val RAIL: Dp = 48.dp
+    val RAIL: Dp = PaneWidth.rail
     /** iOS messagesWidthBesideBoard: narrow beside a board, so its columns get the room. */
-    val MESSAGES_BESIDE_BOARD: Dp = 320.dp
+    val MESSAGES_BESIDE_BOARD: Dp = PaneWidth.messagesBesideBoard
 
     fun showsDetailPane(widthDp: Int) = widthDp >= DETAIL_MIN_WIDTH
 

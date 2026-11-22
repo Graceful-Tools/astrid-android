@@ -23,6 +23,7 @@ cat > "$ui/tasks/Row.kt" <<'KT'
         Text("Hello there", color = Color.White.copy(alpha = 0.5f))
         Icon(contentDescription = "Close the sheet", tint = Color.Transparent)
         Text(stringResource(R.string.ok), modifier = Modifier.size(24.dp))
+        Spacer(Modifier.padding(start = if (reply) Indent else 0.dp, end = 0.0.dp))
         val key = "astridModel"
         val url = "https://astrid.cc"
         val greeting = "$name is here"
@@ -35,7 +36,7 @@ metrics --json > "$work/counts.json" || fail "--json failed"
 expect() { python3 -I -c 'import json,sys; c=json.load(open(sys.argv[1])); sys.exit(0 if c.get(sys.argv[2])==int(sys.argv[3]) else (print(f"{sys.argv[2]}={c.get(sys.argv[2])}, expected {sys.argv[3]}") or 1))' "$work/counts.json" "$1" "$2" || fail "count $1"; }
 expect colorLiterals 1        # Color(0xFFFF0000); the theme's does not count
 expect namedColors 2          # Color.Red, Color.White; Transparent is not a colour choice
-expect dpLiterals 3           # 8.dp, 12.dp, 24.dp
+expect dpLiterals 3           # 8.dp, 12.dp, 24.dp; ADEV-196: 0.dp is not a size choice
 expect roundedCorners 1       # RoundedCornerShape(12.dp)
 expect spLiterals 1           # 14.sp
 expect hardcodedCopy 3        # "Hello there" twice, "Close the sheet"; keys, URLs and templates are not copy

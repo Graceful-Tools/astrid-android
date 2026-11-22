@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.FrameSize
 import com.gracefultools.astrid.ui.theme.MaxSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -160,7 +161,7 @@ private fun CommentBubble(
     var confirmingDelete by remember { mutableStateOf(false) }
     val mine = comment.isMine
     val bubble = if (mine) colors.bubbleMine else colors.bubble
-    val indent = if (comment.isReply) 24.dp else 0.dp
+    val indent = if (comment.isReply) FrameSize.replyIndent else 0.dp
     Row(
         Modifier.fillMaxWidth().padding(start = if (!mine) indent else 0.dp, end = if (mine) indent else 0.dp),
         horizontalArrangement = if (mine) Arrangement.End else Arrangement.Start,

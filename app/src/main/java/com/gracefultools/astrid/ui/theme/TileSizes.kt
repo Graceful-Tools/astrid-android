@@ -20,6 +20,8 @@ object TileSize {
     val attachment = 56.dp
     /** The list image in List Settings → Admin (iOS ListSettingsModal). */
     val listImage = 64.dp
+    /** A thumbnail in the task details' Attachments row, which scrolls sideways (iOS TaskDetailView). */
+    val thumbnail = 64.dp
     /** The app logo on the sign-in screen (iOS SignInView). */
     val logo = 88.dp
 }

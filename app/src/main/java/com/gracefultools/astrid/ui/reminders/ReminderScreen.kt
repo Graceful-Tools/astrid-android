@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.reminders
 
+import com.gracefultools.astrid.ui.theme.FrameSize
 import com.gracefultools.astrid.ui.theme.MaxSize
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.BorderWidth
@@ -166,7 +167,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
                         dueText(detail.due)?.let { Text(it, style = TextStyles.subheadline, color = if (detail.isOverdue) com.gracefultools.astrid.ui.theme.Overdue else colors.textSecondary) }
                     }
                 }
-                AstridSpeechBubble(phrase, Modifier.padding(horizontal = Spacing.s16), characterSize = 80.dp)
+                AstridSpeechBubble(phrase, Modifier.padding(horizontal = Spacing.s16), characterSize = FrameSize.reminderCharacter)
                 if (state.countingOnYou.isNotEmpty()) {
                     Row(
                         Modifier.padding(horizontal = Spacing.s16).fillMaxWidth().clip(RoundedCornerShape(Radius.large))

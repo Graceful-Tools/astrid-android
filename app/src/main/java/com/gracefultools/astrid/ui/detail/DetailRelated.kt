@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
@@ -309,7 +310,7 @@ internal fun AttachmentsSection(files: List<AttachmentFile>, vm: TaskDetailViewM
         )
         Row(Modifier.horizontalScroll(rememberScrollState()).padding(horizontal = Spacing.s16), horizontalArrangement = Arrangement.spacedBy(Spacing.s12)) {
             files.forEachIndexed { index, file ->
-                Thumbnail(file, vm, 64.dp, Modifier.clickable(role = Role.Image, onClickLabel = file.name) { viewing = index })
+                Thumbnail(file, vm, TileSize.thumbnail, Modifier.clickable(role = Role.Image, onClickLabel = file.name) { viewing = index })
             }
         }
         HorizontalDivider(color = colors.divider, modifier = Modifier.padding(top = Spacing.s8))

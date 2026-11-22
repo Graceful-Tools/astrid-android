@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.ui.theme.DragDistance
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.ControlHeight
@@ -527,7 +528,7 @@ private fun RowDragArea(
     val bounds = remember { androidx.compose.runtime.mutableStateMapOf<String, androidx.compose.ui.geometry.Rect>() }
     var origin by remember { mutableStateOf(androidx.compose.ui.geometry.Offset.Zero) }
     var drag by remember { mutableStateOf<RowDrag?>(null) }
-    val outdentPx = with(density) { 40.dp.toPx() }
+    val outdentPx = with(density) { DragDistance.outdent.toPx() }
     val manual = state.sortBy == "manual"
     fun target(d: RowDrag): DropTarget? {
         if (d.pointer.x - d.startX <= -outdentPx) return DropTarget.Outdent
@@ -535,7 +536,7 @@ private fun RowDragArea(
         val rows = state.rows.withIndex().mapNotNull { (i, r) -> bounds[r.id]?.let { Triple(i, r, it) } }
         val hit = rows.firstOrNull { (_, _, b) -> y >= b.top && y <= b.bottom } ?: return null
         val (index, row, b) = hit
-        val band = minOf(with(density) { 12.dp.toPx() }, b.height * 0.3f)
+        val band = minOf(with(density) { DragDistance.dropBand.toPx() }, b.height * 0.3f)
         return when {
             y < b.top + band -> DropTarget.Line(index)
             y > b.bottom - band -> DropTarget.Line(index + 1)
@@ -627,8 +628,8 @@ private fun RowDragArea(
             // The insertion line, the outdent band, and the lifted row under the finger.
             when (val t = current) {
                 is DropTarget.Line -> {
-                    val y = state.rows.getOrNull(t.index)?.let { bounds[it.id]?.top?.minus(with(density) { 4.dp.toPx() }) }
-                        ?: state.rows.lastOrNull()?.let { bounds[it.id]?.bottom?.plus(with(density) { 4.dp.toPx() }) } ?: 0f
+                    val y = state.rows.getOrNull(t.index)?.let { bounds[it.id]?.top?.minus(with(density) { DragDistance.insertionLine.toPx() }) }
+                        ?: state.rows.lastOrNull()?.let { bounds[it.id]?.bottom?.plus(with(density) { DragDistance.insertionLine.toPx() }) } ?: 0f
                     Box(
                         Modifier.offset { androidx.compose.ui.unit.IntOffset(0, y.toInt()) }.padding(horizontal = Spacing.s8)
                             .fillMaxWidth().heightIn(min = ControlHeight.dropLine).clip(CircleShape).background(colors.accent),

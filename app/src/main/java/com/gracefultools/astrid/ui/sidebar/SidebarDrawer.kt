@@ -1,5 +1,8 @@
 package com.gracefultools.astrid.ui.sidebar
 
+import com.gracefultools.astrid.ui.theme.SidebarShapes
+import com.gracefultools.astrid.ui.theme.PaneWidth
+import com.gracefultools.astrid.ui.theme.FrameSize
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.DotSize
 import com.gracefultools.astrid.ui.theme.IosTypeSize
@@ -79,8 +82,8 @@ import com.gracefultools.astrid.ui.theme.AstridShadows
 import com.gracefultools.astrid.ui.theme.shadow
 
 /** iOS SidebarBrandHeader: the logo column every row's icon centres in, and the gap after it. */
-private val LogoColumn = 28.8.dp
-private val LogoGap = 8.dp
+private val LogoColumn = FrameSize.sidebarLogoColumn
+private val LogoGap = Spacing.s8
 
 /**
  * iOS's sidebar, as a navigation drawer (AATD-39): the brand header with search, My Tasks, Favorites,
@@ -104,7 +107,7 @@ fun SidebarDrawer(
 ) {
     val colors = AstridTheme.colors
     val addingFallback = androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
-    val width = (LocalConfiguration.current.screenWidthDp * 0.85f).dp.coerceAtMost(360.dp)
+    val width = (LocalConfiguration.current.screenWidthDp * 0.85f).dp.coerceAtMost(PaneWidth.sidebarMax)
     ModalDrawerSheet(
         drawerContainerColor = colors.bgPrimary, drawerShape = RectangleShape,
         modifier = Modifier.widthIn(max = width).fillMaxHeight(),
@@ -235,7 +238,7 @@ private enum class Position {
 @Composable
 private fun Group(position: Position, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val colors = AstridTheme.colors
-    val r = 22.dp
+    val r = SidebarShapes.groupRadius
     val shape = when (position) {
         Position.Only -> RoundedCornerShape(r)
         Position.First -> RoundedCornerShape(topStart = r, topEnd = r)
@@ -245,8 +248,8 @@ private fun Group(position: Position, modifier: Modifier = Modifier, content: @C
     Column(
         modifier.padding(horizontal = Spacing.s12).padding(bottom = if (position == Position.Only || position == Position.Last) Spacing.s12 else 0.dp)
             .fillMaxWidth().clip(shape).background(colors.floating)
-            .padding(top = if (position == Position.Only || position == Position.First) 6.dp else 0.dp,
-                bottom = if (position == Position.Only || position == Position.Last) 6.dp else 0.dp),
+            .padding(top = if (position == Position.Only || position == Position.First) Gap.s6 else 0.dp,
+                bottom = if (position == Position.Only || position == Position.Last) Gap.s6 else 0.dp),
     ) {
         if (position == Position.Middle || position == Position.Last) {
             androidx.compose.material3.HorizontalDivider(Modifier.padding(start = Gap.sidebarDividerInset, end = Spacing.s16), color = colors.divider)
@@ -319,7 +322,7 @@ private fun Entry(list: ListSummary, selected: Boolean, count: Int?, image: Stri
     val haptics = LocalHapticFeedback.current
     RowShell(selected, "sidebar:${list.id}", onClick, onLongClick = onFavorite?.let { { haptics.performHapticFeedback(HapticFeedbackType.LongPress); it() } }) {
         Box(Modifier.width(LogoColumn), contentAlignment = Alignment.Center) {
-            if (showImages) ListPicture(list, image, 12.dp)
+            if (showImages) ListPicture(list, image, IconSize.xs)
             else Icon(Icons.Filled.Tag, null, tint = parseColor(list.color), modifier = Modifier.size(IconSize.xs))
         }
         Text(list.name, style = TextStyles.body, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
