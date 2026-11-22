@@ -47,7 +47,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
@@ -76,6 +75,8 @@ import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.CircleSize
 import com.gracefultools.astrid.ui.theme.Gap
+import com.gracefultools.astrid.ui.theme.AstridShadows
+import com.gracefultools.astrid.ui.theme.shadow
 
 /** iOS SidebarBrandHeader: the logo column every row's icon centres in, and the gap after it. */
 private val LogoColumn = 28.8.dp
@@ -378,7 +379,7 @@ private fun AccountCard(user: com.gracefultools.astrid.model.UserSummary?, onPro
     val settings = stringResource(R.string.navigation_settings)
     Row(
         modifier.navigationBarsPadding().padding(start = Spacing.s12, end = Spacing.s12, bottom = Spacing.s8).fillMaxWidth()
-            .shadow(6.dp, shape).clip(shape).background(colors.floating).padding(horizontal = Spacing.s8, vertical = Spacing.s8),
+            .shadow(AstridShadows.accountCard, shape).clip(shape).background(colors.floating).padding(horizontal = Spacing.s8, vertical = Spacing.s8),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(

@@ -50,7 +50,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -85,6 +84,8 @@ import com.gracefultools.astrid.ui.theme.TypeSize
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.AstridShadows
+import com.gracefultools.astrid.ui.theme.shadow
 
 /**
  * What a tapped reminder opens (iOS ReminderPresentationModifier): the reminder card for one task,
@@ -138,7 +139,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
     ) {
         Column(
             Modifier.padding(horizontal = Spacing.s16).widthIn(max = MaxSize.reminderColumn).fillMaxWidth()
-                .shadow(20.dp, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgPrimary)
+                .shadow(AstridShadows.dialog, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgPrimary)
                 .clickable(onClickLabel = stringResource(R.string.reminders_triage_card_hint)) { onOpenTask(id) }
                 .padding(bottom = Spacing.s24),
         ) {
@@ -288,7 +289,7 @@ private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (Tria
         Modifier.fillMaxWidth().heightIn(min = ControlHeight.triageCard)
             .offset { IntOffset(drag.value.x.roundToInt(), drag.value.y.roundToInt()) }
             .rotate(inDp(drag.value).x / 20f)
-            .shadow(8.dp, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgSecondary)
+            .shadow(AstridShadows.triageCard, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgSecondary)
             .border(if (pending == null) BorderWidth.thin else BorderWidth.heavy, pending?.let { triageColor(it, colors.textMuted) } ?: colors.border, RoundedCornerShape(Radius.xLarge))
             .pointerInput(task.task.id) {
                 detectDragGestures(
