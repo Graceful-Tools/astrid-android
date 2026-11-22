@@ -22,20 +22,41 @@ class IconSizeTokensTest {
     }
 
     @Test
+    fun `ADEV-196 the off-step icon sizes are named after the iOS views they match`() {
+        assertEquals(13f, IconSize.chip.value)
+        assertEquals(15f, IconSize.tab.value)
+        assertEquals(19f, IconSize.field.value)
+        assertEquals(22f, IconSize.control.value)
+    }
+
+    @Test
+    fun `ADEV-196 no icon types an off-step size by hand`() {
+        val base = File("src/main/java/com/gracefultools/astrid")
+        val offStep = Regex("""\b(?:size|width|height)\(\s*(?:13|15|19|22)\.dp\b""")
+        val offenders = listOf("ui", "platform").map { File(base, it) }.flatMap { root ->
+            root.walkTopDown().filter { it.extension == "kt" && !it.path.contains("/ui/theme/") }.flatMap { file ->
+                calls(file.readText(), offStep).map { "${file.relativeTo(base)}: $it" }
+            }.toList()
+        }
+        assertTrue("icons sized by hand:\n" + offenders.joinToString("\n"), offenders.isEmpty())
+    }
+
+    @Test
     fun `ADEV-196 no icon or progress ring types a step size by hand`() {
         val base = File("src/main/java/com/gracefultools/astrid")
         assertTrue("sources not found from ${File(".").absolutePath}", base.isDirectory)
         val offenders = listOf("ui", "platform").map { File(base, it) }.flatMap { root ->
             root.walkTopDown().filter { it.extension == "kt" && !it.path.contains("/ui/theme/") }.flatMap { file ->
-                calls(file.readText()).map { "${file.relativeTo(base)}: $it" }
+                calls(file.readText(), step).map { "${file.relativeTo(base)}: $it" }
             }.toList()
         }
         assertTrue("icons and progress rings sized by hand:\n" + offenders.joinToString("\n"), offenders.isEmpty())
     }
 
-    /** The `Icon(…)` and `CircularProgressIndicator(…)` calls sized (or stroked) with a typed-in step. Padding is not a size. */
-    private fun calls(source: String): List<String> {
-        val step = Regex("""\b(?:size|width|height)\(\s*(?:12|14|16|18|20|24)\.dp\b|strokeWidth\s*=\s*2\.dp\b""")
+    private val step = Regex("""\b(?:size|width|height)\(\s*(?:12|14|16|18|20|24)\.dp\b|strokeWidth\s*=\s*2\.dp\b""")
+
+    /** The `Icon(…)` and `CircularProgressIndicator(…)` calls whose size (or stroke) matches [typed]. Padding is not a size. */
+    private fun calls(source: String, typed: Regex): List<String> {
         return Regex("""\b(?:Icon|CircularProgressIndicator)\(""").findAll(source).mapNotNull { open ->
             var depth = 0
             var end = open.range.last
@@ -44,7 +65,7 @@ class IconSizeTokensTest {
                 end++
             }
             source.substring(open.range.first, minOf(end + 1, source.length))
-                .takeIf { call -> step.containsMatchIn(call.lines().joinToString(" ") { it.substringBefore("//") }) }
+                .takeIf { call -> typed.containsMatchIn(call.lines().joinToString(" ") { it.substringBefore("//") }) }
                 ?.lines()?.first()?.trim()
         }.toList()
     }

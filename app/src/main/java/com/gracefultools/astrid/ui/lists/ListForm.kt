@@ -151,7 +151,7 @@ internal fun SegmentedTabs(items: List<Pair<ImageVector?, String>>, selected: In
                 modifier = Modifier.heightIn(min = 32.dp),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4), modifier = Modifier.padding(vertical = 6.dp)) {
-                    if (icon != null) Icon(icon, null, modifier = Modifier.size(15.dp))
+                    if (icon != null) Icon(icon, null, modifier = Modifier.size(IconSize.tab))
                     Text(label, style = TextStyles.footnote, fontWeight = if (index == selected) FontWeight.SemiBold else FontWeight.Normal, maxLines = 1)
                 }
             }

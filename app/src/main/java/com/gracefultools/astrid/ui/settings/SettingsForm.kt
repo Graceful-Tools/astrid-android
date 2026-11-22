@@ -119,7 +119,7 @@ internal fun FormDivider(inset: Boolean = true) {
 /** iOS's Label: the accent SF Symbol in a 24 frame, then the title. */
 @Composable
 internal fun RowIcon(icon: ImageVector, tint: Color? = null) {
-    Icon(icon, null, tint = tint ?: AstridTheme.colors.accentInk, modifier = Modifier.width(IconSize.xxl).size(22.dp))
+    Icon(icon, null, tint = tint ?: AstridTheme.colors.accentInk, modifier = Modifier.width(IconSize.xxl).size(IconSize.control))
 }
 
 /** A row's frame: 44 tall at least, 16 in from the card's edges. */

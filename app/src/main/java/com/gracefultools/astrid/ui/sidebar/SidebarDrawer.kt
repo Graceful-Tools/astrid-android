@@ -292,7 +292,7 @@ private fun MyTasksEntry(list: ListSummary, selected: Boolean, count: Int, onCli
     RowShell(selected, "sidebar:${list.id}", onClick) {
         Box(Modifier.width(LogoColumn), contentAlignment = Alignment.Center) { Box(Modifier.size(12.dp).clip(CircleShape).background(colors.accent)) }
         Text(stringResource(R.string.navigation_my_tasks), style = TextStyles.body, color = colors.textPrimary, maxLines = 1, modifier = Modifier.weight(1f))
-        Icon(Icons.Outlined.FilterList, null, tint = colors.textMuted, modifier = Modifier.size(15.dp))
+        Icon(Icons.Outlined.FilterList, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.tab))
         CountCapsule(count)
     }
 }
@@ -320,8 +320,8 @@ private fun Entry(list: ListSummary, selected: Boolean, count: Int?, image: Stri
         }
         Text(list.name, style = TextStyles.body, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
         when (list.privacy) {
-            "PUBLIC" -> Icon(Icons.Outlined.Public, stringResource(R.string.lists_privacy_public), tint = colors.accentInk, modifier = Modifier.size(13.dp))
-            "SHARED" -> Icon(Icons.Filled.People, stringResource(R.string.lists_privacy_shared), tint = AstridTheme.colors.successInk, modifier = Modifier.size(13.dp))
+            "PUBLIC" -> Icon(Icons.Outlined.Public, stringResource(R.string.lists_privacy_public), tint = colors.accentInk, modifier = Modifier.size(IconSize.chip))
+            "SHARED" -> Icon(Icons.Filled.People, stringResource(R.string.lists_privacy_shared), tint = AstridTheme.colors.successInk, modifier = Modifier.size(IconSize.chip))
         }
         CountCapsule(count ?: list.taskCount ?: 0)
     }

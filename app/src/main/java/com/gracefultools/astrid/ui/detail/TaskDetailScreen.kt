@@ -400,7 +400,7 @@ internal fun IconRow(label: String, icon: ImageVector? = null, glyph: String? = 
     ) {
         Box(Modifier.width(TouchSize.leadingControl).semantics { contentDescription = label }, contentAlignment = Alignment.Center) {
             if (glyph != null) Text(glyph, fontSize = IosTypeSize.glyph, fontWeight = FontWeight.SemiBold, color = colors.textSecondary)
-            else if (icon != null) Icon(icon, null, tint = colors.textSecondary, modifier = Modifier.size(19.dp))
+            else if (icon != null) Icon(icon, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.field))
         }
         Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically, content = content)
     }
@@ -715,7 +715,7 @@ private fun SubtasksSection(detail: TaskDetail, vm: TaskDetailViewModel, onOpenT
                     if (sub.completed) Icons.Outlined.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
                     stringResource(if (sub.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, sub.title),
                     tint = if (sub.completed) colors.accentInk else colors.textMuted,
-                    modifier = Modifier.size(22.dp).clip(CircleShape).clickable(enabled = !detail.isCopyOnly) { vm.setSubtaskCompleted(sub.id, !sub.completed) },
+                    modifier = Modifier.size(IconSize.control).clip(CircleShape).clickable(enabled = !detail.isCopyOnly) { vm.setSubtaskCompleted(sub.id, !sub.completed) },
                 )
                 Text(
                     sub.title, style = TextStyles.body, color = if (sub.completed) colors.textMuted else colors.textPrimary,
@@ -725,7 +725,7 @@ private fun SubtasksSection(detail: TaskDetail, vm: TaskDetailViewModel, onOpenT
             }
         }
         if (!detail.isCopyOnly) Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-            Icon(Icons.Outlined.AddCircleOutline, null, tint = colors.textMuted, modifier = Modifier.size(22.dp))
+            Icon(Icons.Outlined.AddCircleOutline, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.control))
             Box(Modifier.weight(1f)) {
                 if (adding.isEmpty()) Text(stringResource(R.string.task_detail_add_subtask), style = TextStyles.body, color = colors.textMuted.copy(alpha = 0.6f))
                 BasicTextField(
@@ -873,7 +873,7 @@ private fun QueuedFiles(files: List<QueuedFile>, onRemove: (String) -> Unit) {
                 }
                 Icon(
                     Icons.Filled.Cancel, stringResource(R.string.attachments_remove_a11y, file.name), tint = colors.onFill,
-                    modifier = Modifier.align(Alignment.TopEnd).size(22.dp).clip(CircleShape).background(ImmersiveColors.badge)
+                    modifier = Modifier.align(Alignment.TopEnd).size(IconSize.control).clip(CircleShape).background(ImmersiveColors.badge)
                         .clickable { onRemove(file.path) },
                 )
             }

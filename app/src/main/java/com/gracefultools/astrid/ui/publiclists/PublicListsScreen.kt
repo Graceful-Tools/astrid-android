@@ -119,9 +119,9 @@ private fun PublicListRow(list: PublicListSummary, image: String?, copying: Bool
                 modifier = Modifier.weight(1f),
             )
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s4)) {
-                Icon(Icons.Outlined.Public, stringResource(R.string.lists_privacy_public), tint = colors.accentInk, modifier = Modifier.size(13.dp))
+                Icon(Icons.Outlined.Public, stringResource(R.string.lists_privacy_public), tint = colors.accentInk, modifier = Modifier.size(IconSize.chip))
                 if (list.isCollaborative) {
-                    Icon(Icons.Outlined.People, stringResource(R.string.lists_privacy_shared), tint = AstridTheme.colors.successInk, modifier = Modifier.size(13.dp))
+                    Icon(Icons.Outlined.People, stringResource(R.string.lists_privacy_shared), tint = AstridTheme.colors.successInk, modifier = Modifier.size(IconSize.chip))
                 }
             }
         }
