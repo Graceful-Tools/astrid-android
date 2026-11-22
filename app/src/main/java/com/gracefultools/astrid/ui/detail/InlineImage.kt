@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.Radius
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
@@ -53,7 +54,7 @@ fun InlineImage(file: FileRow, fetch: (String, (String) -> Unit) -> Unit, onOpen
         Image(
             it.asImageBitmap(), contentDescription = file.name, contentScale = ContentScale.Crop,
             modifier = Modifier.padding(top = 6.dp).widthIn(max = 260.dp).heightIn(max = 200.dp)
-                .clip(RoundedCornerShape(10.dp)).clickable(onClick = onOpen),
+                .clip(RoundedCornerShape(Radius.large)).clickable(onClick = onOpen),
         )
     }
 }

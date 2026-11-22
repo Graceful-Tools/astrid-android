@@ -425,7 +425,7 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
             Spacer(Modifier.height(Spacing.s24))
             if (!detail.task.completed && !detail.isCopyOnly) {
                 Row(
-                    Modifier.width(260.dp).height(60.dp).clip(RoundedCornerShape(30.dp)).background(IosSystemColors.green)
+                    Modifier.width(260.dp).height(60.dp).clip(CircleShape).background(IosSystemColors.green)
                         .clickable(role = Role.Button) { vm.completeFromTimer(); onClose() },
                     horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
                 ) {

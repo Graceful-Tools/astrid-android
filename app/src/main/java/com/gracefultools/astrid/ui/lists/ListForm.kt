@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.SegmentedShapes
 import com.gracefultools.astrid.ui.theme.Hairline
 import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
@@ -127,7 +128,7 @@ internal fun SegmentedTabs(items: List<Pair<ImageVector?, String>>, selected: In
     val thumb = colors.segmentThumb
     TabRow(
         selectedTabIndex = selected,
-        modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(track).padding(Spacing.s2),
+        modifier = modifier.fillMaxWidth().clip(SegmentedShapes.track).background(track).padding(Spacing.s2),
         containerColor = Color.Transparent,
         contentColor = colors.textPrimary,
         indicator = { positions ->
@@ -135,8 +136,8 @@ internal fun SegmentedTabs(items: List<Pair<ImageVector?, String>>, selected: In
                 Box(
                     androidx.compose.material3.TabRowDefaults.run { Modifier.tabIndicatorOffset(positions[selected]) }
                         .padding(1.dp).fillMaxWidth().heightIn(min = 30.dp)
-                        .shadow(1.dp, RoundedCornerShape(7.dp)).clip(RoundedCornerShape(7.dp)).background(thumb)
-                        .border(Hairline, ImmersiveColors.hairline, RoundedCornerShape(7.dp)),
+                        .shadow(1.dp, SegmentedShapes.thumb).clip(SegmentedShapes.thumb).background(thumb)
+                        .border(Hairline, ImmersiveColors.hairline, SegmentedShapes.thumb),
                 )
             }
         },

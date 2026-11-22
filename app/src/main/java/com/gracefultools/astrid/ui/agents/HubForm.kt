@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.agents
 
+import com.gracefultools.astrid.ui.theme.SegmentedShapes
 import com.gracefultools.astrid.ui.theme.Hairline
 import com.gracefultools.astrid.ui.theme.TouchSize
 import android.content.ClipData
@@ -124,7 +125,7 @@ internal fun FormSection(
             )
         }
         Column(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(formCard())
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.large)).background(formCard())
                 .padding(horizontal = Spacing.s16, vertical = Spacing.s12),
             verticalArrangement = Arrangement.spacedBy(Spacing.s12),
             content = content,
@@ -254,13 +255,13 @@ internal fun NavRow(title: String, subtitle: String? = null, leading: (@Composab
 internal fun SegmentedControl(options: List<String>, selected: Int, enabled: Boolean = true, onSelect: (Int) -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(colors.segmentTrack).padding(Spacing.s2),
+        Modifier.fillMaxWidth().clip(SegmentedShapes.track).background(colors.segmentTrack).padding(Spacing.s2),
     ) {
         options.forEachIndexed { index, label ->
             val chosen = index == selected
             Box(
                 Modifier.weight(1f).heightIn(min = 32.dp)
-                    .then(if (chosen) Modifier.shadow(1.dp, RoundedCornerShape(7.dp)).clip(RoundedCornerShape(7.dp)).background(colors.segmentThumb) else Modifier)
+                    .then(if (chosen) Modifier.shadow(1.dp, SegmentedShapes.thumb).clip(SegmentedShapes.thumb).background(colors.segmentThumb) else Modifier)
                     .selectable(selected = chosen, enabled = enabled, role = Role.RadioButton) { onSelect(index) }
                     .padding(horizontal = Spacing.s4, vertical = 6.dp),
                 contentAlignment = Alignment.Center,
