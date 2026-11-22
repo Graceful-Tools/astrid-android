@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -369,7 +370,7 @@ private fun AttachmentGallery(files: List<AttachmentFile>, start: Int, vm: TaskD
                 )
                 Icon(
                     Icons.Filled.Close, stringResource(R.string.actions_close), tint = ImmersiveColors.content,
-                    modifier = Modifier.size(44.dp).clip(CircleShape).clickable(onClick = onClose).padding(10.dp),
+                    modifier = Modifier.size(TouchSize.hitTarget).clip(CircleShape).clickable(onClick = onClose).padding(10.dp),
                 )
             }
         }

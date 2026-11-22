@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import com.gracefultools.astrid.ui.theme.TouchLayout
 import androidx.activity.compose.BackHandler
@@ -254,7 +255,7 @@ private fun DetailHeader(detail: TaskDetail?, vm: TaskDetailViewModel, onBack: (
     ) {
         Icon(
             Icons.AutoMirrored.Filled.ArrowBackIos, stringResource(R.string.common_back), tint = colors.textPrimary,
-            modifier = Modifier.size(44.dp).clip(CircleShape).clickable(onClick = onBack).padding(Spacing.s12).testTag("detail:back"),
+            modifier = Modifier.size(TouchSize.hitTarget).clip(CircleShape).clickable(onClick = onBack).padding(Spacing.s12).testTag("detail:back"),
         )
         Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
             Text(
@@ -266,9 +267,9 @@ private fun DetailHeader(detail: TaskDetail?, vm: TaskDetailViewModel, onBack: (
             if (detail != null && !detail.isCopyOnly) {
                 Icon(
                     Icons.Filled.MoreVert, stringResource(R.string.detail_more), tint = colors.textPrimary,
-                    modifier = Modifier.size(44.dp).clip(CircleShape).clickable { menu = true }.padding(10.dp),
+                    modifier = Modifier.size(TouchSize.hitTarget).clip(CircleShape).clickable { menu = true }.padding(10.dp),
                 )
-            } else Spacer(Modifier.size(44.dp))
+            } else Spacer(Modifier.size(TouchSize.hitTarget))
             DropdownMenu(menu, onDismissRequest = { menu = false }) {
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.actions_copy)) }, leadingIcon = { Icon(Icons.Outlined.ContentCopy, null) },
@@ -330,7 +331,7 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         val label = stringResource(if (detail.task.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, detail.task.title)
-        val tap = Modifier.size(34.dp).completionPop(pop).clip(RoundedCornerShape(Radius.medium))
+        val tap = Modifier.size(TouchSize.leadingControl).completionPop(pop).clip(RoundedCornerShape(Radius.medium))
             .clickable(enabled = !detail.isCopyOnly) {
                 val openSubtasks = detail.subtasks.any { !it.completed }
                 if (!detail.task.completed && openSubtasks) askSubtasks = true
@@ -339,7 +340,7 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
             .semantics { role = Role.Checkbox; contentDescription = label }
         val assignee = detail.assignee
         if (assignee != null && detailLeadingShowsFace(detail)) {
-            Avatar(assignee.image, initialsOf(assignee.name, assignee.email), 34.dp, tap, shape = RowFaceShape,
+            Avatar(assignee.image, initialsOf(assignee.name, assignee.email), TouchSize.leadingControl, tap, shape = RowFaceShape,
                 border = colors.priority.getOrElse(detail.task.priority) { colors.priority[0] })
         } else {
             CheckboxArt(detail.task.priority, detail.task.repeating != null && detail.task.repeating != "never", detail.task.completed, tap)
@@ -394,7 +395,7 @@ internal fun IconRow(label: String, icon: ImageVector? = null, glyph: String? = 
         Modifier.fillMaxWidth().padding(horizontal = Spacing.s16, vertical = Spacing.s8),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
-        Box(Modifier.width(34.dp).semantics { contentDescription = label }, contentAlignment = Alignment.Center) {
+        Box(Modifier.width(TouchSize.leadingControl).semantics { contentDescription = label }, contentAlignment = Alignment.Center) {
             if (glyph != null) Text(glyph, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = colors.textSecondary)
             else if (icon != null) Icon(icon, null, tint = colors.textSecondary, modifier = Modifier.size(19.dp))
         }
@@ -413,7 +414,7 @@ internal fun ValueBox(
     Row(
         modifier.clip(RoundedCornerShape(Radius.medium)).background(AstridTheme.colors.bgSecondary)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .heightIn(min = if (compact) 32.dp else 44.dp)
+            .heightIn(min = if (compact) 32.dp else TouchSize.hitTarget)
             .padding(horizontal = if (compact) Spacing.s8 else Spacing.s12, vertical = if (compact) Spacing.s4 else 6.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
         content = content,
@@ -663,7 +664,7 @@ private fun DescriptionBlock(detail: TaskDetail, onSave: (String) -> Unit, onOpe
         Box(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgSecondary)
                 .clickable(enabled = !readOnly) { entry = DescriptionReader.Entry.WRITE }
-                .heightIn(min = 44.dp).padding(Spacing.s12).testTag("detail:description"),
+                .heightIn(min = TouchSize.hitTarget).padding(Spacing.s12).testTag("detail:description"),
         ) {
             if (detail.descriptionBlocks.isEmpty()) Text(stringResource(R.string.task_edit_add_description), style = TextStyles.body, color = colors.textMuted)
             else MarkdownView(detail.descriptionBlocks, onReference = onReference)
@@ -887,7 +888,7 @@ private fun SuggestionList(items: List<com.gracefultools.astrid.model.CommentSug
     ) {
         items.forEach { item ->
             Row(
-                Modifier.fillMaxWidth().clickable { onPick(item) }.heightIn(min = 44.dp).padding(horizontal = Spacing.s12, vertical = 6.dp),
+                Modifier.fillMaxWidth().clickable { onPick(item) }.heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s12, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
             ) {
                 when {

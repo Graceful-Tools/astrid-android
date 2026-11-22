@@ -1,5 +1,7 @@
 package com.gracefultools.astrid.ui.agents
 
+import com.gracefultools.astrid.ui.theme.Hairline
+import com.gracefultools.astrid.ui.theme.TouchSize
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -140,7 +142,7 @@ internal fun FormSection(
 internal fun formCard(): Color = AstridTheme.colors.sheet
 
 @Composable
-internal fun FormDivider() = HorizontalDivider(color = AstridTheme.colors.divider, thickness = 0.5.dp)
+internal fun FormDivider() = HorizontalDivider(color = AstridTheme.colors.divider, thickness = Hairline)
 
 @Composable
 internal fun Caption(text: String, color: Color = AstridTheme.colors.textSecondary, modifier: Modifier = Modifier) =
@@ -188,7 +190,7 @@ internal fun ActionRow(
         else -> colors.accentInk
     }
     Row(
-        Modifier.fillMaxWidth().heightIn(min = if (small) 32.dp else 44.dp).clip(RoundedCornerShape(Radius.small))
+        Modifier.fillMaxWidth().heightIn(min = if (small) 32.dp else TouchSize.hitTarget).clip(RoundedCornerShape(Radius.small))
             .clickable(enabled = enabled && !busy, onClick = onClick, role = Role.Button),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
@@ -214,7 +216,7 @@ internal fun InlineButton(label: String, color: Color = AstridTheme.colors.accen
 internal fun ToggleRow(label: String, checked: Boolean, subtitle: String? = null, enabled: Boolean = true, onChange: (Boolean) -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().heightIn(min = 44.dp)
+        Modifier.fillMaxWidth().heightIn(min = TouchSize.hitTarget)
             .toggleable(value = checked, enabled = enabled, role = Role.Switch, onValueChange = onChange),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -231,7 +233,7 @@ internal fun ToggleRow(label: String, checked: Boolean, subtitle: String? = null
 internal fun NavRow(title: String, subtitle: String? = null, leading: (@Composable () -> Unit)? = null, onClick: () -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().heightIn(min = 44.dp).clip(RoundedCornerShape(Radius.small)).clickable(role = Role.Button, onClick = onClick),
+        Modifier.fillMaxWidth().heightIn(min = TouchSize.hitTarget).clip(RoundedCornerShape(Radius.small)).clickable(role = Role.Button, onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {

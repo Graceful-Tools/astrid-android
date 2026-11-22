@@ -10,3 +10,6 @@ val TouchLayout = AstridTokens.Layout.Comfortable
 
 /** The comfortable sizes: the 34 pt leading control, the 44 pt hit target, the selection outline. */
 val TouchSize = AstridTokens.Size.Comfortable
+
+/** The thinnest line: dividers and borders (`size.hairline`). */
+val Hairline = AstridTokens.Size.hairline

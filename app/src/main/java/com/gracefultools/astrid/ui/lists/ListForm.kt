@@ -1,5 +1,7 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.Hairline
+import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -83,7 +85,7 @@ internal fun FormRow(
     Row(
         modifier.fillMaxWidth()
             .then(if (onClick != null) Modifier.clickable(onClickLabel = onClickLabel, role = Role.Button, onClick = onClick) else Modifier)
-            .heightIn(min = 44.dp).padding(horizontal = Spacing.s16, vertical = 10.dp),
+            .heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s16, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
         content = content,
@@ -91,7 +93,7 @@ internal fun FormRow(
 }
 
 @Composable
-internal fun FormDivider() = HorizontalDivider(Modifier.padding(start = Spacing.s16), thickness = 0.5.dp, color = AstridTheme.colors.divider)
+internal fun FormDivider() = HorizontalDivider(Modifier.padding(start = Spacing.s16), thickness = Hairline, color = AstridTheme.colors.divider)
 
 /** iOS's Picker row in a Form: the label, the current choice in secondary text, and a chevron. */
 @Composable
@@ -134,7 +136,7 @@ internal fun SegmentedTabs(items: List<Pair<ImageVector?, String>>, selected: In
                     androidx.compose.material3.TabRowDefaults.run { Modifier.tabIndicatorOffset(positions[selected]) }
                         .padding(1.dp).fillMaxWidth().heightIn(min = 30.dp)
                         .shadow(1.dp, RoundedCornerShape(7.dp)).clip(RoundedCornerShape(7.dp)).background(thumb)
-                        .border(0.5.dp, ImmersiveColors.hairline, RoundedCornerShape(7.dp)),
+                        .border(Hairline, ImmersiveColors.hairline, RoundedCornerShape(7.dp)),
                 )
             }
         },

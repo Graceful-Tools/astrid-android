@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -280,7 +281,7 @@ private fun MenuBox(label: String, choices: List<Pair<String, String>>, modifier
     Box(modifier) {
         Row(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.small)).background(colors.bgSecondary)
-                .clickable(role = Role.DropdownList) { open = true }.heightIn(min = 44.dp).padding(horizontal = Spacing.s12),
+                .clickable(role = Role.DropdownList) { open = true }.heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s12),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(label, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
@@ -302,12 +303,12 @@ private fun Stepper(value: Int, range: IntRange, label: String, onChange: (Int) 
     ) {
         Icon(
             Icons.Filled.Remove, stringResource(R.string.repeating_decrease, label), tint = if (value > range.first) colors.accentInk else colors.textMuted,
-            modifier = Modifier.size(44.dp).clickable(enabled = value > range.first) { onChange(value - 1) }.padding(Spacing.s12),
+            modifier = Modifier.size(TouchSize.hitTarget).clickable(enabled = value > range.first) { onChange(value - 1) }.padding(Spacing.s12),
         )
         Text(value.toString(), style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.width(36.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         Icon(
             Icons.Filled.Add, stringResource(R.string.repeating_increase, label), tint = if (value < range.last) colors.accentInk else colors.textMuted,
-            modifier = Modifier.size(44.dp).clickable(enabled = value < range.last) { onChange(value + 1) }.padding(Spacing.s12),
+            modifier = Modifier.size(TouchSize.hitTarget).clickable(enabled = value < range.last) { onChange(value + 1) }.padding(Spacing.s12),
         )
     }
 }

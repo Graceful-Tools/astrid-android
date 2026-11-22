@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.sync
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -98,7 +99,7 @@ internal fun MenuPicker(label: String, value: String, options: List<Pair<String?
     var open by remember { mutableStateOf(false) }
     Box {
         Row(
-            Modifier.fillMaxWidth().heightIn(min = 44.dp).clip(RoundedCornerShape(Radius.small)).clickable(enabled = enabled, role = Role.DropdownList) { open = true },
+            Modifier.fillMaxWidth().heightIn(min = TouchSize.hitTarget).clip(RoundedCornerShape(Radius.small)).clickable(enabled = enabled, role = Role.DropdownList) { open = true },
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
         ) {
             Text(label, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))

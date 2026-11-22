@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.common
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -217,7 +218,7 @@ fun SplashLookalike() {
         ) {
             CheckboxArt(0, repeating = false, checked = false)
             Box(
-                Modifier.weight(1f).height(44.dp).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
+                Modifier.weight(1f).height(TouchSize.hitTarget).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
                     .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)),
             )
             Icon(Icons.Filled.AddCircle, null, tint = colors.textMuted, modifier = Modifier.size(32.dp))
