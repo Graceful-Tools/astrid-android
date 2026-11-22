@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.detail
 
 import com.gracefultools.astrid.ui.theme.AvatarSize
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -112,7 +113,7 @@ internal fun PickRow(label: String, selected: Boolean, color: Color? = null, sub
             .background(if (selected) colors.accent.copy(alpha = 0.15f) else colors.bgSecondary)
             .border(1.dp, if (selected) colors.accent else Color.Transparent, shape)
             .clickable(onClick = onClick).semantics { this.selected = selected }
-            .heightIn(min = 48.dp).padding(horizontal = Spacing.s12, vertical = Spacing.s8),
+            .heightIn(min = ControlHeight.settingRow).padding(horizontal = Spacing.s12, vertical = Spacing.s8),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         leading?.invoke()
@@ -178,7 +179,7 @@ private fun SomeoneElseSection(section: SomeoneElse, vm: TaskDetailViewModel) {
         val inviteLabel = stringResource(R.string.members_invite_email)
         Box(
             Modifier.weight(1f).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
-                .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = 40.dp).padding(horizontal = Spacing.s12),
+                .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = ControlHeight.field).padding(horizontal = Spacing.s12),
             contentAlignment = Alignment.CenterStart,
         ) {
             if (query.isEmpty()) Text(inviteLabel, style = TextStyles.body, color = colors.inputPlaceholder)
@@ -333,7 +334,7 @@ internal fun BlockerSheet(state: TaskDetailState, vm: TaskDetailViewModel, onDis
 internal fun SearchField(value: String, placeholder: String, onChange: (String) -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgTertiary).heightIn(min = 40.dp).padding(horizontal = Spacing.s12),
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgTertiary).heightIn(min = ControlHeight.field).padding(horizontal = Spacing.s12),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
     ) {
         Icon(Icons.Filled.Search, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))

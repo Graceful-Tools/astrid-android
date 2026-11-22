@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.tasks
 
 import com.gracefultools.astrid.ui.theme.AvatarSize
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.ui.zIndex
@@ -244,7 +245,7 @@ private fun ListHeader(
     val openSidebar = stringResource(R.string.navigation_open_sidebar)
     com.gracefultools.astrid.ui.common.FloatingHeader {
         Row(
-            Modifier.weight(1f).heightIn(min = 32.dp).testTag("listTitle")
+            Modifier.weight(1f).heightIn(min = ControlHeight.sm).testTag("listTitle")
                 .then(if (onMenu != null) Modifier.clip(RoundedCornerShape(Radius.small)).clickable(onClick = onMenu).semantics { contentDescription = openSidebar } else Modifier),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -628,7 +629,7 @@ private fun RowDragArea(
                         ?: state.rows.lastOrNull()?.let { bounds[it.id]?.bottom?.plus(with(density) { 4.dp.toPx() }) } ?: 0f
                     Box(
                         Modifier.offset { androidx.compose.ui.unit.IntOffset(0, y.toInt()) }.padding(horizontal = Spacing.s8)
-                            .fillMaxWidth().heightIn(min = 3.dp).clip(CircleShape).background(colors.accent),
+                            .fillMaxWidth().heightIn(min = ControlHeight.dropLine).clip(CircleShape).background(colors.accent),
                     )
                 }
                 DropTarget.Outdent -> Row(

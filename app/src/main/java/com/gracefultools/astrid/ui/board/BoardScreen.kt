@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.board
 
 import androidx.compose.foundation.shape.CircleShape
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.TouchLayout
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.ui.Alignment
@@ -376,7 +377,7 @@ private fun ColumnQuickAdd(columnId: String, onAdd: suspend (String, String) -> 
     ) {
         Box(
             Modifier.weight(1f).clip(RoundedCornerShape(com.gracefultools.astrid.ui.theme.Radius.medium)).background(colors.field)
-                .border(1.dp, colors.fieldBorder, RoundedCornerShape(com.gracefultools.astrid.ui.theme.Radius.medium)).heightIn(min = 40.dp)
+                .border(1.dp, colors.fieldBorder, RoundedCornerShape(com.gracefultools.astrid.ui.theme.Radius.medium)).heightIn(min = ControlHeight.field)
                 .padding(horizontal = 10.dp, vertical = 9.dp),
             contentAlignment = Alignment.CenterStart,
         ) {

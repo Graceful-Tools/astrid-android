@@ -43,6 +43,7 @@ import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.coreLabel
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -101,7 +102,7 @@ private fun ChoiceRow(group: FilterGroup, onPick: (String, String) -> Unit) {
     val current = group.picks.firstOrNull { it.isSelected } ?: group.picks.firstOrNull()
     Box {
         Row(
-            Modifier.fillMaxWidth().clickable { open = true }.heightIn(min = 48.dp).padding(horizontal = Spacing.s16),
+            Modifier.fillMaxWidth().clickable { open = true }.heightIn(min = ControlHeight.settingRow).padding(horizontal = Spacing.s16),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(coreLabel(group.titleKey), style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
@@ -156,7 +157,7 @@ fun ListSwitches(state: FiltersState, vm: FiltersViewModel) {
 @Composable
 private fun SwitchRow(label: String, on: Boolean, onChange: (Boolean) -> Unit) {
     Row(
-        Modifier.fillMaxWidth().toggleableRow(on, onChange).heightIn(min = 48.dp).padding(horizontal = Spacing.s16),
+        Modifier.fillMaxWidth().toggleableRow(on, onChange).heightIn(min = ControlHeight.settingRow).padding(horizontal = Spacing.s16),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(label, style = TextStyles.body, color = AstridTheme.colors.textPrimary, modifier = Modifier.weight(1f))

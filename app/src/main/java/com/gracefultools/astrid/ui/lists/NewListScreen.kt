@@ -48,6 +48,7 @@ import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.FloatingTextHeader
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -104,7 +105,7 @@ fun NewListScreen(vm: NewListViewModel, onCancel: () -> Unit, onCreated: (String
             Column(Modifier.padding(horizontal = Spacing.s16), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                 Text(stringResource(R.string.lists_list_description), style = TextStyles.caption, color = colors.textSecondary)
                 val placeholder = stringResource(R.string.lists_description_placeholder)
-                Box(Modifier.fillMaxWidth().heightIn(min = 80.dp).clip(RoundedCornerShape(Radius.medium)).background(colors.bgSecondary).padding(Spacing.s12)) {
+                Box(Modifier.fillMaxWidth().heightIn(min = ControlHeight.notes).clip(RoundedCornerShape(Radius.medium)).background(colors.bgSecondary).padding(Spacing.s12)) {
                     if (state.description.isEmpty()) Text(placeholder, style = TextStyles.body, color = colors.inputPlaceholder)
                     BasicTextField(
                         state.description, vm::setDescription, textStyle = TextStyles.body.copy(color = colors.textPrimary),
@@ -120,7 +121,7 @@ fun NewListScreen(vm: NewListViewModel, onCancel: () -> Unit, onCreated: (String
                     Text(stringResource(R.string.lists_members), style = TextStyles.caption, color = colors.textSecondary, modifier = Modifier.weight(1f))
                     Row(
                         Modifier.clip(RoundedCornerShape(Radius.small)).clickable(role = Role.Button) { adding = true }
-                            .heightIn(min = 32.dp).padding(horizontal = Spacing.s4),
+                            .heightIn(min = ControlHeight.sm).padding(horizontal = Spacing.s4),
                         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4),
                     ) {
                         Icon(Icons.Outlined.PersonAdd, null, tint = colors.accentInk, modifier = Modifier.size(IconSize.md))

@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.agents
 
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -367,7 +368,7 @@ private fun KeyEditor(vm: AgentsViewModel, state: AgentsState, service: String) 
             Row(
                 Modifier.clip(RoundedCornerShape(Radius.small)).clickable(enabled = inputs[service].orEmpty().isNotBlank() && !busy, role = Role.Button) {
                     vm.saveKey(service, inputs[service].orEmpty())
-                }.heightIn(min = 36.dp).padding(horizontal = Spacing.s4),
+                }.heightIn(min = ControlHeight.md).padding(horizontal = Spacing.s4),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4),
             ) {
                 if (busy) SmallSpinner() else {
@@ -847,7 +848,7 @@ private fun ModelRow(
 ) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().heightIn(min = 48.dp).clip(RoundedCornerShape(Radius.small))
+        Modifier.fillMaxWidth().heightIn(min = ControlHeight.settingRow).clip(RoundedCornerShape(Radius.small))
             .then(
                 if (trailing == null) Modifier.selectable(selected = selected, role = Role.RadioButton, onClick = onClick)
                 else Modifier.clickable(role = Role.Button, onClick = onClick),

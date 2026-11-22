@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.reminders
 
 import com.gracefultools.astrid.ui.theme.AvatarSize
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import androidx.compose.animation.core.Animatable
@@ -282,7 +283,7 @@ private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (Tria
     fun inDp(offset: Offset) = with(density) { Offset(offset.x.toDp().value, offset.y.toDp().value) }
     val openLabel = stringResource(R.string.reminders_triage_card_hint)
     Column(
-        Modifier.fillMaxWidth().heightIn(min = 220.dp)
+        Modifier.fillMaxWidth().heightIn(min = ControlHeight.triageCard)
             .offset { IntOffset(drag.value.x.roundToInt(), drag.value.y.roundToInt()) }
             .rotate(inDp(drag.value).x / 20f)
             .shadow(8.dp, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgSecondary)

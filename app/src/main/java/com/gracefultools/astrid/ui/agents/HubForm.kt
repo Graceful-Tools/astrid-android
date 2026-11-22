@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.agents
 
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.SegmentedShapes
 import com.gracefultools.astrid.ui.theme.Hairline
 import com.gracefultools.astrid.ui.theme.TouchSize
@@ -211,7 +212,7 @@ internal fun InlineButton(label: String, color: Color = AstridTheme.colors.accen
     Text(
         label, style = TextStyles.caption, color = if (enabled) color else AstridTheme.colors.textMuted,
         modifier = Modifier.clip(RoundedCornerShape(Radius.small)).clickable(enabled = enabled, role = Role.Button, onClick = onClick)
-            .heightIn(min = 32.dp).padding(horizontal = Spacing.s8, vertical = Spacing.s8),
+            .heightIn(min = ControlHeight.sm).padding(horizontal = Spacing.s8, vertical = Spacing.s8),
     )
 }
 
@@ -263,7 +264,7 @@ internal fun SegmentedControl(options: List<String>, selected: Int, enabled: Boo
         options.forEachIndexed { index, label ->
             val chosen = index == selected
             Box(
-                Modifier.weight(1f).heightIn(min = 32.dp)
+                Modifier.weight(1f).heightIn(min = ControlHeight.sm)
                     .then(if (chosen) Modifier.shadow(1.dp, SegmentedShapes.thumb).clip(SegmentedShapes.thumb).background(colors.segmentThumb) else Modifier)
                     .selectable(selected = chosen, enabled = enabled, role = Role.RadioButton) { onSelect(index) }
                     .padding(horizontal = Spacing.s4, vertical = 6.dp),
@@ -283,7 +284,7 @@ internal fun SegmentedControl(options: List<String>, selected: Int, enabled: Boo
 internal fun RadioRow(label: String, selected: Boolean, enabled: Boolean = true, leading: (@Composable () -> Unit)? = null, onClick: () -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().heightIn(min = 40.dp).clip(RoundedCornerShape(Radius.small))
+        Modifier.fillMaxWidth().heightIn(min = ControlHeight.field).clip(RoundedCornerShape(Radius.small))
             .selectable(selected = selected, enabled = enabled, role = Role.RadioButton, onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
