@@ -315,6 +315,9 @@ fun dueText(due: DueLabel): String? = when (due.key) {
     else -> null
 }
 
-fun parseColor(hex: String?): Color = runCatching {
-    Color(android.graphics.Color.parseColor(if (hex.isNullOrBlank()) "#3b82f6" else hex))
-}.getOrDefault(Color(0xFF3B82F6))
+/** A list's `#rrggbb` colour; none or an unreadable one is tokens `category-blue` (ADEV-196). */
+fun parseColor(hex: String?): Color {
+    val fallback = com.gracefultools.astrid.ui.theme.LightColors.tokens.categoryBlue
+    if (hex.isNullOrBlank()) return fallback
+    return runCatching { Color(android.graphics.Color.parseColor(hex)) }.getOrDefault(fallback)
+}

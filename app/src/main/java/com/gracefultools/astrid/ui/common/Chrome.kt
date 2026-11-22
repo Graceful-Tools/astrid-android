@@ -126,8 +126,8 @@ fun AstridSpeechBubble(message: String, modifier: Modifier = Modifier, character
     val border = if (colors.isDark) colors.border else if (colors == com.gracefultools.astrid.ui.theme.OceanColors) colors.border else com.gracefultools.astrid.ui.theme.LightColors.border
     val pointer = when {
         colors == com.gracefultools.astrid.ui.theme.OceanColors -> colors.border
-        colors.isDark -> Color(0xFF4B5563)
-        else -> Color(0xFFD1D5DB)
+        colors.isDark -> colors.border
+        else -> colors.borderHover
     }
     Row(modifier, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12)) {
         Image(painterResource(R.drawable.astrid_character), null, Modifier.size(characterSize))
