@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.ui.theme.ScreenTiming
 import com.gracefultools.astrid.ui.theme.DragDistance
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.BorderWidth
@@ -210,7 +211,7 @@ fun TaskListScreen(
         }
         (state.error ?: if (state.copyListFailed) stringResource(R.string.lists_copy_failed) else null)?.let { message ->
             AppErrorBanner(message, onDismissError, Modifier.align(Alignment.BottomCenter).padding(bottom = Gap.floatingClearance))
-            LaunchedEffect(message) { kotlinx.coroutines.delay(6_000); onDismissError() }
+            LaunchedEffect(message) { kotlinx.coroutines.delay(ScreenTiming.errorBannerMillis); onDismissError() }
         }
     }
 }

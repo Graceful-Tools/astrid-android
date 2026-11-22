@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.agents
 
+import com.gracefultools.astrid.ui.theme.ScreenTiming
 import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.DotSize
 import com.gracefultools.astrid.ui.theme.TouchSize
@@ -600,7 +601,7 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
     val app = stringResource(R.string.app_name)
     var registering by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { vm.load() }
-    LaunchedEffect(state.flash) { if (state.flash != null) { delay(3_000); vm.dismissFlash() } }
+    LaunchedEffect(state.flash) { if (state.flash != null) { delay(ScreenTiming.flashMillis); vm.dismissFlash() } }
     LaunchedEffect(state.registration) { if (state.registration != null) registering = false }
 
     HubPage(stringResource(R.string.settings_openclaw_title), onBack) {

@@ -5,5 +5,6 @@
   "roundedCorners": 0,
   "spLiterals": 0,
   "hardcodedCopy": 0,
-  "uniqueHardcodedStrings": 0
+  "uniqueHardcodedStrings": 0,
+  "durationLiterals": 0
 }

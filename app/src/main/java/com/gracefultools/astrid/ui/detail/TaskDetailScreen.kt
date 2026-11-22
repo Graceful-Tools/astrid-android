@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.ScreenTiming
 import com.gracefultools.astrid.ui.theme.MaxSize
 import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.DotSize
@@ -180,7 +181,7 @@ fun TaskDetailScreen(
             if (detail != null) {
                 PullToRefreshBox(
                     isRefreshing = refreshing,
-                    onRefresh = { refreshing = true; vm.refresh(); scope.launch { kotlinx.coroutines.delay(600); refreshing = false } },
+                    onRefresh = { refreshing = true; vm.refresh(); scope.launch { kotlinx.coroutines.delay(ScreenTiming.refreshIndicatorMillis); refreshing = false } },
                     modifier = Modifier.weight(1f),
                 ) {
                     Column(Modifier.fillMaxSize().verticalScroll(scroll).testTag("taskDetail")) {
@@ -252,7 +253,7 @@ fun TaskDetailScreen(
         }
         state.error?.let { message ->
             AppErrorBanner(message, vm::dismissError, Modifier.align(Alignment.BottomCenter).padding(bottom = Gap.floatingClearance))
-            LaunchedEffect(message) { kotlinx.coroutines.delay(6_000); vm.dismissError() }
+            LaunchedEffect(message) { kotlinx.coroutines.delay(ScreenTiming.errorBannerMillis); vm.dismissError() }
         }
     }
 }

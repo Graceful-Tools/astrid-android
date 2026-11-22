@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.publiclists
 
+import com.gracefultools.astrid.ui.theme.ScreenTiming
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -98,7 +99,7 @@ fun PublicListsScreen(vm: PublicListsViewModel, onBack: () -> Unit, onView: (Pub
         }
         if (state.copyFailed) {
             AppErrorBanner(stringResource(R.string.lists_copy_failed), vm::dismissError, Modifier.align(Alignment.BottomCenter).padding(bottom = Spacing.s24))
-            LaunchedEffect(Unit) { kotlinx.coroutines.delay(6_000); vm.dismissError() }
+            LaunchedEffect(Unit) { kotlinx.coroutines.delay(ScreenTiming.errorBannerMillis); vm.dismissError() }
         }
     }
 }

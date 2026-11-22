@@ -27,6 +27,9 @@ cat > "$ui/tasks/Row.kt" <<'KT'
         val key = "astridModel"
         val url = "https://astrid.cc"
         val greeting = "$name is here"
+        LaunchedEffect(Unit) { delay(6_000); delay(ScreenTiming.errorBannerMillis) }
+        animateFloat(0f, animationSpec = infiniteRepeatable(tween(400), StartOffset(index * 150)))
+        spring<Float>(stiffness = 400f); tween<Float>(AstridTokens.Motion.fastDurationMillis)
     }
 }
 KT
@@ -41,6 +44,7 @@ expect roundedCorners 1       # RoundedCornerShape(12.dp)
 expect spLiterals 1           # 14.sp
 expect hardcodedCopy 3        # "Hello there" twice, "Close the sheet"; keys, URLs and templates are not copy
 expect uniqueHardcodedStrings 2
+expect durationLiterals 4      # ADEV-196: delay(6_000), tween(400), StartOffset(… * 150), stiffness = 400f; tokens do not count
 
 # AATD-86: at the budget passes; one over fails and names the metric.
 metrics --update >/dev/null || fail "--update failed"

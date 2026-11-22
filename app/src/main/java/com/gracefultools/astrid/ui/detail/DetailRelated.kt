@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.ScreenTiming
 import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.TouchSize
@@ -396,7 +397,7 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
     val running = timer?.isRunning == true
     val startedAt = timer?.startedAt?.let { runCatching { Instant.parse(it).toEpochMilli() }.getOrNull() }
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
-    LaunchedEffect(running) { while (running) { now = System.currentTimeMillis(); delay(1_000) } }
+    LaunchedEffect(running) { while (running) { now = System.currentTimeMillis(); delay(ScreenTiming.clockTickMillis) } }
     val seconds = if (running && startedAt != null) ((now - startedAt) / 1000).coerceAtLeast(0) else 0L
     Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false, dismissOnClickOutside = false)) {
         Column(Modifier.fillMaxSize().background(ImmersiveColors.background).statusBarsPadding().padding(Spacing.s16), horizontalAlignment = Alignment.CenterHorizontally) {

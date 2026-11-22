@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.common
 
+import com.gracefultools.astrid.ui.theme.MotionTiming
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
@@ -116,7 +117,7 @@ fun AgentTypingIndicator(agentName: String?, modifier: Modifier = Modifier) {
                 // Under reduced motion (DS17) the dots sit still; the words carry the meaning.
                 val lift by bounce.animateFloat(
                     initialValue = 0f, targetValue = if (still) 0f else -4f,
-                    animationSpec = infiniteRepeatable(tween(400), RepeatMode.Reverse, StartOffset(index * 150)),
+                    animationSpec = infiniteRepeatable(tween(MotionTiming.typingDotBounceMillis), RepeatMode.Reverse, StartOffset(index * MotionTiming.typingDotStaggerMillis)),
                     label = "dot$index",
                 )
                 Box(Modifier.offset(y = lift.dp).testTag("typingDot$index").semantics { this[TypingDotLift] = lift }.size(DotSize.typing).clip(CircleShape).background(colors.textMuted))
