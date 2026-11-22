@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.account
 
+import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.tasks.TaskRowView
@@ -125,7 +126,7 @@ import com.gracefultools.astrid.ui.theme.CircleSize
 private fun ProfileCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val colors = AstridTheme.colors
     val shape = RoundedCornerShape(Radius.medium)
-    Box(modifier.fillMaxWidth().clip(shape).background(colors.bgSecondary).border(1.dp, colors.border, shape).padding(Spacing.s16)) { content() }
+    Box(modifier.fillMaxWidth().clip(shape).background(colors.bgSecondary).border(BorderWidth.thin, colors.border, shape).padding(Spacing.s16)) { content() }
 }
 
 private fun localDate(iso: String?): java.time.ZonedDateTime? =
@@ -298,7 +299,7 @@ private fun SharedTasks(person: PersonProfile, name: String, onOpenTask: (String
     val colors = AstridTheme.colors
     val shape = RoundedCornerShape(Radius.medium)
     Column(
-        Modifier.fillMaxWidth().clip(shape).background(colors.bgSecondary).border(1.dp, colors.border, shape).padding(bottom = Spacing.s16),
+        Modifier.fillMaxWidth().clip(shape).background(colors.bgSecondary).border(BorderWidth.thin, colors.border, shape).padding(bottom = Spacing.s16),
         verticalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         Row(Modifier.padding(start = Spacing.s16, end = Spacing.s16, top = Spacing.s16), verticalAlignment = Alignment.CenterVertically) {
@@ -309,7 +310,7 @@ private fun SharedTasks(person: PersonProfile, name: String, onOpenTask: (String
             )
             Text(
                 "${person.count}", style = TextStyles.caption, color = colors.textSecondary,
-                modifier = Modifier.border(1.dp, colors.border, RoundedCornerShape(Radius.small)).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
+                modifier = Modifier.border(BorderWidth.thin, colors.border, RoundedCornerShape(Radius.small)).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
             )
         }
         Column(Modifier.padding(horizontal = Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
@@ -455,7 +456,7 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
 
         FormSection(stringResource(R.string.profile_title), if (isOAuth) stringResource(R.string.account_oauth_footer) else null) {
             FormRowFrame {
-                Box(Modifier.size(AvatarSize.account).clip(CircleShape).border(2.dp, colors.accent, CircleShape)) {
+                Box(Modifier.size(AvatarSize.account).clip(CircleShape).border(BorderWidth.thick, colors.accent, CircleShape)) {
                     if (photo != null) {
                         AsyncImage(model = java.io.File(photo!!), contentDescription = null, contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.size(AvatarSize.account))
                     } else {

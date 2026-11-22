@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.board
 
 import androidx.compose.foundation.shape.CircleShape
+import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.TouchLayout
 import androidx.compose.material.icons.filled.AddCircle
@@ -244,7 +245,7 @@ private fun ColumnView(
     val shape = RoundedCornerShape(TouchLayout.boardColumnRadius)
     Column(
         Modifier.width(width).fillMaxHeight().padding(bottom = Spacing.s8).clip(shape).background(frame)
-            .border(3.dp, if (hoverIndex != null) colors.accent else Color.Transparent, shape)
+            .border(BorderWidth.heavy, if (hoverIndex != null) colors.accent else Color.Transparent, shape)
             .onGloballyPositioned { onBounds(it.boundsInWindow()) }.testTag("board.column.${column.id}"),
     ) {
         Column(Modifier.fillMaxWidth().padding(
@@ -377,7 +378,7 @@ private fun ColumnQuickAdd(columnId: String, onAdd: suspend (String, String) -> 
     ) {
         Box(
             Modifier.weight(1f).clip(RoundedCornerShape(com.gracefultools.astrid.ui.theme.Radius.medium)).background(colors.field)
-                .border(1.dp, colors.fieldBorder, RoundedCornerShape(com.gracefultools.astrid.ui.theme.Radius.medium)).heightIn(min = ControlHeight.field)
+                .border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(com.gracefultools.astrid.ui.theme.Radius.medium)).heightIn(min = ControlHeight.field)
                 .padding(horizontal = 10.dp, vertical = 9.dp),
             contentAlignment = Alignment.CenterStart,
         ) {

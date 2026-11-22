@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.CircleSize
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.ControlHeight
@@ -162,7 +163,7 @@ private fun TitleChips(row: TaskRow) {
     @Composable
     fun chip(text: String, onClick: (() -> Unit)? = null) = Text(
         text, style = TextStyles.caption, color = colors.textSecondary, maxLines = 1,
-        modifier = Modifier.border(1.dp, colors.border, RoundedCornerShape(Radius.small))
+        modifier = Modifier.border(BorderWidth.thin, colors.border, RoundedCornerShape(Radius.small))
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .padding(horizontal = 6.dp, vertical = Spacing.s2),
     )
@@ -195,7 +196,7 @@ private fun LeadingControl(row: TaskRow, onLeading: () -> Unit) {
     val tap = Modifier.size(TouchSize.leadingControl).completionPop(pop).clip(square).clickable(onClick = onTap)
         .semantics { contentDescription = row.checkboxLabel ?: label; role = Role.Checkbox }
     when (row.leading.kind) {
-        "copy" -> Box(tap.border(2.dp, colors.neutral.copy(alpha = 0.4f), square), contentAlignment = Alignment.Center) {
+        "copy" -> Box(tap.border(BorderWidth.thick, colors.neutral.copy(alpha = 0.4f), square), contentAlignment = Alignment.Center) {
             Icon(Icons.Outlined.ContentCopy, null, tint = colors.neutral, modifier = Modifier.size(IconSize.md))
         }
         "avatar" -> {
@@ -217,7 +218,7 @@ private fun LeadingControl(row: TaskRow, onLeading: () -> Unit) {
                 )
             }
             if (row.isRepeating) RepeatFrame(row, onTap, label, pop) { mark(13) }
-            else Box(tap.border(2.dp, priority, square), contentAlignment = Alignment.Center) { mark(15) }
+            else Box(tap.border(BorderWidth.thick, priority, square), contentAlignment = Alignment.Center) { mark(15) }
         }
         else -> CheckboxArt(row.priority, row.isRepeating, row.completed, tap)
     }
@@ -273,7 +274,7 @@ fun ListChipView(chip: com.gracefultools.astrid.model.ListChip, modifier: Modifi
     val tint = parseColor(chip.color)
     val shape = RoundedCornerShape(Radius.large)
     Row(
-        modifier.clip(shape).background(colors.chipBg).border(1.dp, colors.chipBorder, shape).padding(horizontal = 10.dp, vertical = Spacing.s4),
+        modifier.clip(shape).background(colors.chipBg).border(BorderWidth.thin, colors.chipBorder, shape).padding(horizontal = 10.dp, vertical = Spacing.s4),
         horizontalArrangement = Arrangement.spacedBy(Spacing.s4), verticalAlignment = Alignment.CenterVertically,
     ) {
         val (icon, iconTint) = when (chip.glyph) {

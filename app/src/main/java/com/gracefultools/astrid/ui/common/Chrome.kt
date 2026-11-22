@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.common
 
+import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.foundation.Canvas
@@ -142,7 +143,7 @@ fun AstridSpeechBubble(message: String, modifier: Modifier = Modifier, character
             Text(
                 message, style = TextStyles.body, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
                 modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.xLarge)).background(bubble)
-                    .border(2.dp, border, RoundedCornerShape(Radius.xLarge)).padding(Spacing.s16),
+                    .border(BorderWidth.thick, border, RoundedCornerShape(Radius.xLarge)).padding(Spacing.s16),
             )
             Canvas(Modifier.matchParentSize()) {
                 val cy = size.height / 2
@@ -221,7 +222,7 @@ fun SplashLookalike() {
             CheckboxArt(0, repeating = false, checked = false)
             Box(
                 Modifier.weight(1f).height(TouchSize.hitTarget).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
-                    .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)),
+                    .border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(Radius.medium)),
             )
             Icon(Icons.Filled.AddCircle, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lead))
         }
