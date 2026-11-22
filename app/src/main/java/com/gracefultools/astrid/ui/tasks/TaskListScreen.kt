@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.tasks
 
 import com.gracefultools.astrid.ui.theme.AvatarSize
+import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.TouchSize
@@ -402,7 +403,7 @@ private fun QuickAddBar(
             decorationBox = { inner ->
                 Box(
                     Modifier.clip(RoundedCornerShape(Radius.medium)).background(colors.field)
-                        .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium))
+                        .border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(Radius.medium))
                         .heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s12, vertical = 10.dp),
                     contentAlignment = Alignment.CenterStart,
                 ) {
@@ -442,7 +443,7 @@ private fun QuickAddPicker(defaults: QuickAddDefaults, onPriority: (Int) -> Unit
                 Box(
                     Modifier.weight(1f).heightIn(min = TouchSize.hitTarget).clip(RoundedCornerShape(Radius.small))
                         .background(if (selected) colors.priorityFill[p] else Color.Transparent)
-                        .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
+                        .border(BorderWidth.mark, tint, RoundedCornerShape(Radius.small))
                         .clickable { haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove); onPriority(p) },
                     contentAlignment = Alignment.Center,
                 ) { Text(glyph, fontSize = IosTypeSize.glyph, fontWeight = FontWeight.SemiBold, color = if (selected) colors.onFill else tint) }
@@ -473,7 +474,7 @@ private fun AssigneeChoice(id: String?, image: String?, initials: String, name: 
     val shape = RoundedCornerShape(Radius.medium)
     Row(
         Modifier.fillMaxWidth().clip(shape).background(if (selected) colors.bgSecondary else Color.Transparent)
-            .border(1.dp, if (selected) colors.accent else Color.Transparent, shape)
+            .border(BorderWidth.thin, if (selected) colors.accent else Color.Transparent, shape)
             .clickable(onClick = onClick).padding(horizontal = Spacing.s12, vertical = Spacing.s8),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
@@ -615,7 +616,7 @@ private fun RowDragArea(
                     // core's `copy`), and it can be neither swiped away nor moved (iOS 1227-1241).
                     if (row.action == "copy") face() else SwipeToDelete(onDelete = { onDelete(row) }) { face() }
                     if (current == DropTarget.OnRow(row.id)) {
-                        Box(Modifier.matchParentSize().border(2.dp, colors.accent, RoundedCornerShape(Radius.medium)))
+                        Box(Modifier.matchParentSize().border(BorderWidth.thick, colors.accent, RoundedCornerShape(Radius.medium)))
                     }
                 }
             }

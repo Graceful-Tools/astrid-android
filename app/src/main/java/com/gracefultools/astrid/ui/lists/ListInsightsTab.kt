@@ -44,6 +44,7 @@ import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -136,7 +137,7 @@ private fun LineChart(series: List<InsightDay>, modifier: Modifier) {
                         val point = Offset(i * step, size.height * (1f - pick(day).toFloat() / top))
                         if (i == 0) path.moveTo(point.x, point.y) else path.lineTo(point.x, point.y)
                     }
-                    drawPath(path, color, style = Stroke(width = 2.dp.toPx()))
+                    drawPath(path, color, style = Stroke(width = BorderWidth.thick.toPx()))
                 }
                 line({ it.created }, created)
                 line({ it.completed }, Success)

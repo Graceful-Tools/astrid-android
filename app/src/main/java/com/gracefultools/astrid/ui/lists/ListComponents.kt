@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.ControlHeight
@@ -150,7 +151,7 @@ internal fun PriorityButtons(current: Int, onPick: (Int) -> Unit) {
             Box(
                 Modifier.size(TileSize.priority).clip(RoundedCornerShape(Radius.small))
                     .background(if (chosen) AstridTheme.colors.priorityFill[level] else Color.Transparent)
-                    .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
+                    .border(BorderWidth.mark, tint, RoundedCornerShape(Radius.small))
                     .clickable(role = Role.RadioButton) { onPick(level) }
                     .semantics(mergeDescendants = true) { selected = chosen; contentDescription = spoken },
                 contentAlignment = Alignment.Center,

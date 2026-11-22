@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.ControlHeight
@@ -374,7 +375,7 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
     if (detail.isCanceled) {
         Text(
             stringResource(R.string.tasks_wont_do_chip), style = TextStyles.caption, color = colors.textSecondary,
-            modifier = Modifier.padding(start = TouchLayout.detailIconColumn, bottom = Spacing.s8).border(1.dp, colors.border, RoundedCornerShape(Radius.small)).padding(horizontal = 6.dp, vertical = Spacing.s2),
+            modifier = Modifier.padding(start = TouchLayout.detailIconColumn, bottom = Spacing.s8).border(BorderWidth.thin, colors.border, RoundedCornerShape(Radius.small)).padding(horizontal = 6.dp, vertical = Spacing.s2),
         )
     }
     if (askSubtasks) {
@@ -438,7 +439,7 @@ private fun WhoRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailVie
                 Avatar(who.image, initialsOf(who.name, who.email), AvatarSize.xs)
                 Text(who.display, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             } else {
-                Box(Modifier.size(AvatarSize.xs).clip(CircleShape).border(1.5.dp, colors.textMuted, CircleShape), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(AvatarSize.xs).clip(CircleShape).border(BorderWidth.mark, colors.textMuted, CircleShape), contentAlignment = Alignment.Center) {
                     Text(stringResource(R.string.tasks_unassigned_glyph), fontSize = TypeSize.caption2, fontWeight = FontWeight.SemiBold, color = colors.textMuted)
                 }
                 Text(stringResource(R.string.assignee_unassigned), style = TextStyles.body, color = colors.textMuted, modifier = Modifier.weight(1f))
@@ -507,7 +508,7 @@ private fun PriorityRow(current: Int, onPick: (Int) -> Unit) {
                 Box(
                     Modifier.size(TileSize.priority).clip(RoundedCornerShape(Radius.small))
                         .background(if (selected) AstridTheme.colors.priorityFill[level] else Color.Transparent)
-                        .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
+                        .border(BorderWidth.mark, tint, RoundedCornerShape(Radius.small))
                         .clickable { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove); onPick(level) }
                         .semantics(mergeDescendants = true) { this.selected = selected; role = Role.RadioButton; contentDescription = spoken },
                     contentAlignment = Alignment.Center,
@@ -798,7 +799,7 @@ private fun CommentComposer(
         Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
             Box(
                 Modifier.weight(1f).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
-                    .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = ControlHeight.field, max = 200.dp).padding(horizontal = Spacing.s12, vertical = 9.dp),
+                    .border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = ControlHeight.field, max = 200.dp).padding(horizontal = Spacing.s12, vertical = 9.dp),
                 contentAlignment = Alignment.CenterStart,
             ) {
                 if (text.text.isEmpty()) Text(stringResource(R.string.comments_add_placeholder), style = TextStyles.body, color = colors.inputPlaceholder)
@@ -890,7 +891,7 @@ private fun SuggestionList(items: List<com.gracefultools.astrid.model.CommentSug
     val colors = AstridTheme.colors
     Column(
         Modifier.fillMaxWidth().padding(bottom = Spacing.s8).heightIn(max = 220.dp).clip(RoundedCornerShape(Radius.medium))
-            .background(colors.field).border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).verticalScroll(rememberScrollState()),
+            .background(colors.field).border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(Radius.medium)).verticalScroll(rememberScrollState()),
     ) {
         items.forEach { item ->
             Row(
@@ -926,7 +927,7 @@ private fun ComposerButton(icon: ImageVector, label: String, onClick: () -> Unit
 private fun ComposerButton(icon: ImageVector, label: String, tint: Color, onClick: () -> Unit) {
     val colors = AstridTheme.colors
     Box(
-        Modifier.size(CircleSize.lg).clip(CircleShape).background(colors.field).border(1.dp, colors.fieldBorder, CircleShape).clickable(onClick = onClick),
+        Modifier.size(CircleSize.lg).clip(CircleShape).background(colors.field).border(BorderWidth.thin, colors.fieldBorder, CircleShape).clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) { Icon(icon, label, tint = tint, modifier = Modifier.size(IconSize.xl)) }
 }

@@ -29,6 +29,7 @@ import coil3.compose.AsyncImage
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridColors
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.TouchSize
 
@@ -45,7 +46,7 @@ fun Avatar(
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape,
     border: Color? = null,
-    borderWidth: Dp = 2.dp,
+    borderWidth: Dp = BorderWidth.thick,
 ) {
     val colors = AstridTheme.colors
     var failed by remember(image) { mutableStateOf(false) }

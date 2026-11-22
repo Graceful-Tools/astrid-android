@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.reminders
 
 import com.gracefultools.astrid.ui.theme.AvatarSize
+import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
@@ -167,7 +168,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
                 if (state.countingOnYou.isNotEmpty()) {
                     Row(
                         Modifier.padding(horizontal = Spacing.s16).fillMaxWidth().clip(RoundedCornerShape(Radius.large))
-                            .background(IosSystemColors.orange.copy(alpha = 0.1f)).border(1.dp, IosSystemColors.orange.copy(alpha = 0.3f), RoundedCornerShape(Radius.large))
+                            .background(IosSystemColors.orange.copy(alpha = 0.1f)).border(BorderWidth.thin, IosSystemColors.orange.copy(alpha = 0.3f), RoundedCornerShape(Radius.large))
                             .padding(Spacing.s12),
                         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
                     ) {
@@ -210,7 +211,7 @@ private fun ActionButton(title: String, background: Color, foreground: Color, ic
 private fun SnoozeButton(title: String, modifier: Modifier, onClick: () -> Unit) {
     val colors = AstridTheme.colors
     Box(
-        modifier.clip(RoundedCornerShape(Radius.large)).background(colors.bgSecondary).border(1.dp, colors.border, RoundedCornerShape(Radius.large))
+        modifier.clip(RoundedCornerShape(Radius.large)).background(colors.bgSecondary).border(BorderWidth.thin, colors.border, RoundedCornerShape(Radius.large))
             .clickable(role = Role.Button, onClick = onClick).padding(vertical = Spacing.s16),
         contentAlignment = Alignment.Center,
     ) { Text(title, style = TextStyles.headline, color = colors.textPrimary) }
@@ -287,7 +288,7 @@ private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (Tria
             .offset { IntOffset(drag.value.x.roundToInt(), drag.value.y.roundToInt()) }
             .rotate(inDp(drag.value).x / 20f)
             .shadow(8.dp, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgSecondary)
-            .border(if (pending == null) 1.dp else 3.dp, pending?.let { triageColor(it, colors.textMuted) } ?: colors.border, RoundedCornerShape(Radius.xLarge))
+            .border(if (pending == null) BorderWidth.thin else BorderWidth.heavy, pending?.let { triageColor(it, colors.textMuted) } ?: colors.border, RoundedCornerShape(Radius.xLarge))
             .pointerInput(task.task.id) {
                 detectDragGestures(
                     onDragEnd = {
