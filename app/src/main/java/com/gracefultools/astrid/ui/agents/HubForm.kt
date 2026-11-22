@@ -252,13 +252,13 @@ internal fun NavRow(title: String, subtitle: String? = null, leading: (@Composab
 internal fun SegmentedControl(options: List<String>, selected: Int, enabled: Boolean = true, onSelect: (Int) -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(if (colors.isDark) colors.bgTertiary else Color(0xFFEEEEEF)).padding(Spacing.s2),
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(colors.segmentTrack).padding(Spacing.s2),
     ) {
         options.forEachIndexed { index, label ->
             val chosen = index == selected
             Box(
                 Modifier.weight(1f).heightIn(min = 32.dp)
-                    .then(if (chosen) Modifier.shadow(1.dp, RoundedCornerShape(7.dp)).clip(RoundedCornerShape(7.dp)).background(if (colors.isDark) colors.bgActive else Color.White) else Modifier)
+                    .then(if (chosen) Modifier.shadow(1.dp, RoundedCornerShape(7.dp)).clip(RoundedCornerShape(7.dp)).background(colors.segmentThumb) else Modifier)
                     .selectable(selected = chosen, enabled = enabled, role = Role.RadioButton) { onSelect(index) }
                     .padding(horizontal = Spacing.s4, vertical = 6.dp),
                 contentAlignment = Alignment.Center,

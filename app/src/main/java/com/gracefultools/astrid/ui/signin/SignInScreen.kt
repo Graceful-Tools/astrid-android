@@ -115,9 +115,8 @@ fun SignInScreen(
                     }
                 }
                 Column(buttons, verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
-                    // iOS's neutral: white 0.95 on light, white 0.2 on dark.
-                    val neutral = if (palette.isDark) Color(0.2f, 0.2f, 0.2f) else Color(0.95f, 0.95f, 0.95f)
-                    val onNeutral = if (palette.isDark) Color.White else Color.Black
+                    val neutral = palette.neutralButton
+                    val onNeutral = palette.onNeutralButton
                     for (provider in look.providers) when (provider) {
                         "google" -> ProviderButton(R.string.auth_continue_with_google, Icons.Filled.Language, Accent, AccentText) { onProvider("google") }
                         // The hand-off page offers every way in; a passkey is one of them.

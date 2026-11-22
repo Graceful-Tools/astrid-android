@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -62,7 +63,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -346,29 +346,29 @@ private fun AttachmentGallery(files: List<AttachmentFile>, start: Int, vm: TaskD
     val context = LocalContext.current
     val pager = rememberPagerState(initialPage = start) { files.size }
     Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false)) {
-        Box(Modifier.fillMaxSize().background(Color.Black)) {
+        Box(Modifier.fillMaxSize().background(ImmersiveColors.background)) {
             HorizontalPager(pager, Modifier.fillMaxSize()) { page ->
                 val file = files[page]
                 val path = rememberLocalPath(file, vm, wanted = true)
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     when {
-                        path == null -> CircularProgressIndicator(color = Color.White)
+                        path == null -> CircularProgressIndicator(color = ImmersiveColors.content)
                         file.isImage -> AsyncImage(model = File(path), contentDescription = file.name, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize())
                         else -> Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s16)) {
-                            Icon(Icons.AutoMirrored.Filled.InsertDriveFile, null, tint = Color.White.copy(alpha = 0.7f), modifier = Modifier.size(64.dp))
-                            Text(file.name, color = Color.White, style = TextStyles.body, textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = Spacing.s24))
-                            AstridTextButton(onClick = { openFile(context, path, file.mimeType) }) { Text(stringResource(R.string.attachments_open), color = Color.White) }
+                            Icon(Icons.AutoMirrored.Filled.InsertDriveFile, null, tint = ImmersiveColors.contentSecondary, modifier = Modifier.size(64.dp))
+                            Text(file.name, color = ImmersiveColors.content, style = TextStyles.body, textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = Spacing.s24))
+                            AstridTextButton(onClick = { openFile(context, path, file.mimeType) }) { Text(stringResource(R.string.attachments_open), color = ImmersiveColors.content) }
                         }
                     }
                 }
             }
             Row(Modifier.fillMaxWidth().statusBarsPadding().padding(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    files.getOrNull(pager.currentPage)?.name.orEmpty(), color = Color.White, style = TextStyles.headline, maxLines = 1,
+                    files.getOrNull(pager.currentPage)?.name.orEmpty(), color = ImmersiveColors.content, style = TextStyles.headline, maxLines = 1,
                     overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f).padding(horizontal = Spacing.s8),
                 )
                 Icon(
-                    Icons.Filled.Close, stringResource(R.string.actions_close), tint = Color.White,
+                    Icons.Filled.Close, stringResource(R.string.actions_close), tint = ImmersiveColors.content,
                     modifier = Modifier.size(44.dp).clip(CircleShape).clickable(onClick = onClose).padding(10.dp),
                 )
             }
@@ -393,32 +393,32 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
     LaunchedEffect(running) { while (running) { now = System.currentTimeMillis(); delay(1_000) } }
     val seconds = if (running && startedAt != null) ((now - startedAt) / 1000).coerceAtLeast(0) else 0L
     Dialog(onDismissRequest = onClose, properties = DialogProperties(usePlatformDefaultWidth = false, dismissOnClickOutside = false)) {
-        Column(Modifier.fillMaxSize().background(Color.Black).statusBarsPadding().padding(Spacing.s16), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(Modifier.fillMaxSize().background(ImmersiveColors.background).statusBarsPadding().padding(Spacing.s16), horizontalAlignment = Alignment.CenterHorizontally) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Icon(
-                    Icons.Filled.Close, stringResource(R.string.actions_close), tint = Color.White.copy(alpha = 0.7f),
+                    Icons.Filled.Close, stringResource(R.string.actions_close), tint = ImmersiveColors.contentSecondary,
                     modifier = Modifier.size(56.dp).clip(CircleShape).clickable(onClick = onClose).padding(14.dp),
                 )
             }
             Spacer(Modifier.weight(1f))
             Text(
-                detail.task.title, color = Color.White.copy(alpha = 0.7f), fontSize = 24.sp, fontWeight = FontWeight.Medium,
+                detail.task.title, color = ImmersiveColors.contentSecondary, fontSize = 24.sp, fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = Spacing.s16),
             )
             Spacer(Modifier.height(Spacing.s48))
             Text(
-                "%d:%02d".format(seconds / 60, seconds % 60), color = Color.White, fontSize = 88.sp,
+                "%d:%02d".format(seconds / 60, seconds % 60), color = ImmersiveColors.content, fontSize = 88.sp,
                 fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace, maxLines = 1,
             )
             Spacer(Modifier.height(Spacing.s48))
             Box(
-                Modifier.size(100.dp).clip(CircleShape).background(Color.White)
+                Modifier.size(100.dp).clip(CircleShape).background(ImmersiveColors.control)
                     .clickable(role = Role.Button) { if (running) vm.stopTimer() else vm.startTimer() },
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     if (running) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                    stringResource(if (running) R.string.timer_stop else R.string.timer_start), tint = Color.Black, modifier = Modifier.size(40.dp),
+                    stringResource(if (running) R.string.timer_stop else R.string.timer_start), tint = ImmersiveColors.onControl, modifier = Modifier.size(40.dp),
                 )
             }
             Spacer(Modifier.height(Spacing.s24))
@@ -428,14 +428,14 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
                         .clickable(role = Role.Button) { vm.completeFromTimer(); onClose() },
                     horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(Icons.Filled.CheckCircle, null, tint = Color.Black)
+                    Icon(Icons.Filled.CheckCircle, null, tint = ImmersiveColors.onControl)
                     Spacer(Modifier.width(Spacing.s8))
-                    Text(stringResource(R.string.timer_complete_task), color = Color.Black, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.timer_complete_task), color = ImmersiveColors.onControl, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 }
             }
             (timer?.lastValue ?: detail.task.lastTimerValue)?.let { last ->
                 Spacer(Modifier.height(Spacing.s16))
-                Text(stringResource(R.string.task_edit_last_timer, last), color = Color.White.copy(alpha = 0.5f), fontSize = TypeSize.callout)
+                Text(stringResource(R.string.task_edit_last_timer, last), color = ImmersiveColors.contentTertiary, fontSize = TypeSize.callout)
             }
             Spacer(Modifier.weight(2f))
         }

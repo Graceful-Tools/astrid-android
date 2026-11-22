@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -120,8 +121,8 @@ internal fun FormButtonRow(icon: ImageVector, label: String, tint: Color, enable
 @Composable
 internal fun SegmentedTabs(items: List<Pair<ImageVector?, String>>, selected: Int, onSelect: (Int) -> Unit, modifier: Modifier = Modifier) {
     val colors = AstridTheme.colors
-    val track = if (colors.isDark) colors.bgTertiary else Color(0xFFE9E9EB)
-    val thumb = if (colors.isDark) colors.bgActive else Color.White
+    val track = colors.segmentTrack
+    val thumb = colors.segmentThumb
     TabRow(
         selectedTabIndex = selected,
         modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(9.dp)).background(track).padding(Spacing.s2),
@@ -133,7 +134,7 @@ internal fun SegmentedTabs(items: List<Pair<ImageVector?, String>>, selected: In
                     androidx.compose.material3.TabRowDefaults.run { Modifier.tabIndicatorOffset(positions[selected]) }
                         .padding(1.dp).fillMaxWidth().heightIn(min = 30.dp)
                         .shadow(1.dp, RoundedCornerShape(7.dp)).clip(RoundedCornerShape(7.dp)).background(thumb)
-                        .border(0.5.dp, Color.Black.copy(alpha = 0.04f), RoundedCornerShape(7.dp)),
+                        .border(0.5.dp, ImmersiveColors.hairline, RoundedCornerShape(7.dp)),
                 )
             }
         },

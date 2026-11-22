@@ -103,7 +103,7 @@ fun CustomRepeatDialog(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = if (colors.isDark) colors.bgPrimary else Color.White,
+        containerColor = colors.sheet,
     ) {
         Column(
             Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(horizontal = Spacing.s16).padding(bottom = Spacing.s24),

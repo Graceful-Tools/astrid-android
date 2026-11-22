@@ -36,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -50,7 +49,6 @@ import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.OceanColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -157,11 +155,7 @@ private fun CommentBubble(
     var editing by remember { mutableStateOf(false) }
     var confirmingDelete by remember { mutableStateOf(false) }
     val mine = comment.isMine
-    val bubble = when {
-        colors.isDark -> colors.bgSecondary
-        mine -> if (colors == OceanColors) Color.White else colors.bgSecondary
-        else -> Color.White.copy(alpha = 0.5f)
-    }
+    val bubble = if (mine) colors.bubbleMine else colors.bubble
     val indent = if (comment.isReply) 24.dp else 0.dp
     Row(
         Modifier.fillMaxWidth().padding(start = if (!mine) indent else 0.dp, end = if (mine) indent else 0.dp),

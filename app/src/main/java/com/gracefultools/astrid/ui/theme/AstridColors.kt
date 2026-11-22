@@ -82,6 +82,19 @@ data class AstridColors(
     val neutral: Color = Color.Gray,
     /** A mark on a coloured fill (a chosen priority or list colour, delete, the error banner, a switch thumb): iOS `.white`. */
     val onFill: Color = Color.White,
+    /**
+     * iOS's segmented picker (`.pickerStyle(.segmented)`): its grey track and the raised chosen segment.
+     * One pair for every segmented control (ADEV-196); the light track is UIKit's, #EEEEEF.
+     */
+    val segmentTrack: Color = if (isDark) bgTertiary else Color(0xFFEEEEEF),
+    val segmentThumb: Color = if (isDark) bgActive else Color.White,
+    /** A comment by someone else (iOS CommentSectionViewEnhanced): white 0.5 on the light themes. */
+    val bubble: Color = if (isDark) bgSecondary else Color.White.copy(alpha = 0.5f),
+    /** Your own comment: `bg-secondary`, and white on Ocean. */
+    val bubbleMine: Color = bgSecondary,
+    /** iOS's neutral sign-in buttons (GitHub, passkey): white 0.95 on light, 0.2 on dark, under black / white text. */
+    val neutralButton: Color = if (isDark) Color(0.2f, 0.2f, 0.2f) else Color(0.95f, 0.95f, 0.95f),
+    val onNeutralButton: Color = if (isDark) Color.White else Color.Black,
 ) {
     val accent: Color get() = tokens.accent
     val accentHover: Color get() = tokens.accentHover
@@ -221,7 +234,7 @@ val OceanColors = AstridColors(
     tokens = OceanTokens,
     card = OceanTokens.surface.copy(alpha = OCEAN_CARD_OPACITY), cardSelected = OceanTokens.surface,
     floating = Color.White, floatingBar = Color.White.copy(alpha = 0.8f),
-    field = Color.White,
+    field = Color.White, bubbleMine = Color.White,
     // Cyan under white 0.8, flattened.
     pageBg = rgb(231, 248, 254), pressed = OceanTokens.buttonHover,
 )
