@@ -267,7 +267,7 @@ private fun ListHeader(
                 contentAlignment = Alignment.Center,
             ) {
                 if (copyingList) androidx.compose.material3.CircularProgressIndicator(Modifier.size(IconSize.lg), strokeWidth = SpinnerStroke, color = colors.accent)
-                else Icon(Icons.Outlined.ContentCopy, null, tint = colors.accentInk, modifier = Modifier.size(22.dp))
+                else Icon(Icons.Outlined.ContentCopy, null, tint = colors.accentInk, modifier = Modifier.size(IconSize.control))
             }
         }
         val next = nextViewMode(mode, hasBoard, includesMessages)

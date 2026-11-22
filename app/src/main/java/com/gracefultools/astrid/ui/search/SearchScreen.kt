@@ -90,7 +90,7 @@ fun SearchScreen(vm: SearchViewModel, onBack: () -> Unit, onOpenTask: (String) -
             }
             if (state.query.isNotEmpty()) Icon(
                 Icons.Filled.Cancel, stringResource(R.string.search_clear), tint = colors.textMuted,
-                modifier = Modifier.size(22.dp).clip(CircleShape).clickable { vm.setQuery("") },
+                modifier = Modifier.size(IconSize.control).clip(CircleShape).clickable { vm.setQuery("") },
             )
         }
         Box(Modifier.weight(1f)) {

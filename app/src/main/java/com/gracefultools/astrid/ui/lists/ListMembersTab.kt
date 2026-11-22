@@ -100,7 +100,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
                         }
                     }
                     IconButton(onClick = { vm.cancelInvitation(invite.email) }) {
-                        Icon(Icons.Filled.Cancel, stringResource(R.string.lists_cancel_invitation, invite.email), tint = colors.neutral, modifier = Modifier.size(22.dp))
+                        Icon(Icons.Filled.Cancel, stringResource(R.string.lists_cancel_invitation, invite.email), tint = colors.neutral, modifier = Modifier.size(IconSize.control))
                     }
                 }
             }

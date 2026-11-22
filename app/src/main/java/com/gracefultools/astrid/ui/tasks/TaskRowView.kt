@@ -280,7 +280,7 @@ fun ListChipView(chip: com.gracefultools.astrid.model.ListChip, modifier: Modifi
             "people" -> Icons.Outlined.People to colors.accentInk
             else -> Icons.Filled.Tag to tint
         }
-        Icon(icon, null, tint = iconTint, modifier = Modifier.size(13.dp))
+        Icon(icon, null, tint = iconTint, modifier = Modifier.size(IconSize.chip))
         Text(chip.name, style = TextStyles.subheadline, color = colors.textSecondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
