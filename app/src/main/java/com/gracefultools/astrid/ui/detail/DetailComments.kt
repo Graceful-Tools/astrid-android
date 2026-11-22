@@ -116,7 +116,7 @@ private fun StreakRow(streak: com.gracefultools.astrid.model.CompletionStreak) {
     var open by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).clickable { open = !open }.padding(vertical = Spacing.s4), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            Icon(Icons.Filled.LocalFireDepartment, null, tint = Color(0xFFF97316), modifier = Modifier.size(16.dp))
+            Icon(Icons.Filled.LocalFireDepartment, null, tint = colors.tokens.categoryOrange, modifier = Modifier.size(16.dp))
             Text(
                 if (streak.spanDays != null) stringResource(R.string.comments_streak_summary, streak.count, streak.spanDays)
                 else stringResource(R.string.comments_streak_summary_no_span, streak.count),
