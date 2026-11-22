@@ -20,6 +20,9 @@ object CircleSize {
     /** Copy, delete an agent, the "no model" choice, the camera badge on edit profile
      *  (iOS EditProfileView, DefaultAgentPickerView). */
     val md = 36.dp
+    /** The repeat arrows drawn round someone else's or nobody's checkbox (AATD-84): the checkbox's
+     *  art at 42 rather than 34, so the face or mark fits inside the loop. */
+    val repeatFrame = 42.dp
     /** Sidebar search and the comment composer's buttons (iOS ListSidebarView, PriorityButtonPicker). */
     val lg = 40.dp
     /** The close button on the full-screen timer. */

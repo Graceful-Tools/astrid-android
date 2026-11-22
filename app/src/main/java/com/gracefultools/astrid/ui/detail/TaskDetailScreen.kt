@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.IosTypeSize
@@ -504,7 +505,7 @@ private fun PriorityRow(current: Int, onPick: (Int) -> Unit) {
                 val selected = level == current
                 val spoken = stringResource(R.string.priority_a11y, stringResource(names[level]))
                 Box(
-                    Modifier.size(40.dp).clip(RoundedCornerShape(Radius.small))
+                    Modifier.size(TileSize.priority).clip(RoundedCornerShape(Radius.small))
                         .background(if (selected) AstridTheme.colors.priorityFill[level] else Color.Transparent)
                         .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
                         .clickable { haptics.performHapticFeedback(androidx.compose.ui.hapticfeedback.HapticFeedbackType.TextHandleMove); onPick(level) }
@@ -860,7 +861,7 @@ private fun QueuedFiles(files: List<QueuedFile>, onRemove: (String) -> Unit) {
         files.forEach { file ->
             Box(Modifier.size(TouchLayout.detailIconColumn)) {
                 Box(
-                    Modifier.align(Alignment.BottomStart).size(56.dp).clip(RoundedCornerShape(Radius.small)).background(colors.field),
+                    Modifier.align(Alignment.BottomStart).size(TileSize.attachment).clip(RoundedCornerShape(Radius.small)).background(colors.field),
                     contentAlignment = Alignment.Center,
                 ) {
                     if (file.mimeType?.startsWith("image/") == true) {

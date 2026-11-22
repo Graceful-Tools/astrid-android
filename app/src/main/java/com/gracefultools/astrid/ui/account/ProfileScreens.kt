@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.account
 
+import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.tasks.TaskRowView
 import com.gracefultools.astrid.ui.common.rememberPhotoPicker
@@ -218,7 +219,7 @@ private fun StatCard(icon: ImageVector, tint: Color, value: Int, label: Int, tag
     val colors = AstridTheme.colors
     ProfileCard {
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s12), verticalAlignment = Alignment.CenterVertically) {
-            Box(Modifier.size(48.dp).clip(RoundedCornerShape(Radius.medium)).background(tint.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(TileSize.stat).clip(RoundedCornerShape(Radius.medium)).background(tint.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
                 Icon(icon, null, tint = tint, modifier = Modifier.size(IconSize.xxl))
             }
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
@@ -280,7 +281,7 @@ fun PersonProfileScreen(vm: PersonProfileViewModel, onBack: () -> Unit, onOwnPro
                 Modifier.fillMaxWidth().padding(Spacing.s32), horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(Spacing.s16),
             ) {
-                Icon(Icons.Filled.Warning, null, tint = colors.textMuted, modifier = Modifier.size(48.dp))
+                Icon(Icons.Filled.Warning, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.emptyLarge))
                 Text(
                     stringResource(if (state.error == FailureKind.NOT_FOUND) R.string.profile_error_not_found else R.string.profile_error_load_failed),
                     style = TextStyles.body, color = colors.textMuted,
@@ -611,7 +612,7 @@ private fun PasskeyRows(passkeys: List<Passkey>?, loading: Boolean, vm: ProfileV
             Modifier.fillMaxWidth().padding(vertical = Spacing.s12, horizontal = Spacing.s16),
             horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s8),
         ) {
-            Icon(Icons.Filled.Password, null, tint = colors.textMuted, modifier = Modifier.size(32.dp))
+            Icon(Icons.Filled.Password, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lead))
             Text(stringResource(R.string.account_no_passkeys_registered), style = TextStyles.body, color = colors.textMuted)
             Text(stringResource(R.string.account_add_passkey_description), style = TextStyles.footnote, color = colors.textMuted)
         }

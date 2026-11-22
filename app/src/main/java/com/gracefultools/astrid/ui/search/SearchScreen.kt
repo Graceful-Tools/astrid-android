@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.search
 
+import com.gracefultools.astrid.ui.theme.TileSize
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -73,7 +74,7 @@ fun SearchScreen(vm: SearchViewModel, onBack: () -> Unit, onOpenTask: (String) -
         val openSidebar = stringResource(R.string.navigation_open_sidebar)
         FloatingHeader {
             if (onMenu != null) {
-                Box(Modifier.size(32.dp).clip(RoundedCornerShape(Radius.small)).clickable(onClick = onMenu).semantics { contentDescription = openSidebar }, contentAlignment = Alignment.Center) {
+                Box(Modifier.size(TileSize.menu).clip(RoundedCornerShape(Radius.small)).clickable(onClick = onMenu).semantics { contentDescription = openSidebar }, contentAlignment = Alignment.Center) {
                     HamburgerIcon()
                 }
             }

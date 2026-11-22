@@ -358,7 +358,7 @@ private fun AttachmentGallery(files: List<AttachmentFile>, start: Int, vm: TaskD
                         path == null -> CircularProgressIndicator(color = ImmersiveColors.content)
                         file.isImage -> AsyncImage(model = File(path), contentDescription = file.name, contentScale = ContentScale.Fit, modifier = Modifier.fillMaxSize())
                         else -> Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s16)) {
-                            Icon(Icons.AutoMirrored.Filled.InsertDriveFile, null, tint = ImmersiveColors.contentSecondary, modifier = Modifier.size(64.dp))
+                            Icon(Icons.AutoMirrored.Filled.InsertDriveFile, null, tint = ImmersiveColors.contentSecondary, modifier = Modifier.size(IconSize.preview))
                             Text(file.name, color = ImmersiveColors.content, style = TextStyles.body, textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = Spacing.s24))
                             AstridTextButton(onClick = { openFile(context, path, file.mimeType) }) { Text(stringResource(R.string.attachments_open), color = ImmersiveColors.content) }
                         }

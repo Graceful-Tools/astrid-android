@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.signin
 
+import com.gracefultools.astrid.ui.theme.TileSize
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -79,7 +80,7 @@ fun SignInScreen(
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s16), verticalAlignment = Alignment.CenterVertically) {
             Image(
                 painterResource(R.drawable.astrid_character), null,
-                Modifier.size(88.dp).clip(RoundedCornerShape(Radius.xLarge)),
+                Modifier.size(TileSize.logo).clip(RoundedCornerShape(Radius.xLarge)),
             )
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                 Text(

@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.IosTypeSize
@@ -147,7 +148,7 @@ internal fun PriorityButtons(current: Int, onPick: (Int) -> Unit) {
             val chosen = level == current
             val spoken = stringResource(R.string.priority_a11y, stringResource(names[level]))
             Box(
-                Modifier.size(40.dp).clip(RoundedCornerShape(Radius.small))
+                Modifier.size(TileSize.priority).clip(RoundedCornerShape(Radius.small))
                     .background(if (chosen) AstridTheme.colors.priorityFill[level] else Color.Transparent)
                     .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
                     .clickable(role = Role.RadioButton) { onPick(level) }

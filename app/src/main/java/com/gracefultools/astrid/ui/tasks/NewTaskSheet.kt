@@ -104,7 +104,7 @@ fun NewTaskSheet(
             if (file != null) {
                 Section(stringResource(R.string.share_attachment)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s12), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(fileIcon(file.mimeType.orEmpty()), null, tint = Accent, modifier = Modifier.size(32.dp))
+                        Icon(fileIcon(file.mimeType.orEmpty()), null, tint = Accent, modifier = Modifier.size(IconSize.lead))
                         Column(Modifier.weight(1f)) {
                             Text(file.name, style = TextStyles.subheadline, color = colors.textPrimary, maxLines = 2)
                             Text(

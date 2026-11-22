@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.platform
 
+import com.gracefultools.astrid.ui.theme.IconSize
 import android.app.Activity
 import android.content.Context
 import androidx.activity.compose.LocalActivity
@@ -142,7 +143,7 @@ internal fun AppUpdateCard(onUpdate: () -> Unit, onDismiss: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(Spacing.s16),
             ) {
-                Icon(Icons.Filled.ArrowCircleDown, null, tint = colors.accent, modifier = Modifier.size(44.dp))
+                Icon(Icons.Filled.ArrowCircleDown, null, tint = colors.accent, modifier = Modifier.size(IconSize.banner))
                 Text(
                     stringResource(R.string.update_available_title, stringResource(R.string.app_name)),
                     style = Title3, color = colors.textPrimary, textAlign = TextAlign.Center,
