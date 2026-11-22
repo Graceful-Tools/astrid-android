@@ -76,7 +76,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -645,7 +644,7 @@ private fun RowDragArea(
             Box(
                 Modifier.zIndex(1f).offset { androidx.compose.ui.unit.IntOffset(0, (d.pointer.y - d.grabY).toInt()) }
                     .padding(horizontal = Spacing.s8).fillMaxWidth().heightIn(min = with(density) { height.toDp() })
-                    .shadow(8.dp, RoundedCornerShape(Radius.medium)),
+                    .shadow(AstridShadows.liftedCard, RoundedCornerShape(Radius.medium)),
             ) { TaskRowView(d.row, onLeading = {}, onOpen = {}) }
         }
     }

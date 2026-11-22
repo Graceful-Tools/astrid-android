@@ -28,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
@@ -56,6 +55,8 @@ import com.gracefultools.astrid.ui.theme.TextStyles
 import androidx.compose.ui.text.TextStyle
 import com.gracefultools.astrid.ui.theme.TypeSize
 import com.gracefultools.astrid.ui.theme.Gap
+import com.gracefultools.astrid.ui.theme.AstridShadows
+import com.gracefultools.astrid.ui.theme.shadow
 
 /**
  * Google Play In-App Updates (flexible) as the [UpdateSource] (AATD-67) — iOS asks astrid-web what
@@ -138,7 +139,7 @@ internal fun AppUpdateCard(onUpdate: () -> Unit, onDismiss: () -> Unit) {
         ) {
             Column(
                 Modifier.padding(Spacing.s24).widthIn(max = MaxSize.dialog).fillMaxWidth()
-                    .shadow(20.dp, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgPrimary)
+                    .shadow(AstridShadows.dialog, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgPrimary)
                     // The card itself is not the ground: a tap on it is not "Not now".
                     .pointerInput(Unit) { detectTapGestures { } }
                     .padding(Spacing.s24),

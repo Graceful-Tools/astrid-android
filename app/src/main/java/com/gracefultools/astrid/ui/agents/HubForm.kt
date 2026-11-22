@@ -53,7 +53,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -76,6 +75,8 @@ import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.SpinnerStroke
 import com.gracefultools.astrid.ui.theme.CircleSize
 import com.gracefultools.astrid.ui.theme.Gap
+import com.gracefultools.astrid.ui.theme.AstridShadows
+import com.gracefultools.astrid.ui.theme.shadow
 
 /** iOS opens these in-app; Android's equivalent is a Custom Tab (ASTRID.md §2). */
 internal fun openInCustomTab(context: Context, url: String) {
@@ -266,7 +267,7 @@ internal fun SegmentedControl(options: List<String>, selected: Int, enabled: Boo
             val chosen = index == selected
             Box(
                 Modifier.weight(1f).heightIn(min = ControlHeight.sm)
-                    .then(if (chosen) Modifier.shadow(1.dp, SegmentedShapes.thumb).clip(SegmentedShapes.thumb).background(colors.segmentThumb) else Modifier)
+                    .then(if (chosen) Modifier.shadow(AstridShadows.segmentThumb, SegmentedShapes.thumb).clip(SegmentedShapes.thumb).background(colors.segmentThumb) else Modifier)
                     .selectable(selected = chosen, enabled = enabled, role = Role.RadioButton) { onSelect(index) }
                     .padding(horizontal = Spacing.s4, vertical = Gap.s6),
                 contentAlignment = Alignment.Center,

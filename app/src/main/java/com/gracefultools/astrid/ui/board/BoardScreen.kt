@@ -48,7 +48,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.input.pointer.pointerInput
@@ -76,6 +75,8 @@ import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 import com.gracefultools.astrid.ui.theme.FrameSize
 import com.gracefultools.astrid.ui.theme.Gap
+import com.gracefultools.astrid.ui.theme.AstridShadows
+import com.gracefultools.astrid.ui.theme.shadow
 
 /** The card being dragged: which, where the finger is (window), and where on the card it took hold. */
 private data class Drag(val card: TaskRow, val from: String, val pointer: Offset, val grab: Offset, val travelled: Float)
@@ -204,7 +205,7 @@ fun BoardContent(
             val topLeft = lifted.pointer - lifted.grab - root.topLeft
             Box(
                 Modifier.zIndex(1f).offset { IntOffset(topLeft.x.roundToInt(), topLeft.y.roundToInt()) }
-                    .width(FrameSize.liftedCard).shadow(8.dp, RoundedCornerShape(Radius.medium)),
+                    .width(FrameSize.liftedCard).shadow(AstridShadows.liftedCard, RoundedCornerShape(Radius.medium)),
             ) {
                 val fromDone = columns.firstOrNull { it.id == lifted.from }?.kind == "done"
                 val completedLabel = if (fromDone) completedOnLabel(lifted.card.completedOn) else null
