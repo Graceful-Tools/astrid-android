@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.sidebar
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.semantics.selected
@@ -382,7 +383,7 @@ private fun AccountCard(user: com.gracefultools.astrid.model.UserSummary?, onPro
         }
         Icon(
             Icons.Outlined.Settings, settings, tint = colors.textPrimary,
-            modifier = Modifier.size(44.dp).clip(CircleShape).clickable(onClick = onSettings).padding(10.dp).testTag("sidebar:settings"),
+            modifier = Modifier.size(TouchSize.hitTarget).clip(CircleShape).clickable(onClick = onSettings).padding(10.dp).testTag("sidebar:settings"),
         )
     }
 }

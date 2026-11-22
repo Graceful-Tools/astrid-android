@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.ui.zIndex
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.layout.boundsInWindow
@@ -374,12 +375,12 @@ private fun QuickAddBar(
     ) {
         val pickLabel = stringResource(R.string.quick_add_picker_a11y)
         Box(
-            Modifier.size(34.dp).clip(RoundedCornerShape(Radius.medium)).clickable { focus.clearFocus(); picker = true }
+            Modifier.size(TouchSize.leadingControl).clip(RoundedCornerShape(Radius.medium)).clickable { focus.clearFocus(); picker = true }
                 .semantics { contentDescription = pickLabel },
         ) {
             val chosen = defaults.options.firstOrNull { it.userId != null && it.userId == defaults.assigneeId }
             if (defaults.leading.kind == "avatar" && chosen != null) {
-                Avatar(chosen.image, chosen.initials, 34.dp, shape = RowFaceShape, border = colors.priority.getOrElse(defaults.priority) { colors.priority[0] })
+                Avatar(chosen.image, chosen.initials, TouchSize.leadingControl, shape = RowFaceShape, border = colors.priority.getOrElse(defaults.priority) { colors.priority[0] })
             } else {
                 CheckboxArt(defaults.priority, repeating = false, checked = false)
             }
@@ -397,7 +398,7 @@ private fun QuickAddBar(
                 Box(
                     Modifier.clip(RoundedCornerShape(Radius.medium)).background(colors.field)
                         .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium))
-                        .heightIn(min = 44.dp).padding(horizontal = Spacing.s12, vertical = 10.dp),
+                        .heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s12, vertical = 10.dp),
                     contentAlignment = Alignment.CenterStart,
                 ) {
                     if (text.isEmpty()) Text(stringResource(R.string.tasks_add_task_placeholder), style = TextStyles.body, color = colors.inputPlaceholder)
@@ -434,7 +435,7 @@ private fun QuickAddPicker(defaults: QuickAddDefaults, onPriority: (Int) -> Unit
                 val tint = colors.priority[p]
                 val selected = defaults.priority == p
                 Box(
-                    Modifier.weight(1f).heightIn(min = 44.dp).clip(RoundedCornerShape(Radius.small))
+                    Modifier.weight(1f).heightIn(min = TouchSize.hitTarget).clip(RoundedCornerShape(Radius.small))
                         .background(if (selected) colors.priorityFill[p] else Color.Transparent)
                         .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
                         .clickable { haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove); onPriority(p) },

@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -300,7 +301,7 @@ internal fun ListsSheet(detail: TaskDetail, state: TaskDetailState, vm: TaskDeta
                 Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).clickable {
                     vm.setLists(if (on) (chosen - list.id).toList() else (chosen + list.id).toList())
                     vm.loadListPicks(query)
-                }.heightIn(min = 44.dp).padding(horizontal = Spacing.s8),
+                }.heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s8),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
             ) {
                 Box(Modifier.size(16.dp).clip(RoundedCornerShape(3.dp)).background(com.gracefultools.astrid.ui.tasks.parseColor(list.color)))

@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.agents
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -296,7 +297,7 @@ private fun TransportPicker(vm: AgentsViewModel, agent: HubAgent, enabled: Boole
     val current = vm.transport(agent) ?: Transport.POLLING
     Box {
         Row(
-            Modifier.fillMaxWidth().heightIn(min = 44.dp).clip(RoundedCornerShape(Radius.small)).clickable(enabled = enabled, role = Role.DropdownList) { open = true },
+            Modifier.fillMaxWidth().heightIn(min = TouchSize.hitTarget).clip(RoundedCornerShape(Radius.small)).clickable(enabled = enabled, role = Role.DropdownList) { open = true },
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(stringResource(R.string.settings_agents_transport), style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))

@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,7 +34,7 @@ fun MessagesPane(hidden: Boolean, onToggle: () -> Unit, modifier: Modifier = Mod
     val label = stringResource(if (hidden) R.string.chat_show_messages_pane else R.string.chat_hide_messages)
     Column(modifier.fillMaxSize().background(colors.bgPrimary)) {
         Box(
-            Modifier.statusBarsPadding().width(PaneLayout.RAIL).height(44.dp)
+            Modifier.statusBarsPadding().width(PaneLayout.RAIL).height(TouchSize.hitTarget)
                 .clickable(role = Role.Button, onClick = onToggle).semantics { contentDescription = label }
                 .testTag("messages.togglePane"),
             contentAlignment = Alignment.Center,

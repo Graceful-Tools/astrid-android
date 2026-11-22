@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.HueWheel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -83,7 +84,7 @@ internal fun ColorSwatches(choices: List<String>, current: String, onPick: (Stri
         choices.forEach { swatch ->
             val chosen = swatch.equals(current, ignoreCase = true)
             Box(
-                Modifier.weight(1f).heightIn(min = 44.dp)
+                Modifier.weight(1f).heightIn(min = TouchSize.hitTarget)
                     .clickable(role = Role.RadioButton) { onPick(swatch) }
                     .semantics(mergeDescendants = true) { selected = chosen; contentDescription = swatch },
                 contentAlignment = Alignment.Center,
@@ -95,7 +96,7 @@ internal fun ColorSwatches(choices: List<String>, current: String, onPick: (Stri
         }
         val customLabel = stringResource(R.string.lists_custom_color)
         Box(
-            Modifier.weight(1f).heightIn(min = 44.dp)
+            Modifier.weight(1f).heightIn(min = TouchSize.hitTarget)
                 .clickable(role = Role.Button, onClick = onCustom)
                 .semantics(mergeDescendants = true) { selected = isCustom; contentDescription = customLabel },
             contentAlignment = Alignment.Center,
