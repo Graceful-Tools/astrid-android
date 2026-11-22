@@ -40,6 +40,7 @@ import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.intOrNull
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TypeSize
+import com.gracefultools.astrid.ui.theme.FrameSize
 
 /**
  * Draws the core's markdown blocks (`astrid_core::markdown`, fixture-locked to the web's renderer)
@@ -83,25 +84,25 @@ private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
                         else -> "•"
                     }
                     Row {
-                        Text(marker, color = colors.textSecondary, modifier = Modifier.width(24.dp))
+                        Text(marker, color = colors.textSecondary, modifier = Modifier.width(FrameSize.listMarker))
                         MarkdownView(item.arr("blocks"), onReference = onReference)
                     }
                 }
             }
         }
         "quote" -> Row {
-            Column(Modifier.width(3.dp).background(colors.border)) {}
+            Column(Modifier.width(FrameSize.quoteBar).background(colors.border)) {}
             MarkdownView(block.arr("blocks"), Modifier.padding(start = 10.dp), onReference)
         }
         "rule" -> HorizontalDivider(color = colors.border)
         "tradeoffGrid" -> TradeoffGrid(block, onReference)
         "table" -> Column(Modifier.horizontalScroll(rememberScrollState())) {
             val header = (block["header"] as? JsonArray)?.map { cell -> (cell as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList() } ?: emptyList()
-            Row { header.forEach { Inlines(it, TypeSize.subheadline, FontWeight.SemiBold, onReference, Modifier.width(120.dp).padding(Spacing.s4)) } }
+            Row { header.forEach { Inlines(it, TypeSize.subheadline, FontWeight.SemiBold, onReference, Modifier.width(FrameSize.tableCell).padding(Spacing.s4)) } }
             (block["rows"] as? JsonArray)?.forEach { row ->
                 Row {
                     (row as? JsonArray)?.forEach { cell ->
-                        Inlines((cell as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList(), TypeSize.subheadline, FontWeight.Normal, onReference, Modifier.width(120.dp).padding(Spacing.s4))
+                        Inlines((cell as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList(), TypeSize.subheadline, FontWeight.Normal, onReference, Modifier.width(FrameSize.tableCell).padding(Spacing.s4))
                     }
                 }
             }

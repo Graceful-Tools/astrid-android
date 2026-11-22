@@ -49,6 +49,7 @@ import com.gracefultools.astrid.ui.theme.DotSize
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.FrameSize
 
 /**
  * iOS's NetworkMonitor.isConnected, for drawing an offline cue: true while the default network
@@ -109,7 +110,7 @@ fun AgentTypingIndicator(agentName: String?, modifier: Modifier = Modifier) {
         modifier.padding(horizontal = Spacing.s12, vertical = Spacing.s8).semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
         horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(Modifier.height(16.dp), horizontalArrangement = Arrangement.spacedBy(3.dp), verticalAlignment = Alignment.Bottom) {
+        Row(Modifier.height(FrameSize.typingRow), horizontalArrangement = Arrangement.spacedBy(3.dp), verticalAlignment = Alignment.Bottom) {
             for (index in 0 until 3) {
                 // Under reduced motion (DS17) the dots sit still; the words carry the meaning.
                 val lift by bounce.animateFloat(

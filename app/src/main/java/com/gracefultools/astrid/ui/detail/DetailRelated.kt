@@ -108,6 +108,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.CircleSize
+import com.gracefultools.astrid.ui.theme.FrameSize
 
 // ── Occurrences (AATD-52, F18) ───────────────────────────────────────────────────────────────
 
@@ -427,7 +428,7 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
             Spacer(Modifier.height(Spacing.s24))
             if (!detail.task.completed && !detail.isCopyOnly) {
                 Row(
-                    Modifier.width(260.dp).height(60.dp).clip(CircleShape).background(IosSystemColors.green)
+                    Modifier.width(FrameSize.timerDoneWidth).height(FrameSize.timerDoneHeight).clip(CircleShape).background(IosSystemColors.green)
                         .clickable(role = Role.Button) { vm.completeFromTimer(); onClose() },
                     horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
                 ) {

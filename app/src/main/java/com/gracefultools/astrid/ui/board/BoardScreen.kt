@@ -74,6 +74,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Spacing
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
+import com.gracefultools.astrid.ui.theme.FrameSize
 
 /** The card being dragged: which, where the finger is (window), and where on the card it took hold. */
 private data class Drag(val card: TaskRow, val from: String, val pointer: Offset, val grab: Offset, val travelled: Float)
@@ -202,7 +203,7 @@ fun BoardContent(
             val topLeft = lifted.pointer - lifted.grab - root.topLeft
             Box(
                 Modifier.zIndex(1f).offset { IntOffset(topLeft.x.roundToInt(), topLeft.y.roundToInt()) }
-                    .width(284.dp).shadow(8.dp, RoundedCornerShape(Radius.medium)),
+                    .width(FrameSize.liftedCard).shadow(8.dp, RoundedCornerShape(Radius.medium)),
             ) {
                 val fromDone = columns.firstOrNull { it.id == lifted.from }?.kind == "done"
                 val completedLabel = if (fromDone) completedOnLabel(lifted.card.completedOn) else null
@@ -356,7 +357,7 @@ internal fun completedPillLabel(completedOn: String?, today: java.time.LocalDate
 /** iOS's insertion line: 3 accent where the card would land. */
 @Composable
 private fun DropLine() {
-    Box(Modifier.fillMaxWidth().height(3.dp).clip(CircleShape).background(AstridTheme.colors.accent))
+    Box(Modifier.fillMaxWidth().height(ControlHeight.dropLine).clip(CircleShape).background(AstridTheme.colors.accent))
 }
 
 /** iOS's board-footer quick add: a bordered field and the plus, flush at the foot of the column. */

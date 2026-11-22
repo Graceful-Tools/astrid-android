@@ -54,6 +54,7 @@ import java.time.format.DateTimeFormatter
 import kotlin.math.ceil
 import kotlin.math.max
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.FrameSize
 
 /**
  * iOS ListInsightsView (AITD-545): the 7 / 30 / 90-day picker, New and Completed per day with their
@@ -106,7 +107,7 @@ private fun Activity(insights: ListInsights) {
                 style = TextStyles.caption, color = colors.textSecondary,
             )
         }
-        LineChart(insights.series, Modifier.fillMaxWidth().height(176.dp))
+        LineChart(insights.series, Modifier.fillMaxWidth().height(FrameSize.insightsChart))
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s16)) {
             Legend(colors.accent, stringResource(R.string.list_insights_created))
             Legend(Success, stringResource(R.string.list_insights_completed))
