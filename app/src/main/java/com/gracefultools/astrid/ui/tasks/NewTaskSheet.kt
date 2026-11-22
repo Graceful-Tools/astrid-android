@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.ui.theme.ScreenTiming
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -83,7 +84,7 @@ fun NewTaskSheet(
     var description by rememberSaveable { mutableStateOf("") }
     var priority by rememberSaveable { mutableIntStateOf(0) }
     val focus = remember { FocusRequester() }
-    LaunchedEffect(Unit) { kotlinx.coroutines.delay(500); runCatching { focus.requestFocus() } }
+    LaunchedEffect(Unit) { kotlinx.coroutines.delay(ScreenTiming.sheetFocusMillis); runCatching { focus.requestFocus() } }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,

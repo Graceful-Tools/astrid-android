@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.search
 
+import com.gracefultools.astrid.ui.theme.ScreenTiming
 import com.gracefultools.astrid.ui.theme.TileSize
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -67,7 +68,7 @@ fun SearchScreen(vm: SearchViewModel, onBack: () -> Unit, onOpenTask: (String) -
     val colors = AstridTheme.colors
     val focus = remember { FocusRequester() }
     BackHandler(onBack = onBack)
-    LaunchedEffect(Unit) { kotlinx.coroutines.delay(300); runCatching { focus.requestFocus() } }
+    LaunchedEffect(Unit) { kotlinx.coroutines.delay(ScreenTiming.searchFocusMillis); runCatching { focus.requestFocus() } }
     state.statusPicker?.let { picker -> StatusPicker(picker.options, onPick = vm::pickStatus, onDismiss = vm::dismissStatusPicker, row = picker.row, onComplete = vm::completeFromPicker) }
     com.gracefultools.astrid.ui.common.WaitingConditionPrompt(vm.waiting)
     Column(Modifier.fillMaxSize().background(colors.bgPrimary)) {

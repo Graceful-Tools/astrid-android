@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.ScreenTiming
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -98,7 +99,7 @@ fun ListSettingsScreen(
         // iOS's AppErrorBanner, as every screen shows a refusal (AATD-33).
         state.error?.let { message ->
             com.gracefultools.astrid.ui.common.AppErrorBanner(message, vm::dismissError, Modifier.align(Alignment.BottomCenter).navigationBarsPadding().padding(bottom = com.gracefultools.astrid.ui.theme.Spacing.s16))
-            LaunchedEffect(message) { kotlinx.coroutines.delay(6_000); vm.dismissError() }
+            LaunchedEffect(message) { kotlinx.coroutines.delay(ScreenTiming.errorBannerMillis); vm.dismissError() }
         }
     }
 }

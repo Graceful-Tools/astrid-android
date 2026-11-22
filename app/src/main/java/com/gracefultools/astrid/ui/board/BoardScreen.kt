@@ -1,5 +1,7 @@
 package com.gracefultools.astrid.ui.board
 
+import com.gracefultools.astrid.ui.theme.MotionTiming
+import com.gracefultools.astrid.ui.theme.ScreenTiming
 import com.gracefultools.astrid.ui.theme.DragDistance
 import androidx.compose.foundation.shape.CircleShape
 import com.gracefultools.astrid.ui.theme.BorderWidth
@@ -115,7 +117,7 @@ fun BoardContent(
                 x > root.right - edge -> row.scrollBy(24f)
                 x < root.left + edge -> row.scrollBy(-24f)
             }
-            delay(16)
+            delay(ScreenTiming.frameMillis)
         }
     }
 
@@ -215,7 +217,7 @@ fun BoardContent(
         }
         state.error?.let { message ->
             com.gracefultools.astrid.ui.common.AppErrorBanner(message, onDismissError, Modifier.align(Alignment.BottomCenter).padding(bottom = Spacing.s16))
-            LaunchedEffect(message) { delay(6_000); onDismissError() }
+            LaunchedEffect(message) { delay(ScreenTiming.errorBannerMillis); onDismissError() }
         }
     }
 }
@@ -425,7 +427,7 @@ private class OneColumnFling(private val row: androidx.compose.foundation.lazy.L
         // Under reduced motion (DS17) the board lands on its column without springing.
         if (still) { scrollBy(distance); return 0f }
         var travelled = 0f
-        androidx.compose.animation.core.animate(0f, distance, animationSpec = androidx.compose.animation.core.spring(stiffness = 400f)) { value, _ ->
+        androidx.compose.animation.core.animate(0f, distance, animationSpec = androidx.compose.animation.core.spring(stiffness = MotionTiming.boardFlingStiffness)) { value, _ ->
             travelled += scrollBy(value - travelled)
         }
         return 0f

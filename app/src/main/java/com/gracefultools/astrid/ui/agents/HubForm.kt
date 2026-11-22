@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.agents
 
+import com.gracefultools.astrid.ui.theme.ScreenTiming
 import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.SegmentedShapes
 import com.gracefultools.astrid.ui.theme.Hairline
@@ -302,7 +303,7 @@ internal fun RadioRow(label: String, selected: Boolean, enabled: Boolean = true,
 internal fun CopyableCodeBlock(code: String) {
     val context = LocalContext.current
     var copied by remember { mutableStateOf(false) }
-    LaunchedEffect(copied) { if (copied) { delay(2_000); copied = false } }
+    LaunchedEffect(copied) { if (copied) { delay(ScreenTiming.copiedMillis); copied = false } }
     Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
         Text(
             code, style = TextStyles.caption, fontFamily = FontFamily.Monospace, color = AstridTheme.colors.textPrimary, softWrap = false,
@@ -324,7 +325,7 @@ internal fun CredentialCopyRow(label: String, value: String, secret: Boolean = f
     val context = LocalContext.current
     val colors = AstridTheme.colors
     var copied by remember { mutableStateOf(false) }
-    LaunchedEffect(copied) { if (copied) { delay(2_000); copied = false } }
+    LaunchedEffect(copied) { if (copied) { delay(ScreenTiming.copiedMillis); copied = false } }
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
         Caption2(label)
         Row(verticalAlignment = Alignment.CenterVertically) {
