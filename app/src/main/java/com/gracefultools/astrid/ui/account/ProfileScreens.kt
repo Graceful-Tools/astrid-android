@@ -84,7 +84,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.gracefultools.astrid.R
@@ -102,6 +101,7 @@ import com.gracefultools.astrid.ui.settings.NavRow
 import com.gracefultools.astrid.ui.settings.RowIcon
 import com.gracefultools.astrid.ui.settings.SettingsPage
 import com.gracefultools.astrid.ui.settings.ValueRow
+import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.IosSystemColors
@@ -184,13 +184,13 @@ private fun UserCard(image: String?, name: String, initials: String, email: Stri
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        name, fontSize = 24.sp, fontWeight = FontWeight.Bold, color = colors.textPrimary,
+                        name, fontSize = IosTypeSize.figure, fontWeight = FontWeight.Bold, color = colors.textPrimary,
                         modifier = Modifier.weight(1f, fill = false)
                             .then(if (onEdit == null) Modifier else Modifier.clickable(role = Role.Button, onClickLabel = editLabel, onClick = onEdit)),
                     )
                     if (isAIAgent) {
                         Text(
-                            stringResource(R.string.profile_ai_agent), fontSize = 10.sp, fontWeight = FontWeight.SemiBold, color = colors.accentText,
+                            stringResource(R.string.profile_ai_agent), fontSize = IosTypeSize.badge, fontWeight = FontWeight.SemiBold, color = colors.accentText,
                             modifier = Modifier.clip(RoundedCornerShape(Radius.small)).background(colors.accent).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
                         )
                     }
@@ -218,7 +218,7 @@ private fun StatCard(icon: ImageVector, tint: Color, value: Int, label: Int, tag
                 Icon(icon, null, tint = tint, modifier = Modifier.size(24.dp))
             }
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
-                Text("$value ${stringResource(label)}", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = colors.textPrimary)
+                Text("$value ${stringResource(label)}", fontSize = IosTypeSize.figure, fontWeight = FontWeight.Bold, color = colors.textPrimary)
                 Text(stringResource(tagline), fontSize = TypeSize.subheadline, fontWeight = FontWeight.Medium, color = colors.textMuted)
             }
         }

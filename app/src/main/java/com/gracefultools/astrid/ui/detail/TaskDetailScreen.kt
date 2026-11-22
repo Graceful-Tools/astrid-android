@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.SwatchShape
 import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
@@ -110,7 +111,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.TaskDetail
@@ -195,7 +195,7 @@ fun TaskDetailScreen(
                         AttachmentsSection(state.attachments, vm)
                         (detail.timer?.lastValue ?: detail.task.lastTimerValue)?.let { value ->
                             Text(
-                                stringResource(R.string.task_edit_last_timer, value), fontSize = 14.sp, color = colors.textMuted,
+                                stringResource(R.string.task_edit_last_timer, value), fontSize = IosTypeSize.glyph, color = colors.textMuted,
                                 modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s16, vertical = Spacing.s4),
                                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                             )
@@ -397,7 +397,7 @@ internal fun IconRow(label: String, icon: ImageVector? = null, glyph: String? = 
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         Box(Modifier.width(TouchSize.leadingControl).semantics { contentDescription = label }, contentAlignment = Alignment.Center) {
-            if (glyph != null) Text(glyph, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = colors.textSecondary)
+            if (glyph != null) Text(glyph, fontSize = IosTypeSize.glyph, fontWeight = FontWeight.SemiBold, color = colors.textSecondary)
             else if (icon != null) Icon(icon, null, tint = colors.textSecondary, modifier = Modifier.size(19.dp))
         }
         Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically, content = content)
@@ -507,7 +507,7 @@ private fun PriorityRow(current: Int, onPick: (Int) -> Unit) {
                         .semantics(mergeDescendants = true) { this.selected = selected; role = Role.RadioButton; contentDescription = spoken },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(if (level == 0) "○" else "!".repeat(level), color = if (selected) AstridTheme.colors.onFill else tint, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                    Text(if (level == 0) "○" else "!".repeat(level), color = if (selected) AstridTheme.colors.onFill else tint, fontWeight = FontWeight.SemiBold, fontSize = IosTypeSize.glyph)
                 }
             }
         }
@@ -866,7 +866,7 @@ private fun QueuedFiles(files: List<QueuedFile>, onRemove: (String) -> Unit) {
                         )
                     } else Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(Icons.Outlined.Description, file.name, tint = colors.textMuted, modifier = Modifier.size(18.dp))
-                        Text(file.name.substringAfterLast('.', "").uppercase().take(5), fontSize = 9.sp, fontWeight = FontWeight.Medium, color = colors.textMuted)
+                        Text(file.name.substringAfterLast('.', "").uppercase().take(5), fontSize = IosTypeSize.fileBadge, fontWeight = FontWeight.Medium, color = colors.textMuted)
                     }
                 }
                 Icon(

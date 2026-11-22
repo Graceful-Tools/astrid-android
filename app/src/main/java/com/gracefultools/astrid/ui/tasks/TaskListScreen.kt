@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.ui.zIndex
 import androidx.compose.ui.semantics.customActions
@@ -93,7 +94,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.TaskRow
 import com.gracefultools.astrid.ui.common.Avatar
@@ -440,7 +440,7 @@ private fun QuickAddPicker(defaults: QuickAddDefaults, onPriority: (Int) -> Unit
                         .border(1.5.dp, tint, RoundedCornerShape(Radius.small))
                         .clickable { haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove); onPriority(p) },
                     contentAlignment = Alignment.Center,
-                ) { Text(glyph, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = if (selected) colors.onFill else tint) }
+                ) { Text(glyph, fontSize = IosTypeSize.glyph, fontWeight = FontWeight.SemiBold, color = if (selected) colors.onFill else tint) }
             }
         }
         HorizontalDivider(Modifier.padding(vertical = Spacing.s12), color = colors.border)

@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.sidebar
 
+import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.AccountCardShapes
 import androidx.compose.ui.graphics.RectangleShape
 import com.gracefultools.astrid.ui.theme.TouchSize
@@ -59,7 +60,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.ListSummary
@@ -206,7 +206,7 @@ private fun BrandHeader(onSearch: () -> Unit) {
         Image(painterResource(R.drawable.astrid_character), null, Modifier.size(LogoColumn).clip(RoundedCornerShape(Radius.small)))
         Spacer(Modifier.width(LogoGap))
         Text(
-            stringResource(R.string.brand_wordmark), fontSize = 21.6.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
+            stringResource(R.string.brand_wordmark), fontSize = IosTypeSize.wordmark, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
             modifier = Modifier.weight(1f).semantics { heading() },
         )
         Icon(
