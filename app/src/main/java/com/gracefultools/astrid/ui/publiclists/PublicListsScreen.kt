@@ -113,7 +113,7 @@ private fun PublicListRow(list: PublicListSummary, image: String?, copying: Bool
         verticalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12)) {
-            ListPicture(list.asListSummary(), image, 16.dp)
+            ListPicture(list.asListSummary(), image, IconSize.md)
             Text(
                 list.name, style = TextStyles.headline, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.weight(1f),

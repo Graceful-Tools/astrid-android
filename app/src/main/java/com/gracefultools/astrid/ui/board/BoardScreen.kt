@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.board
 
+import com.gracefultools.astrid.ui.theme.DragDistance
 import androidx.compose.foundation.shape.CircleShape
 import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.ControlHeight
@@ -104,7 +105,7 @@ fun BoardContent(
     var root by remember { mutableStateOf(Rect.Zero) }
     var drag by remember { mutableStateOf<Drag?>(null) }
     var menuFor by remember { mutableStateOf<String?>(null) }
-    val edge = with(LocalDensity.current) { 48.dp.toPx() }
+    val edge = with(LocalDensity.current) { DragDistance.edgeScroll.toPx() }
 
     // Near an edge while dragging, the columns scroll — a phone shows one and a bit of them.
     LaunchedEffect(drag != null) {

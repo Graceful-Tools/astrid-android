@@ -1,5 +1,7 @@
 package com.gracefultools.astrid.ui.common
 
+import com.gracefultools.astrid.ui.theme.BubblePointer
+import com.gracefultools.astrid.ui.theme.HamburgerGlyph
 import com.gracefultools.astrid.ui.theme.MaxSize
 import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.TileSize
@@ -113,10 +115,10 @@ fun FloatingTextHeader(
 fun HamburgerIcon(modifier: Modifier = Modifier) {
     val ink = AstridTheme.colors.textPrimary
     Canvas(modifier.size(IconSize.xxl)) {
-        val w = 19.2.dp.toPx(); val h = 2.dp.toPx(); val gap = 5.dp.toPx()
+        val w = HamburgerGlyph.lineWidth.toPx(); val h = HamburgerGlyph.lineHeight.toPx(); val gap = HamburgerGlyph.lineGap.toPx()
         val x = (size.width - w) / 2
         val top = (size.height - (2 * h + gap)) / 2
-        val r = androidx.compose.ui.geometry.CornerRadius(1.5.dp.toPx())
+        val r = androidx.compose.ui.geometry.CornerRadius(HamburgerGlyph.lineRadius.toPx())
         drawRoundRect(ink, Offset(x, top), androidx.compose.ui.geometry.Size(w, h), r)
         drawRoundRect(ink, Offset(x, top + h + gap), androidx.compose.ui.geometry.Size(w, h), r)
     }
@@ -150,10 +152,10 @@ fun AstridSpeechBubble(message: String, modifier: Modifier = Modifier, character
             Canvas(Modifier.matchParentSize()) {
                 val cy = size.height / 2
                 val outer = Path().apply {
-                    moveTo(-16.dp.toPx(), cy); lineTo(3.dp.toPx(), cy - 12.dp.toPx()); lineTo(3.dp.toPx(), cy + 12.dp.toPx()); close()
+                    with(BubblePointer) { moveTo(-outerReach.toPx(), cy); lineTo(overlap.toPx(), cy - outerHalfHeight.toPx()); lineTo(overlap.toPx(), cy + outerHalfHeight.toPx()); close() }
                 }
                 val inner = Path().apply {
-                    moveTo(-13.dp.toPx(), cy); lineTo(3.dp.toPx(), cy - 9.5.dp.toPx()); lineTo(3.dp.toPx(), cy + 9.5.dp.toPx()); close()
+                    with(BubblePointer) { moveTo(-innerReach.toPx(), cy); lineTo(overlap.toPx(), cy - innerHalfHeight.toPx()); lineTo(overlap.toPx(), cy + innerHalfHeight.toPx()); close() }
                 }
                 drawPath(outer, pointer)
                 drawPath(inner, bubble)

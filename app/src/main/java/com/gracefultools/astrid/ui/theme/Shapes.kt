@@ -21,5 +21,10 @@ object AccountCardShapes {
     val profile = RoundedCornerShape(20.dp)
 }
 
+/** iOS 26's sidebar: each group of rows is a card with these corners. */
+object SidebarShapes {
+    val groupRadius = 22.dp
+}
+
 /** A list's colour swatch: a square softened by a fifth of its side (16 dp → ~3, 8 dp → ~2). */
 val SwatchShape = RoundedCornerShape(percent = 20)
