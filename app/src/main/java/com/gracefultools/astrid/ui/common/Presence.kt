@@ -45,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.DotSize
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
@@ -116,7 +117,7 @@ fun AgentTypingIndicator(agentName: String?, modifier: Modifier = Modifier) {
                     animationSpec = infiniteRepeatable(tween(400), RepeatMode.Reverse, StartOffset(index * 150)),
                     label = "dot$index",
                 )
-                Box(Modifier.offset(y = lift.dp).testTag("typingDot$index").semantics { this[TypingDotLift] = lift }.size(6.dp).clip(CircleShape).background(colors.textMuted))
+                Box(Modifier.offset(y = lift.dp).testTag("typingDot$index").semantics { this[TypingDotLift] = lift }.size(DotSize.typing).clip(CircleShape).background(colors.textMuted))
             }
         }
         Text(stringResource(R.string.chat_agent_thinking, name), style = TextStyles.caption2, color = colors.textMuted)

@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.agents
 
 import com.gracefultools.astrid.ui.theme.ControlHeight
+import com.gracefultools.astrid.ui.theme.DotSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -497,7 +498,7 @@ fun WebhookSettingsScreen(vm: WebhookViewModel, onBack: () -> Unit) {
             FormSection(header = stringResource(R.string.settings_agents_webhook_status)) {
                 val active = state.settings.enabled == true
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-                    Box(Modifier.size(8.dp).clip(CircleShape).background(if (active) Success else colors.neutral))
+                    Box(Modifier.size(DotSize.status).clip(CircleShape).background(if (active) Success else colors.neutral))
                     Text(
                         stringResource(if (active) R.string.settings_agents_webhook_active else R.string.settings_agents_webhook_disabled),
                         style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f),
@@ -712,7 +713,7 @@ private fun CustomAgentRow(agent: CustomAgent, busy: Boolean, uploadingPhoto: Bo
             Text(agent.email, style = TextStyles.subheadline, fontFamily = FontFamily.Monospace, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
                 val active = agent.status == "active"
-                Box(Modifier.size(8.dp).clip(CircleShape).background(if (active) Success else colors.neutral))
+                Box(Modifier.size(DotSize.status).clip(CircleShape).background(if (active) Success else colors.neutral))
                 Caption2(stringResource(if (active) R.string.settings_openclaw_status_active else R.string.settings_openclaw_status_idle))
             }
             Caption2(stringResource(R.string.settings_openclaw_registered, displayDate(agent.registeredAt, withTime = true) ?: agent.registeredAt))
