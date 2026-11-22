@@ -27,7 +27,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.TextUnit
+import com.astrid.design.AstridTextStyle
+import com.astrid.design.AstridTokens.TypeScale.Comfortable as Type
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import kotlinx.serialization.json.JsonArray
@@ -37,6 +39,7 @@ import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.intOrNull
 import com.gracefultools.astrid.ui.theme.Spacing
+import com.gracefultools.astrid.ui.theme.TypeSize
 
 /**
  * Draws the core's markdown blocks (`astrid_core::markdown`, fixture-locked to the web's renderer)
@@ -56,13 +59,14 @@ internal fun JsonObject.arr(name: String) = (this[name] as? JsonArray)?.filterIs
 private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
     val colors = AstridTheme.colors
     when (block.str("kind")) {
-        "paragraph" -> Inlines(block.arr("inlines"), 16, FontWeight.Normal, onReference)
+        "paragraph" -> Inlines(block.arr("inlines"), TypeSize.body, FontWeight.Normal, onReference)
         "heading" -> {
             val level = (block["level"] as? JsonPrimitive)?.intOrNull ?: 1
-            Inlines(block.arr("inlines"), listOf(24, 21, 19, 17, 16, 15).getOrElse(level - 1) { 16 }, FontWeight.SemiBold, onReference)
+            val style = headingStyle(level)
+            Inlines(block.arr("inlines"), style.size, style.weight, onReference)
         }
         "code" -> Text(
-            block.str("text").orEmpty(), fontFamily = FontFamily.Monospace, fontSize = 14.sp, color = colors.textPrimary,
+            block.str("text").orEmpty(), fontFamily = FontFamily.Monospace, fontSize = TypeSize.footnote, color = colors.textPrimary,
             modifier = Modifier.fillMaxWidth().background(colors.bgTertiary, RoundedCornerShape(Radius.small))
                 .horizontalScroll(rememberScrollState()).padding(10.dp),
         )
@@ -93,11 +97,11 @@ private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
         "tradeoffGrid" -> TradeoffGrid(block, onReference)
         "table" -> Column(Modifier.horizontalScroll(rememberScrollState())) {
             val header = (block["header"] as? JsonArray)?.map { cell -> (cell as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList() } ?: emptyList()
-            Row { header.forEach { Inlines(it, 15, FontWeight.SemiBold, onReference, Modifier.width(120.dp).padding(Spacing.s4)) } }
+            Row { header.forEach { Inlines(it, TypeSize.subheadline, FontWeight.SemiBold, onReference, Modifier.width(120.dp).padding(Spacing.s4)) } }
             (block["rows"] as? JsonArray)?.forEach { row ->
                 Row {
                     (row as? JsonArray)?.forEach { cell ->
-                        Inlines((cell as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList(), 15, FontWeight.Normal, onReference, Modifier.width(120.dp).padding(Spacing.s4))
+                        Inlines((cell as? JsonArray)?.filterIsInstance<JsonObject>() ?: emptyList(), TypeSize.subheadline, FontWeight.Normal, onReference, Modifier.width(120.dp).padding(Spacing.s4))
                     }
                 }
             }
@@ -106,9 +110,21 @@ private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
     }
 }
 
+/**
+ * A heading's size and weight: `type.comfortable.markdown-h1` to `-h4` (core DS24, as web reads them).
+ * h5 and h6 stay at h4, so a heading is never smaller than the paragraph under it (iOS
+ * `MarkdownText.headingFont`).
+ */
+internal fun headingStyle(level: Int): AstridTextStyle = when (level.coerceAtLeast(1)) {
+    1 -> Type.markdownH1
+    2 -> Type.markdownH2
+    3 -> Type.markdownH3
+    else -> Type.markdownH4
+}
+
 @Composable
-private fun Inlines(inlines: List<JsonObject>, size: Int, weight: FontWeight, onReference: (String, String) -> Unit, modifier: Modifier = Modifier) {
-    Text(inlineText(inlines, onReference), fontSize = size.sp, fontWeight = weight, color = AstridTheme.colors.textPrimary, modifier = modifier)
+private fun Inlines(inlines: List<JsonObject>, size: TextUnit, weight: FontWeight, onReference: (String, String) -> Unit, modifier: Modifier = Modifier) {
+    Text(inlineText(inlines, onReference), fontSize = size, fontWeight = weight, color = AstridTheme.colors.textPrimary, modifier = modifier)
 }
 
 /**
