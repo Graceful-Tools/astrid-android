@@ -24,6 +24,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS ListSortFiltersTab. A placeholder for now: only its Favorite section, so the toggle has a
@@ -49,7 +50,7 @@ fun ListFiltersTab(
             FormRow(Modifier.toggleable(value = isFavorite, role = Role.Switch, onValueChange = onFavoriteChange)) {
                 Icon(
                     if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarBorder, null,
-                    tint = if (isFavorite) IosSystemColors.yellow else colors.textMuted, modifier = Modifier.size(20.dp),
+                    tint = if (isFavorite) IosSystemColors.yellow else colors.textMuted, modifier = Modifier.size(IconSize.xl),
                 )
                 Text(stringResource(R.string.lists_favorite), style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
                 Switch(checked = isFavorite, onCheckedChange = null)

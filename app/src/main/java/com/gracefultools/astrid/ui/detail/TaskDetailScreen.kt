@@ -134,6 +134,7 @@ import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.shadow
 import com.gracefultools.astrid.ui.theme.TypeSize
 import kotlinx.coroutines.launch
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS's TaskDetailViewNew (AATD-48): the "Task Details" header (tap the title to go back to the
@@ -438,7 +439,7 @@ private fun WhoRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailVie
                 }
                 Text(stringResource(R.string.assignee_unassigned), style = TextStyles.body, color = colors.textMuted, modifier = Modifier.weight(1f))
             }
-            Icon(Icons.Outlined.ChevronRight, null, tint = colors.textMuted, modifier = Modifier.size(18.dp))
+            Icon(Icons.Outlined.ChevronRight, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))
         }
     }
     if (picking) AssigneeSheet(state, vm, onPick = { picking = false; vm.setAssignee(it) }, onDismiss = { picking = false })
@@ -467,14 +468,14 @@ private fun WhenRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailVi
                 ValueBox(compact = true, onClick = { vm.loadDueOptions(); sheet = "time" }) {
                     val time = detailTimeLabel(detail)
                     if (time != null) Text(time, style = TextStyles.body, color = colors.textPrimary)
-                    else Icon(Icons.Outlined.TimerOff, stringResource(R.string.picker_add_time), tint = colors.textMuted, modifier = Modifier.size(18.dp))
+                    else Icon(Icons.Outlined.TimerOff, stringResource(R.string.picker_add_time), tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))
                 }
                 ValueBox(compact = true, onClick = { vm.loadRepeats(); sheet = "repeat" }) {
                     val summary = CoreLabels.summary(LocalContext.current, detail.repeatSummary)
                     val repeats = detail.task.repeating != null && detail.task.repeating != "never"
                     Icon(
                         Icons.Outlined.Repeat,
-                        stringResource(R.string.repeating_title), tint = if (repeats) colors.accentInk else colors.textMuted, modifier = Modifier.size(18.dp),
+                        stringResource(R.string.repeating_title), tint = if (repeats) colors.accentInk else colors.textMuted, modifier = Modifier.size(IconSize.lg),
                     )
                     if (repeats && summary != null) Text(summary, style = TextStyles.body, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
@@ -523,7 +524,7 @@ private fun ListsRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailV
         ValueBox(onClick = if (detail.isCopyOnly) null else ({ vm.loadListPicks(); picking = true })) {
             if (detail.listChips.isEmpty()) {
                 Text(stringResource(R.string.picker_add_to_lists), style = TextStyles.body, color = colors.textMuted)
-                Icon(Icons.Outlined.ChevronRight, null, tint = colors.textMuted, modifier = Modifier.size(18.dp))
+                Icon(Icons.Outlined.ChevronRight, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))
             } else {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     detail.listChips.forEach { chip -> ListBadge(chip.name, chip.color) }
@@ -617,7 +618,7 @@ private fun WaitingOnRow(section: com.gracefultools.astrid.model.BlockerSection,
             }
             section.chips.forEach { blocker ->
                 ValueBox(compact = true, onClick = if (blocker.hidden) null else ({ onOpenTask(blocker.id) })) {
-                    if (blocker.hidden) Icon(Icons.Outlined.Lock, null, tint = colors.textMuted, modifier = Modifier.size(14.dp))
+                    if (blocker.hidden) Icon(Icons.Outlined.Lock, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.sm))
                     Text(
                         if (blocker.hidden) stringResource(R.string.tasks_waiting_on_hidden) else (blocker.title ?: blocker.identifier ?: ""),
                         style = TextStyles.subheadline, color = if (blocker.completed) colors.textMuted else colors.textPrimary,
@@ -625,13 +626,13 @@ private fun WaitingOnRow(section: com.gracefultools.astrid.model.BlockerSection,
                     )
                     if (section.canEdit) Icon(
                         Icons.Filled.Close, stringResource(R.string.tasks_waiting_on_remove), tint = colors.textMuted,
-                        modifier = Modifier.size(16.dp).clip(CircleShape).clickable { vm.removeBlocker(blocker.id) },
+                        modifier = Modifier.size(IconSize.md).clip(CircleShape).clickable { vm.removeBlocker(blocker.id) },
                     )
                 }
             }
             if (section.canEdit && section.chips.isNotEmpty()) {
                 ValueBox(compact = true, onClick = { vm.searchBlockers(""); adding = true }) {
-                    Icon(Icons.Filled.Add, stringResource(R.string.tasks_waiting_on_add), tint = colors.textMuted, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Filled.Add, stringResource(R.string.tasks_waiting_on_add), tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))
                 }
             }
         }
@@ -658,7 +659,7 @@ private fun DescriptionBlock(detail: TaskDetail, onSave: (String) -> Unit, onOpe
                 Icon(
                     Icons.Outlined.OpenInFull, stringResource(R.string.task_detail_description_full_screen), tint = colors.textSecondary,
                     modifier = Modifier.clip(RoundedCornerShape(Radius.small)).clickable { entry = DescriptionReader.Entry.EXPAND }
-                        .padding(horizontal = Spacing.s8, vertical = Spacing.s4).size(16.dp).testTag("detail:descriptionExpand"),
+                        .padding(horizontal = Spacing.s8, vertical = Spacing.s4).size(IconSize.md).testTag("detail:descriptionExpand"),
                 )
             }
         }
@@ -687,7 +688,7 @@ private fun ParentLink(title: String, onClick: () -> Unit) {
         Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = Spacing.s16, vertical = Spacing.s8),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        Icon(Icons.AutoMirrored.Filled.Undo, null, tint = colors.textSecondary, modifier = Modifier.size(14.dp))
+        Icon(Icons.AutoMirrored.Filled.Undo, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.sm))
         Text(stringResource(R.string.task_detail_parent_task), style = TextStyles.caption, color = colors.textSecondary)
         Text(title, style = TextStyles.caption, fontWeight = FontWeight.Medium, color = colors.textSecondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
@@ -865,7 +866,7 @@ private fun QueuedFiles(files: List<QueuedFile>, onRemove: (String) -> Unit) {
                             contentScale = androidx.compose.ui.layout.ContentScale.Crop, modifier = Modifier.fillMaxSize(),
                         )
                     } else Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(Icons.Outlined.Description, file.name, tint = colors.textMuted, modifier = Modifier.size(18.dp))
+                        Icon(Icons.Outlined.Description, file.name, tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))
                         Text(file.name.substringAfterLast('.', "").uppercase().take(5), fontSize = IosTypeSize.fileBadge, fontWeight = FontWeight.Medium, color = colors.textMuted)
                     }
                 }
@@ -895,8 +896,8 @@ private fun SuggestionList(items: List<com.gracefultools.astrid.model.CommentSug
                 when {
                     item.kind == "list" -> Text("#", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(20.dp))
                     item.kind == "task" -> Text("!", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(20.dp))
-                    item.isAgent -> Icon(Icons.Outlined.SmartToy, null, tint = colors.tokens.agentInk, modifier = Modifier.size(20.dp))
-                    else -> Icon(Icons.Outlined.AccountCircle, null, tint = colors.textMuted, modifier = Modifier.size(20.dp))
+                    item.isAgent -> Icon(Icons.Outlined.SmartToy, null, tint = colors.tokens.agentInk, modifier = Modifier.size(IconSize.xl))
+                    else -> Icon(Icons.Outlined.AccountCircle, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.xl))
                 }
                 Column(Modifier.weight(1f)) {
                     Text(
@@ -923,7 +924,7 @@ private fun ComposerButton(icon: ImageVector, label: String, tint: Color, onClic
     Box(
         Modifier.size(40.dp).clip(CircleShape).background(colors.field).border(1.dp, colors.fieldBorder, CircleShape).clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
-    ) { Icon(icon, label, tint = tint, modifier = Modifier.size(20.dp)) }
+    ) { Icon(icon, label, tint = tint, modifier = Modifier.size(IconSize.xl)) }
 }
 
 /** iOS's date chip: Today / Tomorrow / Yesterday, else "Mon Oct 20 2026". */

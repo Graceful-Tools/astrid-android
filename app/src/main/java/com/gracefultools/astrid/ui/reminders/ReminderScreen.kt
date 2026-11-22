@@ -80,6 +80,7 @@ import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.TypeSize
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * What a tapped reminder opens (iOS ReminderPresentationModifier): the reminder card for one task,
@@ -198,7 +199,7 @@ private fun ActionButton(title: String, background: Color, foreground: Color, ic
             .padding(vertical = Spacing.s16),
         horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
     ) {
-        icon?.let { Icon(it, null, tint = foreground, modifier = Modifier.size(18.dp)); Spacer(Modifier.size(Spacing.s8)) }
+        icon?.let { Icon(it, null, tint = foreground, modifier = Modifier.size(IconSize.lg)); Spacer(Modifier.size(Spacing.s8)) }
         Text(title, style = TextStyles.headline, color = foreground)
     }
 }
@@ -309,7 +310,7 @@ private fun SwipeCard(task: TaskDetail, pending: TriageAction?, onPending: (Tria
         Text(task.task.title, fontSize = TypeSize.title3, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
             val dueColor = if (task.isOverdue) com.gracefultools.astrid.ui.theme.Overdue else colors.textMuted
-            Icon(Icons.Filled.CalendarToday, null, tint = dueColor, modifier = Modifier.size(16.dp))
+            Icon(Icons.Filled.CalendarToday, null, tint = dueColor, modifier = Modifier.size(IconSize.md))
             Text(dueText(task.due) ?: stringResource(R.string.picker_no_due_date), style = TextStyles.body, color = dueColor)
         }
         if (task.task.description.isNotBlank()) {
@@ -342,7 +343,7 @@ private fun TriageButton(action: TriageAction, pending: TriageAction?, modifier:
         horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
     ) {
         val fg = if (highlighted) colors.onFill else color
-        Icon(icon, null, tint = fg, modifier = Modifier.size(18.dp))
+        Icon(icon, null, tint = fg, modifier = Modifier.size(IconSize.lg))
         Spacer(Modifier.size(Spacing.s8))
         Text(title, style = TextStyles.headline, color = fg)
     }

@@ -52,6 +52,8 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.SpinnerStroke
 
 /**
  * iOS's SettingsView, in its order: Profile; Sync; Features; Exploratory Features; Preferences; Sub
@@ -100,7 +102,7 @@ fun SettingsScreen(
             }
             ButtonRow(
                 stringResource(R.string.settings_sync_now), icon = Icons.Filled.Refresh, color = colors.textPrimary, enabled = !state.syncing,
-                trailing = { if (state.syncing) CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = colors.accent) },
+                trailing = { if (state.syncing) CircularProgressIndicator(Modifier.size(IconSize.lg), strokeWidth = SpinnerStroke, color = colors.accent) },
                 onClick = vm::syncNow,
             )
         }
@@ -206,7 +208,7 @@ private fun OutboxRows(state: SettingsState, vm: SettingsViewModel) {
     FormRowFrame {
         Icon(
             if (outbox.isHealthy) Icons.Filled.Verified else Icons.Filled.Warning, null,
-            tint = if (outbox.isHealthy) AstridTheme.colors.successInk else AstridTheme.colors.warningInk, modifier = Modifier.size(20.dp),
+            tint = if (outbox.isHealthy) AstridTheme.colors.successInk else AstridTheme.colors.warningInk, modifier = Modifier.size(IconSize.xl),
         )
         Text(
             stringResource(R.string.settings_outbox_summary, outbox.completed, outbox.pending + outbox.running, outbox.failed),

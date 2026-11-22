@@ -54,6 +54,8 @@ import java.time.LocalTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.SpinnerStroke
 
 /** Which of the Admin tab's pickers is open. */
 private enum class AdminPicker { ASSIGNEE, DUE_DATE, DUE_TIME, REPEATING, RECENTLY_COMPLETED, SINCE_DATE, CUSTOM_COLOR }
@@ -111,7 +113,7 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel, i
                         state.imageSource?.let { source ->
                             AsyncImage(model = source, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.size(64.dp))
                         }
-                        if (state.imageUploading) CircularProgressIndicator(Modifier.size(24.dp), color = colors.accentText, strokeWidth = 2.dp)
+                        if (state.imageUploading) CircularProgressIndicator(Modifier.size(IconSize.xxl), color = colors.accentText, strokeWidth = SpinnerStroke)
                     }
                     Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                         Text(stringResource(R.string.lists_list_image), style = TextStyles.body, color = colors.textPrimary)
@@ -168,7 +170,7 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel, i
             } else {
                 FormButtonRow(
                     Icons.Outlined.ViewWeek, stringResource(R.string.lists_create_board), colors.accentInk, enabled = !state.boardBusy,
-                    trailing = if (state.boardBusy) ({ CircularProgressIndicator(Modifier.size(18.dp), color = colors.accent, strokeWidth = 2.dp) }) else null,
+                    trailing = if (state.boardBusy) ({ CircularProgressIndicator(Modifier.size(IconSize.lg), color = colors.accent, strokeWidth = SpinnerStroke) }) else null,
                 ) { vm.createBoard() }
             }
             state.boardError?.let { failure ->

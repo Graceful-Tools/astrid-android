@@ -35,6 +35,8 @@ import com.gracefultools.astrid.platform.DeviceContacts
 import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.IosSystemColors
+import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.SpinnerStroke
 
 /**
  * iOS's SettingsContactsSection (AATD-68). Before access: Add Collaborators, which explains first
@@ -76,7 +78,7 @@ internal fun ContactsSection(vm: ContactsViewModel) {
                 FormDivider()
                 ButtonRow(
                     stringResource(R.string.contacts_sync_contacts_now), icon = Icons.Filled.Sync, enabled = !state.syncing,
-                    trailing = { if (state.syncing) CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = colors.accent) },
+                    trailing = { if (state.syncing) CircularProgressIndicator(Modifier.size(IconSize.lg), strokeWidth = SpinnerStroke, color = colors.accent) },
                     onClick = vm::sync,
                 )
             }

@@ -50,6 +50,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.TypeSize
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS PublicListBrowserView, "Featured Lists" (AATD-46): the public catalogue, most copied first.
@@ -129,7 +130,7 @@ private fun PublicListRow(list: PublicListSummary, image: String?, copying: Bool
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4)) {
-                Icon(Icons.Outlined.CheckCircle, null, tint = colors.textMuted, modifier = Modifier.size(12.dp))
+                Icon(Icons.Outlined.CheckCircle, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.xs))
                 Text(stringResource(R.string.filters_tasks_count, list.taskCount), style = TextStyles.caption, color = colors.textMuted)
             }
             if (list.isCollaborative) {

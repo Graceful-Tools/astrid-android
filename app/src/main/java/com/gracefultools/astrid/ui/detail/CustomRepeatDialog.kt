@@ -67,6 +67,7 @@ import java.time.LocalDate
 import java.time.Month
 import java.time.ZoneOffset
 import java.time.format.TextStyle
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /** The wire's weekday names, Monday first — the order iOS's editor offers them. */
 private val WEEKDAYS = DayOfWeek.entries.map { it to it.name.lowercase() }
@@ -285,7 +286,7 @@ private fun MenuBox(label: String, choices: List<Pair<String, String>>, modifier
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(label, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
-            Icon(Icons.Filled.KeyboardArrowDown, null, tint = colors.textMuted, modifier = Modifier.size(16.dp))
+            Icon(Icons.Filled.KeyboardArrowDown, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.md))
         }
         DropdownMenu(open, onDismissRequest = { open = false }) {
             choices.forEach { (text, value) -> DropdownMenuItem(text = { Text(text) }, onClick = { open = false; onPick(value) }) }

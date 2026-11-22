@@ -53,6 +53,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.TypeSize
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS LoginView: the Astrid character beside the wordmark and slogan, "Sign in to get started!",
@@ -109,7 +110,7 @@ fun SignInScreen(
                             horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Icon(Icons.Filled.Error, null, tint = AstridTheme.colors.errorInk, modifier = Modifier.size(14.dp))
+                            Icon(Icons.Filled.Error, null, tint = AstridTheme.colors.errorInk, modifier = Modifier.size(IconSize.sm))
                             Text(state.error, style = TextStyles.caption, color = AstridTheme.colors.errorInk)
                         }
                     }
@@ -147,7 +148,7 @@ private fun ProviderButton(
         colors = ButtonDefaults.buttonColors(containerColor = background, contentColor = foreground),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = Spacing.s16),
     ) {
-        Icon(icon, null, Modifier.size(20.dp))
+        Icon(icon, null, Modifier.size(IconSize.xl))
         Spacer(Modifier.size(Spacing.s12))
         Text(stringResource(title), style = TextStyles.headline)
     }

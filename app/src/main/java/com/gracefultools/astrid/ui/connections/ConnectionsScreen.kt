@@ -63,6 +63,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /** The core names a section by resource key (`connections.category.app`); these are iOS's words for them. */
 @Composable
@@ -258,7 +259,7 @@ private fun RowButton(label: String, icon: androidx.compose.ui.graphics.vector.I
         Modifier.clip(RoundedCornerShape(Radius.small)).clickable(role = Role.Button, onClick = onClick).heightIn(min = 36.dp).padding(horizontal = Spacing.s4),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4),
     ) {
-        Icon(icon, null, tint = color, modifier = Modifier.size(14.dp))
+        Icon(icon, null, tint = color, modifier = Modifier.size(IconSize.sm))
         Text(label, style = TextStyles.caption, color = color)
     }
 }

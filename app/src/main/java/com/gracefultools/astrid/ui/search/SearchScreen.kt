@@ -52,6 +52,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS's search mode of the main pane (AATD-47): the floating header keeps the menu and becomes a
@@ -76,7 +77,7 @@ fun SearchScreen(vm: SearchViewModel, onBack: () -> Unit, onOpenTask: (String) -
                     HamburgerIcon()
                 }
             }
-            Icon(Icons.Filled.Search, null, tint = colors.textMuted, modifier = Modifier.size(20.dp))
+            Icon(Icons.Filled.Search, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.xl))
             val placeholder = stringResource(R.string.tasks_search_tasks_placeholder)
             Box(Modifier.weight(1f)) {
                 if (state.query.isEmpty()) Text(placeholder, style = TextStyles.headline, color = colors.textMuted)

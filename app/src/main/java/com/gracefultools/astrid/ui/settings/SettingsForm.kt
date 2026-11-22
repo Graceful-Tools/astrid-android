@@ -50,6 +50,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /*
  * iOS's settings pages are a `Form`/`List` in the inset-grouped style over the theme background:
@@ -118,7 +119,7 @@ internal fun FormDivider(inset: Boolean = true) {
 /** iOS's Label: the accent SF Symbol in a 24 frame, then the title. */
 @Composable
 internal fun RowIcon(icon: ImageVector, tint: Color? = null) {
-    Icon(icon, null, tint = tint ?: AstridTheme.colors.accentInk, modifier = Modifier.width(24.dp).size(22.dp))
+    Icon(icon, null, tint = tint ?: AstridTheme.colors.accentInk, modifier = Modifier.width(IconSize.xxl).size(22.dp))
 }
 
 /** A row's frame: 44 tall at least, 16 in from the card's edges. */
@@ -150,7 +151,7 @@ internal fun NavRow(
             if (subtitle != null) Text(subtitle, style = TextStyles.caption, color = colors.textSecondary)
         }
         if (value != null) Text(value, style = TextStyles.footnote, color = colors.textSecondary)
-        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null, tint = colors.textMuted, modifier = Modifier.size(20.dp))
+        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.xl))
     }
 }
 
@@ -169,7 +170,7 @@ internal fun ButtonRow(
     val ink = (color ?: colors.accent).let { if (enabled) it else it.copy(alpha = 0.4f) }
     FormRowFrame(Modifier.clickable(enabled = enabled, role = Role.Button, onClickLabel = title, onClick = onClick)) {
         if (centered) Spacer(Modifier.weight(1f))
-        if (icon != null) Icon(icon, null, tint = ink, modifier = Modifier.size(20.dp))
+        if (icon != null) Icon(icon, null, tint = ink, modifier = Modifier.size(IconSize.xl))
         Text(title, style = TextStyles.body, color = ink, modifier = if (centered) Modifier else Modifier.weight(1f))
         if (centered) Spacer(Modifier.weight(1f))
         trailing()
@@ -213,6 +214,6 @@ internal fun CheckRow(title: String, selected: Boolean, subtitle: String? = null
             Text(title, style = TextStyles.body, color = colors.textPrimary)
             if (subtitle != null) Text(subtitle, style = TextStyles.caption2, color = colors.textSecondary)
         }
-        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(20.dp))
+        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(IconSize.xl))
     }
 }

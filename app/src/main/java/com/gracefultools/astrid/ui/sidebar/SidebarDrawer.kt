@@ -71,6 +71,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /** iOS SidebarBrandHeader: the logo column every row's icon centres in, and the gap after it. */
 private val LogoColumn = 28.8.dp
@@ -300,7 +301,7 @@ private fun AddListEntry(onClick: () -> Unit) {
     val colors = AstridTheme.colors
     RowShell(false, "sidebar:add-list", onClick) {
         Box(Modifier.width(LogoColumn), contentAlignment = Alignment.Center) {
-            Icon(Icons.Filled.AddCircle, null, tint = colors.accentInk, modifier = Modifier.size(20.dp))
+            Icon(Icons.Filled.AddCircle, null, tint = colors.accentInk, modifier = Modifier.size(IconSize.xl))
         }
         Text(stringResource(R.string.navigation_add_list), style = TextStyles.body, color = colors.accentInk, modifier = Modifier.weight(1f))
     }
@@ -314,7 +315,7 @@ private fun Entry(list: ListSummary, selected: Boolean, count: Int?, image: Stri
     RowShell(selected, "sidebar:${list.id}", onClick, onLongClick = onFavorite?.let { { haptics.performHapticFeedback(HapticFeedbackType.LongPress); it() } }) {
         Box(Modifier.width(LogoColumn), contentAlignment = Alignment.Center) {
             if (showImages) ListPicture(list, image, 12.dp)
-            else Icon(Icons.Filled.Tag, null, tint = parseColor(list.color), modifier = Modifier.size(12.dp))
+            else Icon(Icons.Filled.Tag, null, tint = parseColor(list.color), modifier = Modifier.size(IconSize.xs))
         }
         Text(list.name, style = TextStyles.body, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
         when (list.privacy) {

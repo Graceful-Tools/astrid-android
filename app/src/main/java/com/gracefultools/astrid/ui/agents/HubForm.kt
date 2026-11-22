@@ -71,6 +71,8 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import kotlinx.coroutines.delay
+import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.SpinnerStroke
 
 /** iOS opens these in-app; Android's equivalent is a Custom Tab (ASTRID.md §2). */
 internal fun openInCustomTab(context: Context, url: String) {
@@ -157,7 +159,7 @@ internal fun Caption2(text: String, color: Color = AstridTheme.colors.textSecond
 @Composable
 internal fun ProblemLabel(text: String, color: Color = AstridTheme.colors.errorInk) {
     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.Top) {
-        Icon(Icons.Filled.Warning, null, tint = color, modifier = Modifier.size(16.dp))
+        Icon(Icons.Filled.Warning, null, tint = color, modifier = Modifier.size(IconSize.md))
         Text(text, style = TextStyles.caption, color = color)
     }
 }
@@ -165,13 +167,13 @@ internal fun ProblemLabel(text: String, color: Color = AstridTheme.colors.errorI
 @Composable
 internal fun LoadingRow(text: String) {
     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s12), verticalAlignment = Alignment.CenterVertically) {
-        CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = AstridTheme.colors.textSecondary)
+        CircularProgressIndicator(Modifier.size(IconSize.xl), strokeWidth = SpinnerStroke, color = AstridTheme.colors.textSecondary)
         Text(text, style = TextStyles.body, color = AstridTheme.colors.textPrimary)
     }
 }
 
 @Composable
-internal fun SmallSpinner() = CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp, color = AstridTheme.colors.textSecondary)
+internal fun SmallSpinner() = CircularProgressIndicator(Modifier.size(IconSize.md), strokeWidth = SpinnerStroke, color = AstridTheme.colors.textSecondary)
 
 /** A Form button row: accent label with its icon, red when destructive, greyed while disabled. */
 @Composable
@@ -196,7 +198,7 @@ internal fun ActionRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
     ) {
-        if (icon != null) Icon(icon, null, tint = tint, modifier = Modifier.size(if (small) 14.dp else 18.dp))
+        if (icon != null) Icon(icon, null, tint = tint, modifier = Modifier.size(if (small) IconSize.sm else IconSize.lg))
         Text(label, style = if (small) TextStyles.caption2 else TextStyles.body, color = tint, modifier = Modifier.weight(1f))
         if (busy) SmallSpinner()
     }
@@ -243,7 +245,7 @@ internal fun NavRow(title: String, subtitle: String? = null, leading: (@Composab
             Text(title, style = TextStyles.body, color = colors.textPrimary)
             if (subtitle != null) Caption2(subtitle)
         }
-        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null, tint = colors.textMuted, modifier = Modifier.size(20.dp))
+        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.xl))
     }
 }
 
@@ -287,7 +289,7 @@ internal fun RadioRow(label: String, selected: Boolean, enabled: Boolean = true,
     ) {
         leading?.invoke()
         Text(label, style = TextStyles.body, color = if (enabled) colors.textPrimary else colors.textMuted, modifier = Modifier.weight(1f))
-        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(18.dp))
+        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(IconSize.lg))
     }
 }
 
@@ -306,7 +308,7 @@ internal fun CopyableCodeBlock(code: String) {
             Modifier.clip(RoundedCornerShape(Radius.small)).clickable(role = Role.Button) { copyToClipboard(context, code); copied = true }.padding(Spacing.s4),
             horizontalArrangement = Arrangement.spacedBy(Spacing.s4), verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(if (copied) Icons.Filled.Check else Icons.Filled.ContentCopy, null, tint = AstridTheme.colors.accentInk, modifier = Modifier.size(12.dp))
+            Icon(if (copied) Icons.Filled.Check else Icons.Filled.ContentCopy, null, tint = AstridTheme.colors.accentInk, modifier = Modifier.size(IconSize.xs))
             Caption2(stringResource(if (copied) R.string.settings_agents_copied else R.string.actions_copy), AstridTheme.colors.accentInk)
         }
     }

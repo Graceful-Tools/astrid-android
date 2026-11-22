@@ -114,6 +114,8 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.SpinnerStroke
 
 /** A card the way iOS's profile draws one: bgSecondary, radius 8, a 1pt border. */
 @Composable
@@ -179,7 +181,7 @@ private fun UserCard(image: String?, name: String, initials: String, email: Stri
                 if (onEdit != null) Box(
                     Modifier.align(Alignment.BottomEnd).offset(x = (-4).dp, y = (-4).dp).size(24.dp).clip(CircleShape).background(colors.accent),
                     contentAlignment = Alignment.Center,
-                ) { Icon(Icons.Filled.PhotoCamera, null, tint = colors.accentText, modifier = Modifier.size(12.dp)) }
+                ) { Icon(Icons.Filled.PhotoCamera, null, tint = colors.accentText, modifier = Modifier.size(IconSize.xs)) }
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
@@ -199,7 +201,7 @@ private fun UserCard(image: String?, name: String, initials: String, email: Stri
                 localDate(createdAt)?.let { joined ->
                     val month = joined.format(DateTimeFormatter.ofPattern("MMMM yyyy", androidx.compose.ui.platform.LocalConfiguration.current.locales[0]))
                     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Filled.CalendarMonth, null, tint = colors.textMuted, modifier = Modifier.size(12.dp))
+                        Icon(Icons.Filled.CalendarMonth, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.xs))
                         Text(stringResource(R.string.profile_joined, month), style = TextStyles.footnote, color = colors.textMuted)
                     }
                 }
@@ -215,7 +217,7 @@ private fun StatCard(icon: ImageVector, tint: Color, value: Int, label: Int, tag
     ProfileCard {
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s12), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(48.dp).clip(RoundedCornerShape(Radius.medium)).background(tint.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
-                Icon(icon, null, tint = tint, modifier = Modifier.size(24.dp))
+                Icon(icon, null, tint = tint, modifier = Modifier.size(IconSize.xxl))
             }
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                 Text("$value ${stringResource(label)}", fontSize = IosTypeSize.figure, fontWeight = FontWeight.Bold, color = colors.textPrimary)
@@ -347,7 +349,7 @@ private fun EditProfileSheet(user: AccountUser, saving: Boolean, vm: ProfileView
                     IconButton(
                         onClick = pick,
                         modifier = Modifier.align(Alignment.BottomEnd).offset(x = (-4).dp, y = (-4).dp).size(36.dp).clip(CircleShape).background(colors.accent),
-                    ) { Icon(Icons.Filled.PhotoCamera, stringResource(R.string.account_change_photo), tint = colors.accentText, modifier = Modifier.size(16.dp)) }
+                    ) { Icon(Icons.Filled.PhotoCamera, stringResource(R.string.account_change_photo), tint = colors.accentText, modifier = Modifier.size(IconSize.md)) }
                 }
                 Text(stringResource(R.string.profile_change_photo), style = TextStyles.footnote, color = colors.textMuted)
             }
@@ -372,7 +374,7 @@ private fun EditProfileSheet(user: AccountUser, saving: Boolean, vm: ProfileView
                 horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (saving) {
-                    CircularProgressIndicator(Modifier.size(16.dp), color = colors.accentText, strokeWidth = 2.dp)
+                    CircularProgressIndicator(Modifier.size(IconSize.md), color = colors.accentText, strokeWidth = SpinnerStroke)
                     Spacer(Modifier.width(Spacing.s8))
                 }
                 Text(label, style = TextStyles.body, fontWeight = FontWeight.SemiBold, color = colors.accentText)
@@ -462,7 +464,7 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
                     user.email?.let { Text(it, style = TextStyles.footnote, color = colors.textSecondary) }
                 }
                 IconButton(onClick = pick, enabled = !state.saving) {
-                    if (state.saving && photo != null) CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
+                    if (state.saving && photo != null) CircularProgressIndicator(Modifier.size(IconSize.lg), strokeWidth = SpinnerStroke)
                     else Icon(Icons.Filled.PhotoCamera, stringResource(R.string.account_change_photo), tint = colors.accentInk)
                 }
             }
@@ -493,7 +495,7 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
                 ButtonRow(
                     stringResource(if (state.saving) R.string.messages_saving else R.string.account_save_changes),
                     enabled = !state.saving, centered = true,
-                    trailing = { if (state.saving) CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp) },
+                    trailing = { if (state.saving) CircularProgressIndicator(Modifier.size(IconSize.md), strokeWidth = SpinnerStroke) },
                 ) { vm.saveProfile(name, photo) }
             }
         }
@@ -559,7 +561,7 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
                         FormRowFrame {
                             RowIcon(labelIcon.second)
                             Text(title, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
-                            CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+                            CircularProgressIndicator(Modifier.size(IconSize.md), strokeWidth = SpinnerStroke)
                         }
                     } else {
                         NavRow(title, labelIcon.second) {
@@ -599,7 +601,7 @@ private fun PasskeyRows(passkeys: List<Passkey>?, loading: Boolean, vm: ProfileV
     when {
         passkeys == null && loading -> FormRowFrame {
             Spacer(Modifier.weight(1f))
-            CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+            CircularProgressIndicator(Modifier.size(IconSize.md), strokeWidth = SpinnerStroke)
             Text(stringResource(R.string.account_loading_passkeys), style = TextStyles.footnote, color = colors.textMuted)
             Spacer(Modifier.weight(1f))
         }
@@ -672,7 +674,7 @@ fun DeleteAccountScreen(vm: ProfileViewModel, onBack: () -> Unit, onSignedOut: (
         FormSection {
             Column(Modifier.fillMaxWidth().padding(Spacing.s16), verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.Warning, null, tint = AstridTheme.colors.errorInk, modifier = Modifier.size(24.dp))
+                    Icon(Icons.Filled.Warning, null, tint = AstridTheme.colors.errorInk, modifier = Modifier.size(IconSize.xxl))
                     Text(stringResource(R.string.account_delete_warning), style = TextStyles.headline, color = AstridTheme.colors.errorInk)
                 }
                 Text(stringResource(R.string.account_delete_remove_list_header), style = TextStyles.body, color = colors.textPrimary)
@@ -718,7 +720,7 @@ fun DeleteAccountScreen(vm: ProfileViewModel, onBack: () -> Unit, onSignedOut: (
                 stringResource(if (state.deleting) R.string.messages_deleting else R.string.account_delete_my_account_button),
                 icon = if (state.deleting) null else Icons.Filled.Delete, color = AstridTheme.colors.errorInk, centered = true,
                 enabled = state.deleteMatches && !state.deleting,
-                trailing = { if (state.deleting) CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp, color = Error) },
+                trailing = { if (state.deleting) CircularProgressIndicator(Modifier.size(IconSize.md), strokeWidth = SpinnerStroke, color = Error) },
                 onClick = vm::askDelete,
             )
         }
@@ -740,7 +742,7 @@ fun DeleteAccountScreen(vm: ProfileViewModel, onBack: () -> Unit, onSignedOut: (
 @Composable
 private fun FeedbackLine(icon: ImageVector, text: String, tint: Color) {
     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s4), verticalAlignment = Alignment.CenterVertically) {
-        Icon(icon, null, tint = tint, modifier = Modifier.size(14.dp))
+        Icon(icon, null, tint = tint, modifier = Modifier.size(IconSize.sm))
         Text(text, style = TextStyles.footnote, color = tint)
     }
 }
