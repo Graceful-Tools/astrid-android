@@ -41,7 +41,10 @@ data class AstridColors(
     val buttonBg: Color = tokens.buttonBg,
     val buttonBorder: Color = tokens.buttonBorder,
     val isDark: Boolean = tokens.appearance == AstridAppearance.DARK,
-    /** A task row's card: Ocean white 0.8 (1.0 selected), Light glass, Dark bgPrimary (TaskRowView.getCardBackground). */
+    /**
+     * A task's fill, list row and board card alike (iOS TaskCardFill, ADEV-196): tokens `surface`,
+     * `surface-hover` selected on Dark; Ocean `surface` at 0.8, solid selected; Light glass.
+     */
     val card: Color = bgPrimary,
     val cardSelected: Color = card,
     val cardBorder: Color = border,
@@ -204,16 +207,19 @@ val LightColors = AstridColors(
 
 val DarkColors = AstridColors(
     tokens = DarkTokens,
-    cardSelected = DarkTokens.bgSecondary,
+    card = DarkTokens.surface, cardSelected = DarkTokens.surfaceHover,
     floating = DarkTokens.bgSecondary,
     chipBg = DarkTokens.bgSecondary,
     pressed = DarkTokens.bgHover,
 )
 
+/** An unselected Ocean card lets the water show through (iOS `TaskCardFill.oceanUnselectedOpacity`). */
+private const val OCEAN_CARD_OPACITY = 0.8f
+
 /** iOS's default theme: cyan behind white cards, silver inputs, and the darker text (DS1, AATD-85). */
 val OceanColors = AstridColors(
     tokens = OceanTokens,
-    card = Color.White.copy(alpha = 0.8f), cardSelected = Color.White,
+    card = OceanTokens.surface.copy(alpha = OCEAN_CARD_OPACITY), cardSelected = OceanTokens.surface,
     floating = Color.White, floatingBar = Color.White.copy(alpha = 0.8f),
     field = Color.White,
     // Cyan under white 0.8, flattened.

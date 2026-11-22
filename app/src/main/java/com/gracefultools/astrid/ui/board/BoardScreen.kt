@@ -233,7 +233,7 @@ private fun ColumnView(
     val colors = AstridTheme.colors
     // iOS's BoardColumnView: a frame (white 0.8 on Ocean) around a recessed well (the theme's
     // background), 6 walls, radius 12; an accent ring while a card hovers over it.
-    val frame = when { colors.isDark -> colors.headerBg; colors == com.gracefultools.astrid.ui.theme.OceanColors -> Color.White.copy(alpha = 0.8f); else -> Color.White }
+    val frame = when { colors.isDark -> colors.headerBg; colors == com.gracefultools.astrid.ui.theme.OceanColors -> colors.tokens.surface.copy(alpha = 0.8f); else -> colors.tokens.surface }
     val well = when { colors.isDark -> colors.bgPrimary; colors == com.gracefultools.astrid.ui.theme.OceanColors -> colors.bgPrimary; else -> colors.bgTertiary }
     val shape = RoundedCornerShape(Radius.large)
     Column(
