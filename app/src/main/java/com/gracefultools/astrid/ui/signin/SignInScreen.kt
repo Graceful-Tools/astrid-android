@@ -55,6 +55,7 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.TypeSize
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.ControlHeight
 
 /**
  * iOS LoginView: the Astrid character beside the wordmark and slogan, "Sign in to get started!",
@@ -144,7 +145,7 @@ private fun ProviderButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth().height(50.dp),
+        modifier = Modifier.fillMaxWidth().height(ControlHeight.signIn),
         shape = RoundedCornerShape(Radius.large),
         colors = ButtonDefaults.buttonColors(containerColor = background, contentColor = foreground),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = Spacing.s16),

@@ -116,6 +116,7 @@ import kotlinx.coroutines.launch
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.SpinnerStroke
 import com.gracefultools.astrid.ui.theme.CircleSize
+import com.gracefultools.astrid.ui.theme.FrameSize
 
 /** iOS's HeaderToggleSegment: what the main pane shows for a list. */
 enum class ViewMode { LIST, MESSAGES, BOARD }
@@ -634,7 +635,7 @@ private fun RowDragArea(
                     )
                 }
                 DropTarget.Outdent -> Row(
-                    Modifier.fillMaxHeight().width(56.dp).background(colors.accent.copy(alpha = 0.12f)),
+                    Modifier.fillMaxHeight().width(FrameSize.outdentZone).background(colors.accent.copy(alpha = 0.12f)),
                     verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center,
                 ) { Icon(Icons.AutoMirrored.Filled.KeyboardTab, null, tint = colors.accentInk, modifier = Modifier.graphicsLayerRotate180()) }
                 else -> Unit

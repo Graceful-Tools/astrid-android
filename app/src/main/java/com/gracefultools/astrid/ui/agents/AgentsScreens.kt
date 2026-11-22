@@ -865,7 +865,7 @@ private fun ModelRow(
         when {
             trailing != null -> trailing()
             selected -> Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(IconSize.lg))
-            else -> Spacer(Modifier.width(18.dp))
+            else -> Spacer(Modifier.width(IconSize.lg))
         }
     }
 }

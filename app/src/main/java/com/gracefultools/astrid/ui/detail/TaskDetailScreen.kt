@@ -141,6 +141,7 @@ import com.gracefultools.astrid.ui.theme.TypeSize
 import kotlinx.coroutines.launch
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.CircleSize
+import com.gracefultools.astrid.ui.theme.FrameSize
 
 /**
  * iOS's TaskDetailViewNew (AATD-48): the "Task Details" header (tap the title to go back to the
@@ -900,8 +901,8 @@ private fun SuggestionList(items: List<com.gracefultools.astrid.model.CommentSug
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
             ) {
                 when {
-                    item.kind == "list" -> Text("#", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(20.dp))
-                    item.kind == "task" -> Text("!", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(20.dp))
+                    item.kind == "list" -> Text("#", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(FrameSize.mentionGlyph))
+                    item.kind == "task" -> Text("!", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(FrameSize.mentionGlyph))
                     item.isAgent -> Icon(Icons.Outlined.SmartToy, null, tint = colors.tokens.agentInk, modifier = Modifier.size(IconSize.xl))
                     else -> Icon(Icons.Outlined.AccountCircle, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.xl))
                 }

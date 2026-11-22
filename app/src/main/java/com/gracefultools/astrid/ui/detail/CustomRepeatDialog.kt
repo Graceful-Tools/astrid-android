@@ -69,6 +69,7 @@ import java.time.ZoneOffset
 import java.time.format.TextStyle
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.CircleSize
+import com.gracefultools.astrid.ui.theme.FrameSize
 
 /** The wire's weekday names, Monday first — the order iOS's editor offers them. */
 private val WEEKDAYS = DayOfWeek.entries.map { it to it.name.lowercase() }
@@ -307,7 +308,7 @@ private fun Stepper(value: Int, range: IntRange, label: String, onChange: (Int) 
             Icons.Filled.Remove, stringResource(R.string.repeating_decrease, label), tint = if (value > range.first) colors.accentInk else colors.textMuted,
             modifier = Modifier.size(TouchSize.hitTarget).clickable(enabled = value > range.first) { onChange(value - 1) }.padding(Spacing.s12),
         )
-        Text(value.toString(), style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.width(36.dp), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
+        Text(value.toString(), style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.width(FrameSize.stepperValue), textAlign = androidx.compose.ui.text.style.TextAlign.Center)
         Icon(
             Icons.Filled.Add, stringResource(R.string.repeating_increase, label), tint = if (value < range.last) colors.accentInk else colors.textMuted,
             modifier = Modifier.size(TouchSize.hitTarget).clickable(enabled = value < range.last) { onChange(value + 1) }.padding(Spacing.s12),

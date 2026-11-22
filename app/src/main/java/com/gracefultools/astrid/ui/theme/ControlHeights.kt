@@ -25,6 +25,8 @@ object ControlHeight {
      * height, not iOS's 44 pt (docs/PARITY.md).
      */
     val settingRow = 48.dp
+    /** A sign-in button: Google, Apple, email. */
+    val signIn = 50.dp
     /** The list colour preview in list settings. */
     val colourPreview = 56.dp
     /** The description box on a new list. */
