@@ -159,4 +159,6 @@
     <string name="settings_custom_agents_photo_updated">Profilbild aktualisiert</string>
     <string name="settings_custom_agents_photo_failed">Profilbild konnte nicht aktualisiert werden</string>
     <string name="settings_appearance_task_details_footer">Wähle das Layout der Aufgabendetails. Liste gibt Priorität und zugewiesener Person eigene Zeilen. Projekt ist kompakt, und das Kästchen öffnet eine Auswahl, statt die Aufgabe abzuschließen.</string>
+    <string name="settings_agents_key_placeholder_copilot">Copilot-Token</string>
+    <string name="settings_agents_key_placeholder_muse">Meta-API-Schlüssel</string>
 </resources>

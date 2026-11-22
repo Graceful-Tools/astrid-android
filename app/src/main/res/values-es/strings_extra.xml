@@ -159,4 +159,6 @@
     <string name="settings_custom_agents_photo_updated">Foto de perfil actualizada</string>
     <string name="settings_custom_agents_photo_failed">No se pudo actualizar la foto de perfil</string>
     <string name="settings_appearance_task_details_footer">Elige cómo se muestran los detalles de la tarea. Lista da a la prioridad y al responsable sus propias filas. Proyecto es compacto y la casilla abre un selector en lugar de completar la tarea.</string>
+    <string name="settings_agents_key_placeholder_copilot">Token de Copilot</string>
+    <string name="settings_agents_key_placeholder_muse">Clave de API de Meta</string>
 </resources>

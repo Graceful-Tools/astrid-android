@@ -159,4 +159,6 @@
     <string name="settings_custom_agents_photo_updated">头像已更新</string>
     <string name="settings_custom_agents_photo_failed">更新头像失败</string>
     <string name="settings_appearance_task_details_footer">选择任务详情的布局。列表为优先级和负责人各设一行。项目更紧凑，勾选框会打开选择器而不是完成任务。</string>
+    <string name="settings_agents_key_placeholder_copilot">Copilot 令牌</string>
+    <string name="settings_agents_key_placeholder_muse">Meta API 密钥</string>
 </resources>

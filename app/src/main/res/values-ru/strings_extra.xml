@@ -159,4 +159,6 @@
     <string name="settings_custom_agents_photo_updated">Фото профиля обновлено</string>
     <string name="settings_custom_agents_photo_failed">Не удалось обновить фото профиля</string>
     <string name="settings_appearance_task_details_footer">Выберите оформление деталей задачи. «Список» отводит приоритету и исполнителю отдельные строки. «Проект» компактный, и флажок открывает выбор вместо завершения задачи.</string>
+    <string name="settings_agents_key_placeholder_copilot">Токен Copilot</string>
+    <string name="settings_agents_key_placeholder_muse">Ключ API Meta</string>
 </resources>

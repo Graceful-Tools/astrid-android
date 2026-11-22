@@ -184,6 +184,8 @@
     <string name="task_detail_complete_all_subtasks">Mark all sub-tasks complete</string>
     <string name="task_detail_complete_only_this">Only this task</string>
     <string name="task_detail_completed_via">Completed via %1$s</string>
+    <!-- iOS apple_reminders: the app a task was completed in, for "Completed via %1$s". -->
+    <string name="provider_apple_reminders">Apple Reminders</string>
     <string name="task_edit_last_timer">Last: %1$s</string>
     <string name="comments_count">Comments (%1$d)</string>
     <string name="comments_empty">No comments yet. Be the first to comment!</string>
@@ -538,6 +540,9 @@
     <string name="settings_agents_copilot_disconnect">Disconnect GitHub Copilot</string>
     <string name="settings_agents_copilot_waiting">Waiting for GitHub to confirm…</string>
     <string name="settings_agents_manage_key">Manage provider API key</string>
+    <!-- iOS AIService.keyPlaceholder for providers whose key has no fixed prefix. -->
+    <string name="settings_agents_key_placeholder_copilot">Copilot token</string>
+    <string name="settings_agents_key_placeholder_muse">Meta API key</string>
     <string name="settings_agents_key_replace_placeholder">Key saved — paste to replace</string>
     <string name="settings_agents_test_key">Test</string>
     <string name="settings_agents_key_footer">Encrypted at rest, used only server-side.</string>
