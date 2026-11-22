@@ -83,7 +83,6 @@ import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.rememberPhotoPicker
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
@@ -800,7 +799,7 @@ fun AstridModelScreen(vm: AstridModelViewModel, onBack: () -> Unit, onAddKey: ()
                     ModelRow(
                         title = option.name,
                         subtitle = option.serviceLabel.ifBlank { option.service }.replaceFirstChar { it.uppercase() },
-                        subtitleColor = IosSystemColors.purple,
+                        subtitleColor = AstridTheme.colors.tokens.agentInk,
                         selected = state.model.selected == option.id,
                         leading = { BrandIcon(agentIcon(option.service), size = 36.dp, fallback = Icons.Filled.Cloud) },
                     ) { vm.select(option.id) }

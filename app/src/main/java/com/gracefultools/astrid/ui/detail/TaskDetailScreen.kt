@@ -894,7 +894,7 @@ private fun SuggestionList(items: List<com.gracefultools.astrid.model.CommentSug
                 when {
                     item.kind == "list" -> Text("#", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(20.dp))
                     item.kind == "task" -> Text("!", style = TextStyles.headline, color = colors.textMuted, modifier = Modifier.width(20.dp))
-                    item.isAgent -> Icon(Icons.Outlined.SmartToy, null, tint = colors.accentInk, modifier = Modifier.size(20.dp))
+                    item.isAgent -> Icon(Icons.Outlined.SmartToy, null, tint = colors.tokens.agentInk, modifier = Modifier.size(20.dp))
                     else -> Icon(Icons.Outlined.AccountCircle, null, tint = colors.textMuted, modifier = Modifier.size(20.dp))
                 }
                 Column(Modifier.weight(1f)) {
