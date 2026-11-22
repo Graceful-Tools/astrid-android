@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.sync
 
+import com.gracefultools.astrid.ui.theme.MaxSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -103,7 +104,7 @@ internal fun MenuPicker(label: String, value: String, options: List<Pair<String?
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
         ) {
             Text(label, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
-            Text(value, style = TextStyles.body, color = colors.textSecondary, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.widthIn(max = 200.dp))
+            Text(value, style = TextStyles.body, color = colors.textSecondary, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.widthIn(max = MaxSize.pickerValue))
             Icon(Icons.Filled.UnfoldMore, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.md))
         }
         DropdownMenu(expanded = open, onDismissRequest = { open = false }) {

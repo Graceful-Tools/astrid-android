@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.common
 
+import com.gracefultools.astrid.ui.theme.MaxSize
 import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.theme.TouchSize
@@ -169,7 +170,7 @@ fun EmptyState(message: String, modifier: Modifier = Modifier, buttonTitle: Stri
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AstridSpeechBubble(message, Modifier.padding(horizontal = Spacing.s24).widthIn(max = 560.dp))
+        AstridSpeechBubble(message, Modifier.padding(horizontal = Spacing.s24).widthIn(max = MaxSize.speechBubble))
         if (buttonTitle != null && onButton != null) {
             Spacer(Modifier.height(Spacing.s24 + Spacing.s8))
             Row(
@@ -191,7 +192,7 @@ fun EmptyState(message: String, modifier: Modifier = Modifier, buttonTitle: Stri
 @Composable
 fun AppErrorBanner(message: String, onDismiss: () -> Unit, modifier: Modifier = Modifier) {
     Row(
-        modifier.widthIn(max = 520.dp).fillMaxWidth().padding(horizontal = Spacing.s16)
+        modifier.widthIn(max = MaxSize.errorBanner).fillMaxWidth().padding(horizontal = Spacing.s16)
             .shadow(Spacing.s4, RoundedCornerShape(Radius.large)).clip(RoundedCornerShape(Radius.large)).background(Error)
             .padding(start = Spacing.s12, top = Spacing.s8, bottom = Spacing.s8),
         verticalAlignment = Alignment.CenterVertically,

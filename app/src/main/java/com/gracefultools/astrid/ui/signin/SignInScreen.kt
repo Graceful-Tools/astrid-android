@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.signin
 
+import com.gracefultools.astrid.ui.theme.MaxSize
 import com.gracefultools.astrid.ui.theme.TileSize
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -93,7 +94,7 @@ fun SignInScreen(
             }
         }
         Spacer(Modifier.height(Spacing.s12))
-        val buttons = Modifier.fillMaxWidth().widthIn(max = 420.dp).padding(horizontal = Spacing.s32)
+        val buttons = Modifier.fillMaxWidth().widthIn(max = MaxSize.signInColumn).padding(horizontal = Spacing.s32)
         when (state) {
             SignInState.Checking, SignInState.Completing, SignInState.SignedIn -> CircularProgressIndicator(color = Accent)
             SignInState.WaitingForBrowser -> {

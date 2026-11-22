@@ -195,7 +195,7 @@ internal fun ActionRow(
         else -> colors.accentInk
     }
     Row(
-        Modifier.fillMaxWidth().heightIn(min = if (small) 32.dp else TouchSize.hitTarget).clip(RoundedCornerShape(Radius.small))
+        Modifier.fillMaxWidth().heightIn(min = if (small) ControlHeight.sm else TouchSize.hitTarget).clip(RoundedCornerShape(Radius.small))
             .clickable(enabled = enabled && !busy, onClick = onClick, role = Role.Button),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s8),

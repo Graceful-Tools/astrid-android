@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.chat
 
+import com.gracefultools.astrid.ui.theme.MaxSize
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -85,7 +86,7 @@ fun ChatPanel(vm: ChatViewModel, modifier: Modifier = Modifier) {
                 items(state.chat.messages, key = { it.id }) { message ->
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = if (message.isMine) Arrangement.End else Arrangement.Start) {
                         Column(
-                            Modifier.widthIn(max = 300.dp).clip(RoundedCornerShape(Radius.xLarge))
+                            Modifier.widthIn(max = MaxSize.bubble).clip(RoundedCornerShape(Radius.xLarge))
                                 .background(if (message.isMine) colors.accent.copy(alpha = 0.16f) else colors.sheet)
                                 .padding(horizontal = Spacing.s12, vertical = Spacing.s8),
                         ) {

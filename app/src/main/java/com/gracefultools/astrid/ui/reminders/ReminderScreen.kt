@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.reminders
 
+import com.gracefultools.astrid.ui.theme.MaxSize
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.ControlHeight
@@ -136,7 +137,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            Modifier.padding(horizontal = Spacing.s16).widthIn(max = 500.dp).fillMaxWidth()
+            Modifier.padding(horizontal = Spacing.s16).widthIn(max = MaxSize.reminderColumn).fillMaxWidth()
                 .shadow(20.dp, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgPrimary)
                 .clickable(onClickLabel = stringResource(R.string.reminders_triage_card_hint)) { onOpenTask(id) }
                 .padding(bottom = Spacing.s24),
@@ -227,7 +228,7 @@ private fun TriageDeck(state: ReminderState, vm: ReminderViewModel, onOpenTask: 
     val colors = AstridTheme.colors
     Box(Modifier.fillMaxSize().background(colors.bgPrimary).safeDrawingPadding(), contentAlignment = Alignment.TopCenter) {
         Column(
-            Modifier.widthIn(max = 500.dp).fillMaxSize().padding(Spacing.s16),
+            Modifier.widthIn(max = MaxSize.reminderColumn).fillMaxSize().padding(Spacing.s16),
             verticalArrangement = Arrangement.spacedBy(Spacing.s16),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {

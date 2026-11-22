@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.MaxSize
 import com.gracefultools.astrid.ui.theme.BorderWidth
 import com.gracefultools.astrid.ui.theme.DotSize
 import com.gracefultools.astrid.ui.theme.TileSize
@@ -423,7 +424,7 @@ internal fun ValueBox(
     Row(
         modifier.clip(RoundedCornerShape(Radius.medium)).background(AstridTheme.colors.bgSecondary)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .heightIn(min = if (compact) 32.dp else TouchSize.hitTarget)
+            .heightIn(min = if (compact) ControlHeight.sm else TouchSize.hitTarget)
             .padding(horizontal = if (compact) Spacing.s8 else Spacing.s12, vertical = if (compact) Spacing.s4 else 6.dp),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
         content = content,
@@ -801,7 +802,7 @@ private fun CommentComposer(
         Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
             Box(
                 Modifier.weight(1f).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
-                    .border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = ControlHeight.field, max = 200.dp).padding(horizontal = Spacing.s12, vertical = 9.dp),
+                    .border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = ControlHeight.field, max = MaxSize.commentBox).padding(horizontal = Spacing.s12, vertical = 9.dp),
                 contentAlignment = Alignment.CenterStart,
             ) {
                 if (text.text.isEmpty()) Text(stringResource(R.string.comments_add_placeholder), style = TextStyles.body, color = colors.inputPlaceholder)
@@ -892,7 +893,7 @@ private fun QueuedFiles(files: List<QueuedFile>, onRemove: (String) -> Unit) {
 private fun SuggestionList(items: List<com.gracefultools.astrid.model.CommentSuggestion>, onPick: (com.gracefultools.astrid.model.CommentSuggestion) -> Unit) {
     val colors = AstridTheme.colors
     Column(
-        Modifier.fillMaxWidth().padding(bottom = Spacing.s8).heightIn(max = 220.dp).clip(RoundedCornerShape(Radius.medium))
+        Modifier.fillMaxWidth().padding(bottom = Spacing.s8).heightIn(max = MaxSize.mentionPicker).clip(RoundedCornerShape(Radius.medium))
             .background(colors.field).border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(Radius.medium)).verticalScroll(rememberScrollState()),
     ) {
         items.forEach { item ->
