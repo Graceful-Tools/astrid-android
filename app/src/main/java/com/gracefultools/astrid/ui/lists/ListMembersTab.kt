@@ -139,7 +139,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
                             Text(stringResource(R.string.lists_default_agent_description), style = TextStyles.caption2, color = colors.textMuted, maxLines = 2)
                         }
                         when {
-                            member -> Pill(stringResource(R.string.actions_remove), Color.Red) { vm.removeAgent(agent.id) }
+                            member -> Pill(stringResource(R.string.actions_remove), colors.errorInk) { vm.removeAgent(agent.id) }
                             // An invitation needs the agent's address; listAgentOptions does not answer it yet.
                             agent.email != null -> Pill(stringResource(R.string.actions_add), colors.accentInk) { vm.addAgent(agent.email) }
                         }

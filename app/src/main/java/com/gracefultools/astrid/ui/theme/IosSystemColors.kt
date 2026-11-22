@@ -14,4 +14,6 @@ object IosSystemColors {
     val orange = Color(0xFFFF9500)
     val yellow = Color(0xFFFFCC00)
     val blue = Color(0xFF007AFF)
+    /** The purple-indigo of "Add a Passkey". */
+    val indigo = Color(0xFF5957D6)
 }

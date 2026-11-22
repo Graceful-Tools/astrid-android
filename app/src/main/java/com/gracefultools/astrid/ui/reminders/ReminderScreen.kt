@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.reminders
 
+import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.foundation.background
@@ -124,7 +125,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
     val phrase = rememberPhrase(vm.isDue(detail))
     val id = detail.task.id
     Box(
-        Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f))
+        Modifier.fillMaxSize().background(ImmersiveColors.scrim)
             // A tap outside the card closes it, as iOS's dimmed overlay; the close button is the labelled way.
             .pointerInput(Unit) { detectTapGestures { vm.close() } }
             .safeDrawingPadding(),
@@ -169,7 +170,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
                     ) {
                         Row(horizontalArrangement = Arrangement.spacedBy((-8).dp)) {
                             state.countingOnYou.forEach { person ->
-                                Avatar(person.image, initialsOf(person.display), 32.dp, border = Color.White)
+                                Avatar(person.image, initialsOf(person.display), 32.dp, border = colors.onFill)
                             }
                         }
                         Text(stringResource(R.string.reminders_counting_on_you), style = TextStyles.subheadline, fontWeight = FontWeight.Medium, color = IosSystemColors.orange)

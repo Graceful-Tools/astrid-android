@@ -545,7 +545,7 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
         FormSection(stringResource(R.string.account_passkeys), stringResource(R.string.account_passkeys_footer)) {
             PasskeyRows(state.passkeys, state.loadingPasskeys, vm)
             FormDivider(inset = false)
-            ButtonRow(stringResource(R.string.account_add_passkey_button), icon = Icons.Filled.AddCircle, color = PasskeyIndigo) {
+            ButtonRow(stringResource(R.string.account_add_passkey_button), icon = Icons.Filled.AddCircle, color = IosSystemColors.indigo) {
                 CustomTabsIntent.Builder().build().launchUrl(context, Uri.parse(WEB_ACCOUNT_SETTINGS))
             }
         }
@@ -585,8 +585,6 @@ fun AccountAccessScreen(vm: ProfileViewModel, onBack: () -> Unit, onDelete: () -
     }
 }
 
-/** iOS's purple-indigo "Add a Passkey". */
-private val PasskeyIndigo = Color(0xFF5957D6)
 
 /** A label for a field that has no visible one of its own. */
 private fun Modifier.semanticsLabel(label: String): Modifier = semantics { contentDescription = label }

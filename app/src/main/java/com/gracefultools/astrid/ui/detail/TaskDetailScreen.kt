@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import com.gracefultools.astrid.ui.theme.TouchLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -868,7 +869,7 @@ private fun QueuedFiles(files: List<QueuedFile>, onRemove: (String) -> Unit) {
                 }
                 Icon(
                     Icons.Filled.Cancel, stringResource(R.string.attachments_remove_a11y, file.name), tint = colors.onFill,
-                    modifier = Modifier.align(Alignment.TopEnd).size(22.dp).clip(CircleShape).background(Color.Black.copy(alpha = 0.6f))
+                    modifier = Modifier.align(Alignment.TopEnd).size(22.dp).clip(CircleShape).background(ImmersiveColors.badge)
                         .clickable { onRemove(file.path) },
                 )
             }

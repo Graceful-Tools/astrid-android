@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.HueWheel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -99,7 +100,7 @@ internal fun ColorSwatches(choices: List<String>, current: String, onPick: (Stri
                 .semantics(mergeDescendants = true) { selected = isCustom; contentDescription = customLabel },
             contentAlignment = Alignment.Center,
         ) {
-            val wheel = Brush.sweepGradient(listOf(Color.Red, Color.Yellow, Color.Green, Color.Cyan, Color.Blue, Color.Magenta, Color.Red))
+            val wheel = Brush.sweepGradient(HueWheel)
             Box(Modifier.size(28.dp).clip(CircleShape).background(wheel).padding(Spacing.s4).clip(CircleShape).background(parseColor(current)), contentAlignment = Alignment.Center) {
                 if (isCustom) Icon(Icons.Filled.Check, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(12.dp))
             }
