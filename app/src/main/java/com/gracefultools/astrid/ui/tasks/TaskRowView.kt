@@ -1,5 +1,7 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.ui.theme.TouchSize
+import com.gracefultools.astrid.ui.theme.TouchLayout
 import com.gracefultools.astrid.ui.common.reportsSelectedRow
 import com.gracefultools.astrid.ui.common.selectionOutline
 import com.gracefultools.astrid.ui.common.selectionOutlineStyle
@@ -89,12 +91,12 @@ fun TaskRowView(
     underTitle: (@Composable () -> Unit)? = null,
 ) {
     val colors = AstridTheme.colors
-    val shape = RoundedCornerShape(AstridTokens.Layout.Comfortable.rowRadius)
+    val shape = RoundedCornerShape(TouchLayout.rowRadius)
     val outline = selectionOutlineStyle()
     val haptics = androidx.compose.ui.platform.LocalHapticFeedback.current
     val clipboard = androidx.compose.ui.platform.LocalClipboardManager.current
     var menu by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
-    Box(modifier.fillMaxWidth().padding(start = (minOf(row.depth, 4) * 16).dp)) {
+    Box(modifier.fillMaxWidth().padding(start = TouchLayout.subtaskIndent * minOf(row.depth, 4))) {
         Row(
             Modifier
                 .fillMaxWidth()
@@ -111,12 +113,15 @@ fun TaskRowView(
                         menu = true
                     }) else null,
                 )
-                .heightIn(min = 76.dp)
-                .padding(horizontal = if (embedded) 10.dp else Spacing.s16, vertical = if (embedded) 12.dp else 14.dp)
+                .heightIn(min = TouchLayout.rowMinHeight)
+                .padding(
+                    horizontal = if (embedded) TouchLayout.boardCardPaddingX else TouchLayout.rowPaddingX,
+                    vertical = if (embedded) TouchLayout.boardCardPaddingY else TouchLayout.rowPaddingY,
+                )
                 .alpha(if (row.isPending) 0.7f else 1f)
                 .testTag("taskRow"),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
+            horizontalArrangement = Arrangement.spacedBy(TouchLayout.rowGap),
         ) {
             LeadingControl(row, onLeading)
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -183,7 +188,7 @@ private fun LeadingControl(row: TaskRow, onLeading: () -> Unit) {
     val priority = colors.priority.getOrElse(row.priority) { colors.priority[0] }
     val square = RoundedCornerShape(Radius.medium)
     val label = stringResource(if (row.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, row.title)
-    val tap = Modifier.size(34.dp).completionPop(pop).clip(square).clickable(onClick = onTap)
+    val tap = Modifier.size(TouchSize.leadingControl).completionPop(pop).clip(square).clickable(onClick = onTap)
         .semantics { contentDescription = row.checkboxLabel ?: label; role = Role.Checkbox }
     when (row.leading.kind) {
         "copy" -> Box(tap.border(2.dp, colors.neutral.copy(alpha = 0.4f), square), contentAlignment = Alignment.Center) {
@@ -195,7 +200,7 @@ private fun LeadingControl(row: TaskRow, onLeading: () -> Unit) {
                 Avatar(image = row.assignee?.image, initials = initials, size = 22.dp)
             } else Avatar(
                 image = row.assignee?.image, initials = initials,
-                size = 34.dp, shape = RowFaceShape, border = priority, modifier = tap,
+                size = TouchSize.leadingControl, shape = RowFaceShape, border = priority, modifier = tap,
             )
         }
         "unassigned" -> {
@@ -225,7 +230,7 @@ private fun RepeatFrame(row: TaskRow, onTap: () -> Unit, label: String, pop: Com
     // Laid out in the 34 slot every leading control takes, drawn 4dp past each side of it, so a
     // framed row's title lines up with its neighbours'.
     Box(
-        Modifier.size(34.dp).wrapContentSize(unbounded = true).size(42.dp).completionPop(pop).clip(CircleShape).clickable(onClick = onTap).testTag(REPEAT_FRAME_TAG)
+        Modifier.size(TouchSize.leadingControl).wrapContentSize(unbounded = true).size(42.dp).completionPop(pop).clip(CircleShape).clickable(onClick = onTap).testTag(REPEAT_FRAME_TAG)
             .semantics { contentDescription = row.checkboxLabel ?: label; role = Role.Checkbox },
         contentAlignment = Alignment.Center,
     ) {

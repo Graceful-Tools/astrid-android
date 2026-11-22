@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.TouchLayout
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
@@ -48,7 +49,7 @@ private val ArrowDepth = Spacing.s12
 fun DetailsPanel(anchor: SelectedRowAnchor, modifier: Modifier = Modifier, content: @Composable () -> Unit) {
     val colors = AstridTheme.colors
     val outline = selectionOutlineStyle()
-    val radius = AstridTokens.Layout.Comfortable.detailPanelRadius
+    val radius = TouchLayout.detailPanelRadius
     val shape = RoundedCornerShape(radius)
     val density = LocalDensity.current
     var top by remember { mutableFloatStateOf(0f) }
