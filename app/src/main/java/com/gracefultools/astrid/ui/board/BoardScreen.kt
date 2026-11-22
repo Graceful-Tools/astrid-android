@@ -169,7 +169,7 @@ fun BoardContent(
             state = row,
             contentPadding = PaddingValues(horizontal = gap / 2, vertical = Spacing.s8),
             horizontalArrangement = Arrangement.spacedBy(gap),
-            flingBehavior = remember(row) { OneColumnFling(row) },
+            flingBehavior = com.gracefultools.astrid.ui.theme.LocalReducedMotion.current.let { still -> remember(row, still) { OneColumnFling(row, still) } },
             modifier = Modifier.fillMaxSize().testTag("board"),
         ) {
             items(columns, key = { it.id }) { column ->
@@ -402,7 +402,7 @@ private fun ColumnQuickAdd(columnId: String, onAdd: suspend (String, String) -> 
  * iOS's board pages one column per swipe (ProjectStatusBoardView): whatever the speed, a fling
  * settles on the next column in its direction, or back on this one when it was barely a nudge.
  */
-private class OneColumnFling(private val row: androidx.compose.foundation.lazy.LazyListState) : androidx.compose.foundation.gestures.FlingBehavior {
+private class OneColumnFling(private val row: androidx.compose.foundation.lazy.LazyListState, private val still: Boolean = false) : androidx.compose.foundation.gestures.FlingBehavior {
     override suspend fun androidx.compose.foundation.gestures.ScrollScope.performFling(initialVelocity: Float): Float {
         val first = row.firstVisibleItemIndex
         val offset = row.firstVisibleItemScrollOffset
@@ -415,6 +415,8 @@ private class OneColumnFling(private val row: androidx.compose.foundation.lazy.L
         }.coerceIn(0, maxOf(0, row.layoutInfo.totalItemsCount - 1))
         val info = row.layoutInfo.visibleItemsInfo.firstOrNull { it.index == target }
         val distance = (info?.offset?.toFloat() ?: ((target - first) * size - offset).toFloat()) - row.layoutInfo.beforeContentPadding
+        // Under reduced motion (DS17) the board lands on its column without springing.
+        if (still) { scrollBy(distance); return 0f }
         var travelled = 0f
         androidx.compose.animation.core.animate(0f, distance, animationSpec = androidx.compose.animation.core.spring(stiffness = 400f)) { value, _ ->
             travelled += scrollBy(value - travelled)

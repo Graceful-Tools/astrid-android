@@ -69,7 +69,9 @@ fun DetailsPanel(anchor: SelectedRowAnchor, modifier: Modifier = Modifier, conte
         val high = height - low
         val target = anchor.centerY?.minus(top)?.takeIf { it in low..high }
         val y by animateFloatAsState(
-            target ?: 0f, tween(AstridTokens.Motion.fastDurationMillis), label = "detailsArrow",
+            target ?: 0f,
+            if (com.gracefultools.astrid.ui.theme.LocalReducedMotion.current) androidx.compose.animation.core.snap() else tween(AstridTokens.Motion.fastDurationMillis),
+            label = "detailsArrow",
         )
         if (target != null) {
             val fill = colors.pageBg

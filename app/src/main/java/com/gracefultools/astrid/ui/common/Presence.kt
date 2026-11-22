@@ -32,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -39,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.gracefultools.astrid.R
@@ -91,24 +93,29 @@ fun OfflineStrip(modifier: Modifier = Modifier) {
     }
 }
 
-/** iOS's AgentTypingIndicator: three bouncing dots and "<agent> is thinking...". */
+/** A typing dot's lift in dp, for tests: 0 at rest, -4 at the top of its bounce. */
+val TypingDotLift = SemanticsPropertyKey<Float>("TypingDotLift")
+
+/** iOS's AgentTypingIndicator: three bouncing dots and "<agent> is thinking...". The dots keep still under reduced motion. */
 @Composable
 fun AgentTypingIndicator(agentName: String?, modifier: Modifier = Modifier) {
     val colors = AstridTheme.colors
     val name = agentName ?: stringResource(R.string.chat_agent_fallback)
     val bounce = rememberInfiniteTransition(label = "typing")
+    val still = com.gracefultools.astrid.ui.theme.LocalReducedMotion.current
     Row(
         modifier.padding(horizontal = Spacing.s12, vertical = Spacing.s8).semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
         horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(Modifier.height(16.dp), horizontalArrangement = Arrangement.spacedBy(3.dp), verticalAlignment = Alignment.Bottom) {
             for (index in 0 until 3) {
+                // Under reduced motion (DS17) the dots sit still; the words carry the meaning.
                 val lift by bounce.animateFloat(
-                    initialValue = 0f, targetValue = -4f,
+                    initialValue = 0f, targetValue = if (still) 0f else -4f,
                     animationSpec = infiniteRepeatable(tween(400), RepeatMode.Reverse, StartOffset(index * 150)),
                     label = "dot$index",
                 )
-                Box(Modifier.offset(y = lift.dp).size(6.dp).clip(CircleShape).background(colors.textMuted))
+                Box(Modifier.offset(y = lift.dp).testTag("typingDot$index").semantics { this[TypingDotLift] = lift }.size(6.dp).clip(CircleShape).background(colors.textMuted))
             }
         }
         Text(stringResource(R.string.chat_agent_thinking, name), style = TextStyles.caption2, color = colors.textMuted)
