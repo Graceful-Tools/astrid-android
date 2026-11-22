@@ -5,13 +5,13 @@ import org.junit.Test
 import java.io.File
 
 /**
- * AATD-85 (step 5): iOS's system colours (`.purple`, `.green`, `.orange`, `.yellow`, `.blue`) are
+ * AATD-85 (step 5): iOS's system colours (`.green`, `.orange`, `.yellow`, `.blue`) are
  * named once, in `ui/theme` ([IosSystemColors]). A screen typing one of them as hex is drifting by
  * hand. Other literals (the passkey's own RGB, Tailwind colours) are not iOS system colours.
  */
 class IosSystemColorsTokensTest {
     private val root = File("src/main/java/com/gracefultools/astrid/ui")
-    private val systemHex = Regex("""Color\(0x[Ff]{2}(AF52DE|34C759|FF9500|FFCC00|007AFF)\)""", RegexOption.IGNORE_CASE)
+    private val systemHex = Regex("""Color\(0x[Ff]{2}(34C759|FF9500|FFCC00|007AFF)\)""", RegexOption.IGNORE_CASE)
 
     @Test
     fun `AATD-85 no screen types an iOS system colour as hex`() {

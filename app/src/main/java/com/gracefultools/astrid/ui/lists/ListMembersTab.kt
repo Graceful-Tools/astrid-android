@@ -121,7 +121,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
             FormSection(
                 stringResource(if (github) R.string.lists_ai_coding_agents else R.string.lists_ai_agents),
                 footer = if (github) null else stringResource(R.string.lists_connect_github_description),
-                header = { Icon(Icons.Outlined.Memory, null, tint = IosSystemColors.purple, modifier = Modifier.size(14.dp)) },
+                header = { Icon(Icons.Outlined.Memory, null, tint = AstridTheme.colors.tokens.agentInk, modifier = Modifier.size(14.dp)) },
             ) {
                 Text(
                     stringResource(R.string.lists_available_agents), style = TextStyles.caption, color = colors.textSecondary,
@@ -130,9 +130,9 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
                 agents.forEach { agent ->
                     val member = state.isMember(agent.id)
                     FormRow(Modifier.padding(vertical = Spacing.s4)) {
-                        Box(Modifier.size(40.dp).clip(CircleShape).background(IosSystemColors.purple.copy(alpha = 0.2f)), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(40.dp).clip(CircleShape).background(AstridTheme.colors.tokens.agentBubble), contentAlignment = Alignment.Center) {
                             if (agent.image != null) Avatar(agent.image, initialsOf(agent.name), 40.dp)
-                            else Icon(Icons.Outlined.Memory, null, tint = IosSystemColors.purple, modifier = Modifier.size(18.dp))
+                            else Icon(Icons.Outlined.Memory, null, tint = AstridTheme.colors.tokens.agentInk, modifier = Modifier.size(18.dp))
                         }
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                             Text(agent.name, style = TextStyles.body, color = colors.textPrimary)

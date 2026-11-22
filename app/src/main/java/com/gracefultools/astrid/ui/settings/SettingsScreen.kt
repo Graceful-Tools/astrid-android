@@ -115,7 +115,7 @@ fun SettingsScreen(
             NavRow(stringResource(R.string.settings_connections_title), Icons.Filled.Link) { onOpen("connections") }
             if (state.serverOffersGithub && canOpen(ROUTE_GITHUB)) {
                 FormDivider()
-                NavRow(stringResource(R.string.settings_github_issues), Icons.Filled.Code, iconTint = IosSystemColors.purple) { onOpen(ROUTE_GITHUB) }
+                NavRow(stringResource(R.string.settings_github_issues), Icons.Filled.Code, iconTint = AstridTheme.colors.tokens.categoryPurpleInk) { onOpen(ROUTE_GITHUB) }
             }
             if (state.showsGoogleTasks && canOpen(ROUTE_GOOGLE_TASKS)) {
                 FormDivider()

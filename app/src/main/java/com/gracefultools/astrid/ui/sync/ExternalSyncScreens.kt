@@ -57,7 +57,6 @@ import com.gracefultools.astrid.ui.agents.NavRow
 import com.gracefultools.astrid.ui.agents.SmallSpinner
 import com.gracefultools.astrid.ui.agents.openInCustomTab
 import com.gracefultools.astrid.ui.theme.AstridTheme
-import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -81,7 +80,7 @@ fun ExternalSyncRows(core: Core, onOpen: (String) -> Unit) {
     if (available.github) {
         NavRow(
             stringResource(R.string.sync_github_issues_title),
-            leading = { Icon(Icons.Filled.Code, null, tint = IosSystemColors.purple, modifier = Modifier.size(20.dp)) },
+            leading = { Icon(Icons.Filled.Code, null, tint = AstridTheme.colors.tokens.categoryPurpleInk, modifier = Modifier.size(20.dp)) },
         ) { onOpen(SyncRoutes.GITHUB) }
     }
     if (available.google) {
