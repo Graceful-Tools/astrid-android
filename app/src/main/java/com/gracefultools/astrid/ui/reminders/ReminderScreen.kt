@@ -142,7 +142,7 @@ private fun ReminderCard(detail: TaskDetail, state: ReminderState, vm: ReminderV
         ) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 IconButton(onClick = vm::close, modifier = Modifier.padding(Spacing.s8)) {
-                    Icon(Icons.Filled.Cancel, stringResource(R.string.reminders_triage_close), tint = colors.textMuted, modifier = Modifier.size(28.dp))
+                    Icon(Icons.Filled.Cancel, stringResource(R.string.reminders_triage_close), tint = colors.textMuted, modifier = Modifier.size(IconSize.dismiss))
                 }
             }
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.s24)) {
@@ -238,13 +238,13 @@ private fun TriageDeck(state: ReminderState, vm: ReminderViewModel, onOpenTask: 
                     Text(stringResource(R.string.reminders_triage_progress, state.index + 1, state.deck.size), style = TextStyles.caption, color = colors.textMuted)
                 }
                 IconButton(onClick = vm::close) {
-                    Icon(Icons.Filled.Cancel, stringResource(R.string.reminders_triage_close), tint = colors.textMuted, modifier = Modifier.size(28.dp))
+                    Icon(Icons.Filled.Cancel, stringResource(R.string.reminders_triage_close), tint = colors.textMuted, modifier = Modifier.size(IconSize.dismiss))
                 }
             }
             val task = state.current
             if (task == null) {
                 Column(Modifier.weight(1f).fillMaxWidth(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(Icons.Filled.Verified, null, tint = AstridTheme.colors.successInk, modifier = Modifier.size(56.dp))
+                    Icon(Icons.Filled.Verified, null, tint = AstridTheme.colors.successInk, modifier = Modifier.size(IconSize.done))
                     Spacer(Modifier.size(Spacing.s16))
                     Text(stringResource(R.string.reminders_triage_caught_up), fontSize = TypeSize.title3, fontWeight = FontWeight.SemiBold, color = colors.textPrimary)
                     Spacer(Modifier.size(Spacing.s16))

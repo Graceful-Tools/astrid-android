@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.ui.theme.CircleSize
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.TouchSize
@@ -233,11 +234,11 @@ private fun RepeatFrame(row: TaskRow, onTap: () -> Unit, label: String, pop: Com
     // Laid out in the 34 slot every leading control takes, drawn 4dp past each side of it, so a
     // framed row's title lines up with its neighbours'.
     Box(
-        Modifier.size(TouchSize.leadingControl).wrapContentSize(unbounded = true).size(42.dp).completionPop(pop).clip(CircleShape).clickable(onClick = onTap).testTag(REPEAT_FRAME_TAG)
+        Modifier.size(TouchSize.leadingControl).wrapContentSize(unbounded = true).size(CircleSize.repeatFrame).completionPop(pop).clip(CircleShape).clickable(onClick = onTap).testTag(REPEAT_FRAME_TAG)
             .semantics { contentDescription = row.checkboxLabel ?: label; role = Role.Checkbox },
         contentAlignment = Alignment.Center,
     ) {
-        CheckboxArt(row.priority, repeating = true, checked = false, size = 42.dp)
+        CheckboxArt(row.priority, repeating = true, checked = false, size = CircleSize.repeatFrame)
         content()
     }
 }

@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.TileSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -109,9 +110,9 @@ internal fun ListAdminTab(state: ListSettingsState, vm: ListSettingsViewModel, i
         FormSection(stringResource(R.string.lists_list_appearance)) {
             if (state.showListImages) {
                 FormRow(Modifier.padding(vertical = Spacing.s4)) {
-                    Box(Modifier.size(64.dp).clip(RoundedCornerShape(Radius.large)).background(parseColor(settings.color)), contentAlignment = Alignment.Center) {
+                    Box(Modifier.size(TileSize.listImage).clip(RoundedCornerShape(Radius.large)).background(parseColor(settings.color)), contentAlignment = Alignment.Center) {
                         state.imageSource?.let { source ->
-                            AsyncImage(model = source, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.size(64.dp))
+                            AsyncImage(model = source, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.size(TileSize.listImage))
                         }
                         if (state.imageUploading) CircularProgressIndicator(Modifier.size(IconSize.xxl), color = colors.accentText, strokeWidth = SpinnerStroke)
                     }

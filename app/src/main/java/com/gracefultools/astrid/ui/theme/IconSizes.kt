@@ -34,6 +34,23 @@ object IconSize {
     val control = 22.dp
     /** The play / pause glyph on the full-screen timer's button (iOS TaskTimerView, 40pt). */
     val timer = 40.dp
+
+    // Large glyphs that stand alone: an empty state, a banner, a file. Named after what they do.
+
+    /** Closes the reminder triage card (iOS ReminderTriageView's `xmark.circle.fill`). */
+    val dismiss = 28.dp
+    /** Leads a block: the shared file, the no-passkeys note, the composer placeholder's add. */
+    val lead = 32.dp
+    /** An empty list's glyph inside a form section (no OpenClaw agents). */
+    val empty = 36.dp
+    /** The app update banner's download glyph, the size of a hit target. */
+    val banner = TouchSize.hitTarget
+    /** A full-screen empty or error state's glyph (the profile that failed to load). */
+    val emptyLarge = 48.dp
+    /** The all-done mark when the reminder triage is cleared. */
+    val done = 56.dp
+    /** A file with no preview, in the full-screen attachment viewer. */
+    val preview = 64.dp
 }
 
 /** The line of a progress ring (iOS `ProgressView`'s stroke). */

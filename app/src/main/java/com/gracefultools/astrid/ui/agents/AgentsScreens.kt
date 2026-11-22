@@ -143,7 +143,7 @@ private fun webhookAgentLabel(agent: String): String = when (agent) {
 }
 
 @Composable
-internal fun BrandIcon(@DrawableRes icon: Int?, size: androidx.compose.ui.unit.Dp = 30.dp, fallback: ImageVector = Icons.Filled.Memory, modifier: Modifier = Modifier) {
+internal fun BrandIcon(@DrawableRes icon: Int?, size: androidx.compose.ui.unit.Dp = CircleSize.compact, fallback: ImageVector = Icons.Filled.Memory, modifier: Modifier = Modifier) {
     if (icon != null) {
         Image(painterResource(icon), null, modifier.size(size).clip(CircleShape), contentScale = ContentScale.Fit)
     } else {
@@ -204,13 +204,13 @@ fun AgentsScreen(vm: AgentsViewModel, onBack: () -> Unit, onOpen: (String) -> Un
                 FormSection {
                     NavRow(
                         stringResource(R.string.connections_title), stringResource(R.string.settings_connections_subtitle),
-                        leading = { Icon(Icons.Filled.Link, null, tint = AstridTheme.colors.accentInk, modifier = Modifier.size(30.dp).padding(Spacing.s4)) },
+                        leading = { Icon(Icons.Filled.Link, null, tint = AstridTheme.colors.accentInk, modifier = Modifier.size(CircleSize.compact).padding(Spacing.s4)) },
                     ) { onOpen(AgentRoutes.CONNECTIONS) }
                 }
                 FormSection(footer = stringResource(R.string.settings_agents_model_description, app)) {
                     NavRow(
                         stringResource(R.string.settings_agents_model_title, app),
-                        leading = { Image(painterResource(R.drawable.astrid_character), null, Modifier.size(30.dp)) },
+                        leading = { Image(painterResource(R.drawable.astrid_character), null, Modifier.size(CircleSize.compact)) },
                     ) { onOpen(AgentRoutes.MODEL) }
                 }
                 GitHubConnectionSection()
@@ -603,7 +603,7 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
     HubPage(stringResource(R.string.settings_openclaw_title), onBack) {
         FormSection {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-                BrandIcon(R.drawable.ai_openclaw, size = 36.dp)
+                BrandIcon(R.drawable.ai_openclaw, size = CircleSize.md)
                 Text(stringResource(R.string.settings_openclaw_title), style = TextStyles.subheadline, color = colors.textPrimary)
             }
             Caption(stringResource(R.string.settings_openclaw_description))
@@ -634,7 +634,7 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
             state.isLoading -> FormSection { LoadingRow(stringResource(R.string.settings_openclaw_loading)) }
             state.agents.isEmpty() -> FormSection {
                 Column(Modifier.fillMaxWidth().padding(vertical = Spacing.s16), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s12)) {
-                    Icon(Icons.Filled.Memory, null, tint = colors.textSecondary, modifier = Modifier.size(36.dp))
+                    Icon(Icons.Filled.Memory, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.empty))
                     Text(stringResource(R.string.settings_openclaw_no_agents), style = TextStyles.subheadline, color = colors.textPrimary)
                     Text(stringResource(R.string.settings_openclaw_no_agents_hint, app), style = TextStyles.caption, color = colors.textSecondary, textAlign = TextAlign.Center)
                 }
@@ -805,7 +805,7 @@ fun AstridModelScreen(vm: AstridModelViewModel, onBack: () -> Unit, onAddKey: ()
                         subtitle = option.serviceLabel.ifBlank { option.service }.replaceFirstChar { it.uppercase() },
                         subtitleColor = AstridTheme.colors.tokens.agentInk,
                         selected = state.model.selected == option.id,
-                        leading = { BrandIcon(agentIcon(option.service), size = 36.dp, fallback = Icons.Filled.Cloud) },
+                        leading = { BrandIcon(agentIcon(option.service), size = CircleSize.md, fallback = Icons.Filled.Cloud) },
                     ) { vm.select(option.id) }
                 }
                 val configured = options.map { it.service }.toSet()
@@ -815,7 +815,7 @@ fun AstridModelScreen(vm: AstridModelViewModel, onBack: () -> Unit, onAddKey: ()
                         subtitle = stringResource(R.string.agents_model_key_required, model.subtitle),
                         subtitleColor = AstridTheme.colors.warningInk,
                         selected = false,
-                        leading = { BrandIcon(agentIcon(model.service), size = 36.dp, modifier = Modifier.alpha(0.5f)) },
+                        leading = { BrandIcon(agentIcon(model.service), size = CircleSize.md, modifier = Modifier.alpha(0.5f)) },
                         trailing = { Icon(Icons.Filled.Key, null, tint = AstridTheme.colors.warningInk, modifier = Modifier.size(IconSize.sm)) },
                         onClick = onAddKey,
                     )

@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.common
 
+import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -95,7 +96,7 @@ fun FloatingTextHeader(
         if (onBack != null) {
             Icon(
                 Icons.AutoMirrored.Filled.ArrowBackIos, stringResource(R.string.common_back), tint = colors.textPrimary,
-                modifier = Modifier.size(28.dp).clip(RoundedCornerShape(Radius.small)).clickable(onClick = onBack).padding(Spacing.s4),
+                modifier = Modifier.size(TileSize.back).clip(RoundedCornerShape(Radius.small)).clickable(onClick = onBack).padding(Spacing.s4),
             )
         }
         if (icon != null) Icon(icon, null, tint = iconTint ?: colors.textPrimary, modifier = Modifier.size(IconSize.xl))
@@ -108,7 +109,7 @@ fun FloatingTextHeader(
 @Composable
 fun HamburgerIcon(modifier: Modifier = Modifier) {
     val ink = AstridTheme.colors.textPrimary
-    Canvas(modifier.size(24.dp)) {
+    Canvas(modifier.size(IconSize.xxl)) {
         val w = 19.2.dp.toPx(); val h = 2.dp.toPx(); val gap = 5.dp.toPx()
         val x = (size.width - w) / 2
         val top = (size.height - (2 * h + gap)) / 2
@@ -222,7 +223,7 @@ fun SplashLookalike() {
                 Modifier.weight(1f).height(TouchSize.hitTarget).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
                     .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)),
             )
-            Icon(Icons.Filled.AddCircle, null, tint = colors.textMuted, modifier = Modifier.size(32.dp))
+            Icon(Icons.Filled.AddCircle, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lead))
         }
     }
 }
