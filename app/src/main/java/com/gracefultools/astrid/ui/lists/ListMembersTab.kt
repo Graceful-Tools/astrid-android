@@ -56,6 +56,7 @@ import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS ListMembershipTab: the roster (owner first, members, pending invitations), Add Member, Share,
@@ -87,7 +88,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
                 divider()
                 FormRow {
                     Box(Modifier.size(32.dp).clip(CircleShape).background(colors.neutral.copy(alpha = 0.3f)), contentAlignment = Alignment.Center) {
-                        Icon(Icons.Outlined.Email, null, tint = colors.neutral, modifier = Modifier.size(16.dp))
+                        Icon(Icons.Outlined.Email, null, tint = colors.neutral, modifier = Modifier.size(IconSize.md))
                     }
                     Column(Modifier.weight(1f)) {
                         Text(invite.email, style = TextStyles.body, color = colors.textPrimary, maxLines = 1)
@@ -121,7 +122,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
             FormSection(
                 stringResource(if (github) R.string.lists_ai_coding_agents else R.string.lists_ai_agents),
                 footer = if (github) null else stringResource(R.string.lists_connect_github_description),
-                header = { Icon(Icons.Outlined.Memory, null, tint = AstridTheme.colors.tokens.agentInk, modifier = Modifier.size(14.dp)) },
+                header = { Icon(Icons.Outlined.Memory, null, tint = AstridTheme.colors.tokens.agentInk, modifier = Modifier.size(IconSize.sm)) },
             ) {
                 Text(
                     stringResource(R.string.lists_available_agents), style = TextStyles.caption, color = colors.textSecondary,
@@ -132,7 +133,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
                     FormRow(Modifier.padding(vertical = Spacing.s4)) {
                         Box(Modifier.size(40.dp).clip(CircleShape).background(AstridTheme.colors.tokens.agentBubble), contentAlignment = Alignment.Center) {
                             if (agent.image != null) Avatar(agent.image, initialsOf(agent.name), 40.dp)
-                            else Icon(Icons.Outlined.Memory, null, tint = AstridTheme.colors.tokens.agentInk, modifier = Modifier.size(18.dp))
+                            else Icon(Icons.Outlined.Memory, null, tint = AstridTheme.colors.tokens.agentInk, modifier = Modifier.size(IconSize.lg))
                         }
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                             Text(agent.name, style = TextStyles.body, color = colors.textPrimary)
@@ -273,7 +274,7 @@ private fun MemberRow(member: Member, canManage: Boolean, vm: ListSettingsViewMo
                     verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
                     Text(roleLabel(member.role), style = TextStyles.caption, color = colors.textMuted)
-                    Icon(Icons.Filled.MoreVert, null, tint = colors.textSecondary, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Filled.MoreVert, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.lg))
                 }
                 DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
                     DropdownMenuItem(

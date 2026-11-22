@@ -76,6 +76,8 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import java.time.Instant
 import java.time.ZoneOffset
+import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.SpinnerStroke
 
 /** A bottom sheet the way iOS's pickers are: a title with Close, then the rows. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -117,7 +119,7 @@ internal fun PickRow(label: String, selected: Boolean, color: Color? = null, sub
             Text(label, style = TextStyles.body, color = color ?: colors.textPrimary)
             if (subtitle != null) Text(subtitle, style = TextStyles.caption2, color = colors.textMuted)
         }
-        if (selected) Icon(Icons.Filled.Check, null, tint = color ?: colors.accentInk, modifier = Modifier.size(18.dp))
+        if (selected) Icon(Icons.Filled.Check, null, tint = color ?: colors.accentInk, modifier = Modifier.size(IconSize.lg))
     }
 }
 
@@ -151,7 +153,7 @@ internal fun AssigneeSheet(state: TaskDetailState, vm: TaskDetailViewModel, onPi
                 leading = {
                     if (option.userId == null) {
                         Box(Modifier.size(32.dp).clip(CircleShape).background(colors.bgTertiary), contentAlignment = Alignment.Center) {
-                            Icon(Icons.Outlined.PersonOff, null, tint = colors.textMuted, modifier = Modifier.size(16.dp))
+                            Icon(Icons.Outlined.PersonOff, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.md))
                         }
                     } else Avatar(option.image, option.initials, 32.dp)
                 },
@@ -333,7 +335,7 @@ internal fun SearchField(value: String, placeholder: String, onChange: (String) 
         Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgTertiary).heightIn(min = 40.dp).padding(horizontal = Spacing.s12),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
     ) {
-        Icon(Icons.Filled.Search, null, tint = colors.textMuted, modifier = Modifier.size(18.dp))
+        Icon(Icons.Filled.Search, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))
         Box(Modifier.weight(1f)) {
             if (value.isEmpty()) Text(placeholder, style = TextStyles.body, color = colors.inputPlaceholder)
             BasicTextField(value, onChange, singleLine = true, textStyle = TextStyles.body.copy(color = colors.textPrimary), cursorBrush = SolidColor(colors.accent), modifier = Modifier.fillMaxWidth())
@@ -380,7 +382,7 @@ internal fun ShareTaskSheet(vm: TaskDetailViewModel, detail: TaskDetail, onDismi
         when {
             state.shareFailed -> Text(stringResource(R.string.share_link_failed), style = TextStyles.body, color = AstridTheme.colors.errorInk)
             link == null -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-                CircularProgressIndicator(Modifier.size(18.dp), color = colors.accent, strokeWidth = 2.dp)
+                CircularProgressIndicator(Modifier.size(IconSize.lg), color = colors.accent, strokeWidth = SpinnerStroke)
                 Text(stringResource(R.string.share_generating_link), style = TextStyles.body, color = colors.textSecondary)
             }
             else -> {

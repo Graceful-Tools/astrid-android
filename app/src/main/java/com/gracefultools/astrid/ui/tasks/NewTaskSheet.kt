@@ -60,6 +60,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS's share extension form (TaskQuickCreateView): the attachment, title and description,
@@ -133,7 +134,7 @@ fun NewTaskSheet(
                             selected = priority == value,
                             onClick = { priority = value },
                             shape = SegmentedButtonDefaults.itemShape(value, names.size),
-                            icon = { Icon(if (value == 0) Icons.Outlined.Circle else Icons.Filled.Flag, null, Modifier.size(14.dp)) },
+                            icon = { Icon(if (value == 0) Icons.Outlined.Circle else Icons.Filled.Flag, null, Modifier.size(IconSize.sm)) },
                         ) { Text(stringResource(name), maxLines = 1) }
                     }
                 }
@@ -165,7 +166,7 @@ private fun Section(header: String, content: @Composable () -> Unit) {
 private fun Note(icon: ImageVector, text: String) {
     val colors = AstridTheme.colors
     Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-        Icon(icon, null, tint = colors.textSecondary, modifier = Modifier.size(14.dp))
+        Icon(icon, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.sm))
         Text(text, style = TextStyles.caption, color = colors.textSecondary)
     }
 }

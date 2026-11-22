@@ -46,6 +46,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS's sort and filter form (AATD-41): "Sort By", then "Filters" — each a row whose value opens a
@@ -105,7 +106,7 @@ private fun ChoiceRow(group: FilterGroup, onPick: (String, String) -> Unit) {
         ) {
             Text(coreLabel(group.titleKey), style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
             Text(current?.let { coreLabel(it.titleKey) } ?: "", style = TextStyles.body, color = colors.textSecondary)
-            Icon(Icons.Filled.UnfoldMore, null, tint = colors.textMuted, modifier = Modifier.size(16.dp))
+            Icon(Icons.Filled.UnfoldMore, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.md))
         }
         DropdownMenu(open, onDismissRequest = { open = false }) {
             group.picks.forEach { pick ->

@@ -51,6 +51,8 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.SpinnerStroke
 
 /**
  * iOS ListEditView for a new list ("New list"): the name, a description and the people to invite,
@@ -68,7 +70,7 @@ fun NewListScreen(vm: NewListViewModel, onCancel: () -> Unit, onCreated: (String
     Column(Modifier.fillMaxSize().background(colors.pageBg).imePadding()) {
         FloatingTextHeader(stringResource(R.string.lists_new_list), onBack = onCancel) {
             if (state.busy) {
-                CircularProgressIndicator(Modifier.size(20.dp), color = colors.accent, strokeWidth = 2.dp)
+                CircularProgressIndicator(Modifier.size(IconSize.xl), color = colors.accent, strokeWidth = SpinnerStroke)
             } else {
                 AstridTextButton(onClick = vm::create, enabled = state.canCreate) {
                     Text(stringResource(R.string.lists_create), style = TextStyles.headline)
@@ -120,7 +122,7 @@ fun NewListScreen(vm: NewListViewModel, onCancel: () -> Unit, onCreated: (String
                             .heightIn(min = 32.dp).padding(horizontal = Spacing.s4),
                         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4),
                     ) {
-                        Icon(Icons.Outlined.PersonAdd, null, tint = colors.accentInk, modifier = Modifier.size(16.dp))
+                        Icon(Icons.Outlined.PersonAdd, null, tint = colors.accentInk, modifier = Modifier.size(IconSize.md))
                         Text(stringResource(R.string.actions_add), style = TextStyles.caption, color = colors.accentInk)
                     }
                 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridTheme
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS iPadTaskManagerView.messagesPane: the selected list's messages pinned at the right of a wide
@@ -38,7 +39,7 @@ fun MessagesPane(hidden: Boolean, onToggle: () -> Unit, modifier: Modifier = Mod
                 .clickable(role = Role.Button, onClick = onToggle).semantics { contentDescription = label }
                 .testTag("messages.togglePane"),
             contentAlignment = Alignment.Center,
-        ) { Icon(Icons.Outlined.ViewSidebar, null, tint = colors.accentInk, modifier = Modifier.height(18.dp)) }
+        ) { Icon(Icons.Outlined.ViewSidebar, null, tint = colors.accentInk, modifier = Modifier.height(IconSize.lg)) }
         if (!hidden) Box(Modifier.weight(1f)) { chat() }
     }
 }

@@ -54,6 +54,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.shadow
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS's FloatingHeader: content padded 16x12 on a card (white on Ocean, glass on Light, headerBg on
@@ -97,7 +98,7 @@ fun FloatingTextHeader(
                 modifier = Modifier.size(28.dp).clip(RoundedCornerShape(Radius.small)).clickable(onClick = onBack).padding(Spacing.s4),
             )
         }
-        if (icon != null) Icon(icon, null, tint = iconTint ?: colors.textPrimary, modifier = Modifier.size(20.dp))
+        if (icon != null) Icon(icon, null, tint = iconTint ?: colors.textPrimary, modifier = Modifier.size(IconSize.xl))
         Text(title, style = TextStyles.headline, color = colors.textPrimary, modifier = Modifier.weight(1f).semantics { heading() })
         actions()
     }
@@ -174,7 +175,7 @@ fun EmptyState(message: String, modifier: Modifier = Modifier, buttonTitle: Stri
                     .padding(horizontal = Spacing.s24, vertical = Spacing.s12),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(Icons.Filled.AddCircle, null, tint = colors.accentText, modifier = Modifier.size(20.dp))
+                Icon(Icons.Filled.AddCircle, null, tint = colors.accentText, modifier = Modifier.size(IconSize.xl))
                 Text(buttonTitle, style = TextStyles.headline, color = colors.accentText)
             }
         }
@@ -194,7 +195,7 @@ fun AppErrorBanner(message: String, onDismiss: () -> Unit, modifier: Modifier = 
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
     ) {
-        Icon(Icons.Filled.Warning, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(18.dp))
+        Icon(Icons.Filled.Warning, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(IconSize.lg))
         Text(message, style = TextStyles.subheadline, color = AstridTheme.colors.onFill, modifier = Modifier.weight(1f))
         IconButton(onClick = onDismiss) { Icon(Icons.Filled.Close, stringResource(R.string.common_dismiss), tint = AstridTheme.colors.onFill) }
     }

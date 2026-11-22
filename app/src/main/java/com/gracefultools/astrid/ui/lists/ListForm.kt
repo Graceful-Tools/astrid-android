@@ -42,6 +42,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /*
  * iOS's grouped Form, drawn in Compose: a section is an uppercase footnote header, a rounded card of
@@ -103,7 +104,7 @@ internal fun FormPickerRow(label: String, value: String, enabled: Boolean = true
     FormRow(onClick = if (enabled) onClick else null) {
         Text(label, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
         Text(value, style = TextStyles.body, color = colors.textSecondary, maxLines = 1)
-        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null, tint = colors.textMuted, modifier = Modifier.size(18.dp))
+        Icon(Icons.AutoMirrored.Filled.KeyboardArrowRight, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))
     }
 }
 
@@ -111,7 +112,7 @@ internal fun FormPickerRow(label: String, value: String, enabled: Boolean = true
 @Composable
 internal fun FormButtonRow(icon: ImageVector, label: String, tint: Color, enabled: Boolean = true, trailing: (@Composable RowScope.() -> Unit)? = null, onClick: () -> Unit) {
     FormRow(onClick = if (enabled) onClick else null) {
-        Icon(icon, null, tint = if (enabled) tint else tint.copy(alpha = 0.4f), modifier = Modifier.size(20.dp))
+        Icon(icon, null, tint = if (enabled) tint else tint.copy(alpha = 0.4f), modifier = Modifier.size(IconSize.xl))
         Text(label, style = TextStyles.body, color = if (enabled) tint else tint.copy(alpha = 0.4f), modifier = Modifier.weight(1f))
         trailing?.invoke(this)
     }

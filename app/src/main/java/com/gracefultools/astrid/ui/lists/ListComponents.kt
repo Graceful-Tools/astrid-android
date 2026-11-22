@@ -71,6 +71,8 @@ import com.gracefultools.astrid.ui.theme.Error
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.SpinnerStroke
 
 /**
  * iOS ListColorSwatches: the palette as 28dp circles spread evenly across the row, a white
@@ -90,7 +92,7 @@ internal fun ColorSwatches(choices: List<String>, current: String, onPick: (Stri
                 contentAlignment = Alignment.Center,
             ) {
                 Box(Modifier.size(28.dp).clip(CircleShape).background(parseColor(swatch)), contentAlignment = Alignment.Center) {
-                    if (chosen) Icon(Icons.Filled.Check, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(14.dp))
+                    if (chosen) Icon(Icons.Filled.Check, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(IconSize.sm))
                 }
             }
         }
@@ -103,7 +105,7 @@ internal fun ColorSwatches(choices: List<String>, current: String, onPick: (Stri
         ) {
             val wheel = Brush.sweepGradient(HueWheel)
             Box(Modifier.size(28.dp).clip(CircleShape).background(wheel).padding(Spacing.s4).clip(CircleShape).background(parseColor(current)), contentAlignment = Alignment.Center) {
-                if (isCustom) Icon(Icons.Filled.Check, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(12.dp))
+                if (isCustom) Icon(Icons.Filled.Check, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(IconSize.xs))
             }
         }
     }
@@ -206,7 +208,7 @@ internal fun AddMemberSheet(
                 if (searching) {
                     FormDivider()
                     FormRow {
-                        CircularProgressIndicator(Modifier.size(16.dp), color = colors.accent, strokeWidth = 2.dp)
+                        CircularProgressIndicator(Modifier.size(IconSize.md), color = colors.accent, strokeWidth = SpinnerStroke)
                         Text(stringResource(R.string.members_searching), style = TextStyles.caption2, color = colors.textMuted)
                     }
                 }
@@ -240,7 +242,7 @@ internal fun ShareListSheet(name: String, privacy: String?, link: String?, faile
         when {
             failed -> Text(stringResource(R.string.share_link_failed), style = TextStyles.body, color = AstridTheme.colors.errorInk)
             link == null -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-                CircularProgressIndicator(Modifier.size(18.dp), color = colors.accent, strokeWidth = 2.dp)
+                CircularProgressIndicator(Modifier.size(IconSize.lg), color = colors.accent, strokeWidth = SpinnerStroke)
                 Text(stringResource(R.string.share_generating_link), style = TextStyles.body, color = colors.textSecondary)
             }
             else -> {

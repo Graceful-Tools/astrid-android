@@ -110,6 +110,8 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.shadow
 import kotlinx.coroutines.launch
+import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.SpinnerStroke
 
 /** iOS's HeaderToggleSegment: what the main pane shows for a list. */
 enum class ViewMode { LIST, MESSAGES, BOARD }
@@ -263,7 +265,7 @@ private fun ListHeader(
                     .semantics { contentDescription = copyLabel }.testTag("copyList"),
                 contentAlignment = Alignment.Center,
             ) {
-                if (copyingList) androidx.compose.material3.CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = colors.accent)
+                if (copyingList) androidx.compose.material3.CircularProgressIndicator(Modifier.size(IconSize.lg), strokeWidth = SpinnerStroke, color = colors.accent)
                 else Icon(Icons.Outlined.ContentCopy, null, tint = colors.accentInk, modifier = Modifier.size(22.dp))
             }
         }
@@ -474,14 +476,14 @@ private fun AssigneeChoice(id: String?, image: String?, initials: String, name: 
     ) {
         if (id == null) {
             Box(Modifier.size(36.dp).clip(CircleShape).background(colors.bgSecondary), contentAlignment = Alignment.Center) {
-                Icon(Icons.Outlined.PersonOff, null, tint = colors.textMuted, modifier = Modifier.size(18.dp))
+                Icon(Icons.Outlined.PersonOff, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))
             }
         } else Avatar(image, initials, 36.dp)
         Column(Modifier.weight(1f)) {
             Text(name, style = TextStyles.body, color = colors.textPrimary)
             if (caption != null) Text(caption, style = TextStyles.caption2, color = colors.textMuted)
         }
-        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(18.dp))
+        if (selected) Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(IconSize.lg))
     }
 }
 

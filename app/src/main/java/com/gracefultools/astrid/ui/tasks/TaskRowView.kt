@@ -66,6 +66,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * One row, drawn as iOS's TaskRowView (AATD-36): a rounded-8 card (white 0.8 on Ocean, 1.0 and a
@@ -192,7 +193,7 @@ private fun LeadingControl(row: TaskRow, onLeading: () -> Unit) {
         .semantics { contentDescription = row.checkboxLabel ?: label; role = Role.Checkbox }
     when (row.leading.kind) {
         "copy" -> Box(tap.border(2.dp, colors.neutral.copy(alpha = 0.4f), square), contentAlignment = Alignment.Center) {
-            Icon(Icons.Outlined.ContentCopy, null, tint = colors.neutral, modifier = Modifier.size(16.dp))
+            Icon(Icons.Outlined.ContentCopy, null, tint = colors.neutral, modifier = Modifier.size(IconSize.md))
         }
         "avatar" -> {
             val initials = row.leading.initial ?: initialsOf(row.assignee?.name, row.assignee?.email)

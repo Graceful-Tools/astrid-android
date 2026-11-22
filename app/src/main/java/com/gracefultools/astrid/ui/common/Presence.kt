@@ -47,6 +47,7 @@ import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS's NetworkMonitor.isConnected, for drawing an offline cue: true while the default network
@@ -88,7 +89,7 @@ fun OfflineStrip(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(Spacing.s4, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(Icons.Outlined.WifiOff, null, tint = colors.textMuted, modifier = Modifier.size(12.dp))
+        Icon(Icons.Outlined.WifiOff, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.xs))
         Text(stringResource(R.string.chat_offline), style = TextStyles.caption2, color = colors.textMuted, textAlign = TextAlign.Center)
     }
 }

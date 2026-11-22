@@ -106,6 +106,7 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import com.gracefultools.astrid.ui.theme.IconSize
 
 // ── Occurrences (AATD-52, F18) ───────────────────────────────────────────────────────────────
 
@@ -126,13 +127,13 @@ internal fun OccurrencesRow(detail: TaskDetail, onOpenTask: (String) -> Unit) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
             previous?.let { id ->
                 ValueBox(compact = true, onClick = { onOpenTask(id) }) {
-                    Icon(Icons.Filled.ChevronLeft, null, tint = colors.textPrimary, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Filled.ChevronLeft, null, tint = colors.textPrimary, modifier = Modifier.size(IconSize.lg))
                     Text(stringResource(R.string.tasks_occurrences_previous), style = TextStyles.body, color = colors.textPrimary, maxLines = 1)
                 }
             }
             next?.let { id ->
                 ValueBox(compact = true, onClick = { onOpenTask(id) }) {
-                    Icon(Icons.Filled.ChevronRight, null, tint = colors.textPrimary, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Filled.ChevronRight, null, tint = colors.textPrimary, modifier = Modifier.size(IconSize.lg))
                     Text(stringResource(R.string.tasks_occurrences_next), style = TextStyles.body, color = colors.textPrimary, maxLines = 1)
                 }
             }
@@ -331,7 +332,7 @@ private fun Thumbnail(file: AttachmentFile, vm: TaskDetailViewModel, size: andro
             AsyncImage(model = File(path), contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
-                Icon(Icons.AutoMirrored.Filled.InsertDriveFile, null, tint = colors.textMuted, modifier = Modifier.size(18.dp))
+                Icon(Icons.AutoMirrored.Filled.InsertDriveFile, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))
                 Text(file.name.substringAfterLast('.', "").uppercase().take(5), fontSize = IosTypeSize.fileBadge, fontWeight = FontWeight.Medium, color = colors.textMuted)
             }
         }

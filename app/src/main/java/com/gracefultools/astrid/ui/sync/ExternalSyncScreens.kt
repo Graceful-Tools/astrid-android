@@ -60,6 +60,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /** Routes the two account screens live at. */
 object SyncRoutes {
@@ -80,13 +81,13 @@ fun ExternalSyncRows(core: Core, onOpen: (String) -> Unit) {
     if (available.github) {
         NavRow(
             stringResource(R.string.sync_github_issues_title),
-            leading = { Icon(Icons.Filled.Code, null, tint = AstridTheme.colors.tokens.categoryPurpleInk, modifier = Modifier.size(20.dp)) },
+            leading = { Icon(Icons.Filled.Code, null, tint = AstridTheme.colors.tokens.categoryPurpleInk, modifier = Modifier.size(IconSize.xl)) },
         ) { onOpen(SyncRoutes.GITHUB) }
     }
     if (available.google) {
         NavRow(
             stringResource(R.string.sync_google_tasks_title),
-            leading = { Icon(Icons.Filled.TaskAlt, null, tint = AstridTheme.colors.successInk, modifier = Modifier.size(20.dp)) },
+            leading = { Icon(Icons.Filled.TaskAlt, null, tint = AstridTheme.colors.successInk, modifier = Modifier.size(IconSize.xl)) },
         ) { onOpen(SyncRoutes.GOOGLE) }
     }
 }
@@ -103,7 +104,7 @@ internal fun MenuPicker(label: String, value: String, options: List<Pair<String?
         ) {
             Text(label, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
             Text(value, style = TextStyles.body, color = colors.textSecondary, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.widthIn(max = 200.dp))
-            Icon(Icons.Filled.UnfoldMore, null, tint = colors.textSecondary, modifier = Modifier.size(16.dp))
+            Icon(Icons.Filled.UnfoldMore, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.md))
         }
         DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
             options.forEach { (id, name) ->
@@ -140,7 +141,7 @@ fun ExternalSyncScreen(vm: ExternalSyncViewModel, onBack: () -> Unit) {
         ) {
             if (state.connected) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-                    Icon(Icons.Filled.Verified, null, tint = AstridTheme.colors.successInk, modifier = Modifier.size(20.dp))
+                    Icon(Icons.Filled.Verified, null, tint = AstridTheme.colors.successInk, modifier = Modifier.size(IconSize.xl))
                     Text(stringResource(R.string.sync_connected), style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
                     InlineButton(stringResource(R.string.sync_disconnect), color = AstridTheme.colors.errorInk) { vm.disconnect() }
                 }

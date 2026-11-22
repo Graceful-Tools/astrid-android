@@ -50,6 +50,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.math.ceil
 import kotlin.math.max
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS ListInsightsView (AITD-545): the 7 / 30 / 90-day picker, New and Completed per day with their
@@ -230,7 +231,7 @@ private fun Contributors(people: List<InsightContributor>) {
                         Text(person.name ?: "—", style = TextStyles.subheadline, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         if (person.isAIAgent) Icon(
                             Icons.Outlined.Memory, stringResource(R.string.lists_ai_coding_agent),
-                            tint = colors.textSecondary, modifier = Modifier.size(12.dp),
+                            tint = colors.textSecondary, modifier = Modifier.size(IconSize.xs),
                         )
                     }
                     Text(

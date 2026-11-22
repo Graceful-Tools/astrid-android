@@ -88,6 +88,7 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
 import kotlinx.coroutines.delay
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /** Routes the hub pushes. */
 object AgentRoutes {
@@ -258,7 +259,7 @@ private fun AgentSection(vm: AgentsViewModel, state: AgentsState, agent: HubAgen
                 Caption(stringResource(R.string.settings_agents_webhook_description))
                 NavRow(
                     stringResource(R.string.settings_agents_webhook_configure),
-                    leading = { Icon(Icons.Filled.Hub, null, tint = colors.accentInk, modifier = Modifier.size(20.dp)) },
+                    leading = { Icon(Icons.Filled.Hub, null, tint = colors.accentInk, modifier = Modifier.size(IconSize.xl)) },
                 ) { onOpen(AgentRoutes.WEBHOOK) }
             }
             else -> Caption(stringResource(R.string.settings_agents_off_description, app))
@@ -301,7 +302,7 @@ private fun TransportPicker(vm: AgentsViewModel, agent: HubAgent, enabled: Boole
         ) {
             Text(stringResource(R.string.settings_agents_transport), style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f))
             Text(transportLabel(current), style = TextStyles.body, color = colors.textSecondary)
-            Icon(Icons.Filled.UnfoldMore, null, tint = colors.textSecondary, modifier = Modifier.size(16.dp))
+            Icon(Icons.Filled.UnfoldMore, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.md))
         }
         DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
             vm.offeredTransports(agent).forEach { transport ->
@@ -369,7 +370,7 @@ private fun KeyEditor(vm: AgentsViewModel, state: AgentsState, service: String) 
             ) {
                 if (busy) SmallSpinner() else {
                     val tint = if (inputs[service].orEmpty().isNotBlank()) colors.accentInk else colors.textMuted
-                    Icon(Icons.Filled.Check, null, tint = tint, modifier = Modifier.size(16.dp))
+                    Icon(Icons.Filled.Check, null, tint = tint, modifier = Modifier.size(IconSize.md))
                     Text(stringResource(R.string.agents_actions_save), style = TextStyles.body, color = tint)
                 }
             }
@@ -380,7 +381,7 @@ private fun KeyEditor(vm: AgentsViewModel, state: AgentsState, service: String) 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 if (works == false) Icons.Filled.Cancel else Icons.Filled.CheckCircle, null,
-                tint = if (works == false) AstridTheme.colors.errorInk else AstridTheme.colors.successInk, modifier = Modifier.size(18.dp),
+                tint = if (works == false) AstridTheme.colors.errorInk else AstridTheme.colors.successInk, modifier = Modifier.size(IconSize.lg),
             )
             Spacer(Modifier.weight(1f))
             if (busy) SmallSpinner() else {
@@ -410,7 +411,7 @@ private fun GitHubConnectionSection() {
     FormSection(
         headerContent = {
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s4), verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.Code, null, tint = AstridTheme.colors.textSecondary, modifier = Modifier.size(14.dp))
+                Icon(Icons.Filled.Code, null, tint = AstridTheme.colors.textSecondary, modifier = Modifier.size(IconSize.sm))
                 Text(stringResource(R.string.settings_agents_github_title).uppercase(), style = TextStyles.footnote, color = AstridTheme.colors.textSecondary)
             }
         },
@@ -515,7 +516,7 @@ fun WebhookSettingsScreen(vm: WebhookViewModel, onBack: () -> Unit) {
                 state.testResult?.let { result ->
                     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                            Icon(if (result.success) Icons.Filled.CheckCircle else Icons.Filled.Cancel, null, tint = if (result.success) AstridTheme.colors.successInk else AstridTheme.colors.errorInk, modifier = Modifier.size(16.dp))
+                            Icon(if (result.success) Icons.Filled.CheckCircle else Icons.Filled.Cancel, null, tint = if (result.success) AstridTheme.colors.successInk else AstridTheme.colors.errorInk, modifier = Modifier.size(IconSize.md))
                             Caption(result.message ?: if (result.success) "OK" else "Failed", if (result.success) AstridTheme.colors.successInk else AstridTheme.colors.errorInk)
                         }
                         result.responseTime?.let { Caption2(stringResource(R.string.settings_agents_webhook_test_response, it)) }
@@ -609,7 +610,7 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
             val ink = if (failed) AstridTheme.colors.errorInk else AstridTheme.colors.successInk
             FormSection {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                    Icon(if (failed) Icons.Filled.Warning else Icons.Filled.CheckCircle, null, tint = ink, modifier = Modifier.size(18.dp))
+                    Icon(if (failed) Icons.Filled.Warning else Icons.Filled.CheckCircle, null, tint = ink, modifier = Modifier.size(IconSize.lg))
                     Text(
                         stringResource(
                             when (flash) {
@@ -657,7 +658,7 @@ fun CustomAgentsScreen(vm: CustomAgentsViewModel, onBack: () -> Unit) {
         }
         FormSection {
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Filled.Lightbulb, null, tint = colors.accentInk, modifier = Modifier.size(16.dp))
+                Icon(Icons.Filled.Lightbulb, null, tint = colors.accentInk, modifier = Modifier.size(IconSize.md))
                 Text(stringResource(R.string.settings_openclaw_tip_title), style = TextStyles.subheadline, color = colors.textPrimary)
             }
             Caption(stringResource(R.string.settings_openclaw_tip_description))
@@ -812,7 +813,7 @@ fun AstridModelScreen(vm: AstridModelViewModel, onBack: () -> Unit, onAddKey: ()
                         subtitleColor = AstridTheme.colors.warningInk,
                         selected = false,
                         leading = { BrandIcon(agentIcon(model.service), size = 36.dp, modifier = Modifier.alpha(0.5f)) },
-                        trailing = { Icon(Icons.Filled.Key, null, tint = AstridTheme.colors.warningInk, modifier = Modifier.size(14.dp)) },
+                        trailing = { Icon(Icons.Filled.Key, null, tint = AstridTheme.colors.warningInk, modifier = Modifier.size(IconSize.sm)) },
                         onClick = onAddKey,
                     )
                 }
@@ -823,7 +824,7 @@ fun AstridModelScreen(vm: AstridModelViewModel, onBack: () -> Unit, onAddKey: ()
                     selected = state.model.selected == null,
                     leading = {
                         Box(Modifier.size(36.dp).clip(CircleShape).background(colors.neutral.copy(alpha = 0.15f)), contentAlignment = Alignment.Center) {
-                            Icon(Icons.Filled.Close, null, tint = colors.neutral, modifier = Modifier.size(16.dp))
+                            Icon(Icons.Filled.Close, null, tint = colors.neutral, modifier = Modifier.size(IconSize.md))
                         }
                     },
                 ) { vm.select(null) }
@@ -859,7 +860,7 @@ private fun ModelRow(
         }
         when {
             trailing != null -> trailing()
-            selected -> Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(18.dp))
+            selected -> Icon(Icons.Filled.Check, null, tint = colors.accentInk, modifier = Modifier.size(IconSize.lg))
             else -> Spacer(Modifier.width(18.dp))
         }
     }

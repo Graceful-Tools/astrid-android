@@ -52,6 +52,7 @@ import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
+import com.gracefultools.astrid.ui.theme.IconSize
 
 /**
  * iOS's CommentSectionViewEnhanced (AATD-53): "Comments (n)" with Show/Hide system, the empty line,
@@ -88,7 +89,7 @@ internal fun CommentsSection(
             }
             // iOS's offline mark in the header: the thread is what this device last heard (AATD-62).
             if (offline) Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4)) {
-                Icon(Icons.Outlined.WifiOff, null, tint = colors.textMuted, modifier = Modifier.size(12.dp))
+                Icon(Icons.Outlined.WifiOff, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.xs))
                 Text(stringResource(R.string.comments_offline), style = TextStyles.caption2, color = colors.textMuted)
             }
         }
@@ -114,7 +115,7 @@ private fun StreakRow(streak: com.gracefultools.astrid.model.CompletionStreak) {
     var open by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).clickable { open = !open }.padding(vertical = Spacing.s4), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            Icon(Icons.Filled.LocalFireDepartment, null, tint = colors.tokens.categoryOrange, modifier = Modifier.size(16.dp))
+            Icon(Icons.Filled.LocalFireDepartment, null, tint = colors.tokens.categoryOrange, modifier = Modifier.size(IconSize.md))
             Text(
                 if (streak.spanDays != null) stringResource(R.string.comments_streak_summary, streak.count, streak.spanDays)
                 else stringResource(R.string.comments_streak_summary_no_span, streak.count),
@@ -180,7 +181,7 @@ private fun CommentBubble(
                             Modifier.clip(RoundedCornerShape(Radius.medium)).background(colors.bgTertiary).clickable { onOpenFile(file) }.padding(horizontal = 10.dp, vertical = 6.dp),
                             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
                         ) {
-                            Icon(Icons.Filled.AttachFile, null, tint = colors.textSecondary, modifier = Modifier.size(16.dp))
+                            Icon(Icons.Filled.AttachFile, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.md))
                             Text(file.name, style = TextStyles.subheadline, color = colors.textPrimary)
                         }
                     }
