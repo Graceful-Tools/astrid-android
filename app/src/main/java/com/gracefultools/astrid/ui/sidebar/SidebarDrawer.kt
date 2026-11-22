@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.sidebar
 
 import com.gracefultools.astrid.ui.theme.AvatarSize
+import com.gracefultools.astrid.ui.theme.DotSize
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.AccountCardShapes
 import androidx.compose.ui.graphics.RectangleShape
@@ -291,7 +292,7 @@ private fun RowShell(
 private fun MyTasksEntry(list: ListSummary, selected: Boolean, count: Int, onClick: () -> Unit) {
     val colors = AstridTheme.colors
     RowShell(selected, "sidebar:${list.id}", onClick) {
-        Box(Modifier.width(LogoColumn), contentAlignment = Alignment.Center) { Box(Modifier.size(12.dp).clip(CircleShape).background(colors.accent)) }
+        Box(Modifier.width(LogoColumn), contentAlignment = Alignment.Center) { Box(Modifier.size(DotSize.accent).clip(CircleShape).background(colors.accent)) }
         Text(stringResource(R.string.navigation_my_tasks), style = TextStyles.body, color = colors.textPrimary, maxLines = 1, modifier = Modifier.weight(1f))
         Icon(Icons.Outlined.FilterList, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.tab))
         CountCapsule(count)

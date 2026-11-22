@@ -45,6 +45,7 @@ import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.BorderWidth
+import com.gracefultools.astrid.ui.theme.DotSize
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
@@ -178,7 +179,7 @@ private fun dateTicks(series: List<InsightDay>): List<String> {
 @Composable
 private fun Legend(color: Color, label: String) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        Canvas(Modifier.size(8.dp)) { drawCircle(color) }
+        Canvas(Modifier.size(DotSize.status)) { drawCircle(color) }
         Text(label, style = TextStyles.caption, color = AstridTheme.colors.textSecondary)
     }
 }

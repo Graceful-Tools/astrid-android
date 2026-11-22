@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.detail
 
 import com.gracefultools.astrid.ui.theme.BorderWidth
+import com.gracefultools.astrid.ui.theme.DotSize
 import com.gracefultools.astrid.ui.theme.TileSize
 import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.ControlHeight
@@ -548,7 +549,7 @@ internal fun ListBadge(name: String, color: String) {
         Modifier.clip(RoundedCornerShape(Radius.small)).background(colors.bgTertiary).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp),
     ) {
-        Box(Modifier.size(8.dp).clip(SwatchShape).background(parseColor(color)))
+        Box(Modifier.size(DotSize.swatch).clip(SwatchShape).background(parseColor(color)))
         Text(name, style = TextStyles.caption, color = colors.textPrimary, maxLines = 1)
     }
 }
