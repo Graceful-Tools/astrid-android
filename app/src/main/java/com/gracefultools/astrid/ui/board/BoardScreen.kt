@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.board
 
+import com.gracefultools.astrid.ui.theme.TouchLayout
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
@@ -150,9 +151,12 @@ fun BoardContent(
                 }
             },
     ) {
-        // iOS's boardColumnsVisible: floor(width / 300), 1...5, columns to a screen — one on a phone.
-        val visible = (maxWidth.value / 300f).toInt().coerceIn(1, 5)
-        val columnWidth = (maxWidth - Spacing.s8 * 2 - Spacing.s8 * (visible - 1)) / visible
+        // iOS's boardColumnsVisible: floor(width / board-column-min-width), 1...5, columns to a
+        // screen — one on a phone. As iOS insets each column by half the gap, the screen edges
+        // get half a gap and the gutters between columns a whole one.
+        val visible = (maxWidth / TouchLayout.boardColumnMinWidth).toInt().coerceIn(1, 5)
+        val gap = TouchLayout.boardColumnGap
+        val columnWidth = (maxWidth - gap - gap * (visible - 1)) / visible
         // Open on the inbox column once the columns arrive (ADEV-135); a reload leaves the row be.
         var opened by remember(state.board?.listId) { mutableStateOf(false) }
         LaunchedEffect(columns.isNotEmpty(), visible) {
@@ -163,8 +167,8 @@ fun BoardContent(
         }
         LazyRow(
             state = row,
-            contentPadding = PaddingValues(horizontal = Spacing.s8, vertical = Spacing.s8),
-            horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
+            contentPadding = PaddingValues(horizontal = gap / 2, vertical = Spacing.s8),
+            horizontalArrangement = Arrangement.spacedBy(gap),
             flingBehavior = remember(row) { OneColumnFling(row) },
             modifier = Modifier.fillMaxSize().testTag("board"),
         ) {
@@ -232,16 +236,20 @@ private fun ColumnView(
 ) {
     val colors = AstridTheme.colors
     // iOS's BoardColumnView: a frame (white 0.8 on Ocean) around a recessed well (the theme's
-    // background), 6 walls, radius 12; an accent ring while a card hovers over it.
+    // background), board-column-wall walls, board-column-radius; an accent ring while a card hovers.
     val frame = when { colors.isDark -> colors.headerBg; colors == com.gracefultools.astrid.ui.theme.OceanColors -> colors.tokens.surface.copy(alpha = 0.8f); else -> colors.tokens.surface }
     val well = when { colors.isDark -> colors.bgPrimary; colors == com.gracefultools.astrid.ui.theme.OceanColors -> colors.bgPrimary; else -> colors.bgTertiary }
-    val shape = RoundedCornerShape(Radius.large)
+    val shape = RoundedCornerShape(TouchLayout.boardColumnRadius)
     Column(
         Modifier.width(width).fillMaxHeight().padding(bottom = Spacing.s8).clip(shape).background(frame)
             .border(3.dp, if (hoverIndex != null) colors.accent else Color.Transparent, shape)
-            .onGloballyPositioned { onBounds(it.boundsInWindow()) },
+            .onGloballyPositioned { onBounds(it.boundsInWindow()) }.testTag("board.column.${column.id}"),
     ) {
-        Column(Modifier.fillMaxWidth().padding(start = Spacing.s12, end = Spacing.s12, top = Spacing.s12, bottom = Spacing.s8), verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
+        Column(Modifier.fillMaxWidth().padding(
+                start = TouchLayout.boardColumnHeaderPaddingX, end = TouchLayout.boardColumnHeaderPaddingX,
+                top = TouchLayout.boardColumnHeaderPaddingTop, bottom = TouchLayout.boardColumnHeaderPaddingBottom,
+            ),
+            verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(column.name, style = com.gracefultools.astrid.ui.theme.TextStyles.headline, color = colors.textPrimary, modifier = Modifier.weight(1f), maxLines = 1)
                 Text(
@@ -254,15 +262,16 @@ private fun ColumnView(
                 Text(it, style = com.gracefultools.astrid.ui.theme.TextStyles.caption, color = colors.textSecondary, maxLines = 2)
             }
         }
-        Box(Modifier.weight(1f).fillMaxWidth().padding(horizontal = 6.dp).padding(bottom = if (column.kind == "done") 6.dp else 0.dp).background(well)) {
+        Box(Modifier.weight(1f).fillMaxWidth().padding(horizontal = TouchLayout.boardColumnWall).padding(bottom = if (column.kind == "done") TouchLayout.boardColumnWall else 0.dp).background(well)) {
         if (column.cards.isEmpty() && hoverIndex == null) {
             com.gracefultools.astrid.ui.common.AstridSpeechBubble(
-                stringResource(R.string.empty_state_default), Modifier.padding(Spacing.s8).heightIn(min = 160.dp), characterSize = 96.dp,
+                stringResource(R.string.empty_state_default), Modifier.padding(Spacing.s8).heightIn(min = TouchLayout.emptyColumnMinHeight).testTag("board.column.${column.id}.empty"),
+                characterSize = TouchLayout.emptyArt,
             )
         }
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(6.dp),
-            contentPadding = PaddingValues(horizontal = 6.dp, vertical = Spacing.s8),
+            verticalArrangement = Arrangement.spacedBy(TouchLayout.boardCardGap),
+            contentPadding = PaddingValues(horizontal = TouchLayout.boardColumnBodyPaddingX, vertical = TouchLayout.boardColumnBodyPaddingY),
             modifier = Modifier.fillMaxSize(),
         ) {
             itemsIndexed(column.cards, key = { _, it -> it.id }) { index, card ->

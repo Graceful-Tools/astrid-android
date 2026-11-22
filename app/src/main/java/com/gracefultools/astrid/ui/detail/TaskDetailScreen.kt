@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.TouchLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -364,7 +365,7 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
     if (detail.isCanceled) {
         Text(
             stringResource(R.string.tasks_wont_do_chip), style = TextStyles.caption, color = colors.textSecondary,
-            modifier = Modifier.padding(start = 62.dp, bottom = Spacing.s8).border(1.dp, colors.border, RoundedCornerShape(4.dp)).padding(horizontal = 6.dp, vertical = Spacing.s2),
+            modifier = Modifier.padding(start = TouchLayout.detailIconColumn, bottom = Spacing.s8).border(1.dp, colors.border, RoundedCornerShape(4.dp)).padding(horizontal = 6.dp, vertical = Spacing.s2),
         )
     }
     if (askSubtasks) {
@@ -849,7 +850,7 @@ private fun QueuedFiles(files: List<QueuedFile>, onRemove: (String) -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
     ) {
         files.forEach { file ->
-            Box(Modifier.size(62.dp)) {
+            Box(Modifier.size(TouchLayout.detailIconColumn)) {
                 Box(
                     Modifier.align(Alignment.BottomStart).size(56.dp).clip(RoundedCornerShape(Radius.small)).background(colors.field),
                     contentAlignment = Alignment.Center,

@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.common
 
+import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.foundation.border
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -32,7 +33,7 @@ val SelectionOutline = SemanticsPropertyKey<SelectionOutlineStyle>("SelectionOut
  */
 @Composable
 fun selectionOutlineStyle(): SelectionOutlineStyle = SelectionOutlineStyle(
-    width = AstridTokens.Size.Comfortable.selectionOutline,
+    width = TouchSize.selectionOutline,
     color = AstridTheme.colors.borderFocus.copy(alpha = AstridTokens.State.selectionOutlineOpacity),
 )
 

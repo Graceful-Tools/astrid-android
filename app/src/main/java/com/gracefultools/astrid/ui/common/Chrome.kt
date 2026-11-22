@@ -38,6 +38,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -119,8 +120,11 @@ fun HamburgerIcon(modifier: Modifier = Modifier) {
  * iOS's AstridSpeechBubble: the character at 160 beside a bubble of semibold body text (radius 16,
  * 2pt border, a pointer on its left edge aimed at the character).
  */
+/** The Astrid character beside a speech bubble, for tests that measure her. */
+const val CHARACTER_TAG = "astrid.character"
+
 @Composable
-fun AstridSpeechBubble(message: String, modifier: Modifier = Modifier, characterSize: androidx.compose.ui.unit.Dp = 160.dp) {
+fun AstridSpeechBubble(message: String, modifier: Modifier = Modifier, characterSize: androidx.compose.ui.unit.Dp = com.gracefultools.astrid.ui.theme.TouchLayout.emptyArt) {
     val colors = AstridTheme.colors
     val bubble = colors.bgSecondary
     val border = if (colors.isDark) colors.border else if (colors == com.gracefultools.astrid.ui.theme.OceanColors) colors.border else com.gracefultools.astrid.ui.theme.LightColors.border
@@ -130,7 +134,7 @@ fun AstridSpeechBubble(message: String, modifier: Modifier = Modifier, character
         else -> colors.borderHover
     }
     Row(modifier, verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12)) {
-        Image(painterResource(R.drawable.astrid_character), null, Modifier.size(characterSize))
+        Image(painterResource(R.drawable.astrid_character), null, Modifier.size(characterSize).testTag(CHARACTER_TAG))
         Box(Modifier.weight(1f)) {
             Text(
                 message, style = TextStyles.body, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
