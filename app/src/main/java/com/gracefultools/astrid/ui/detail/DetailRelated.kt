@@ -107,6 +107,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.CircleSize
 
 // ── Occurrences (AATD-52, F18) ───────────────────────────────────────────────────────────────
 
@@ -236,7 +237,7 @@ private fun ProjectFieldEditor(row: ProjectFieldRow, readOnly: Boolean, onSave: 
                 if (!readOnly && shown != null) {
                     Icon(
                         Icons.Outlined.Cancel, stringResource(R.string.tasks_project_fields_clear), tint = colors.textMuted,
-                        modifier = Modifier.size(32.dp).clip(CircleShape).clickable { onSave(null) }.padding(6.dp),
+                        modifier = Modifier.size(CircleSize.sm).clip(CircleShape).clickable { onSave(null) }.padding(6.dp),
                     )
                 }
             }
@@ -399,7 +400,7 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Icon(
                     Icons.Filled.Close, stringResource(R.string.actions_close), tint = ImmersiveColors.contentSecondary,
-                    modifier = Modifier.size(56.dp).clip(CircleShape).clickable(onClick = onClose).padding(14.dp),
+                    modifier = Modifier.size(CircleSize.close).clip(CircleShape).clickable(onClick = onClose).padding(14.dp),
                 )
             }
             Spacer(Modifier.weight(1f))
@@ -414,13 +415,13 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
             )
             Spacer(Modifier.height(Spacing.s48))
             Box(
-                Modifier.size(100.dp).clip(CircleShape).background(ImmersiveColors.control)
+                Modifier.size(CircleSize.timer).clip(CircleShape).background(ImmersiveColors.control)
                     .clickable(role = Role.Button) { if (running) vm.stopTimer() else vm.startTimer() },
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     if (running) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                    stringResource(if (running) R.string.timer_stop else R.string.timer_start), tint = ImmersiveColors.onControl, modifier = Modifier.size(40.dp),
+                    stringResource(if (running) R.string.timer_stop else R.string.timer_start), tint = ImmersiveColors.onControl, modifier = Modifier.size(IconSize.timer),
                 )
             }
             Spacer(Modifier.height(Spacing.s24))

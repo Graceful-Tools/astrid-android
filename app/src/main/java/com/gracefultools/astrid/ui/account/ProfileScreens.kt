@@ -117,6 +117,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.SpinnerStroke
+import com.gracefultools.astrid.ui.theme.CircleSize
 
 /** A card the way iOS's profile draws one: bgSecondary, radius 8, a 1pt border. */
 @Composable
@@ -180,7 +181,7 @@ private fun UserCard(image: String?, name: String, initials: String, email: Stri
             ) {
                 Avatar(image, initials, AvatarSize.profile)
                 if (onEdit != null) Box(
-                    Modifier.align(Alignment.BottomEnd).offset(x = (-4).dp, y = (-4).dp).size(24.dp).clip(CircleShape).background(colors.accent),
+                    Modifier.align(Alignment.BottomEnd).offset(x = (-4).dp, y = (-4).dp).size(CircleSize.badge).clip(CircleShape).background(colors.accent),
                     contentAlignment = Alignment.Center,
                 ) { Icon(Icons.Filled.PhotoCamera, null, tint = colors.accentText, modifier = Modifier.size(IconSize.xs)) }
             }
@@ -349,7 +350,7 @@ private fun EditProfileSheet(user: AccountUser, saving: Boolean, vm: ProfileView
                     }
                     IconButton(
                         onClick = pick,
-                        modifier = Modifier.align(Alignment.BottomEnd).offset(x = (-4).dp, y = (-4).dp).size(36.dp).clip(CircleShape).background(colors.accent),
+                        modifier = Modifier.align(Alignment.BottomEnd).offset(x = (-4).dp, y = (-4).dp).size(CircleSize.md).clip(CircleShape).background(colors.accent),
                     ) { Icon(Icons.Filled.PhotoCamera, stringResource(R.string.account_change_photo), tint = colors.accentText, modifier = Modifier.size(IconSize.md)) }
                 }
                 Text(stringResource(R.string.profile_change_photo), style = TextStyles.footnote, color = colors.textMuted)

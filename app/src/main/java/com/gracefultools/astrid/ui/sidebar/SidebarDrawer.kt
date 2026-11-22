@@ -73,6 +73,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.CircleSize
 
 /** iOS SidebarBrandHeader: the logo column every row's icon centres in, and the gap after it. */
 private val LogoColumn = 28.8.dp
@@ -213,7 +214,7 @@ private fun BrandHeader(onSearch: () -> Unit) {
         )
         Icon(
             Icons.Outlined.Search, stringResource(R.string.navigation_search), tint = colors.textPrimary,
-            modifier = Modifier.size(40.dp).clip(CircleShape).clickable(onClick = onSearch).padding(Spacing.s8).testTag("sidebar:search"),
+            modifier = Modifier.size(CircleSize.lg).clip(CircleShape).clickable(onClick = onSearch).padding(Spacing.s8).testTag("sidebar:search"),
         )
     }
 }

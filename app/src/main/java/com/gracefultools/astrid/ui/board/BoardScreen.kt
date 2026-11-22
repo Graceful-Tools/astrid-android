@@ -393,7 +393,7 @@ private fun ColumnQuickAdd(columnId: String, onAdd: suspend (String, String) -> 
         androidx.compose.material3.Icon(
             androidx.compose.material.icons.Icons.Filled.AddCircle, stringResource(R.string.tasks_add_task),
             tint = if (text.isBlank()) colors.textMuted else colors.accentInk,
-            modifier = Modifier.size(30.dp).clip(androidx.compose.foundation.shape.CircleShape).clickable(enabled = text.isNotBlank()) { submit() },
+            modifier = Modifier.size(com.gracefultools.astrid.ui.theme.CircleSize.compact).clip(androidx.compose.foundation.shape.CircleShape).clickable(enabled = text.isNotBlank()) { submit() },
         )
     }
 }

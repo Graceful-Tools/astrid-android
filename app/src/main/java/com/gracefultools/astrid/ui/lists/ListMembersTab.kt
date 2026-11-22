@@ -88,7 +88,7 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
             if (settings.canManageMembers) state.pendingInvitations.forEach { invite ->
                 divider()
                 FormRow {
-                    Box(Modifier.size(32.dp).clip(CircleShape).background(colors.neutral.copy(alpha = 0.3f)), contentAlignment = Alignment.Center) {
+                    Box(Modifier.size(AvatarSize.md).clip(CircleShape).background(colors.neutral.copy(alpha = 0.3f)), contentAlignment = Alignment.Center) {
                         Icon(Icons.Outlined.Email, null, tint = colors.neutral, modifier = Modifier.size(IconSize.md))
                     }
                     Column(Modifier.weight(1f)) {

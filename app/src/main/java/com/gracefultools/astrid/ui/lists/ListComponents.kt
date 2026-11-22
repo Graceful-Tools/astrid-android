@@ -74,6 +74,7 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.SpinnerStroke
+import com.gracefultools.astrid.ui.theme.CircleSize
 
 /**
  * iOS ListColorSwatches: the palette as 28dp circles spread evenly across the row, a white
@@ -92,7 +93,7 @@ internal fun ColorSwatches(choices: List<String>, current: String, onPick: (Stri
                     .semantics(mergeDescendants = true) { selected = chosen; contentDescription = swatch },
                 contentAlignment = Alignment.Center,
             ) {
-                Box(Modifier.size(28.dp).clip(CircleShape).background(parseColor(swatch)), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(CircleSize.swatch).clip(CircleShape).background(parseColor(swatch)), contentAlignment = Alignment.Center) {
                     if (chosen) Icon(Icons.Filled.Check, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(IconSize.sm))
                 }
             }
@@ -105,7 +106,7 @@ internal fun ColorSwatches(choices: List<String>, current: String, onPick: (Stri
             contentAlignment = Alignment.Center,
         ) {
             val wheel = Brush.sweepGradient(HueWheel)
-            Box(Modifier.size(28.dp).clip(CircleShape).background(wheel).padding(Spacing.s4).clip(CircleShape).background(parseColor(current)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(CircleSize.swatch).clip(CircleShape).background(wheel).padding(Spacing.s4).clip(CircleShape).background(parseColor(current)), contentAlignment = Alignment.Center) {
                 if (isCustom) Icon(Icons.Filled.Check, null, tint = AstridTheme.colors.onFill, modifier = Modifier.size(IconSize.xs))
             }
         }

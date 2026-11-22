@@ -53,6 +53,7 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.SpinnerStroke
+import com.gracefultools.astrid.ui.theme.AvatarSize
 
 /**
  * iOS ListEditView for a new list ("New list"): the name, a description and the people to invite,
@@ -133,7 +134,7 @@ fun NewListScreen(vm: NewListViewModel, onCancel: () -> Unit, onCreated: (String
                         Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgSecondary).padding(Spacing.s12),
                         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
                     ) {
-                        Box(Modifier.size(32.dp).clip(CircleShape).background(colors.accent.copy(alpha = 0.2f)), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(AvatarSize.md).clip(CircleShape).background(colors.accent.copy(alpha = 0.2f)), contentAlignment = Alignment.Center) {
                             Text(invitee.email.take(1).uppercase(), style = TextStyles.caption, color = colors.accentInk)
                         }
                         Column(Modifier.weight(1f)) {

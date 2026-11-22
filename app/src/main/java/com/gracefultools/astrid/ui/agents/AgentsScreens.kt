@@ -89,6 +89,8 @@ import com.gracefultools.astrid.ui.theme.Success
 import com.gracefultools.astrid.ui.theme.TextStyles
 import kotlinx.coroutines.delay
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.CircleSize
+import com.gracefultools.astrid.ui.theme.AvatarSize
 
 /** Routes the hub pushes. */
 object AgentRoutes {
@@ -690,7 +692,7 @@ private fun CustomAgentRow(agent: CustomAgent, busy: Boolean, uploadingPhoto: Bo
         // The web's Custom Agents photo (AATD-95): the avatar is the button that changes it.
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.size(40.dp).clip(CircleShape)
+            modifier = Modifier.size(AvatarSize.xl).clip(CircleShape)
                 .clickable(enabled = !uploadingPhoto, role = Role.Button, onClickLabel = stringResource(R.string.settings_custom_agents_change_photo), onClick = pickPhoto)
                 .testTag("customAgentPhoto-${agent.id}"),
         ) {
@@ -701,7 +703,7 @@ private fun CustomAgentRow(agent: CustomAgent, busy: Boolean, uploadingPhoto: Bo
                     modifier = Modifier.matchParentSize(),
                 )
             } else {
-                BrandIcon(R.drawable.ai_openclaw, size = 40.dp)
+                BrandIcon(R.drawable.ai_openclaw, size = AvatarSize.xl)
             }
             if (uploadingPhoto) SmallSpinner()
         }
@@ -718,7 +720,7 @@ private fun CustomAgentRow(agent: CustomAgent, busy: Boolean, uploadingPhoto: Bo
         if (busy) SmallSpinner() else {
             Icon(
                 Icons.Filled.Delete, stringResource(R.string.settings_openclaw_delete_agent), tint = AstridTheme.colors.errorInk,
-                modifier = Modifier.size(36.dp).clip(CircleShape).clickable(role = Role.Button, onClick = onDelete).padding(Spacing.s8),
+                modifier = Modifier.size(CircleSize.md).clip(CircleShape).clickable(role = Role.Button, onClick = onDelete).padding(Spacing.s8),
             )
         }
     }
@@ -823,7 +825,7 @@ fun AstridModelScreen(vm: AstridModelViewModel, onBack: () -> Unit, onAddKey: ()
                     subtitleColor = colors.textMuted,
                     selected = state.model.selected == null,
                     leading = {
-                        Box(Modifier.size(36.dp).clip(CircleShape).background(colors.neutral.copy(alpha = 0.15f)), contentAlignment = Alignment.Center) {
+                        Box(Modifier.size(CircleSize.md).clip(CircleShape).background(colors.neutral.copy(alpha = 0.15f)), contentAlignment = Alignment.Center) {
                             Icon(Icons.Filled.Close, null, tint = colors.neutral, modifier = Modifier.size(IconSize.md))
                         }
                     },
