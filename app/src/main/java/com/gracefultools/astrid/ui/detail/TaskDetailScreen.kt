@@ -136,6 +136,7 @@ import com.gracefultools.astrid.ui.theme.shadow
 import com.gracefultools.astrid.ui.theme.TypeSize
 import kotlinx.coroutines.launch
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.CircleSize
 
 /**
  * iOS's TaskDetailViewNew (AATD-48): the "Task Details" header (tap the title to go back to the
@@ -435,7 +436,7 @@ private fun WhoRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailVie
                 Avatar(who.image, initialsOf(who.name, who.email), AvatarSize.xs)
                 Text(who.display, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             } else {
-                Box(Modifier.size(24.dp).clip(CircleShape).border(1.5.dp, colors.textMuted, CircleShape), contentAlignment = Alignment.Center) {
+                Box(Modifier.size(AvatarSize.xs).clip(CircleShape).border(1.5.dp, colors.textMuted, CircleShape), contentAlignment = Alignment.Center) {
                     Text(stringResource(R.string.tasks_unassigned_glyph), fontSize = TypeSize.caption2, fontWeight = FontWeight.SemiBold, color = colors.textMuted)
                 }
                 Text(stringResource(R.string.assignee_unassigned), style = TextStyles.body, color = colors.textMuted, modifier = Modifier.weight(1f))
@@ -923,7 +924,7 @@ private fun ComposerButton(icon: ImageVector, label: String, onClick: () -> Unit
 private fun ComposerButton(icon: ImageVector, label: String, tint: Color, onClick: () -> Unit) {
     val colors = AstridTheme.colors
     Box(
-        Modifier.size(40.dp).clip(CircleShape).background(colors.field).border(1.dp, colors.fieldBorder, CircleShape).clickable(onClick = onClick),
+        Modifier.size(CircleSize.lg).clip(CircleShape).background(colors.field).border(1.dp, colors.fieldBorder, CircleShape).clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) { Icon(icon, label, tint = tint, modifier = Modifier.size(IconSize.xl)) }
 }

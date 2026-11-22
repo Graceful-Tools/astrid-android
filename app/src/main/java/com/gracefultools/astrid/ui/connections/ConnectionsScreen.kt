@@ -64,6 +64,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.CircleSize
 
 /** The core names a section by resource key (`connections.category.app`); these are iOS's words for them. */
 @Composable
@@ -143,7 +144,7 @@ fun ConnectionsScreen(vm: ConnectionsViewModel, core: Core, onBack: () -> Unit) 
         actions = {
             Icon(
                 Icons.Filled.Add, stringResource(R.string.settings_connections_new), tint = colors.accentInk,
-                modifier = Modifier.size(32.dp).clip(CircleShape).clickable(role = Role.Button) { openings++; editor = EditorMode(null, openings) }.padding(Spacing.s4),
+                modifier = Modifier.size(CircleSize.sm).clip(CircleShape).clickable(role = Role.Button) { openings++; editor = EditorMode(null, openings) }.padding(Spacing.s4),
             )
         },
     ) {

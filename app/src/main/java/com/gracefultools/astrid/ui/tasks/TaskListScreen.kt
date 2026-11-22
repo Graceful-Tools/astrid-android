@@ -113,6 +113,7 @@ import com.gracefultools.astrid.ui.theme.shadow
 import kotlinx.coroutines.launch
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.SpinnerStroke
+import com.gracefultools.astrid.ui.theme.CircleSize
 
 /** iOS's HeaderToggleSegment: what the main pane shows for a list. */
 enum class ViewMode { LIST, MESSAGES, BOARD }
@@ -261,7 +262,7 @@ private fun ListHeader(
         if (onCopyList != null) {
             val copyLabel = stringResource(R.string.lists_copy_list)
             Box(
-                Modifier.padding(start = Spacing.s8).size(32.dp).clip(CircleShape)
+                Modifier.padding(start = Spacing.s8).size(CircleSize.sm).clip(CircleShape)
                     .clickable(enabled = !copyingList, role = androidx.compose.ui.semantics.Role.Button, onClick = onCopyList)
                     .semantics { contentDescription = copyLabel }.testTag("copyList"),
                 contentAlignment = Alignment.Center,
@@ -304,7 +305,7 @@ private fun ListHeader(
 private fun HeaderButton(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, onClick: () -> Unit) {
     Icon(
         icon, label, tint = AstridTheme.colors.textPrimary,
-        modifier = Modifier.padding(start = Spacing.s8).size(32.dp).clip(CircleShape).clickable(onClick = onClick).padding(5.dp),
+        modifier = Modifier.padding(start = Spacing.s8).size(CircleSize.sm).clip(CircleShape).clickable(onClick = onClick).padding(5.dp),
     )
 }
 
@@ -412,7 +413,7 @@ private fun QuickAddBar(
         Icon(
             Icons.Filled.AddCircle, stringResource(R.string.tasks_add_task),
             tint = if (text.isBlank()) colors.textMuted else colors.accentInk,
-            modifier = Modifier.size(32.dp).clip(CircleShape).clickable(enabled = text.isNotBlank()) { submit(open = true) },
+            modifier = Modifier.size(CircleSize.sm).clip(CircleShape).clickable(enabled = text.isNotBlank()) { submit(open = true) },
         )
     }
     if (picker) {

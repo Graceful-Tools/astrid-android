@@ -32,6 +32,8 @@ object IconSize {
      *  remove an attachment, a settings row's icon (iOS 20pt `xmark.circle.fill` / `plus.circle`, and
      *  SettingsView's 24-wide icon column). */
     val control = 22.dp
+    /** The play / pause glyph on the full-screen timer's button (iOS TaskTimerView, 40pt). */
+    val timer = 40.dp
 }
 
 /** The line of a progress ring (iOS `ProgressView`'s stroke). */

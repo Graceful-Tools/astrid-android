@@ -73,6 +73,7 @@ import com.gracefultools.astrid.ui.theme.TextStyles
 import kotlinx.coroutines.delay
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.SpinnerStroke
+import com.gracefultools.astrid.ui.theme.CircleSize
 
 /** iOS opens these in-app; Android's equivalent is a Custom Tab (ASTRID.md §2). */
 internal fun openInCustomTab(context: Context, url: String) {
@@ -332,7 +333,7 @@ internal fun CredentialCopyRow(label: String, value: String, secret: Boolean = f
             Icon(
                 if (copied) Icons.Filled.Check else Icons.Filled.ContentCopy, stringResource(R.string.actions_copy),
                 tint = if (copied) AstridTheme.colors.successInk else colors.accentInk,
-                modifier = Modifier.size(36.dp).clip(CircleShape).clickable(role = Role.Button) { copyToClipboard(context, value); copied = true }.padding(Spacing.s8),
+                modifier = Modifier.size(CircleSize.md).clip(CircleShape).clickable(role = Role.Button) { copyToClipboard(context, value); copied = true }.padding(Spacing.s8),
             )
         }
     }

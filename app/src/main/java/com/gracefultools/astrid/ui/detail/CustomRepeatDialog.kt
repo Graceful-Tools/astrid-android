@@ -68,6 +68,7 @@ import java.time.Month
 import java.time.ZoneOffset
 import java.time.format.TextStyle
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.CircleSize
 
 /** The wire's weekday names, Monday first — the order iOS's editor offers them. */
 private val WEEKDAYS = DayOfWeek.entries.map { it to it.name.lowercase() }
@@ -137,7 +138,7 @@ fun CustomRepeatDialog(
                         WEEKDAYS.forEach { (day, wire) ->
                             val chosen = pattern.weekdays.orEmpty().contains(wire)
                             Box(
-                                Modifier.size(32.dp).clip(CircleShape).background(if (chosen) colors.accent else colors.bgSecondary)
+                                Modifier.size(CircleSize.sm).clip(CircleShape).background(if (chosen) colors.accent else colors.bgSecondary)
                                     .toggleable(value = chosen, role = Role.Checkbox) {
                                         val current = pattern.weekdays.orEmpty()
                                         val next = if (chosen) current - wire else current + wire
