@@ -159,4 +159,6 @@
     <string name="settings_custom_agents_photo_updated">Profielfoto bijgewerkt</string>
     <string name="settings_custom_agents_photo_failed">Profielfoto kon niet worden bijgewerkt</string>
     <string name="settings_appearance_task_details_footer">Kies hoe taakdetails worden weergegeven. Lijst geeft prioriteit en toegewezene een eigen rij. Project is compact en het vakje opent een keuzemenu in plaats van de taak te voltooien.</string>
+    <string name="settings_agents_key_placeholder_copilot">Copilot-token</string>
+    <string name="settings_agents_key_placeholder_muse">Meta-API-sleutel</string>
 </resources>

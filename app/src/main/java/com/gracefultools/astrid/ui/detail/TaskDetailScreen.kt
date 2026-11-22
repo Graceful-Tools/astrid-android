@@ -212,7 +212,12 @@ fun TaskDetailScreen(
                         }
                         val source = detail.task.completedSource
                         if (detail.task.completed && source != null && source != "astrid") {
-                            val provider = mapOf("google" to "Google Tasks", "github" to "GitHub", "apple" to "Apple Reminders")[source] ?: source
+                            val provider = when (source) {
+                                "google" -> stringResource(R.string.settings_google_tasks)
+                                "github" -> "GitHub"
+                                "apple" -> stringResource(R.string.provider_apple_reminders)
+                                else -> source
+                            }
                             Text(
                                 stringResource(R.string.task_detail_completed_via, provider), style = TextStyles.caption2, color = colors.textMuted,
                                 modifier = Modifier.padding(horizontal = Spacing.s16, vertical = Spacing.s4),

@@ -117,12 +117,13 @@ internal fun agentIcon(service: String): Int? = when (service) {
 }
 
 /** iOS `AIService.keyPlaceholder` / `documentationURL`: where a provider's key comes from. */
+@Composable
 private fun keyPlaceholder(service: String): String? = when (service) {
     "claude" -> "sk-ant-..."
     "openai" -> "sk-..."
     "gemini" -> "AIza..."
-    "copilot" -> "Copilot token"
-    "muse" -> "Meta API key"
+    "copilot" -> stringResource(R.string.settings_agents_key_placeholder_copilot)
+    "muse" -> stringResource(R.string.settings_agents_key_placeholder_muse)
     else -> null
 }
 

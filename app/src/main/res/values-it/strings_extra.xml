@@ -159,4 +159,6 @@
     <string name="settings_custom_agents_photo_updated">Foto profilo aggiornata</string>
     <string name="settings_custom_agents_photo_failed">Impossibile aggiornare la foto profilo</string>
     <string name="settings_appearance_task_details_footer">Scegli come vengono disposti i dettagli dell\'attività. Elenco assegna a priorità e assegnatario righe proprie. Progetto è compatto e la casella apre un selettore invece di completare l\'attività.</string>
+    <string name="settings_agents_key_placeholder_copilot">Token di Copilot</string>
+    <string name="settings_agents_key_placeholder_muse">Chiave API di Meta</string>
 </resources>
