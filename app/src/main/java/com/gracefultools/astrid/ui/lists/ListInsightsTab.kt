@@ -55,6 +55,7 @@ import kotlin.math.ceil
 import kotlin.math.max
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.FrameSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /**
  * iOS ListInsightsView (AITD-545): the 7 / 30 / 90-day picker, New and Completed per day with their
@@ -126,7 +127,7 @@ private fun LineChart(series: List<InsightDay>, modifier: Modifier) {
     val dates = dateTicks(series)
     Column(modifier) {
         Row(Modifier.weight(1f)) {
-            Canvas(Modifier.weight(1f).fillMaxSize().padding(vertical = 6.dp)) {
+            Canvas(Modifier.weight(1f).fillMaxSize().padding(vertical = Gap.s6)) {
                 ticks.forEach { value ->
                     val y = size.height * (1f - value.toFloat() / top)
                     drawLine(grid, Offset(0f, y), Offset(size.width, y), strokeWidth = 1f)
@@ -144,7 +145,7 @@ private fun LineChart(series: List<InsightDay>, modifier: Modifier) {
                 line({ it.created }, created)
                 line({ it.completed }, Success)
             }
-            Column(Modifier.padding(start = 6.dp).fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
+            Column(Modifier.padding(start = Gap.s6).fillMaxHeight(), verticalArrangement = Arrangement.SpaceBetween) {
                 ticks.reversed().forEach { Text(it.toString(), style = TextStyles.caption2, color = colors.textSecondary) }
             }
         }
@@ -179,7 +180,7 @@ private fun dateTicks(series: List<InsightDay>): List<String> {
 
 @Composable
 private fun Legend(color: Color, label: String) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Gap.s6)) {
         Canvas(Modifier.size(DotSize.status)) { drawCircle(color) }
         Text(label, style = TextStyles.caption, color = AstridTheme.colors.textSecondary)
     }
@@ -201,7 +202,7 @@ private fun Lanes(lanes: List<InsightLane>) {
 @Composable
 private fun DurationRow(label: String, value: InsightDuration) {
     val colors = AstridTheme.colors
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Gap.s6)) {
         Text(label, style = TextStyles.subheadline, color = colors.textSecondary, modifier = Modifier.weight(1f))
         val median = ListInsightsFormat.duration(value)
         if (median != null) {

@@ -75,6 +75,7 @@ import kotlinx.coroutines.delay
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.SpinnerStroke
 import com.gracefultools.astrid.ui.theme.CircleSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /** iOS opens these in-app; Android's equivalent is a Custom Tab (ASTRID.md §2). */
 internal fun openInCustomTab(context: Context, url: String) {
@@ -243,7 +244,7 @@ internal fun NavRow(title: String, subtitle: String? = null, leading: (@Composab
         horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         leading?.invoke()
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Gap.s3)) {
             Text(title, style = TextStyles.body, color = colors.textPrimary)
             if (subtitle != null) Caption2(subtitle)
         }
@@ -267,7 +268,7 @@ internal fun SegmentedControl(options: List<String>, selected: Int, enabled: Boo
                 Modifier.weight(1f).heightIn(min = ControlHeight.sm)
                     .then(if (chosen) Modifier.shadow(1.dp, SegmentedShapes.thumb).clip(SegmentedShapes.thumb).background(colors.segmentThumb) else Modifier)
                     .selectable(selected = chosen, enabled = enabled, role = Role.RadioButton) { onSelect(index) }
-                    .padding(horizontal = Spacing.s4, vertical = 6.dp),
+                    .padding(horizontal = Spacing.s4, vertical = Gap.s6),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(

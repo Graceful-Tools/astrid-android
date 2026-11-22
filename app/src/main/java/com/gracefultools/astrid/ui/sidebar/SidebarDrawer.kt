@@ -75,6 +75,7 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.CircleSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /** iOS SidebarBrandHeader: the logo column every row's icon centres in, and the gap after it. */
 private val LogoColumn = 28.8.dp
@@ -110,7 +111,7 @@ fun SidebarDrawer(
         Box(Modifier.fillMaxHeight().statusBarsPadding()) {
             Column(Modifier.fillMaxHeight()) {
                 Group(Position.Only, Modifier.padding(top = Spacing.s8)) { BrandHeader(onSearch) }
-                LazyColumn(Modifier.weight(1f), contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 96.dp)) {
+                LazyColumn(Modifier.weight(1f), contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = Gap.floatingClearance)) {
                     state.myTasks?.let { mine ->
                         item { Group(Position.Only) { MyTasksEntry(mine, state.selectedId == mine.id, state.counts[mine.id] ?: 0) { onSelect(mine) } } }
                     }
@@ -181,7 +182,7 @@ private fun androidx.compose.foundation.lazy.LazyListScope.publicSection(
                 stringResource(seeAll), style = TextStyles.caption, color = AstridTheme.colors.accentInk,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = Spacing.s8).clip(RoundedCornerShape(Radius.medium))
                     .clickable(role = androidx.compose.ui.semantics.Role.Button, onClick = onSeeAll)
-                    .testTag("sidebar:$key-see-all").padding(start = Spacing.s12, top = 13.dp, bottom = 13.dp),
+                    .testTag("sidebar:$key-see-all").padding(start = Spacing.s12, top = Gap.s13, bottom = Gap.s13),
             )
         }
     }
@@ -247,7 +248,7 @@ private fun Group(position: Position, modifier: Modifier = Modifier, content: @C
                 bottom = if (position == Position.Only || position == Position.Last) 6.dp else 0.dp),
     ) {
         if (position == Position.Middle || position == Position.Last) {
-            androidx.compose.material3.HorizontalDivider(Modifier.padding(start = 56.dp, end = Spacing.s16), color = colors.divider)
+            androidx.compose.material3.HorizontalDivider(Modifier.padding(start = Gap.sidebarDividerInset, end = Spacing.s16), color = colors.divider)
         }
         content()
     }
@@ -258,7 +259,7 @@ private fun Group(position: Position, modifier: Modifier = Modifier, content: @C
 private fun Section(title: String) {
     Text(
         title, style = TextStyles.headline, color = AstridTheme.colors.textSecondary,
-        modifier = Modifier.padding(start = 28.dp, top = Spacing.s8, bottom = Spacing.s8).semantics { heading() },
+        modifier = Modifier.padding(start = Gap.s28, top = Spacing.s8, bottom = Spacing.s8).semantics { heading() },
     )
 }
 
@@ -274,13 +275,13 @@ private fun RowShell(
     val colors = AstridTheme.colors
     @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
     Row(
-        Modifier.fillMaxWidth().padding(horizontal = Spacing.s8, vertical = 1.dp)
+        Modifier.fillMaxWidth().padding(horizontal = Spacing.s8, vertical = Gap.s1)
             .clip(RoundedCornerShape(Radius.medium))
             .background(if (selected) (if (colors.isDark) colors.bgTertiary else colors.accent.copy(alpha = 0.1f)) else Color.Transparent)
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
             .testTag(tag)
             .semantics { this.selected = selected }
-            .padding(start = Spacing.s12, end = Spacing.s4, top = 13.dp, bottom = 13.dp),
+            .padding(start = Spacing.s12, end = Spacing.s4, top = Gap.s13, bottom = Gap.s13),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(LogoGap),
         content = content,
@@ -389,7 +390,7 @@ private fun AccountCard(user: com.gracefultools.astrid.model.UserSummary?, onPro
         }
         Icon(
             Icons.Outlined.Settings, settings, tint = colors.textPrimary,
-            modifier = Modifier.size(TouchSize.hitTarget).clip(CircleShape).clickable(onClick = onSettings).padding(10.dp).testTag("sidebar:settings"),
+            modifier = Modifier.size(TouchSize.hitTarget).clip(CircleShape).clickable(onClick = onSettings).padding(Gap.s10).testTag("sidebar:settings"),
         )
     }
 }

@@ -55,6 +55,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /**
  * iOS's CommentSectionViewEnhanced (AATD-53): "Comments (n)" with Show/Hide system, the empty line,
@@ -86,7 +87,7 @@ internal fun CommentsSection(
                 Text(
                     stringResource(if (showSystem) R.string.comments_hide_system else R.string.comments_show_system),
                     style = TextStyles.caption, color = colors.accentInk,
-                    modifier = Modifier.clip(RoundedCornerShape(Radius.small)).clickable { showSystem = !showSystem }.padding(6.dp),
+                    modifier = Modifier.clip(RoundedCornerShape(Radius.small)).clickable { showSystem = !showSystem }.padding(Gap.s6),
                 )
             }
             // iOS's offline mark in the header: the thread is what this device last heard (AATD-62).
@@ -116,7 +117,7 @@ private fun StreakRow(streak: com.gracefultools.astrid.model.CompletionStreak) {
     val colors = AstridTheme.colors
     var open by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).clickable { open = !open }.padding(vertical = Spacing.s4), horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Gap.s6)) {
             Icon(Icons.Filled.LocalFireDepartment, null, tint = colors.tokens.categoryOrange, modifier = Modifier.size(IconSize.md))
             Text(
                 if (streak.spanDays != null) stringResource(R.string.comments_streak_summary, streak.count, streak.spanDays)
@@ -171,7 +172,7 @@ private fun CommentBubble(
                 Column(
                     Modifier.widthIn(max = MaxSize.bubble).clip(RoundedCornerShape(Radius.medium)).background(bubble)
                         .combinedClickable(onClick = {}, onLongClick = { menu = true }).padding(Spacing.s12),
-                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalArrangement = Arrangement.spacedBy(Gap.s6),
                 ) {
                     if (comment.showsText) {
                         if (comment.blocks.isNotEmpty()) MarkdownView(comment.blocks, onReference = { kind, id -> if (kind == "list") onOpenList(id) else onOpenTask(id) })
@@ -180,8 +181,8 @@ private fun CommentBubble(
                     comment.files.filter { it.rendersInline }.forEach { file -> InlineImage(file, fetch) { onOpenFile(file) } }
                     comment.files.filterNot { it.rendersInline }.forEach { file ->
                         Row(
-                            Modifier.clip(RoundedCornerShape(Radius.medium)).background(colors.bgTertiary).clickable { onOpenFile(file) }.padding(horizontal = 10.dp, vertical = 6.dp),
-                            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            Modifier.clip(RoundedCornerShape(Radius.medium)).background(colors.bgTertiary).clickable { onOpenFile(file) }.padding(horizontal = Gap.s10, vertical = Gap.s6),
+                            verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Gap.s6),
                         ) {
                             Icon(Icons.Filled.AttachFile, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.md))
                             Text(file.name, style = TextStyles.subheadline, color = colors.textPrimary)
@@ -206,7 +207,7 @@ private fun CommentBubble(
             Text(
                 listOfNotNull(who.takeIf { it.isNotEmpty() }, time).joinToString(" · ") +
                     if (comment.isPending) "  " + stringResource(R.string.tasks_waiting_to_send) else "",
-                style = TextStyles.caption2, color = colors.textMuted, modifier = Modifier.padding(top = 3.dp, start = Spacing.s4, end = Spacing.s4),
+                style = TextStyles.caption2, color = colors.textMuted, modifier = Modifier.padding(top = Gap.s3, start = Spacing.s4, end = Spacing.s4),
             )
         }
         if (mine) { Spacer(Modifier.size(Spacing.s8)); Avatar(comment.authorImage, comment.authorInitials ?: "", AvatarSize.md) }

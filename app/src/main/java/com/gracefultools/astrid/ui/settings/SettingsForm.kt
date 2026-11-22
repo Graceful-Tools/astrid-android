@@ -51,6 +51,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /*
  * iOS's settings pages are a `Form`/`List` in the inset-grouped style over the theme background:
@@ -113,7 +114,7 @@ internal fun FormSection(header: String? = null, footer: String? = null, content
 /** The hairline between two rows, inset past the leading icon as iOS's is. */
 @Composable
 internal fun FormDivider(inset: Boolean = true) {
-    HorizontalDivider(Modifier.padding(start = if (inset) 52.dp else Spacing.s16), thickness = Hairline, color = AstridTheme.colors.divider)
+    HorizontalDivider(Modifier.padding(start = if (inset) Gap.settingsDividerInset else Spacing.s16), thickness = Hairline, color = AstridTheme.colors.divider)
 }
 
 /** iOS's Label: the accent SF Symbol in a 24 frame, then the title. */
@@ -126,7 +127,7 @@ internal fun RowIcon(icon: ImageVector, tint: Color? = null) {
 @Composable
 internal fun FormRowFrame(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
     Row(
-        modifier.fillMaxWidth().heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s16, vertical = 10.dp),
+        modifier.fillMaxWidth().heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s16, vertical = Gap.s10),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
         content = content,

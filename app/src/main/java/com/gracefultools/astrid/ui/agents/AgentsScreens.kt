@@ -93,6 +93,7 @@ import kotlinx.coroutines.delay
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.CircleSize
 import com.gracefultools.astrid.ui.theme.AvatarSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /** Routes the hub pushes. */
 object AgentRoutes {
@@ -230,7 +231,7 @@ private fun AgentSection(vm: AgentsViewModel, state: AgentsState, agent: HubAgen
     FormSection(modifier = Modifier.alpha(if (agent.mode == "off") 0.65f else 1f)) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12)) {
             BrandIcon(agentIcon(agent.id))
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Gap.s3)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
                     Text(agent.name, style = TextStyles.body, color = colors.textPrimary)
                     if (!vm.isConfigured(agent) && agent.mode != "off") Caption2(stringResource(R.string.settings_agents_needs_setup), AstridTheme.colors.warningInk)

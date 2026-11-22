@@ -39,6 +39,7 @@ import com.gracefultools.astrid.R
 import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.TypeSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /**
  * Where the permission stands, as near to iOS's three states as Android lets us tell: granted;
@@ -138,7 +139,7 @@ fun ExactAlarmRow() {
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                 )
             }
-        }.padding(vertical = 6.dp),
+        }.padding(vertical = Gap.s6),
     ) {
         Text(stringResource(R.string.notifications_exact_alarms), color = colors.textPrimary, fontSize = TypeSize.body)
         Text(stringResource(R.string.notifications_exact_alarms_hint), color = colors.textSecondary, fontSize = TypeSize.footnote)

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.gracefultools.astrid.model.FileRow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import com.gracefultools.astrid.ui.theme.Gap
 
 /** Decode a picture no larger than it is drawn: a phone photo is 12 MP, a thumbnail is not. */
 object Thumbnails {
@@ -54,7 +55,7 @@ fun InlineImage(file: FileRow, fetch: (String, (String) -> Unit) -> Unit, onOpen
     bitmap?.let {
         Image(
             it.asImageBitmap(), contentDescription = file.name, contentScale = ContentScale.Crop,
-            modifier = Modifier.padding(top = 6.dp).widthIn(max = MaxSize.inlineImageWidth).heightIn(max = MaxSize.inlineImageHeight)
+            modifier = Modifier.padding(top = Gap.s6).widthIn(max = MaxSize.inlineImageWidth).heightIn(max = MaxSize.inlineImageHeight)
                 .clip(RoundedCornerShape(Radius.large)).clickable(onClick = onOpen),
         )
     }

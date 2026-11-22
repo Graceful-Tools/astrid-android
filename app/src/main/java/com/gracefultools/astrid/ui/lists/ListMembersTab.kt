@@ -58,6 +58,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /**
  * iOS ListMembershipTab: the roster (owner first, members, pending invitations), Add Member, Share,
@@ -271,8 +272,8 @@ private fun MemberRow(member: Member, canManage: Boolean, vm: ListSettingsViewMo
                 Row(
                     Modifier.clip(RoundedCornerShape(Radius.small)).clickable(role = Role.Button, onClickLabel = menuLabel) { open = true }
                         .semantics(mergeDescendants = true) { contentDescription = menuLabel }
-                        .padding(horizontal = Spacing.s8, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        .padding(horizontal = Spacing.s8, vertical = Gap.s6),
+                    verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Gap.s6),
                 ) {
                     Text(roleLabel(member.role), style = TextStyles.caption, color = colors.textMuted)
                     Icon(Icons.Filled.MoreVert, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.lg))
@@ -300,6 +301,6 @@ private fun Pill(label: String, tint: Color, onClick: () -> Unit) {
     Text(
         label, style = TextStyles.caption, color = tint,
         modifier = Modifier.clip(RoundedCornerShape(Radius.small)).background(tint.copy(alpha = 0.1f))
-            .clickable(role = Role.Button, onClick = onClick).padding(horizontal = Spacing.s12, vertical = 6.dp),
+            .clickable(role = Role.Button, onClick = onClick).padding(horizontal = Spacing.s12, vertical = Gap.s6),
     )
 }

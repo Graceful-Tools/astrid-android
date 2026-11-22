@@ -44,6 +44,7 @@ import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /*
  * iOS's grouped Form, drawn in Compose: a section is an uppercase footnote header, a rounded card of
@@ -62,7 +63,7 @@ internal fun FormSection(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val colors = AstridTheme.colors
-    Column(Modifier.fillMaxWidth().padding(horizontal = Spacing.s16), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Column(Modifier.fillMaxWidth().padding(horizontal = Spacing.s16), verticalArrangement = Arrangement.spacedBy(Gap.s6)) {
         if (title != null || header != null) {
             Row(
                 Modifier.padding(horizontal = Spacing.s16).semantics(mergeDescendants = true) { heading() },
@@ -88,7 +89,7 @@ internal fun FormRow(
     Row(
         modifier.fillMaxWidth()
             .then(if (onClick != null) Modifier.clickable(onClickLabel = onClickLabel, role = Role.Button, onClick = onClick) else Modifier)
-            .heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s16, vertical = 10.dp),
+            .heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s16, vertical = Gap.s10),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
         content = content,
@@ -137,7 +138,7 @@ internal fun SegmentedTabs(items: List<Pair<ImageVector?, String>>, selected: In
             if (selected in positions.indices) {
                 Box(
                     androidx.compose.material3.TabRowDefaults.run { Modifier.tabIndicatorOffset(positions[selected]) }
-                        .padding(1.dp).fillMaxWidth().heightIn(min = ControlHeight.segmentThumb)
+                        .padding(Gap.s1).fillMaxWidth().heightIn(min = ControlHeight.segmentThumb)
                         .shadow(1.dp, SegmentedShapes.thumb).clip(SegmentedShapes.thumb).background(thumb)
                         .border(Hairline, ImmersiveColors.hairline, SegmentedShapes.thumb),
                 )
@@ -151,7 +152,7 @@ internal fun SegmentedTabs(items: List<Pair<ImageVector?, String>>, selected: In
                 selectedContentColor = colors.textPrimary, unselectedContentColor = colors.textPrimary,
                 modifier = Modifier.heightIn(min = ControlHeight.sm),
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4), modifier = Modifier.padding(vertical = 6.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4), modifier = Modifier.padding(vertical = Gap.s6)) {
                     if (icon != null) Icon(icon, null, modifier = Modifier.size(IconSize.tab))
                     Text(label, style = TextStyles.footnote, fontWeight = if (index == selected) FontWeight.SemiBold else FontWeight.Normal, maxLines = 1)
                 }

@@ -75,6 +75,7 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 import com.gracefultools.astrid.ui.theme.FrameSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /** The card being dragged: which, where the finger is (window), and where on the card it took hold. */
 private data class Drag(val card: TaskRow, val from: String, val pointer: Offset, val grab: Offset, val travelled: Float)
@@ -374,13 +375,13 @@ private fun ColumnQuickAdd(columnId: String, onAdd: suspend (String, String) -> 
         scope.launch { if (!onAdd(columnId, title)) text = title }
     }
     Row(
-        Modifier.fillMaxWidth().padding(horizontal = 10.dp, vertical = Spacing.s8),
+        Modifier.fillMaxWidth().padding(horizontal = Gap.s10, vertical = Spacing.s8),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
     ) {
         Box(
             Modifier.weight(1f).clip(RoundedCornerShape(com.gracefultools.astrid.ui.theme.Radius.medium)).background(colors.field)
                 .border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(com.gracefultools.astrid.ui.theme.Radius.medium)).heightIn(min = ControlHeight.field)
-                .padding(horizontal = 10.dp, vertical = 9.dp),
+                .padding(horizontal = Gap.s10, vertical = Gap.s9),
             contentAlignment = Alignment.CenterStart,
         ) {
             if (text.isEmpty()) Text(placeholder, style = com.gracefultools.astrid.ui.theme.TextStyles.body, color = colors.inputPlaceholder)
