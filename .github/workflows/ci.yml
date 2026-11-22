@@ -64,14 +64,25 @@ jobs:
           emulator-options: -no-window -no-audio -no-snapshot -no-boot-anim -gpu swiftshader_indirect
           # Each line is its own shell. A Custom Tab left on top by a sign-in check covers the app
           # and times every test out (docs/TESTING.md), so Chrome goes first.
+          # A loaded emulator raises "System UI isn't responding": the dialog takes window focus from
+          # the app, and Espresso's pressBack then fails with RootViewWithoutFocusException
+          # (AccessibilityTest.kt:57, runs 43423438064, 43481346972, 45016372422; reproduced on the
+          # dev Mac's emulator, where dumpsys showed the ANR window focused). hide_error_dialogs keeps
+          # it from appearing; an app crash still fails the run, as instrumentation dies with it.
+          # Then one retry for whatever else the emulator does: a real failure fails both attempts,
+          # and the first attempt's report and logcat are kept under build/ci-logs/.
           script: |
             adb shell am force-stop com.android.chrome || true
-            ./gradlew --console=plain connectedDebugAndroidTest
+            adb shell settings put global hide_error_dialogs 1
+            adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS || true
+            ./gradlew --console=plain connectedDebugAndroidTest || { mkdir -p build/ci-logs && cp -r app/build/reports/androidTests build/ci-logs/first-attempt-reports 2>/dev/null; adb logcat -d > build/ci-logs/first-attempt-logcat.txt; adb shell am force-stop com.android.chrome; echo "::warning::Instrumented tests failed once; retrying"; ./gradlew --console=plain connectedDebugAndroidTest; }
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: instrumented-reports
-          path: app/build/reports/androidTests/
+          path: |
+            app/build/reports/androidTests/
+            build/ci-logs/
           if-no-files-found: ignore
 
   # The Rust dependency tree the APK ships, against the RustSec database — on every push and
