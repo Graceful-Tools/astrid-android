@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.SegmentedShapes
 import com.gracefultools.astrid.ui.theme.Hairline
 import com.gracefultools.astrid.ui.theme.TouchSize
@@ -136,7 +137,7 @@ internal fun SegmentedTabs(items: List<Pair<ImageVector?, String>>, selected: In
             if (selected in positions.indices) {
                 Box(
                     androidx.compose.material3.TabRowDefaults.run { Modifier.tabIndicatorOffset(positions[selected]) }
-                        .padding(1.dp).fillMaxWidth().heightIn(min = 30.dp)
+                        .padding(1.dp).fillMaxWidth().heightIn(min = ControlHeight.segmentThumb)
                         .shadow(1.dp, SegmentedShapes.thumb).clip(SegmentedShapes.thumb).background(thumb)
                         .border(Hairline, ImmersiveColors.hairline, SegmentedShapes.thumb),
                 )
@@ -148,7 +149,7 @@ internal fun SegmentedTabs(items: List<Pair<ImageVector?, String>>, selected: In
             Tab(
                 selected = index == selected, onClick = { onSelect(index) },
                 selectedContentColor = colors.textPrimary, unselectedContentColor = colors.textPrimary,
-                modifier = Modifier.heightIn(min = 32.dp),
+                modifier = Modifier.heightIn(min = ControlHeight.sm),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4), modifier = Modifier.padding(vertical = 6.dp)) {
                     if (icon != null) Icon(icon, null, modifier = Modifier.size(IconSize.tab))

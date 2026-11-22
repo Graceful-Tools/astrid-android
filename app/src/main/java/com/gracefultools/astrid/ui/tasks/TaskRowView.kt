@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.tasks
 
 import com.gracefultools.astrid.ui.theme.AvatarSize
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.TouchLayout
 import com.gracefultools.astrid.ui.common.reportsSelectedRow
@@ -248,7 +249,7 @@ private fun Metadata(row: TaskRow) {
     val identifier = row.identifier.takeIf { row.showsIdentifier }
     if (due == null && row.listChips.isEmpty() && identifier == null && !row.isPending) return
     Row(
-        Modifier.heightIn(min = 27.dp),
+        Modifier.heightIn(min = ControlHeight.rowMetadata),
         horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically,
     ) {
         if (identifier != null) Text(identifier, style = TextStyles.subheadline, color = colors.textMuted, maxLines = 1)

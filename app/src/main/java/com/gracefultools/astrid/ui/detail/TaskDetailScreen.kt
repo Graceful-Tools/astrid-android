@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.detail
 
 import com.gracefultools.astrid.ui.theme.AvatarSize
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.SwatchShape
 import com.gracefultools.astrid.ui.theme.TouchSize
@@ -796,7 +797,7 @@ private fun CommentComposer(
         Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
             Box(
                 Modifier.weight(1f).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
-                    .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = 40.dp, max = 200.dp).padding(horizontal = Spacing.s12, vertical = 9.dp),
+                    .border(1.dp, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = ControlHeight.field, max = 200.dp).padding(horizontal = Spacing.s12, vertical = 9.dp),
                 contentAlignment = Alignment.CenterStart,
             ) {
                 if (text.text.isEmpty()) Text(stringResource(R.string.comments_add_placeholder), style = TextStyles.body, color = colors.inputPlaceholder)

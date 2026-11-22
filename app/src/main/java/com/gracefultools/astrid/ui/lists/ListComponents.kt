@@ -1,6 +1,7 @@
 package com.gracefultools.astrid.ui.lists
 
 import com.gracefultools.astrid.ui.theme.AvatarSize
+import com.gracefultools.astrid.ui.theme.ControlHeight
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.HueWheel
@@ -125,7 +126,7 @@ internal fun CustomColorSheet(initial: String, onChange: (String) -> Unit, onDis
     var value by remember { mutableFloatStateOf(hsv[2].coerceAtLeast(0.3f)) }
     fun hex(): String = String.format("#%06x", android.graphics.Color.HSVToColor(floatArrayOf(hue, saturation, value)) and 0xFFFFFF)
     PickerSheet(stringResource(R.string.lists_custom_color), onDismiss) {
-        Box(Modifier.fillMaxWidth().heightIn(min = 56.dp).clip(RoundedCornerShape(Radius.large)).background(parseColor(hex())))
+        Box(Modifier.fillMaxWidth().heightIn(min = ControlHeight.colourPreview).clip(RoundedCornerShape(Radius.large)).background(parseColor(hex())))
         val hueLabel = stringResource(R.string.lists_color_hue)
         val saturationLabel = stringResource(R.string.lists_color_saturation)
         val brightnessLabel = stringResource(R.string.lists_color_brightness)
