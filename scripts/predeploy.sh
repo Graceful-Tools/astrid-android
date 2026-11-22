@@ -131,6 +131,10 @@ fi
 if [[ "$mode" == "--full" ]]; then
   step "gradle: instrumented smoke tests (needs a device or emulator)"
   adb get-state >/dev/null 2>&1 || { echo "no device: start the emulator first (docs/TESTING.md)" >&2; exit 1; }
+  # A loaded emulator raises "System UI isn't responding", which takes window focus from the app and
+  # fails Espresso's pressBack (RootViewWithoutFocusException) — CI's job does the same.
+  adb shell settings put global hide_error_dialogs 1
+  adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS >/dev/null
   ./gradlew --console=plain connectedDebugAndroidTest
 fi
 printf '\npredeploy %s: green\n' "${mode:-standard}"
