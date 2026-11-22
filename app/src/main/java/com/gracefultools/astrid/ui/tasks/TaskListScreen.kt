@@ -117,6 +117,7 @@ import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.SpinnerStroke
 import com.gracefultools.astrid.ui.theme.CircleSize
 import com.gracefultools.astrid.ui.theme.FrameSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /** iOS's HeaderToggleSegment: what the main pane shows for a list. */
 enum class ViewMode { LIST, MESSAGES, BOARD }
@@ -208,7 +209,7 @@ fun TaskListScreen(
             }
         }
         (state.error ?: if (state.copyListFailed) stringResource(R.string.lists_copy_failed) else null)?.let { message ->
-            AppErrorBanner(message, onDismissError, Modifier.align(Alignment.BottomCenter).padding(bottom = 96.dp))
+            AppErrorBanner(message, onDismissError, Modifier.align(Alignment.BottomCenter).padding(bottom = Gap.floatingClearance))
             LaunchedEffect(message) { kotlinx.coroutines.delay(6_000); onDismissError() }
         }
     }
@@ -252,8 +253,8 @@ private fun ListHeader(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (onMenu != null) {
-                HamburgerIcon(Modifier.padding(start = 6.dp))
-                Spacer(Modifier.width(10.dp))
+                HamburgerIcon(Modifier.padding(start = Gap.s6))
+                Spacer(Modifier.width(Gap.s10))
             }
             Text(
                 if (titleSuffix == null) androidx.compose.ui.text.AnnotatedString(title) else androidx.compose.ui.text.AnnotatedString(title) + titleSuffix,
@@ -308,7 +309,7 @@ private fun ListHeader(
 private fun HeaderButton(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, onClick: () -> Unit) {
     Icon(
         icon, label, tint = AstridTheme.colors.textPrimary,
-        modifier = Modifier.padding(start = Spacing.s8).size(CircleSize.sm).clip(CircleShape).clickable(onClick = onClick).padding(5.dp),
+        modifier = Modifier.padding(start = Spacing.s8).size(CircleSize.sm).clip(CircleShape).clickable(onClick = onClick).padding(Gap.s5),
     )
 }
 
@@ -405,7 +406,7 @@ private fun QuickAddBar(
                 Box(
                     Modifier.clip(RoundedCornerShape(Radius.medium)).background(colors.field)
                         .border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(Radius.medium))
-                        .heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s12, vertical = 10.dp),
+                        .heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s12, vertical = Gap.s10),
                     contentAlignment = Alignment.CenterStart,
                 ) {
                     if (text.isEmpty()) Text(stringResource(R.string.tasks_add_task_placeholder), style = TextStyles.body, color = colors.inputPlaceholder)

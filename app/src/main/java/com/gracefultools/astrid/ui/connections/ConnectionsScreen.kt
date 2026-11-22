@@ -66,6 +66,7 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.CircleSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /** The core names a section by resource key (`connections.category.app`); these are iOS's words for them. */
 @Composable
@@ -230,7 +231,7 @@ private fun ConnectionRow(row: Connection, ownerBadge: String?, isRevoking: Bool
             ownerBadge?.let {
                 Caption2(
                     it,
-                    modifier = Modifier.clip(RoundedCornerShape(50)).background(colors.textSecondary.copy(alpha = 0.12f)).padding(horizontal = Spacing.s4, vertical = 1.dp),
+                    modifier = Modifier.clip(RoundedCornerShape(50)).background(colors.textSecondary.copy(alpha = 0.12f)).padding(horizontal = Spacing.s4, vertical = Gap.s1),
                 )
             }
             Spacer(Modifier.weight(1f))

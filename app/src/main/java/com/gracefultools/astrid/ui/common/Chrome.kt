@@ -58,6 +58,7 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import com.gracefultools.astrid.ui.theme.shadow
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /**
  * iOS's FloatingHeader: content padded 16x12 on a card (white on Ocean, glass on Light, headerBg on
@@ -213,7 +214,7 @@ fun AppErrorBanner(message: String, onDismiss: () -> Unit, modifier: Modifier = 
 fun SplashLookalike() {
     val colors = AstridTheme.colors
     Column(Modifier.fillMaxSize().background(colors.bgPrimary)) {
-        FloatingHeader { HamburgerIcon(Modifier.padding(start = 6.dp)); Spacer(Modifier.height(Spacing.s32)) }
+        FloatingHeader { HamburgerIcon(Modifier.padding(start = Gap.s6)); Spacer(Modifier.height(Spacing.s32)) }
         EmptyState(stringResource(R.string.tasks_loading), Modifier.weight(1f))
         Row(
             Modifier.navigationBarsPadding().padding(start = Spacing.s8, end = Spacing.s8, bottom = Spacing.s8).fillMaxWidth()

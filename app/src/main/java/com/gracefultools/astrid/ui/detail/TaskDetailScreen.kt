@@ -143,6 +143,7 @@ import kotlinx.coroutines.launch
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.CircleSize
 import com.gracefultools.astrid.ui.theme.FrameSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /**
  * iOS's TaskDetailViewNew (AATD-48): the "Task Details" header (tap the title to go back to the
@@ -245,7 +246,7 @@ fun TaskDetailScreen(
             }
         }
         state.error?.let { message ->
-            AppErrorBanner(message, vm::dismissError, Modifier.align(Alignment.BottomCenter).padding(bottom = 96.dp))
+            AppErrorBanner(message, vm::dismissError, Modifier.align(Alignment.BottomCenter).padding(bottom = Gap.floatingClearance))
             LaunchedEffect(message) { kotlinx.coroutines.delay(6_000); vm.dismissError() }
         }
     }
@@ -277,7 +278,7 @@ private fun DetailHeader(detail: TaskDetail?, vm: TaskDetailViewModel, onBack: (
             if (detail != null && !detail.isCopyOnly) {
                 Icon(
                     Icons.Filled.MoreVert, stringResource(R.string.detail_more), tint = colors.textPrimary,
-                    modifier = Modifier.size(TouchSize.hitTarget).clip(CircleShape).clickable { menu = true }.padding(10.dp),
+                    modifier = Modifier.size(TouchSize.hitTarget).clip(CircleShape).clickable { menu = true }.padding(Gap.s10),
                 )
             } else Spacer(Modifier.size(TouchSize.hitTarget))
             DropdownMenu(menu, onDismissRequest = { menu = false }) {
@@ -378,7 +379,7 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
     if (detail.isCanceled) {
         Text(
             stringResource(R.string.tasks_wont_do_chip), style = TextStyles.caption, color = colors.textSecondary,
-            modifier = Modifier.padding(start = TouchLayout.detailIconColumn, bottom = Spacing.s8).border(BorderWidth.thin, colors.border, RoundedCornerShape(Radius.small)).padding(horizontal = 6.dp, vertical = Spacing.s2),
+            modifier = Modifier.padding(start = TouchLayout.detailIconColumn, bottom = Spacing.s8).border(BorderWidth.thin, colors.border, RoundedCornerShape(Radius.small)).padding(horizontal = Gap.s6, vertical = Spacing.s2),
         )
     }
     if (askSubtasks) {
@@ -425,7 +426,7 @@ internal fun ValueBox(
         modifier.clip(RoundedCornerShape(Radius.medium)).background(AstridTheme.colors.bgSecondary)
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .heightIn(min = if (compact) ControlHeight.sm else TouchSize.hitTarget)
-            .padding(horizontal = if (compact) Spacing.s8 else Spacing.s12, vertical = if (compact) Spacing.s4 else 6.dp),
+            .padding(horizontal = if (compact) Spacing.s8 else Spacing.s12, vertical = if (compact) Spacing.s4 else Gap.s6),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
         content = content,
     )
@@ -534,7 +535,7 @@ private fun ListsRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailV
                 Text(stringResource(R.string.picker_add_to_lists), style = TextStyles.body, color = colors.textMuted)
                 Icon(Icons.Outlined.ChevronRight, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))
             } else {
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(Gap.s6), verticalArrangement = Arrangement.spacedBy(Gap.s6)) {
                     detail.listChips.forEach { chip -> ListBadge(chip.name, chip.color) }
                 }
             }
@@ -549,7 +550,7 @@ internal fun ListBadge(name: String, color: String) {
     val colors = AstridTheme.colors
     Row(
         Modifier.clip(RoundedCornerShape(Radius.small)).background(colors.bgTertiary).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
-        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Gap.s5),
     ) {
         Box(Modifier.size(DotSize.swatch).clip(SwatchShape).background(parseColor(color)))
         Text(name, style = TextStyles.caption, color = colors.textPrimary, maxLines = 1)
@@ -604,7 +605,7 @@ private fun ProjectStateRow(state: com.gracefultools.astrid.model.BoardState, en
                         .background(if (chip.isCurrent) colors.accent.copy(alpha = 0.15f) else colors.bgSecondary)
                         .clickable(enabled = enabled && !chip.isCurrent) { onPick(chip.id) }
                         .semantics { selected = chip.isCurrent }
-                        .padding(horizontal = Spacing.s12, vertical = 6.dp),
+                        .padding(horizontal = Spacing.s12, vertical = Gap.s6),
                 )
             }
         }
@@ -660,7 +661,7 @@ private fun DescriptionBlock(detail: TaskDetail, onSave: (String) -> Unit, onOpe
     val readOnly = detail.isCopyOnly
     var entry by rememberSaveable(detail.task.id) { mutableStateOf<DescriptionReader.Entry?>(null) }
     val onReference: (String, String) -> Unit = { kind, id -> if (kind == "list") onOpenList(id) else onOpenTask(id) }
-    Column(Modifier.fillMaxWidth().padding(horizontal = Spacing.s16, vertical = Spacing.s12), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Column(Modifier.fillMaxWidth().padding(horizontal = Spacing.s16, vertical = Spacing.s12), verticalArrangement = Arrangement.spacedBy(Gap.s6)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(stringResource(R.string.detail_description), style = TextStyles.caption, color = colors.textSecondary, modifier = Modifier.weight(1f))
             if (DescriptionReader.offersFullScreen(text, readOnly)) {
@@ -694,7 +695,7 @@ private fun ParentLink(title: String, onClick: () -> Unit) {
     val colors = AstridTheme.colors
     Row(
         Modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = Spacing.s16, vertical = Spacing.s8),
-        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Gap.s6),
     ) {
         Icon(Icons.AutoMirrored.Filled.Undo, null, tint = colors.textSecondary, modifier = Modifier.size(IconSize.sm))
         Text(stringResource(R.string.task_detail_parent_task), style = TextStyles.caption, color = colors.textSecondary)
@@ -791,7 +792,7 @@ private fun CommentComposer(
                 text = androidx.compose.ui.text.input.TextFieldValue(newText, androidx.compose.ui.text.TextRange(caret))
             }
         }
-        if (replyTo != null) Row(Modifier.fillMaxWidth().padding(bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+        if (replyTo != null) Row(Modifier.fillMaxWidth().padding(bottom = Gap.s6), verticalAlignment = Alignment.CenterVertically) {
             Text(
                 stringResource(R.string.comments_replying_to, replyTo.authorName ?: ""), style = TextStyles.caption, color = colors.textSecondary,
                 modifier = Modifier.weight(1f),
@@ -802,7 +803,7 @@ private fun CommentComposer(
         Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
             Box(
                 Modifier.weight(1f).clip(RoundedCornerShape(Radius.medium)).background(colors.field)
-                    .border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = ControlHeight.field, max = MaxSize.commentBox).padding(horizontal = Spacing.s12, vertical = 9.dp),
+                    .border(BorderWidth.thin, colors.fieldBorder, RoundedCornerShape(Radius.medium)).heightIn(min = ControlHeight.field, max = MaxSize.commentBox).padding(horizontal = Spacing.s12, vertical = Gap.s9),
                 contentAlignment = Alignment.CenterStart,
             ) {
                 if (text.text.isEmpty()) Text(stringResource(R.string.comments_add_placeholder), style = TextStyles.body, color = colors.inputPlaceholder)
@@ -859,7 +860,7 @@ private fun CommentComposer(
 private fun QueuedFiles(files: List<QueuedFile>, onRemove: (String) -> Unit) {
     val colors = AstridTheme.colors
     Row(
-        Modifier.fillMaxWidth().horizontalScroll(androidx.compose.foundation.rememberScrollState()).padding(top = 6.dp, bottom = Spacing.s8),
+        Modifier.fillMaxWidth().horizontalScroll(androidx.compose.foundation.rememberScrollState()).padding(top = Gap.s6, bottom = Spacing.s8),
         horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
     ) {
         files.forEach { file ->
@@ -898,7 +899,7 @@ private fun SuggestionList(items: List<com.gracefultools.astrid.model.CommentSug
     ) {
         items.forEach { item ->
             Row(
-                Modifier.fillMaxWidth().clickable { onPick(item) }.heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s12, vertical = 6.dp),
+                Modifier.fillMaxWidth().clickable { onPick(item) }.heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s12, vertical = Gap.s6),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
             ) {
                 when {

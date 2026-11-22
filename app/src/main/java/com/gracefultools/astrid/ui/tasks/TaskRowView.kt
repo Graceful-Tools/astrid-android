@@ -71,6 +71,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import com.gracefultools.astrid.ui.theme.IconSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /**
  * One row, drawn as iOS's TaskRowView (AATD-36): a rounded-8 card (white 0.8 on Ocean, 1.0 and a
@@ -129,7 +130,7 @@ fun TaskRowView(
             horizontalArrangement = Arrangement.spacedBy(TouchLayout.rowGap),
         ) {
             LeadingControl(row, onLeading)
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Gap.s6)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         row.title,
@@ -165,7 +166,7 @@ private fun TitleChips(row: TaskRow) {
         text, style = TextStyles.caption, color = colors.textSecondary, maxLines = 1,
         modifier = Modifier.border(BorderWidth.thin, colors.border, RoundedCornerShape(Radius.small))
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .padding(horizontal = 6.dp, vertical = Spacing.s2),
+            .padding(horizontal = Gap.s6, vertical = Spacing.s2),
     )
     if (row.isCanceled) chip(stringResource(R.string.tasks_wont_do_chip))
     when (row.syncMark) {
@@ -274,7 +275,7 @@ fun ListChipView(chip: com.gracefultools.astrid.model.ListChip, modifier: Modifi
     val tint = parseColor(chip.color)
     val shape = RoundedCornerShape(Radius.large)
     Row(
-        modifier.clip(shape).background(colors.chipBg).border(BorderWidth.thin, colors.chipBorder, shape).padding(horizontal = 10.dp, vertical = Spacing.s4),
+        modifier.clip(shape).background(colors.chipBg).border(BorderWidth.thin, colors.chipBorder, shape).padding(horizontal = Gap.s10, vertical = Spacing.s4),
         horizontalArrangement = Arrangement.spacedBy(Spacing.s4), verticalAlignment = Alignment.CenterVertically,
     ) {
         val (icon, iconTint) = when (chip.glyph) {

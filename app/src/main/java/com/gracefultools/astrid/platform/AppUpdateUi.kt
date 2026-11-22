@@ -55,6 +55,7 @@ import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TextStyles
 import androidx.compose.ui.text.TextStyle
 import com.gracefultools.astrid.ui.theme.TypeSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /**
  * Google Play In-App Updates (flexible) as the [UpdateSource] (AATD-67) — iOS asks astrid-web what
@@ -153,7 +154,7 @@ internal fun AppUpdateCard(onUpdate: () -> Unit, onDismiss: () -> Unit) {
                 Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                     Box(
                         Modifier.fillMaxWidth().clip(RoundedCornerShape(com.gracefultools.astrid.ui.theme.Radius.large)).background(colors.accent)
-                            .clickable(role = Role.Button, onClick = onUpdate).padding(vertical = 14.dp),
+                            .clickable(role = Role.Button, onClick = onUpdate).padding(vertical = Gap.s14),
                         contentAlignment = Alignment.Center,
                     ) { Text(stringResource(R.string.update_action), style = TextStyles.headline, color = colors.accentText) }
                     Box(

@@ -82,6 +82,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.SpinnerStroke
+import com.gracefultools.astrid.ui.theme.Gap
 
 /** A bottom sheet the way iOS's pickers are: a title with Close, then the rows. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -205,7 +206,7 @@ private fun SomeoneElseSection(section: SomeoneElse, vm: TaskDetailViewModel) {
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s8),
         ) {
             Icon(Icons.Outlined.AccountCircle, null, tint = colors.textMuted)
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Gap.s1)) {
                 Text(person.name?.takeIf { it.isNotBlank() } ?: person.email.orEmpty(), style = TextStyles.body, color = colors.textPrimary)
                 if (!person.name.isNullOrBlank()) Text(person.email.orEmpty(), style = TextStyles.caption, color = colors.textMuted)
             }
@@ -366,7 +367,7 @@ internal fun CopyTaskSheet(vm: TaskDetailViewModel, onDismiss: () -> Unit) {
         }
         Box(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.large)).background(colors.accent)
-                .clickable { vm.copy(target, comments); onDismiss() }.padding(vertical = 14.dp),
+                .clickable { vm.copy(target, comments); onDismiss() }.padding(vertical = Gap.s14),
             contentAlignment = Alignment.Center,
         ) { Text(stringResource(R.string.tasks_copy_task), style = TextStyles.headline, color = colors.accentText) }
     }

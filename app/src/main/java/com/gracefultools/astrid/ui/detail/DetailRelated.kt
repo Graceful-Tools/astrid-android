@@ -109,6 +109,7 @@ import java.time.format.FormatStyle
 import com.gracefultools.astrid.ui.theme.IconSize
 import com.gracefultools.astrid.ui.theme.CircleSize
 import com.gracefultools.astrid.ui.theme.FrameSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 // ── Occurrences (AATD-52, F18) ───────────────────────────────────────────────────────────────
 
@@ -238,7 +239,7 @@ private fun ProjectFieldEditor(row: ProjectFieldRow, readOnly: Boolean, onSave: 
                 if (!readOnly && shown != null) {
                     Icon(
                         Icons.Outlined.Cancel, stringResource(R.string.tasks_project_fields_clear), tint = colors.textMuted,
-                        modifier = Modifier.size(CircleSize.sm).clip(CircleShape).clickable { onSave(null) }.padding(6.dp),
+                        modifier = Modifier.size(CircleSize.sm).clip(CircleShape).clickable { onSave(null) }.padding(Gap.s6),
                     )
                 }
             }
@@ -275,7 +276,7 @@ private fun ProjectFieldEditor(row: ProjectFieldRow, readOnly: Boolean, onSave: 
                 } else onSave(JsonPrimitive(trimmed))
             }
             Box(
-                Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgSecondary).padding(horizontal = Spacing.s8, vertical = 6.dp),
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(Radius.medium)).background(colors.bgSecondary).padding(horizontal = Spacing.s8, vertical = Gap.s6),
             ) {
                 if (draft.isEmpty()) Text(empty, style = TextStyles.body, color = colors.textMuted)
                 BasicTextField(
@@ -373,7 +374,7 @@ private fun AttachmentGallery(files: List<AttachmentFile>, start: Int, vm: TaskD
                 )
                 Icon(
                     Icons.Filled.Close, stringResource(R.string.actions_close), tint = ImmersiveColors.content,
-                    modifier = Modifier.size(TouchSize.hitTarget).clip(CircleShape).clickable(onClick = onClose).padding(10.dp),
+                    modifier = Modifier.size(TouchSize.hitTarget).clip(CircleShape).clickable(onClick = onClose).padding(Gap.s10),
                 )
             }
         }
@@ -401,7 +402,7 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Icon(
                     Icons.Filled.Close, stringResource(R.string.actions_close), tint = ImmersiveColors.contentSecondary,
-                    modifier = Modifier.size(CircleSize.close).clip(CircleShape).clickable(onClick = onClose).padding(14.dp),
+                    modifier = Modifier.size(CircleSize.close).clip(CircleShape).clickable(onClick = onClose).padding(Gap.s14),
                 )
             }
             Spacer(Modifier.weight(1f))

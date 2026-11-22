@@ -41,6 +41,7 @@ import kotlinx.serialization.json.intOrNull
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.TypeSize
 import com.gracefultools.astrid.ui.theme.FrameSize
+import com.gracefultools.astrid.ui.theme.Gap
 
 /**
  * Draws the core's markdown blocks (`astrid_core::markdown`, fixture-locked to the web's renderer)
@@ -69,7 +70,7 @@ private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
         "code" -> Text(
             block.str("text").orEmpty(), fontFamily = FontFamily.Monospace, fontSize = TypeSize.footnote, color = colors.textPrimary,
             modifier = Modifier.fillMaxWidth().background(colors.bgTertiary, RoundedCornerShape(Radius.small))
-                .horizontalScroll(rememberScrollState()).padding(10.dp),
+                .horizontalScroll(rememberScrollState()).padding(Gap.s10),
         )
         "list" -> {
             val ordered = (block["ordered"] as? JsonPrimitive)?.booleanOrNull == true
@@ -92,7 +93,7 @@ private fun Block(block: JsonObject, onReference: (String, String) -> Unit) {
         }
         "quote" -> Row {
             Column(Modifier.width(FrameSize.quoteBar).background(colors.border)) {}
-            MarkdownView(block.arr("blocks"), Modifier.padding(start = 10.dp), onReference)
+            MarkdownView(block.arr("blocks"), Modifier.padding(start = Gap.s10), onReference)
         }
         "rule" -> HorizontalDivider(color = colors.border)
         "tradeoffGrid" -> TradeoffGrid(block, onReference)
