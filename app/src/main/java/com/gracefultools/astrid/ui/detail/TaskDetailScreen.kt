@@ -152,6 +152,7 @@ fun TaskDetailScreen(
     val context = LocalContext.current
     val scroll = rememberScrollState()
     val scope = rememberCoroutineScope()
+    val still = com.gracefultools.astrid.ui.theme.LocalReducedMotion.current
     BackHandler(onBack = onBack)
     LaunchedEffect(state.deleted) { if (state.deleted) onBack() }
     LaunchedEffect(state.copiedId) { state.copiedId?.let { vm.copyOpened(); onOpenTask(it) } }
@@ -161,7 +162,7 @@ fun TaskDetailScreen(
     val online by com.gracefultools.astrid.ui.common.rememberIsOnline()
     Box(Modifier.fillMaxSize().background(colors.pageBg)) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
-            DetailHeader(state.detail, vm, onBack, onTitleTap = { scope.launch { scroll.animateScrollTo(0) } })
+            DetailHeader(state.detail, vm, onBack, onTitleTap = { scope.launch { if (still) scroll.scrollTo(0) else scroll.animateScrollTo(0) } })
             val detail = state.detail
             if (detail != null) {
                 PullToRefreshBox(

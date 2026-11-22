@@ -331,10 +331,12 @@ fun AppRoot(graph: AppGraph, onSignedOut: () -> Unit, onDeepLink: DeepLinks) {
                         if (openId != null && layout.detail > 0.dp) { shownId = openId; shownWidth = layout.detail }
                         val panelMotion = androidx.compose.animation.core.tween<androidx.compose.ui.unit.IntSize>(com.astrid.design.AstridTokens.Motion.panelDurationMillis)
                         val panelFade = androidx.compose.animation.core.tween<Float>(com.astrid.design.AstridTokens.Motion.panelDurationMillis)
+                        // Under reduced motion (DS17) it fades without growing sideways.
+                        val panelStill = com.gracefultools.astrid.ui.theme.LocalReducedMotion.current
                         androidx.compose.animation.AnimatedVisibility(
                             visible = openId != null && layout.detail > 0.dp,
-                            enter = androidx.compose.animation.expandHorizontally(panelMotion) + androidx.compose.animation.fadeIn(panelFade),
-                            exit = androidx.compose.animation.shrinkHorizontally(panelMotion) + androidx.compose.animation.fadeOut(panelFade),
+                            enter = if (panelStill) androidx.compose.animation.fadeIn(panelFade) else androidx.compose.animation.expandHorizontally(panelMotion) + androidx.compose.animation.fadeIn(panelFade),
+                            exit = if (panelStill) androidx.compose.animation.fadeOut(panelFade) else androidx.compose.animation.shrinkHorizontally(panelMotion) + androidx.compose.animation.fadeOut(panelFade),
                         ) {
                             shownId?.let { id ->
                                 com.gracefultools.astrid.ui.detail.DetailsPanel(rowAnchor, androidx.compose.ui.Modifier.width(shownWidth).fillMaxHeight()) { detailPane(id) }

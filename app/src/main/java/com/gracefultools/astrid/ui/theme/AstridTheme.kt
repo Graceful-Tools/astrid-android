@@ -139,7 +139,7 @@ fun AstridTheme(mode: ThemeMode = ThemeMode.OCEAN, content: @Composable () -> Un
     // Material components (dialogs, pickers, menus) draw from this scheme, mapped from the iOS
     // palette so they sit in the same theme as everything else.
     val scheme = materialScheme(colors)
-    CompositionLocalProvider(LocalAstridColors provides colors) {
+    CompositionLocalProvider(LocalAstridColors provides colors, LocalReducedMotion provides rememberReducedMotion()) {
         MaterialTheme(colorScheme = scheme, typography = AstridTypography, content = content)
     }
 }

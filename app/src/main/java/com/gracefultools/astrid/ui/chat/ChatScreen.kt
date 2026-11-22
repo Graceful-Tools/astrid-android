@@ -63,7 +63,12 @@ fun ChatPanel(vm: ChatViewModel, modifier: Modifier = Modifier) {
     val state by vm.state.collectAsStateWithLifecycle()
     val colors = AstridTheme.colors
     val list = rememberLazyListState()
-    LaunchedEffect(state.chat.messages.size) { if (state.chat.messages.isNotEmpty()) list.animateScrollToItem(state.chat.messages.lastIndex) }
+    // Under reduced motion (DS17) a new message jumps into view instead of scrolling there.
+    val still = com.gracefultools.astrid.ui.theme.LocalReducedMotion.current
+    LaunchedEffect(state.chat.messages.size) {
+        val last = state.chat.messages.lastIndex
+        if (last >= 0) { if (still) list.scrollToItem(last) else list.animateScrollToItem(last) }
+    }
     val online by com.gracefultools.astrid.ui.common.rememberIsOnline()
     Column(modifier.fillMaxSize()) {
         // iOS's ChatPanelView: the offline strip over the messages (AATD-62).
