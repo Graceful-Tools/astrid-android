@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.reminders
 
+import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.VectorConverter
@@ -60,7 +61,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -228,7 +228,7 @@ private fun TriageDeck(state: ReminderState, vm: ReminderViewModel, onOpenTask: 
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    stringResource(R.string.reminders_triage_title), fontSize = 20.sp, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
+                    stringResource(R.string.reminders_triage_title), fontSize = IosTypeSize.triageTitle, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
                     modifier = Modifier.weight(1f).semantics { heading() },
                 )
                 if (state.current != null) {

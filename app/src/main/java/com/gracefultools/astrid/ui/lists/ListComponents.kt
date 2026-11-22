@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.lists
 
+import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.HueWheel
 import androidx.compose.foundation.background
@@ -57,7 +58,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.gracefultools.astrid.R
 import com.gracefultools.astrid.model.UserSummary
 import com.gracefultools.astrid.ui.common.AstridTextButton
@@ -149,7 +149,7 @@ internal fun PriorityButtons(current: Int, onPick: (Int) -> Unit) {
                     .semantics(mergeDescendants = true) { selected = chosen; contentDescription = spoken },
                 contentAlignment = Alignment.Center,
             ) {
-                Text(if (level == 0) "○" else "!".repeat(level), color = if (chosen) AstridTheme.colors.onFill else tint, fontWeight = FontWeight.SemiBold, fontSize = 14.sp)
+                Text(if (level == 0) "○" else "!".repeat(level), color = if (chosen) AstridTheme.colors.onFill else tint, fontWeight = FontWeight.SemiBold, fontSize = IosTypeSize.glyph)
             }
         }
     }

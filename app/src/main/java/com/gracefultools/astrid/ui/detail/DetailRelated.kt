@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -81,7 +82,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
@@ -332,7 +332,7 @@ private fun Thumbnail(file: AttachmentFile, vm: TaskDetailViewModel, size: andro
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
                 Icon(Icons.AutoMirrored.Filled.InsertDriveFile, null, tint = colors.textMuted, modifier = Modifier.size(18.dp))
-                Text(file.name.substringAfterLast('.', "").uppercase().take(5), fontSize = 9.sp, fontWeight = FontWeight.Medium, color = colors.textMuted)
+                Text(file.name.substringAfterLast('.', "").uppercase().take(5), fontSize = IosTypeSize.fileBadge, fontWeight = FontWeight.Medium, color = colors.textMuted)
             }
         }
     }
@@ -403,12 +403,12 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
             }
             Spacer(Modifier.weight(1f))
             Text(
-                detail.task.title, color = ImmersiveColors.contentSecondary, fontSize = 24.sp, fontWeight = FontWeight.Medium,
+                detail.task.title, color = ImmersiveColors.contentSecondary, fontSize = IosTypeSize.timerTitle, fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center, modifier = Modifier.padding(horizontal = Spacing.s16),
             )
             Spacer(Modifier.height(Spacing.s48))
             Text(
-                "%d:%02d".format(seconds / 60, seconds % 60), color = ImmersiveColors.content, fontSize = 88.sp,
+                "%d:%02d".format(seconds / 60, seconds % 60), color = ImmersiveColors.content, fontSize = IosTypeSize.timerDigits,
                 fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace, maxLines = 1,
             )
             Spacer(Modifier.height(Spacing.s48))
@@ -431,7 +431,7 @@ internal fun TaskTimerScreen(detail: TaskDetail, vm: TaskDetailViewModel, onClos
                 ) {
                     Icon(Icons.Filled.CheckCircle, null, tint = ImmersiveColors.onControl)
                     Spacer(Modifier.width(Spacing.s8))
-                    Text(stringResource(R.string.timer_complete_task), color = ImmersiveColors.onControl, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.timer_complete_task), color = ImmersiveColors.onControl, fontSize = IosTypeSize.timerAction, fontWeight = FontWeight.Bold)
                 }
             }
             (timer?.lastValue ?: detail.task.lastTimerValue)?.let { last ->

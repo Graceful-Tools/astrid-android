@@ -11,6 +11,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.astrid.design.AstridTextStyle
 import com.astrid.design.AstridTokens
 import com.astrid.design.AstridTokens.Space
@@ -119,6 +120,30 @@ object TypeSize {
     val body = Type.body.size; val callout = Type.callout.size; val subheadline = Type.subheadline.size
     val footnote = Type.footnote.size; val caption1 = Type.caption1.size; val caption2 = Type.caption2.size
     val rowTitle = Type.rowTitle.size
+}
+
+/**
+ * Sizes iOS types by hand (`.system(size:)`) that the token type scale doesn't have (ADEV-196). Named
+ * here so screens never type `N.sp`; each says the iOS view it matches. Move one to [TypeSize] when
+ * core gains a token for it.
+ */
+object IosTypeSize {
+    /** Priority picker glyphs and the details glyph column (QuickAddPickerSheet, TaskDetailViewNew). */
+    val glyph = 14.sp
+    /** The file-type label on an attachment thumbnail (TaskDetailViewNew, CommentSectionViewEnhanced). */
+    val fileBadge = 9.sp
+    /** A small capsule badge, such as AI agent on a profile (UserProfileView). */
+    val badge = 10.sp
+    /** The reminders triage title. */
+    val triageTitle = 20.sp
+    /** The sidebar wordmark (SidebarBrandHeader.wordmarkSize). */
+    val wordmark = 21.6.sp
+    /** A profile's name and stat figures (UserProfileView). */
+    val figure = 24.sp
+    /** The full-screen timer (TaskTimerView): task title, countdown, Complete button. */
+    val timerTitle = 24.sp
+    val timerDigits = 88.sp
+    val timerAction = 20.sp
 }
 
 /** iOS Theme.shadowSmall/Medium/Large as Compose elevations, and the floating header's own. */
