@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.tasks
 
+import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.ui.zIndex
@@ -475,10 +476,10 @@ private fun AssigneeChoice(id: String?, image: String?, initials: String, name: 
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
     ) {
         if (id == null) {
-            Box(Modifier.size(36.dp).clip(CircleShape).background(colors.bgSecondary), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(AvatarSize.lg).clip(CircleShape).background(colors.bgSecondary), contentAlignment = Alignment.Center) {
                 Icon(Icons.Outlined.PersonOff, null, tint = colors.textMuted, modifier = Modifier.size(IconSize.lg))
             }
-        } else Avatar(image, initials, 36.dp)
+        } else Avatar(image, initials, AvatarSize.lg)
         Column(Modifier.weight(1f)) {
             Text(name, style = TextStyles.body, color = colors.textPrimary)
             if (caption != null) Text(caption, style = TextStyles.caption2, color = colors.textMuted)

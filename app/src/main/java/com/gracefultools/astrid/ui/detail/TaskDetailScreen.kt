@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.IosTypeSize
 import com.gracefultools.astrid.ui.theme.SwatchShape
 import com.gracefultools.astrid.ui.theme.TouchSize
@@ -431,7 +432,7 @@ private fun WhoRow(detail: TaskDetail, state: TaskDetailState, vm: TaskDetailVie
         ValueBox(Modifier.fillMaxWidth(), onClick = { vm.loadAssignees(); picking = true }) {
             val who = detail.assignee
             if (who != null && who.id.isNotEmpty()) {
-                Avatar(who.image, initialsOf(who.name, who.email), 24.dp)
+                Avatar(who.image, initialsOf(who.name, who.email), AvatarSize.xs)
                 Text(who.display, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             } else {
                 Box(Modifier.size(24.dp).clip(CircleShape).border(1.5.dp, colors.textMuted, CircleShape), contentAlignment = Alignment.Center) {
@@ -552,7 +553,7 @@ internal fun ListBadge(name: String, color: String) {
 private fun CreatedByRow(creator: com.gracefultools.astrid.model.UserSummary) {
     val colors = AstridTheme.colors
     IconRow(stringResource(R.string.tasks_created_by), Icons.Outlined.AccountCircle) {
-        Avatar(creator.image, initialsOf(creator.name, creator.email), 28.dp)
+        Avatar(creator.image, initialsOf(creator.name, creator.email), AvatarSize.sm)
         Spacer(Modifier.width(Spacing.s8))
         Text(creator.display, style = TextStyles.body, color = colors.textPrimary)
     }

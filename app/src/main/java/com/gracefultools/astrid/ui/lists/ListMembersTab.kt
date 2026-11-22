@@ -51,6 +51,7 @@ import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.detail.PickRow
 import com.gracefultools.astrid.ui.detail.PickerSheet
+import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.IosSystemColors
 import com.gracefultools.astrid.ui.theme.Radius
@@ -131,8 +132,8 @@ internal fun ListMembersTab(state: ListSettingsState, vm: ListSettingsViewModel,
                 agents.forEach { agent ->
                     val member = state.isMember(agent.id)
                     FormRow(Modifier.padding(vertical = Spacing.s4)) {
-                        Box(Modifier.size(40.dp).clip(CircleShape).background(AstridTheme.colors.tokens.agentBubble), contentAlignment = Alignment.Center) {
-                            if (agent.image != null) Avatar(agent.image, initialsOf(agent.name), 40.dp)
+                        Box(Modifier.size(AvatarSize.xl).clip(CircleShape).background(AstridTheme.colors.tokens.agentBubble), contentAlignment = Alignment.Center) {
+                            if (agent.image != null) Avatar(agent.image, initialsOf(agent.name), AvatarSize.xl)
                             else Icon(Icons.Outlined.Memory, null, tint = AstridTheme.colors.tokens.agentInk, modifier = Modifier.size(IconSize.lg))
                         }
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s4)) {
@@ -243,7 +244,7 @@ private fun PersonRow(person: UserSummary, onOpen: () -> Unit, trailing: @Compos
             Modifier.weight(1f).clickable(role = Role.Button, onClick = onOpen),
             horizontalArrangement = Arrangement.spacedBy(Spacing.s12), verticalAlignment = Alignment.CenterVertically,
         ) {
-            Avatar(person.image, initialsOf(person.name, person.email), 32.dp)
+            Avatar(person.image, initialsOf(person.name, person.email), AvatarSize.md)
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
                 Text(person.display, style = TextStyles.body, color = colors.textPrimary, maxLines = 1)
                 Text(person.email ?: stringResource(R.string.profile_no_email), style = TextStyles.caption2, color = colors.textSecondary, maxLines = 1)

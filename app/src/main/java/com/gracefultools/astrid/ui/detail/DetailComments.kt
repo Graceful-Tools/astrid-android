@@ -48,6 +48,7 @@ import com.gracefultools.astrid.model.TaskDetail
 import com.gracefultools.astrid.ui.common.AstridTextButton
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.markdown.MarkdownView
+import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Radius
 import com.gracefultools.astrid.ui.theme.Spacing
@@ -163,7 +164,7 @@ private fun CommentBubble(
         horizontalArrangement = if (mine) Arrangement.End else Arrangement.Start,
         verticalAlignment = Alignment.Top,
     ) {
-        if (!mine) { Avatar(comment.authorImage, comment.authorInitials ?: "", 32.dp); Spacer(Modifier.size(Spacing.s8)) }
+        if (!mine) { Avatar(comment.authorImage, comment.authorInitials ?: "", AvatarSize.md); Spacer(Modifier.size(Spacing.s8)) }
         Column(horizontalAlignment = if (mine) Alignment.End else Alignment.Start, modifier = Modifier.weight(1f, fill = false)) {
             Box {
                 Column(
@@ -207,7 +208,7 @@ private fun CommentBubble(
                 style = TextStyles.caption2, color = colors.textMuted, modifier = Modifier.padding(top = 3.dp, start = Spacing.s4, end = Spacing.s4),
             )
         }
-        if (mine) { Spacer(Modifier.size(Spacing.s8)); Avatar(comment.authorImage, comment.authorInitials ?: "", 32.dp) }
+        if (mine) { Spacer(Modifier.size(Spacing.s8)); Avatar(comment.authorImage, comment.authorInitials ?: "", AvatarSize.md) }
     }
     if (editing) {
         var text by remember { mutableStateOf(comment.content) }

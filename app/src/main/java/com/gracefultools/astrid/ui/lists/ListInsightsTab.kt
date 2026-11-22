@@ -42,6 +42,7 @@ import com.gracefultools.astrid.model.InsightLane
 import com.gracefultools.astrid.model.ListInsights
 import com.gracefultools.astrid.ui.common.Avatar
 import com.gracefultools.astrid.ui.common.initialsOf
+import com.gracefultools.astrid.ui.theme.AvatarSize
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.Spacing
 import com.gracefultools.astrid.ui.theme.Success
@@ -225,7 +226,7 @@ private fun Contributors(people: List<InsightContributor>) {
         if (people.isEmpty()) Note(stringResource(R.string.list_insights_no_activity))
         people.forEach { person ->
             Row(Modifier.semantics(mergeDescendants = true) {}, horizontalArrangement = Arrangement.spacedBy(Spacing.s8)) {
-                Avatar(person.image, initialsOf(person.name), 24.dp, shape = CircleShape)
+                Avatar(person.image, initialsOf(person.name), AvatarSize.xs, shape = CircleShape)
                 Column(verticalArrangement = Arrangement.spacedBy(Spacing.s2)) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s4)) {
                         Text(person.name ?: "—", style = TextStyles.subheadline, color = colors.textPrimary, maxLines = 1, overflow = TextOverflow.Ellipsis)
