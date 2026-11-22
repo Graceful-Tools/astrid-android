@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.MaxSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -168,7 +169,7 @@ private fun CommentBubble(
         Column(horizontalAlignment = if (mine) Alignment.End else Alignment.Start, modifier = Modifier.weight(1f, fill = false)) {
             Box {
                 Column(
-                    Modifier.widthIn(max = 300.dp).clip(RoundedCornerShape(Radius.medium)).background(bubble)
+                    Modifier.widthIn(max = MaxSize.bubble).clip(RoundedCornerShape(Radius.medium)).background(bubble)
                         .combinedClickable(onClick = {}, onLongClick = { menu = true }).padding(Spacing.s12),
                     verticalArrangement = Arrangement.spacedBy(6.dp),
                 ) {

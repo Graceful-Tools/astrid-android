@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.platform
 
+import com.gracefultools.astrid.ui.theme.MaxSize
 import com.gracefultools.astrid.ui.theme.IconSize
 import android.app.Activity
 import android.content.Context
@@ -135,7 +136,7 @@ internal fun AppUpdateCard(onUpdate: () -> Unit, onDismiss: () -> Unit) {
             contentAlignment = Alignment.Center,
         ) {
             Column(
-                Modifier.padding(Spacing.s24).widthIn(max = 340.dp).fillMaxWidth()
+                Modifier.padding(Spacing.s24).widthIn(max = MaxSize.dialog).fillMaxWidth()
                     .shadow(20.dp, RoundedCornerShape(Radius.xLarge)).clip(RoundedCornerShape(Radius.xLarge)).background(colors.bgPrimary)
                     // The card itself is not the ground: a tap on it is not "Not now".
                     .pointerInput(Unit) { detectTapGestures { } }
