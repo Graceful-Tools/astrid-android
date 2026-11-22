@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.board
 
+import androidx.compose.foundation.shape.CircleShape
 import com.gracefultools.astrid.ui.theme.TouchLayout
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.ui.Alignment
@@ -353,7 +354,7 @@ internal fun completedPillLabel(completedOn: String?, today: java.time.LocalDate
 /** iOS's insertion line: 3 accent where the card would land. */
 @Composable
 private fun DropLine() {
-    Box(Modifier.fillMaxWidth().height(3.dp).clip(RoundedCornerShape(2.dp)).background(AstridTheme.colors.accent))
+    Box(Modifier.fillMaxWidth().height(3.dp).clip(CircleShape).background(AstridTheme.colors.accent))
 }
 
 /** iOS's board-footer quick add: a bordered field and the plus, flush at the foot of the column. */

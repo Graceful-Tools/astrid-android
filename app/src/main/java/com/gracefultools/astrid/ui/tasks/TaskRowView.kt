@@ -158,7 +158,7 @@ private fun TitleChips(row: TaskRow) {
     @Composable
     fun chip(text: String, onClick: (() -> Unit)? = null) = Text(
         text, style = TextStyles.caption, color = colors.textSecondary, maxLines = 1,
-        modifier = Modifier.border(1.dp, colors.border, RoundedCornerShape(4.dp))
+        modifier = Modifier.border(1.dp, colors.border, RoundedCornerShape(Radius.small))
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
             .padding(horizontal = 6.dp, vertical = Spacing.s2),
     )

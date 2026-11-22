@@ -1,5 +1,6 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.theme.SwatchShape
 import com.gracefultools.astrid.ui.theme.TouchSize
 import com.gracefultools.astrid.ui.theme.ImmersiveColors
 import com.gracefultools.astrid.ui.theme.TouchLayout
@@ -368,7 +369,7 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
     if (detail.isCanceled) {
         Text(
             stringResource(R.string.tasks_wont_do_chip), style = TextStyles.caption, color = colors.textSecondary,
-            modifier = Modifier.padding(start = TouchLayout.detailIconColumn, bottom = Spacing.s8).border(1.dp, colors.border, RoundedCornerShape(4.dp)).padding(horizontal = 6.dp, vertical = Spacing.s2),
+            modifier = Modifier.padding(start = TouchLayout.detailIconColumn, bottom = Spacing.s8).border(1.dp, colors.border, RoundedCornerShape(Radius.small)).padding(horizontal = 6.dp, vertical = Spacing.s2),
         )
     }
     if (askSubtasks) {
@@ -541,7 +542,7 @@ internal fun ListBadge(name: String, color: String) {
         Modifier.clip(RoundedCornerShape(Radius.small)).background(colors.bgTertiary).padding(horizontal = Spacing.s8, vertical = Spacing.s4),
         verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp),
     ) {
-        Box(Modifier.size(8.dp).clip(RoundedCornerShape(2.dp)).background(parseColor(color)))
+        Box(Modifier.size(8.dp).clip(SwatchShape).background(parseColor(color)))
         Text(name, style = TextStyles.caption, color = colors.textPrimary, maxLines = 1)
     }
 }

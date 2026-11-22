@@ -189,7 +189,7 @@ fun EmptyState(message: String, modifier: Modifier = Modifier, buttonTitle: Stri
 fun AppErrorBanner(message: String, onDismiss: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier.widthIn(max = 520.dp).fillMaxWidth().padding(horizontal = Spacing.s16)
-            .shadow(Spacing.s4, RoundedCornerShape(10.dp)).clip(RoundedCornerShape(10.dp)).background(Error)
+            .shadow(Spacing.s4, RoundedCornerShape(Radius.large)).clip(RoundedCornerShape(Radius.large)).background(Error)
             .padding(start = Spacing.s12, top = Spacing.s8, bottom = Spacing.s8),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(Spacing.s8),

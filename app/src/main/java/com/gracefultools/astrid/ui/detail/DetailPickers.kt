@@ -304,7 +304,7 @@ internal fun ListsSheet(detail: TaskDetail, state: TaskDetailState, vm: TaskDeta
                 }.heightIn(min = TouchSize.hitTarget).padding(horizontal = Spacing.s8),
                 verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
             ) {
-                Box(Modifier.size(16.dp).clip(RoundedCornerShape(3.dp)).background(com.gracefultools.astrid.ui.tasks.parseColor(list.color)))
+                Box(Modifier.size(16.dp).clip(com.gracefultools.astrid.ui.theme.SwatchShape).background(com.gracefultools.astrid.ui.tasks.parseColor(list.color)))
                 Text(list.name, style = TextStyles.body, color = colors.textPrimary, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                 Icon(if (on) Icons.Filled.CheckCircle else Icons.Outlined.RadioButtonUnchecked, null, tint = if (on) colors.accentInk else colors.textMuted)
             }

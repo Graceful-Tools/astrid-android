@@ -624,7 +624,7 @@ private fun RowDragArea(
                         ?: state.rows.lastOrNull()?.let { bounds[it.id]?.bottom?.plus(with(density) { 4.dp.toPx() }) } ?: 0f
                     Box(
                         Modifier.offset { androidx.compose.ui.unit.IntOffset(0, y.toInt()) }.padding(horizontal = Spacing.s8)
-                            .fillMaxWidth().heightIn(min = 3.dp).clip(RoundedCornerShape(2.dp)).background(colors.accent),
+                            .fillMaxWidth().heightIn(min = 3.dp).clip(CircleShape).background(colors.accent),
                     )
                 }
                 DropTarget.Outdent -> Row(

@@ -150,12 +150,12 @@ internal fun AppUpdateCard(onUpdate: () -> Unit, onDismiss: () -> Unit) {
                 Text(stringResource(R.string.update_available_body), style = TextStyles.body, color = colors.textMuted, textAlign = TextAlign.Center)
                 Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
                     Box(
-                        Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(colors.accent)
+                        Modifier.fillMaxWidth().clip(RoundedCornerShape(com.gracefultools.astrid.ui.theme.Radius.large)).background(colors.accent)
                             .clickable(role = Role.Button, onClick = onUpdate).padding(vertical = 14.dp),
                         contentAlignment = Alignment.Center,
                     ) { Text(stringResource(R.string.update_action), style = TextStyles.headline, color = colors.accentText) }
                     Box(
-                        Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp))
+                        Modifier.fillMaxWidth().clip(RoundedCornerShape(com.gracefultools.astrid.ui.theme.Radius.large))
                             .clickable(role = Role.Button, onClick = onDismiss).padding(vertical = Spacing.s8),
                         contentAlignment = Alignment.Center,
                     ) { Text(stringResource(R.string.update_later), style = TextStyles.body, color = colors.textMuted) }

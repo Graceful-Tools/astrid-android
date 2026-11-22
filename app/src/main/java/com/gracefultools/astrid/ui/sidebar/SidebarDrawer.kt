@@ -1,5 +1,7 @@
 package com.gracefultools.astrid.ui.sidebar
 
+import com.gracefultools.astrid.ui.theme.AccountCardShapes
+import androidx.compose.ui.graphics.RectangleShape
 import com.gracefultools.astrid.ui.theme.TouchSize
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
@@ -98,7 +100,7 @@ fun SidebarDrawer(
     val addingFallback = androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
     val width = (LocalConfiguration.current.screenWidthDp * 0.85f).dp.coerceAtMost(360.dp)
     ModalDrawerSheet(
-        drawerContainerColor = colors.bgPrimary, drawerShape = RoundedCornerShape(0.dp),
+        drawerContainerColor = colors.bgPrimary, drawerShape = RectangleShape,
         modifier = Modifier.widthIn(max = width).fillMaxHeight(),
     ) {
         Box(Modifier.fillMaxHeight().statusBarsPadding()) {
@@ -232,7 +234,7 @@ private fun Group(position: Position, modifier: Modifier = Modifier, content: @C
         Position.Only -> RoundedCornerShape(r)
         Position.First -> RoundedCornerShape(topStart = r, topEnd = r)
         Position.Last -> RoundedCornerShape(bottomStart = r, bottomEnd = r)
-        Position.Middle -> RoundedCornerShape(0.dp)
+        Position.Middle -> RectangleShape
     }
     Column(
         modifier.padding(horizontal = Spacing.s12).padding(bottom = if (position == Position.Only || position == Position.Last) Spacing.s12 else 0.dp)
@@ -367,7 +369,7 @@ private fun CountCapsule(count: Int) {
 @Composable
 private fun AccountCard(user: com.gracefultools.astrid.model.UserSummary?, onProfile: () -> Unit, onSettings: () -> Unit, modifier: Modifier = Modifier) {
     val colors = AstridTheme.colors
-    val shape = RoundedCornerShape(24.dp)
+    val shape = AccountCardShapes.card
     val settings = stringResource(R.string.navigation_settings)
     Row(
         modifier.navigationBarsPadding().padding(start = Spacing.s12, end = Spacing.s12, bottom = Spacing.s8).fillMaxWidth()
@@ -375,7 +377,7 @@ private fun AccountCard(user: com.gracefultools.astrid.model.UserSummary?, onPro
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
-            Modifier.weight(1f).clip(RoundedCornerShape(20.dp)).clickable(onClick = onProfile).testTag("sidebar:profile").padding(Spacing.s4),
+            Modifier.weight(1f).clip(AccountCardShapes.profile).clickable(onClick = onProfile).testTag("sidebar:profile").padding(Spacing.s4),
             verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(Spacing.s12),
         ) {
             Avatar(user?.image, initialsOf(user?.name, user?.email), 40.dp)
