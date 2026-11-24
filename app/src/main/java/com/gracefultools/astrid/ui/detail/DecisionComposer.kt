@@ -56,7 +56,7 @@ import com.gracefultools.astrid.ui.lists.FormRow
 import com.gracefultools.astrid.ui.lists.FormSection
 import com.gracefultools.astrid.ui.lists.FormTextField
 import com.gracefultools.astrid.ui.lists.SegmentedTabs
-import com.gracefultools.astrid.ui.markdown.MarkdownView
+import com.gracefultools.astrid.ui.markdown.DecisionMarkdown
 import com.gracefultools.astrid.ui.markdown.ratingLabel
 import com.gracefultools.astrid.ui.theme.AstridTheme
 import com.gracefultools.astrid.ui.theme.IconSize
@@ -135,7 +135,7 @@ fun DecisionComposer(onDone: (markdown: String, toDescription: Boolean) -> Unit,
                     val blocks = remember(draft.markdown) { rendered(draft.markdown) }
                     FormSection(title = stringResource(R.string.decision_composer_preview)) {
                         Box(Modifier.fillMaxWidth().padding(Spacing.s16).testTag("decisionComposer.preview")) {
-                            if (blocks != null) MarkdownView(blocks, onReference = { _, _ -> })
+                            if (blocks != null) DecisionMarkdown(draft.markdown, blocks, null, onReference = { _, _ -> })
                             else Text(draft.markdown, style = TextStyles.body, color = colors.textPrimary)
                         }
                     }

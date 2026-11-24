@@ -803,6 +803,9 @@
     <string name="decision_composer_post">Опубликовать</string>
     <string name="decision_composer_add">Добавить</string>
     <string name="decision_recommended">Рекомендуется</string>
+    <string name="decision_tap_row_hint">Нажмите на вариант, чтобы выбрать его.</string>
+    <string name="decision_confirm_title">Опубликовать ваш выбор?</string>
+    <string name="decision_choose_option">Выбрать %1$s</string>
     <string name="core_picker_no_due_date" formatted="false">Без срока</string>
     <string name="core_picker_today" formatted="false">Сегодня</string>
     <string name="core_picker_tomorrow" formatted="false">Завтра</string>

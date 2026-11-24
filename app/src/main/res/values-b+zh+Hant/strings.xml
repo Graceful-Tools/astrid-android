@@ -803,6 +803,9 @@
     <string name="decision_composer_post">發佈</string>
     <string name="decision_composer_add">新增</string>
     <string name="decision_recommended">推薦</string>
+    <string name="decision_tap_row_hint">點一下選項即可選擇。</string>
+    <string name="decision_confirm_title">發佈你的選擇？</string>
+    <string name="decision_choose_option">選擇 %1$s</string>
     <string name="core_picker_no_due_date" formatted="false">無截止日期</string>
     <string name="core_picker_today" formatted="false">今天</string>
     <string name="core_picker_tomorrow" formatted="false">明天</string>

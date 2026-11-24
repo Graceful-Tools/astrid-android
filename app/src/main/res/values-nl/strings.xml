@@ -803,6 +803,9 @@
     <string name="decision_composer_post">Plaatsen</string>
     <string name="decision_composer_add">Toevoegen</string>
     <string name="decision_recommended">Aanbevolen</string>
+    <string name="decision_tap_row_hint">Tik op een optie om die te kiezen.</string>
+    <string name="decision_confirm_title">Je keuze plaatsen?</string>
+    <string name="decision_choose_option">%1$s kiezen</string>
     <string name="core_picker_no_due_date" formatted="false">Geen deadline</string>
     <string name="core_picker_today" formatted="false">Vandaag</string>
     <string name="core_picker_tomorrow" formatted="false">Morgen</string>

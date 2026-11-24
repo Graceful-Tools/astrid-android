@@ -234,6 +234,7 @@ fun TaskDetailScreen(
                             onReply = { replyTo = it },
                             onEdit = vm::editComment,
                             onDelete = vm::deleteComment,
+                            onAnswer = { reply -> vm.postComment(reply) },
                             onOpenTask = onOpenTask, onOpenList = onOpenList,
                             typingAgent = state.typingAgent,
                             offline = !online,
@@ -685,7 +686,8 @@ private fun DescriptionBlock(detail: TaskDetail, onSave: (String) -> Unit, onOpe
                 .heightIn(min = TouchSize.hitTarget).padding(Spacing.s12).testTag("detail:description"),
         ) {
             if (detail.descriptionBlocks.isEmpty()) Text(stringResource(R.string.task_edit_add_description), style = TextStyles.body, color = colors.textMuted)
-            else MarkdownView(detail.descriptionBlocks, onReference = onReference)
+            // A decision in the description shows its options read-only (ADEV-257, iOS).
+            else com.gracefultools.astrid.ui.markdown.DecisionMarkdown(detail.task.description.orEmpty(), detail.descriptionBlocks, null, onReference)
         }
     }
     entry?.let { opened ->

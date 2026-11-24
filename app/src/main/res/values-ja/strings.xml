@@ -803,6 +803,9 @@
     <string name="decision_composer_post">投稿</string>
     <string name="decision_composer_add">追加</string>
     <string name="decision_recommended">おすすめ</string>
+    <string name="decision_tap_row_hint">選択肢をタップして選びます。</string>
+    <string name="decision_confirm_title">選択を投稿しますか？</string>
+    <string name="decision_choose_option">%1$s を選ぶ</string>
     <string name="core_picker_no_due_date" formatted="false">期限なし</string>
     <string name="core_picker_today" formatted="false">今日</string>
     <string name="core_picker_tomorrow" formatted="false">明日</string>

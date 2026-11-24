@@ -1020,4 +1020,8 @@
     <string name="decision_composer_post">Post</string>
     <string name="decision_composer_add">Add</string>
     <string name="decision_recommended">Recommended</string>
+    <!-- ADEV-257: answering a decision, iOS decision.* -->
+    <string name="decision_tap_row_hint">Tap an option to choose it.</string>
+    <string name="decision_confirm_title">Post your choice?</string>
+    <string name="decision_choose_option">Choose %1$s</string>
 </resources>
