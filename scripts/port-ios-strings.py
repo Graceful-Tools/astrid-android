@@ -72,6 +72,9 @@ for fname in ('strings.xml', 'core_keys.xml'):
             continue
         base = name[5:] if name.startswith('core_') else name
         candidates = [base.replace('_', '.', 1), base.replace('_', '.')]
+        # A key whose first part has an underscore itself (decision_composer.options, ADEV-241):
+        # the dot at any later underscore, so it matches by name before falling back to English text.
+        candidates += [base[:i] + '.' + base[i + 1:] for i, ch in enumerate(base) if ch == '_']
         key = next((c for c in candidates if c in en), None) or by_text.get(comparable(unescape(value)))
         if key and kinds(en[key]) != kinds(unescape(value)):
             key = None  # e.g. iOS "Complete %d" against Android's "Complete %1$s"

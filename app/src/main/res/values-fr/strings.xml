@@ -773,12 +773,36 @@
     <string name="project_goals_kind_enforced">Appliqué</string>
     <string name="project_goals_add_goal">Ajouter un objectif</string>
     <string name="project_goals_add_guardrail">Ajouter un garde-fou</string>
-    <string name="project_goals_remove">Supprimer</string>
+    <string name="project_goals_remove">Retirer</string>
     <string name="project_goals_save_failed">Impossible d\'enregistrer les objectifs et garde-fous. Réessayez.</string>
     <string name="project_goals_counts">Objectifs: %1$d · Garde-fous: %2$d</string>
     <string name="project_goals_target_value">Cible : %1$s</string>
     <string name="project_goals_current_value">Actuel : %1$s</string>
     <string name="actions_save">Enregistrer</string>
+    <string name="decision_composer_title">Demander une décision</string>
+    <string name="decision_composer_question">Question</string>
+    <string name="decision_composer_question_placeholder">Que faut-il décider ?</string>
+    <string name="decision_composer_options">Options</string>
+    <string name="decision_composer_option_placeholder">Option</string>
+    <string name="decision_composer_add_option">Ajouter une option</string>
+    <string name="decision_composer_needs_two_options">Écrivez au moins deux options.</string>
+    <string name="decision_composer_recommend_hint">Touchez l’étoile pour en recommander une.</string>
+    <string name="decision_composer_criteria">Compromis (facultatif)</string>
+    <string name="decision_composer_criterion_placeholder">Critère, p. ex. Coût</string>
+    <string name="decision_composer_criterion_detail_placeholder">Ce que cela signifie (facultatif)</string>
+    <string name="decision_composer_add_criterion">Ajouter un critère</string>
+    <string name="decision_composer_criteria_hint">Notez chaque option du rouge au vert pour chaque critère. Pas de score : c’est vous qui décidez.</string>
+    <string name="decision_composer_reason_placeholder">Note (facultatif), p. ex. 2 jours de travail</string>
+    <string name="decision_composer_reason_needs_colour">Choisissez une couleur pour chaque raison écrite.</string>
+    <string name="decision_composer_post_to">Publier dans</string>
+    <string name="decision_composer_as_comment">Commentaire</string>
+    <string name="decision_composer_in_description">Description</string>
+    <string name="decision_composer_comment_hint">Publié en commentaire. Toucher une option y répond dans le fil.</string>
+    <string name="decision_composer_description_hint">Ajouté à la fin de la description.</string>
+    <string name="decision_composer_preview">Aperçu</string>
+    <string name="decision_composer_post">Publier</string>
+    <string name="decision_composer_add">Ajouter</string>
+    <string name="decision_recommended">Recommandée</string>
     <string name="core_picker_no_due_date" formatted="false">Sans échéance</string>
     <string name="core_picker_today" formatted="false">Aujourd\'hui</string>
     <string name="core_picker_tomorrow" formatted="false">Demain</string>

@@ -150,7 +150,7 @@
     <string name="picker_add_to_lists">Añadir a listas</string>
     <string name="picker_no_lists_found">No se encontraron listas</string>
     <string name="picker_time">Hora</string>
-    <string name="task_edit_add_description">Agrega una descripción...</string>
+    <string name="task_edit_add_description">Añadir una descripción...</string>
     <string name="task_detail_subtasks">Subtareas</string>
     <string name="task_detail_add_subtask">Añadir una subtarea</string>
     <string name="task_detail_parent_task">Tarea principal:</string>
@@ -773,12 +773,36 @@
     <string name="project_goals_kind_enforced">Aplicado</string>
     <string name="project_goals_add_goal">Añadir objetivo</string>
     <string name="project_goals_add_guardrail">Añadir límite</string>
-    <string name="project_goals_remove">Eliminar</string>
+    <string name="project_goals_remove">Quitar</string>
     <string name="project_goals_save_failed">No se pudieron guardar los objetivos y límites. Inténtalo de nuevo.</string>
     <string name="project_goals_counts">Objetivos: %1$d · Límites: %2$d</string>
     <string name="project_goals_target_value">Meta: %1$s</string>
     <string name="project_goals_current_value">Ahora: %1$s</string>
     <string name="actions_save">Guardar</string>
+    <string name="decision_composer_title">Pedir una decisión</string>
+    <string name="decision_composer_question">Pregunta</string>
+    <string name="decision_composer_question_placeholder">¿Qué hay que decidir?</string>
+    <string name="decision_composer_options">Opciones</string>
+    <string name="decision_composer_option_placeholder">Opción</string>
+    <string name="decision_composer_add_option">Añadir opción</string>
+    <string name="decision_composer_needs_two_options">Escribe al menos dos opciones.</string>
+    <string name="decision_composer_recommend_hint">Toca la estrella para recomendar una.</string>
+    <string name="decision_composer_criteria">Ventajas e inconvenientes (opcional)</string>
+    <string name="decision_composer_criterion_placeholder">Criterio, p. ej. Coste</string>
+    <string name="decision_composer_criterion_detail_placeholder">Qué significa (opcional)</string>
+    <string name="decision_composer_add_criterion">Añadir criterio</string>
+    <string name="decision_composer_criteria_hint">Valora cada opción de rojo a verde en cada criterio. No hay puntuación: tú decides.</string>
+    <string name="decision_composer_reason_placeholder">Nota (opcional), p. ej. 2 días de trabajo</string>
+    <string name="decision_composer_reason_needs_colour">Elige un color para cada motivo que escribas.</string>
+    <string name="decision_composer_post_to">Publicar en</string>
+    <string name="decision_composer_as_comment">Comentario</string>
+    <string name="decision_composer_in_description">Descripción</string>
+    <string name="decision_composer_comment_hint">Se publica como comentario. Tocar una opción la responde en el hilo.</string>
+    <string name="decision_composer_description_hint">Se añade al final de la descripción.</string>
+    <string name="decision_composer_preview">Vista previa</string>
+    <string name="decision_composer_post">Publicar</string>
+    <string name="decision_composer_add">Añadir</string>
+    <string name="decision_recommended">Recomendada</string>
     <string name="core_picker_no_due_date" formatted="false">Sin fecha límite</string>
     <string name="core_picker_today" formatted="false">Hoy</string>
     <string name="core_picker_tomorrow" formatted="false">Mañana</string>

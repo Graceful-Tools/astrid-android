@@ -402,6 +402,21 @@ class TaskDetailViewModel(
         load()
     }
 
+    /**
+     * A decision from the composer (ADEV-241, iOS `addDecision`): posted as a markdown comment
+     * through the Outbox, or added after the description and saved like any description edit.
+     */
+    fun addDecision(markdown: String, toDescription: Boolean) {
+        if (toDescription) {
+            update("description" to com.gracefultools.astrid.core.DecisionDraft.append(markdown, _state.value.detail?.task?.description.orEmpty()))
+            return
+        }
+        work {
+            runCommand { core.run(command("postComment", "taskId" to id, "content" to markdown, "type" to "MARKDOWN")) }
+            load()
+        }
+    }
+
     fun editComment(commentId: String, text: String) = work {
         val trimmed = text.trim()
         if (trimmed.isEmpty()) return@work

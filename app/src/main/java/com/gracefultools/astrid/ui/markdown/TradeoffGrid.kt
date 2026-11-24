@@ -121,8 +121,9 @@ private fun plainText(inlines: List<JsonObject>) = inlines.joinToString("") {
     }
 }
 
+/** A rating's name by its core wire name (`veryPoor` … `veryGood`); also the composer's lights (ADEV-241). */
 @Composable
-private fun ratingLabel(rating: String?): String = stringResource(
+internal fun ratingLabel(rating: String?): String = stringResource(
     when (rating) {
         "veryPoor" -> R.string.tradeoff_very_poor
         "poor" -> R.string.tradeoff_poor

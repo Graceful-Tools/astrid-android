@@ -67,6 +67,7 @@ import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.ChevronRight
+import androidx.compose.material.icons.outlined.Checklist
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.GridView
@@ -788,6 +789,8 @@ private fun CommentComposer(
     ) { taken -> cameraPath?.let { path -> if (taken) vm.queueFile(path, java.io.File(path).name, "image/jpeg") }; cameraPath = null }
     val hasCamera = remember { context.packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_CAMERA_ANY) }
     var attachMenu by remember { mutableStateOf(false) }
+    var showDecision by rememberSaveable { mutableStateOf(false) }
+    if (showDecision) DecisionComposer(onDone = vm::addDecision, onDismiss = { showDecision = false })
     Column(
         Modifier.navigationBarsPadding().imePadding().padding(start = Spacing.s8, end = Spacing.s8, bottom = Spacing.s8).fillMaxWidth()
             .shadow(AstridShadows.bottomBar, shape)
@@ -837,6 +840,11 @@ private fun CommentComposer(
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.attachments_from_documents)) }, leadingIcon = { Icon(Icons.Outlined.Description, null) },
                         onClick = { attachMenu = false; documents.launch(arrayOf("*/*")) },
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.decision_composer_title)) }, leadingIcon = { Icon(Icons.Outlined.Checklist, null) },
+                        onClick = { attachMenu = false; showDecision = true },
+                        modifier = Modifier.testTag("detail:askForDecision"),
                     )
                     if (hasCamera) DropdownMenuItem(
                         text = { Text(stringResource(R.string.attachments_from_camera)) }, leadingIcon = { Icon(Icons.Outlined.PhotoCamera, null) },
