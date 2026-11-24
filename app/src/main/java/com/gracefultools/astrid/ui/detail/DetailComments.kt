@@ -1,5 +1,9 @@
 package com.gracefultools.astrid.ui.detail
 
+import com.gracefultools.astrid.ui.markdown.DecisionMarkdown
+import com.gracefultools.astrid.core.Decisions
+import com.gracefultools.astrid.core.DecisionThread
+import com.gracefultools.astrid.core.DecisionResponse
 import com.gracefultools.astrid.ui.theme.FrameSize
 import com.gracefultools.astrid.ui.theme.MaxSize
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -76,8 +80,14 @@ internal fun CommentsSection(
     onOpenList: (String) -> Unit,
     typingAgent: TypingAgent? = null,
     offline: Boolean = false,
+    onAnswer: (String) -> Unit = {},
 ) {
     val colors = AstridTheme.colors
+    // A question's options answer in this thread, your own too (ADEV-257; iOS AITD-579, ADEV-232).
+    val answers = remember(detail.comments) {
+        val thread = detail.comments.map { DecisionThread.Comment(it.id, it.content, it.authorId, it.isSystem, it.createdAt) }
+        thread.filter { Decisions.parse(it.content) != null }.associate { it.id to DecisionThread.answer(it, thread) }
+    }
     var showSystem by remember { mutableStateOf(false) }
     val people = detail.comments.filterNot { it.isSystem }
     val shown = if (showSystem) detail.comments else people
@@ -105,7 +115,10 @@ internal fun CommentsSection(
             if (comment.id in inStreak) return@forEach
             if (streak != null) StreakRow(streak)
             else if (comment.isSystem) SystemNote(comment)
-            else CommentBubble(comment, onOpenFile, fetch, onReply, onEdit, onDelete, onOpenTask, onOpenList)
+            else CommentBubble(
+                comment, onOpenFile, fetch, onReply, onEdit, onDelete, onOpenTask, onOpenList,
+                response = if (comment.id in answers) DecisionResponse(answers[comment.id]) { option -> onAnswer(Decisions.reply(option)) } else null,
+            )
         }
         // iOS's AgentTypingIndicator under the thread, while an agent works on this task (AATD-53).
         typingAgent?.let { com.gracefultools.astrid.ui.common.AgentTypingIndicator(it.name) }
@@ -153,6 +166,7 @@ private fun CommentBubble(
     onDelete: (String) -> Unit,
     onOpenTask: (String) -> Unit,
     onOpenList: (String) -> Unit,
+    response: DecisionResponse? = null,
 ) {
     val colors = AstridTheme.colors
     val clipboard = LocalClipboardManager.current
@@ -176,7 +190,11 @@ private fun CommentBubble(
                     verticalArrangement = Arrangement.spacedBy(Gap.s6),
                 ) {
                     if (comment.showsText) {
-                        if (comment.blocks.isNotEmpty()) MarkdownView(comment.blocks, onReference = { kind, id -> if (kind == "list") onOpenList(id) else onOpenTask(id) })
+                        if (comment.blocks.isNotEmpty()) {
+                            val onReference = { kind: String, id: String -> if (kind == "list") onOpenList(id) else onOpenTask(id) }
+                            if (response != null) DecisionMarkdown(comment.content, comment.blocks, response, onReference)
+                            else MarkdownView(comment.blocks, onReference = onReference)
+                        }
                         else Text(comment.content, style = TextStyles.body, color = colors.textPrimary)
                     }
                     comment.files.filter { it.rendersInline }.forEach { file -> InlineImage(file, fetch) { onOpenFile(file) } }

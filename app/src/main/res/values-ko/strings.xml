@@ -803,6 +803,9 @@
     <string name="decision_composer_post">게시</string>
     <string name="decision_composer_add">추가</string>
     <string name="decision_recommended">추천</string>
+    <string name="decision_tap_row_hint">선택지를 탭해 고르세요.</string>
+    <string name="decision_confirm_title">선택을 게시할까요?</string>
+    <string name="decision_choose_option">%1$s 선택</string>
     <string name="core_picker_no_due_date" formatted="false">마감일 없음</string>
     <string name="core_picker_today" formatted="false">오늘</string>
     <string name="core_picker_tomorrow" formatted="false">내일</string>

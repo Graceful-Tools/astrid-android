@@ -803,6 +803,9 @@
     <string name="decision_composer_post">Publicar</string>
     <string name="decision_composer_add">Adicionar</string>
     <string name="decision_recommended">Recomendada</string>
+    <string name="decision_tap_row_hint">Toque numa opção para escolhê-la.</string>
+    <string name="decision_confirm_title">Publicar a sua escolha?</string>
+    <string name="decision_choose_option">Escolher %1$s</string>
     <string name="core_picker_no_due_date" formatted="false">Sem prazo</string>
     <string name="core_picker_today" formatted="false">Hoje</string>
     <string name="core_picker_tomorrow" formatted="false">Amanhã</string>

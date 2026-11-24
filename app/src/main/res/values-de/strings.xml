@@ -803,6 +803,9 @@
     <string name="decision_composer_post">Posten</string>
     <string name="decision_composer_add">Hinzufügen</string>
     <string name="decision_recommended">Empfohlen</string>
+    <string name="decision_tap_row_hint">Tippe auf eine Option, um sie zu wählen.</string>
+    <string name="decision_confirm_title">Deine Wahl posten?</string>
+    <string name="decision_choose_option">%1$s wählen</string>
     <string name="core_picker_no_due_date" formatted="false">Kein Fälligkeitsdatum</string>
     <string name="core_picker_today" formatted="false">Heute</string>
     <string name="core_picker_tomorrow" formatted="false">Morgen</string>

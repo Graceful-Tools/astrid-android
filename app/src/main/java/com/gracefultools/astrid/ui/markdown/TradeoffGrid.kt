@@ -1,6 +1,17 @@
 package com.gracefultools.astrid.ui.markdown
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.semantics.Role
+import com.gracefultools.astrid.core.DecisionResponse
+import com.gracefultools.astrid.core.Decisions
+import com.gracefultools.astrid.ui.common.AstridTextButton
+import com.gracefultools.astrid.ui.theme.CircleSize
+import com.gracefultools.astrid.ui.theme.Gap
+import com.gracefultools.astrid.ui.theme.Radius
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -64,10 +75,14 @@ import kotlinx.serialization.json.JsonPrimitive
  * and "Full screen" above. The core decides which tables are grids and what each cell rates.
  */
 @Composable
-internal fun TradeoffGrid(block: JsonObject, onReference: (String, String) -> Unit) {
+internal fun TradeoffGrid(block: JsonObject, onReference: (String, String) -> Unit, choice: GridChoice? = null) {
     var fullScreen by rememberSaveable { mutableStateOf(false) }
+    var pending by remember { mutableStateOf<Decisions.Option?>(null) }
     val colors = AstridTheme.colors
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.s8)) {
+        if (choice?.state == DecisionResponse.State.Open) {
+            Text(stringResource(R.string.decision_tap_row_hint), fontSize = TypeSize.footnote, color = colors.textSecondary)
+        }
         Row(
             Modifier.clickable { fullScreen = true }.padding(vertical = Spacing.s2),
             horizontalArrangement = Arrangement.spacedBy(Spacing.s4),
@@ -78,11 +93,39 @@ internal fun TradeoffGrid(block: JsonObject, onReference: (String, String) -> Un
         }
         BoxWithConstraints {
             val available = maxWidth
-            Column(Modifier.horizontalScroll(rememberScrollState())) { Table(block, onReference, available, wide = false) }
+            Column(Modifier.horizontalScroll(rememberScrollState())) { Table(block, onReference, available, wide = false, choice, onPick = { pending = it }) }
         }
         Key(block)
     }
     if (fullScreen) FullScreen(block, onReference) { fullScreen = false }
+    // A sideways scroll can land a tap, so a row asks before it posts (iOS ADEV-229).
+    pending?.let { option ->
+        AlertDialog(
+            onDismissRequest = { pending = null },
+            title = { Text(stringResource(R.string.decision_confirm_title)) },
+            confirmButton = {
+                AstridTextButton(onClick = { pending = null; choice?.onPick?.invoke(option) }, modifier = Modifier.testTag("decision.confirm")) {
+                    Text(stringResource(R.string.decision_choose_option, Decisions.reply(option)))
+                }
+            },
+            dismissButton = { AstridTextButton(onClick = { pending = null }) { Text(stringResource(R.string.common_cancel)) } },
+        )
+    }
+}
+
+/**
+ * A grid whose rows are a decision's options (ADEV-229, iOS `TradeOffGridView(decision:)`): row n
+ * chooses option n. While the decision is open every cell of a row asks to post it; once answered,
+ * the chosen row is ringed and the others dim.
+ */
+internal class GridChoice(val decision: Decisions.Decision, val state: DecisionResponse.State, val onPick: (Decisions.Option) -> Unit) {
+    fun option(row: Int): Decisions.Option? = decision.options.getOrNull(row)
+    fun chosen(row: Int) = state == DecisionResponse.State.Chosen(row + 1)
+    fun dimmed(row: Int) = when (state) {
+        is DecisionResponse.State.Chosen -> state.number != row + 1
+        DecisionResponse.State.AnsweredInWords -> true
+        else -> false
+    }
 }
 
 /** A grid on a screen of its own (iOS `TradeOffGridFullScreenView`): wider cells, scrolls both ways, closed with ✕. */
@@ -146,7 +189,14 @@ internal fun columnLetter(index: Int): String {
 }
 
 @Composable
-private fun Table(block: JsonObject, onReference: (String, String) -> Unit, available: Dp, wide: Boolean) {
+private fun Table(
+    block: JsonObject,
+    onReference: (String, String) -> Unit,
+    available: Dp,
+    wide: Boolean,
+    choice: GridChoice? = null,
+    onPick: (Decisions.Option) -> Unit = {},
+) {
     val colors = AstridTheme.colors
     val metrics = AstridTokens.Markdown
     val header = block.inlinesAt("header")
@@ -184,9 +234,17 @@ private fun Table(block: JsonObject, onReference: (String, String) -> Unit, avai
             }
         }
         rows.forEachIndexed { index, row ->
-            Row(Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(metrics.tradeoffGap)) {
+            val option = choice?.option(index)
+            val open = option != null && choice.state == DecisionResponse.State.Open
+            val rowModifier = Modifier.height(IntrinsicSize.Min)
+                .then(if (choice?.dimmed(index) == true) Modifier.alpha(AstridTokens.State.disabledOpacity) else Modifier)
+                .then(if (open) Modifier.clickable(role = Role.Button) { onPick(option!!) } else Modifier)
+                .then(if (option != null) Modifier.testTag("decision.row.${index + 1}") else Modifier)
+            Row(rowModifier, horizontalArrangement = Arrangement.spacedBy(metrics.tradeoffGap)) {
                 val name = inlineText(row.arr("name"), onReference)
-                Text(
+                if (option != null) {
+                    ChoiceName(index + 1, name, option.recommended, chosen = choice.chosen(index), Modifier.width(optionWidth).fillMaxHeight())
+                } else Text(
                     buildAnnotatedString { append("${index + 1}. "); append(name) },
                     fontSize = small, fontWeight = FontWeight.SemiBold, color = colors.textPrimary,
                     modifier = Modifier.width(optionWidth).fillMaxHeight().padding(horizontal = Spacing.s4, vertical = Spacing.s4),
@@ -238,6 +296,39 @@ private fun Key(block: JsonObject) {
         }
     }
 }
+
+/** A row that is an option to choose: its number badge, its name, "Recommended", ringed once chosen (iOS ADEV-229). */
+@Composable
+private fun ChoiceName(number: Int, name: androidx.compose.ui.text.AnnotatedString, recommended: Boolean, chosen: Boolean, modifier: Modifier) {
+    val colors = AstridTheme.colors
+    val shape = RoundedCornerShape(Radius.small)
+    Column(
+        modifier.then(if (chosen) Modifier.border(AstridTokens.Size.Comfortable.selectionOutline, colors.accent, shape) else Modifier)
+            .padding(horizontal = Spacing.s12, vertical = Gap.s10),
+        verticalArrangement = Arrangement.spacedBy(Spacing.s2),
+    ) {
+        Row(horizontalArrangement = Arrangement.spacedBy(Spacing.s8), verticalAlignment = Alignment.CenterVertically) {
+            DecisionNumberBadge(number, chosen)
+            Text(name, fontSize = TypeSize.body, color = colors.textPrimary)
+        }
+        if (recommended) Text(stringResource(R.string.decision_recommended), fontSize = TypeSize.caption1, fontWeight = FontWeight.SemiBold, color = colors.accentInk)
+    }
+}
+
+/** An option's number in its circle, filled once chosen (iOS `DecisionNumberBadge`). */
+@Composable
+internal fun DecisionNumberBadge(number: Int, chosen: Boolean) {
+    val colors = AstridTheme.colors
+    Box(
+        Modifier.size(CircleSize.badge).background(if (chosen) colors.accent else colors.accent.copy(alpha = BADGE_WASH_ALPHA), CircleShape),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text("$number", fontSize = TypeSize.body, fontWeight = FontWeight.SemiBold, color = if (chosen) colors.accentText else colors.accentInk)
+    }
+}
+
+/** The badge's wash behind an open option's number: the accent at 14%, as iOS draws it. */
+private const val BADGE_WASH_ALPHA = 0.14f
 
 /** An unrated cell is the text colour at 5%, as iOS draws it. */
 private const val UNRATED_ALPHA = 0.05f
