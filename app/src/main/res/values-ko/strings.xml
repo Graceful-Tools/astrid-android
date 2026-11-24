@@ -779,6 +779,30 @@
     <string name="project_goals_target_value">목표치: %1$s</string>
     <string name="project_goals_current_value">현재: %1$s</string>
     <string name="actions_save">저장</string>
+    <string name="decision_composer_title">결정 요청</string>
+    <string name="decision_composer_question">질문</string>
+    <string name="decision_composer_question_placeholder">무엇을 결정해야 하나요?</string>
+    <string name="decision_composer_options">선택지</string>
+    <string name="decision_composer_option_placeholder">선택지</string>
+    <string name="decision_composer_add_option">선택지 추가</string>
+    <string name="decision_composer_needs_two_options">선택지를 두 개 이상 입력하세요.</string>
+    <string name="decision_composer_recommend_hint">별을 탭해 하나를 추천하세요.</string>
+    <string name="decision_composer_criteria">장단점 (선택)</string>
+    <string name="decision_composer_criterion_placeholder">기준, 예: 비용</string>
+    <string name="decision_composer_criterion_detail_placeholder">의미(선택)</string>
+    <string name="decision_composer_add_criterion">기준 추가</string>
+    <string name="decision_composer_criteria_hint">각 기준에서 선택지를 빨강부터 초록까지 평가하세요. 점수는 없습니다. 결정은 당신이 합니다.</string>
+    <string name="decision_composer_reason_placeholder">메모(선택), 예: 작업 2일</string>
+    <string name="decision_composer_reason_needs_colour">입력한 이유마다 색을 고르세요.</string>
+    <string name="decision_composer_post_to">게시 위치</string>
+    <string name="decision_composer_as_comment">댓글</string>
+    <string name="decision_composer_in_description">설명</string>
+    <string name="decision_composer_comment_hint">댓글로 게시됩니다. 선택지를 탭하면 스레드에서 답할 수 있습니다.</string>
+    <string name="decision_composer_description_hint">설명 끝에 추가됩니다.</string>
+    <string name="decision_composer_preview">미리보기</string>
+    <string name="decision_composer_post">게시</string>
+    <string name="decision_composer_add">추가</string>
+    <string name="decision_recommended">추천</string>
     <string name="core_picker_no_due_date" formatted="false">마감일 없음</string>
     <string name="core_picker_today" formatted="false">오늘</string>
     <string name="core_picker_tomorrow" formatted="false">내일</string>

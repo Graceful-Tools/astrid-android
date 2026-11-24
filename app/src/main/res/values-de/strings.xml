@@ -779,6 +779,30 @@
     <string name="project_goals_target_value">Zielwert: %1$s</string>
     <string name="project_goals_current_value">Aktuell: %1$s</string>
     <string name="actions_save">Speichern</string>
+    <string name="decision_composer_title">Um eine Entscheidung bitten</string>
+    <string name="decision_composer_question">Frage</string>
+    <string name="decision_composer_question_placeholder">Was muss entschieden werden?</string>
+    <string name="decision_composer_options">Optionen</string>
+    <string name="decision_composer_option_placeholder">Option</string>
+    <string name="decision_composer_add_option">Option hinzufügen</string>
+    <string name="decision_composer_needs_two_options">Schreibe mindestens zwei Optionen.</string>
+    <string name="decision_composer_recommend_hint">Tippe auf den Stern, um eine zu empfehlen.</string>
+    <string name="decision_composer_criteria">Abwägungen (optional)</string>
+    <string name="decision_composer_criterion_placeholder">Kriterium, z. B. Kosten</string>
+    <string name="decision_composer_criterion_detail_placeholder">Was es bedeutet (optional)</string>
+    <string name="decision_composer_add_criterion">Kriterium hinzufügen</string>
+    <string name="decision_composer_criteria_hint">Bewerte jede Option je Kriterium von Rot bis Grün. Es gibt keine Punktzahl: Du entscheidest.</string>
+    <string name="decision_composer_reason_placeholder">Notiz (optional), z. B. 2 Tage Arbeit</string>
+    <string name="decision_composer_reason_needs_colour">Wähle für jede Begründung eine Farbe.</string>
+    <string name="decision_composer_post_to">Posten in</string>
+    <string name="decision_composer_as_comment">Kommentar</string>
+    <string name="decision_composer_in_description">Beschreibung</string>
+    <string name="decision_composer_comment_hint">Als Kommentar gepostet. Ein Tipp auf eine Option beantwortet sie im Verlauf.</string>
+    <string name="decision_composer_description_hint">Wird am Ende der Beschreibung angefügt.</string>
+    <string name="decision_composer_preview">Vorschau</string>
+    <string name="decision_composer_post">Posten</string>
+    <string name="decision_composer_add">Hinzufügen</string>
+    <string name="decision_recommended">Empfohlen</string>
     <string name="core_picker_no_due_date" formatted="false">Kein Fälligkeitsdatum</string>
     <string name="core_picker_today" formatted="false">Heute</string>
     <string name="core_picker_tomorrow" formatted="false">Morgen</string>

@@ -779,6 +779,30 @@
     <string name="project_goals_target_value">Meta: %1$s</string>
     <string name="project_goals_current_value">Agora: %1$s</string>
     <string name="actions_save">Salvar</string>
+    <string name="decision_composer_title">Pedir uma decisão</string>
+    <string name="decision_composer_question">Pergunta</string>
+    <string name="decision_composer_question_placeholder">O que precisa ser decidido?</string>
+    <string name="decision_composer_options">Opções</string>
+    <string name="decision_composer_option_placeholder">Opção</string>
+    <string name="decision_composer_add_option">Adicionar opção</string>
+    <string name="decision_composer_needs_two_options">Escreva pelo menos duas opções.</string>
+    <string name="decision_composer_recommend_hint">Toque na estrela para recomendar uma.</string>
+    <string name="decision_composer_criteria">Prós e contras (opcional)</string>
+    <string name="decision_composer_criterion_placeholder">Critério, ex.: Custo</string>
+    <string name="decision_composer_criterion_detail_placeholder">O que significa (opcional)</string>
+    <string name="decision_composer_add_criterion">Adicionar critério</string>
+    <string name="decision_composer_criteria_hint">Avalie cada opção de vermelho a verde em cada critério. Não há pontuação: você decide.</string>
+    <string name="decision_composer_reason_placeholder">Nota (opcional), ex.: 2 dias de trabalho</string>
+    <string name="decision_composer_reason_needs_colour">Escolha uma cor para cada motivo que escrever.</string>
+    <string name="decision_composer_post_to">Publicar em</string>
+    <string name="decision_composer_as_comment">Comentário</string>
+    <string name="decision_composer_in_description">Descrição</string>
+    <string name="decision_composer_comment_hint">Publicado como comentário. Tocar numa opção responde na conversa.</string>
+    <string name="decision_composer_description_hint">Adicionado ao final da descrição.</string>
+    <string name="decision_composer_preview">Pré-visualização</string>
+    <string name="decision_composer_post">Publicar</string>
+    <string name="decision_composer_add">Adicionar</string>
+    <string name="decision_recommended">Recomendada</string>
     <string name="core_picker_no_due_date" formatted="false">Sem prazo</string>
     <string name="core_picker_today" formatted="false">Hoje</string>
     <string name="core_picker_tomorrow" formatted="false">Amanhã</string>

@@ -995,4 +995,29 @@
     <string name="project_goals_target_value">Target: %1$s</string>
     <string name="project_goals_current_value">Now: %1$s</string>
     <string name="actions_save">Save</string>
+    <!-- ADEV-241: the decision composer, iOS decision_composer.* -->
+    <string name="decision_composer_title">Ask for a decision</string>
+    <string name="decision_composer_question">Question</string>
+    <string name="decision_composer_question_placeholder">What needs deciding?</string>
+    <string name="decision_composer_options">Options</string>
+    <string name="decision_composer_option_placeholder">Option</string>
+    <string name="decision_composer_add_option">Add option</string>
+    <string name="decision_composer_needs_two_options">Write at least two options.</string>
+    <string name="decision_composer_recommend_hint">Tap the star to recommend one.</string>
+    <string name="decision_composer_criteria">Trade-offs (optional)</string>
+    <string name="decision_composer_criterion_placeholder">Criterion, e.g. Cost</string>
+    <string name="decision_composer_criterion_detail_placeholder">What it means (optional)</string>
+    <string name="decision_composer_add_criterion">Add criterion</string>
+    <string name="decision_composer_criteria_hint">Rate each option from red to green on each criterion. There is no score: you decide.</string>
+    <string name="decision_composer_reason_placeholder">Note (optional), e.g. 2 days of work</string>
+    <string name="decision_composer_reason_needs_colour">Pick a colour for every reason you write.</string>
+    <string name="decision_composer_post_to">Post to</string>
+    <string name="decision_composer_as_comment">Comment</string>
+    <string name="decision_composer_in_description">Description</string>
+    <string name="decision_composer_comment_hint">Posted as a comment. Tapping an option answers it in the thread.</string>
+    <string name="decision_composer_description_hint">Added to the end of the description.</string>
+    <string name="decision_composer_preview">Preview</string>
+    <string name="decision_composer_post">Post</string>
+    <string name="decision_composer_add">Add</string>
+    <string name="decision_recommended">Recommended</string>
 </resources>

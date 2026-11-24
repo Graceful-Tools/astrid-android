@@ -150,7 +150,7 @@
     <string name="picker_add_to_lists">Toevoegen aan lijsten</string>
     <string name="picker_no_lists_found">Geen lijsten gevonden</string>
     <string name="picker_time">Tijd</string>
-    <string name="task_edit_add_description">Voeg een beschrijving toe...</string>
+    <string name="task_edit_add_description">Beschrijving toevoegen...</string>
     <string name="task_detail_subtasks">Subtaken</string>
     <string name="task_detail_add_subtask">Subtaak toevoegen</string>
     <string name="task_detail_parent_task">Hoofdtaak:</string>
@@ -779,6 +779,30 @@
     <string name="project_goals_target_value">Streefwaarde: %1$s</string>
     <string name="project_goals_current_value">Nu: %1$s</string>
     <string name="actions_save">Opslaan</string>
+    <string name="decision_composer_title">Om een beslissing vragen</string>
+    <string name="decision_composer_question">Vraag</string>
+    <string name="decision_composer_question_placeholder">Wat moet er beslist worden?</string>
+    <string name="decision_composer_options">Opties</string>
+    <string name="decision_composer_option_placeholder">Optie</string>
+    <string name="decision_composer_add_option">Optie toevoegen</string>
+    <string name="decision_composer_needs_two_options">Schrijf minstens twee opties.</string>
+    <string name="decision_composer_recommend_hint">Tik op de ster om er één aan te bevelen.</string>
+    <string name="decision_composer_criteria">Afwegingen (optioneel)</string>
+    <string name="decision_composer_criterion_placeholder">Criterium, bijv. Kosten</string>
+    <string name="decision_composer_criterion_detail_placeholder">Wat het betekent (optioneel)</string>
+    <string name="decision_composer_add_criterion">Criterium toevoegen</string>
+    <string name="decision_composer_criteria_hint">Beoordeel elke optie per criterium van rood tot groen. Er is geen score: jij beslist.</string>
+    <string name="decision_composer_reason_placeholder">Notitie (optioneel), bijv. 2 dagen werk</string>
+    <string name="decision_composer_reason_needs_colour">Kies een kleur voor elke reden die je schrijft.</string>
+    <string name="decision_composer_post_to">Plaatsen in</string>
+    <string name="decision_composer_as_comment">Opmerking</string>
+    <string name="decision_composer_in_description">Beschrijving</string>
+    <string name="decision_composer_comment_hint">Geplaatst als opmerking. Tikken op een optie beantwoordt die in de draad.</string>
+    <string name="decision_composer_description_hint">Toegevoegd aan het einde van de beschrijving.</string>
+    <string name="decision_composer_preview">Voorbeeld</string>
+    <string name="decision_composer_post">Plaatsen</string>
+    <string name="decision_composer_add">Toevoegen</string>
+    <string name="decision_recommended">Aanbevolen</string>
     <string name="core_picker_no_due_date" formatted="false">Geen deadline</string>
     <string name="core_picker_today" formatted="false">Vandaag</string>
     <string name="core_picker_tomorrow" formatted="false">Morgen</string>
