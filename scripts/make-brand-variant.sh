@@ -14,7 +14,6 @@
 #                "accentInk": "#6b21a8", "accentInkDark": "#d8b4fe", "defaultTheme": "light",
 #                "versionCode": 3, "versionName": "1.2.0" "appIcon": "acme-icon-1024.png",
 #                "monochromeIcon": "acme-glyph-1024.png", "characterImage": "acme-mascot.png",
-#                "checkboxImages": "acme-checkboxes",
 #                "play": { "title": "…", "shortDescription": "…", "fullDescription": "…", "releaseNotes": "…" } }
 #
 # — and writes brands/<slug>/brand.properties, its Play listing (play/, a neutral draft in the
@@ -23,9 +22,8 @@
 # first package in the server's BRAND_ANDROID_APP_LINKS, which is the one the server vouches for.
 # A value the profile leaves out stays out, so the build uses Astrid's. Artwork comes from images
 # beside the profile: android.appIcon (1024x1024), android.monochromeIcon (a 1024x1024 silhouette for
-# the themed and notification icons), android.characterImage (square), android.checkboxImages (a
-# folder of square check_box[_repeat][_checked]_<0-3>.png, Astrid's names; each one present replaces
-# Astrid's), android.iconBackground (#rrggbb, default the accent). sips or ImageMagick resizes them
+# the themed and notification icons), android.characterImage (square), android.iconBackground
+# (#rrggbb, default the accent); android.checkboxImages is retired (ADEV-196). sips or ImageMagick resizes them
 # into res/. Re-running removes only the files it wrote last time (res/.make-brand-variant),
 # never a partner's own resources.
 #
@@ -227,28 +225,18 @@ icon, mono, character = source("appIcon"), source("monochromeIcon"), source("cha
 if mono and not icon:
     sys.exit("android.monochromeIcon needs android.appIcon: it is the themed layer of that icon")
 
-# The checkbox art: a folder of Astrid's own file names, each one present replacing Astrid's.
-CHECKBOXES = {f"check_box{r}{c}_{p}.png" for r in ("", "_repeat") for c in ("", "_checked") for p in range(4)}
-boxes = {}
+# Retired (ADEV-196, register DS21): the app draws astrid-core's checkbox art in the priority
+# tokens, so the brand's accent already colours it. An older profile still builds.
 if android.get("checkboxImages"):
-    folder = os.path.join(here, str(android["checkboxImages"]))
-    if not os.path.isdir(folder):
-        sys.exit(f"android.checkboxImages: no such folder {folder}")
-    pngs = sorted(f for f in os.listdir(folder) if f.lower().endswith(".png"))
-    unknown = [f for f in pngs if f not in CHECKBOXES]
-    if unknown:
-        sys.exit(f"android.checkboxImages: {', '.join(unknown)} is not one of Astrid's checkbox names "
-                 "(check_box[_repeat][_checked]_<0-3>.png)")
-    if not pngs:
-        sys.exit(f"android.checkboxImages: {folder} holds none of the check_box[_repeat][_checked]_<0-3>.png images")
-    boxes = {f: os.path.join(folder, f) for f in pngs}
+    print("  note: android.checkboxImages is retired (ADEV-196): the checkbox is astrid-core's art in the "
+          "brand's priority colours, so the folder is not used", file=sys.stderr)
 
-if not (icon or character or boxes):
+if not (icon or character):
     sys.exit(0)
 
 tool = next((t for t in ("sips", "magick", "convert") if shutil.which(t)), None)
 if not tool:
-    sys.exit("android.appIcon / characterImage / checkboxImages need sips (macOS) or ImageMagick to resize")
+    sys.exit("android.appIcon / characterImage need sips (macOS) or ImageMagick to resize")
 
 def run(*args):
     done = subprocess.run(args, capture_output=True, text=True)
@@ -323,9 +311,6 @@ if icon:
 if character:
     square(character, "characterImage")
     resize(character, "drawable-nodpi/astrid_character.png", 512)
-for name, path in boxes.items():
-    square(path, f"checkboxImages/{name}")
-    resize(path, f"drawable-nodpi/{name}", 56)        # Astrid's own are 56px, drawn the same size
 
 open(marker, "w", encoding="utf-8").write("\n".join(sorted(written)) + "\n")
 print(f"  art: {len(written)} files in res/", file=sys.stderr)

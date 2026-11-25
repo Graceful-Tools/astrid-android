@@ -102,7 +102,7 @@ if [[ "$mode" != "--quick" ]]; then
     scale() { if command -v sips >/dev/null; then sips -z 1024 1024 "$1" --out "$2" >/dev/null; else "$(command -v magick || command -v convert)" "$1" -resize 1024x1024! "$2"; fi; }
     scale app/src/main/res/drawable-nodpi/astrid_character.png "$art/icon.png"
     scale app/src/main/res/mipmap-xxxhdpi/ic_launcher_monochrome.png "$art/mono.png"
-    cp app/src/main/res/drawable-nodpi/check_box_1.png "$art/character.png"
+    cp app/src/main/res/drawable-nodpi/ai_claude.png "$art/character.png"
     scripts/make-brand-variant.sh "$art/artcheck.brand.json" --out brands/.artcheck 2>/dev/null
     ./gradlew --console=plain -PastridBrand=.artcheck :app:processDebugResources
     grep -q '<color name="ic_launcher_background">#FF123456</color>' \
