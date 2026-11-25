@@ -154,6 +154,20 @@ class CoreSessionTest {
     }
 
     @Test
+    fun `ADEV-151 the pinned core tells task details what the leading tap does`() = runBlocking {
+        // The detail's leading tap follows the core's answer (iOS TaskDetailLeadingControl): someone
+        // else's task opens the quick changer, and your own checkbox completes.
+        val core = session()
+        core.run(CoreJson.parseToJsonElement("""{"kind":"seedCache","currentUser":{"id":"u"},
+            "tasks":[{"id":"theirs","title":"Theirs","assigneeId":"v"},
+                     {"id":"mine","title":"Mine","assigneeId":"u"}]}""").jsonObject)
+        suspend fun action(taskId: String) =
+            (core.run(command("taskDetail", "taskId" to taskId)).jsonObject["action"] as? JsonPrimitive)?.content
+        assertEquals("openPicker", action("theirs"))
+        assertEquals("complete", action("mine"))
+    }
+
+    @Test
     fun `AATD-50 the rules door words a repeat that is still being edited`() {
         val parts = CoreRules.ask(
             CoreJson.parseToJsonElement(
