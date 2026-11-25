@@ -11,8 +11,9 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
@@ -44,26 +45,27 @@ fun Modifier.selectionOutline(style: SelectionOutlineStyle, shape: Shape): Modif
 
 /**
  * Where the selected row sits on screen, so the details panel can point its arrow at it (DS7).
- * The row reports its vertical centre in root coordinates while it is composed and selected, and
- * clears it when it leaves — scrolled out of a lazy list, or deselected — so the arrow hides.
+ * The row reports its bounds in root coordinates (pixels) while it is composed and selected —
+ * the core's callout placement wants the whole anchor, not just its middle (AATD-114) — and
+ * clears them when it leaves (scrolled out of a lazy list, or deselected), so the arrow hides.
  */
 class SelectedRowAnchor {
     private var owner: String? = null
-    var centerY by mutableStateOf<Float?>(null)
+    var bounds by mutableStateOf<Rect?>(null)
         private set
 
-    fun report(id: String, y: Float) { owner = id; centerY = y }
-    fun clear(id: String) { if (owner == id) { owner = null; centerY = null } }
+    fun report(id: String, rowBounds: Rect) { owner = id; bounds = rowBounds }
+    fun clear(id: String) { if (owner == id) { owner = null; bounds = null } }
 }
 
 /** Provided where the list and the details share the screen; null on a phone's single pane. */
 val LocalSelectedRowAnchor = staticCompositionLocalOf<SelectedRowAnchor?> { null }
 
-/** On the selected row: keeps [LocalSelectedRowAnchor] at this element's vertical centre. */
+/** On the selected row: keeps [LocalSelectedRowAnchor] at this element's bounds. */
 @Composable
 fun Modifier.reportsSelectedRow(id: String, isSelected: Boolean): Modifier {
     val anchor = LocalSelectedRowAnchor.current ?: return this
     if (!isSelected) return this
     DisposableEffect(anchor, id) { onDispose { anchor.clear(id) } }
-    return onGloballyPositioned { anchor.report(id, it.positionInRoot().y + it.size.height / 2f) }
+    return onGloballyPositioned { anchor.report(id, it.boundsInRoot()) }
 }
