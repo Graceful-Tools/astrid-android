@@ -62,6 +62,54 @@ class TaskDetailViewModelTest {
         assertFalse(core.kinds().contains("updateTask"))
     }
 
+    private val someoneElses = """{"task":{"id":"t1","title":"Water plants","priority":1},
+        "assignee":{"id":"u-sam","name":"Sam"},"leading":{"kind":"avatar","userId":"u-sam"},"action":"openPicker",
+        "fieldOrder":["when","priority","lists"],"descriptionBlocks":[],"comments":[],"subtasks":[]}"""
+
+    @Test
+    fun `ADEV-151 a tap on someone else's task in details opens the quick changer instead of completing it`() = runTest {
+        val core = FakeCore().apply {
+            answer("taskDetail", someoneElses)
+            answer("taskStatusOptions", """{"current":"doing","columns":[{"id":"doing","name":"Doing","isCurrent":true},{"id":"done","name":"Done"}]}""")
+        }
+        val vm = vm(core)
+        assertTrue("the core's openPicker is handled here", vm.tapLeading())
+        assertFalse(core.kinds().contains("completeTask"))
+        val picker = vm.state.value.statusPicker!!
+        assertEquals(JsonPrimitive("t1"), core.last("taskStatusOptions")!!["taskId"])
+        assertEquals(listOf("doing", "done"), picker.options.columns.map { it.id })
+        // The picker's question ("Complete this task?") reads whose it is from the core's leading control.
+        assertTrue(com.gracefultools.astrid.ui.common.MarkDoneQuickSet.needsConfirmation(picker.row))
+        assertEquals("Sam", picker.row.assignee?.name)
+
+        vm.completeFromPicker()
+        assertEquals(JsonPrimitive(true), core.last("completeTask")!!["completed"])
+        assertEquals(null, vm.state.value.statusPicker)
+    }
+
+    @Test
+    fun `ADEV-151 a column from the details picker moves the task there`() = runTest {
+        val core = FakeCore().apply {
+            answer("taskDetail", someoneElses)
+            answer("taskStatusOptions", """{"current":"doing","columns":[{"id":"doing","name":"Doing","isCurrent":true},{"id":"done","name":"Done"}]}""")
+        }
+        val vm = vm(core)
+        vm.tapLeading()
+        vm.pickStatus("done")
+        assertEquals(JsonPrimitive("done"), core.last("setTaskStatus")!!["columnId"])
+        assertFalse(core.kinds().contains("completeTask"))
+        assertEquals(null, vm.state.value.statusPicker)
+    }
+
+    @Test
+    fun `ADEV-151 your own checkbox, or a core that says nothing, leaves the tap to complete`() = runTest {
+        val core = FakeCore().apply { answer("taskDetail", detail) }
+        val vm = vm(core)
+        assertFalse(vm.tapLeading())
+        assertFalse(core.kinds().contains("taskStatusOptions"))
+        assertEquals(null, vm.state.value.statusPicker)
+    }
+
     @Test
     fun `AATD-9 a comment is posted trimmed, and an empty one is not posted`() = runTest {
         val core = FakeCore().apply { answer("taskDetail", detail) }

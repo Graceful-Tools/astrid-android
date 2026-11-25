@@ -130,6 +130,7 @@ import com.gracefultools.astrid.ui.common.completionPop
 import com.gracefultools.astrid.ui.common.rememberCompletionPop
 import com.gracefultools.astrid.ui.common.CoreLabels
 import com.gracefultools.astrid.ui.common.RowFaceShape
+import com.gracefultools.astrid.ui.common.StatusPicker
 import com.gracefultools.astrid.ui.common.initialsOf
 import com.gracefultools.astrid.ui.markdown.MarkdownView
 import com.gracefultools.astrid.ui.tasks.parseColor
@@ -352,11 +353,13 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
         val label = stringResource(if (detail.task.completed) R.string.tasks_reopen_a11y else R.string.tasks_complete_a11y, detail.task.title)
         val tap = Modifier.size(TouchSize.leadingControl).completionPop(pop).clip(RoundedCornerShape(Radius.medium))
             .clickable(enabled = !detail.isCopyOnly) {
+                // The core's answer for details first: someone else's face opens the quick changer (ADEV-151).
+                if (vm.tapLeading()) return@clickable
                 val openSubtasks = detail.subtasks.any { !it.completed }
                 if (!detail.task.completed && openSubtasks) askSubtasks = true
                 else { pop.tapped(completes = !detail.task.completed); vm.setCompleted(!detail.task.completed) }
             }
-            .semantics { role = Role.Checkbox; contentDescription = label }
+            .semantics { role = if (detail.action == "openPicker") Role.Button else Role.Checkbox; contentDescription = label }
         val assignee = detail.assignee
         if (assignee != null && detailLeadingShowsFace(detail)) {
             Avatar(assignee.image, initialsOf(assignee.name, assignee.email), TouchSize.leadingControl, tap, shape = RowFaceShape,
@@ -389,6 +392,10 @@ private fun TitleBlock(detail: TaskDetail, vm: TaskDetailViewModel) {
             stringResource(R.string.tasks_wont_do_chip), style = TextStyles.caption, color = colors.textSecondary,
             modifier = Modifier.padding(start = TouchLayout.detailIconColumn, bottom = Spacing.s8).border(BorderWidth.thin, colors.border, RoundedCornerShape(Radius.small)).padding(horizontal = Gap.s6, vertical = Spacing.s2),
         )
+    }
+    // ADEV-151: the quick changer the leading control opened, as a row's (ADEV-150).
+    vm.state.collectAsStateWithLifecycle().value.statusPicker?.let { picker ->
+        StatusPicker(picker.options, onPick = vm::pickStatus, onDismiss = vm::dismissStatusPicker, row = picker.row, onComplete = vm::completeFromPicker)
     }
     if (askSubtasks) {
         AlertDialog(

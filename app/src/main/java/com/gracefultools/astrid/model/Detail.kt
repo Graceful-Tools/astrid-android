@@ -16,6 +16,13 @@ data class TaskDetail(
     val repeatSummary: JsonElement? = null,
     val listChips: List<ListChip> = emptyList(),
     val assignee: UserSummary? = null,
+    /** The leading control the core draws for details, as a row's (core `LeadingControl`, ADEV-263). */
+    val leading: LeadingControl? = null,
+    /**
+     * What tapping it does (core `LeadingControl::action(Surface::Detail)`): `complete`, `openPicker`
+     * or `copy`. Absent from an older core, which keeps today's tap: complete (ADEV-151).
+     */
+    val action: String = "complete",
     val isCopyOnly: Boolean = false,
     val showsIdentifier: Boolean = false,
     val offersCopyIdentifier: Boolean = false,
