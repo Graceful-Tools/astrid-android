@@ -49,7 +49,7 @@ name and domain, for the partner to replace.
 | `iconBackground` | `#rrggbb` behind the adaptive icon (`ic_launcher_background`). Default: the profile's accent |
 | `monochromeIcon` | A 1024×1024 silhouette (only its alpha counts): the themed icon (Android 13+) and `ic_notification`. Without it, the brand's adaptive icon has no themed layer, so it never shows Astrid's silhouette. The notification icon stays Astrid's, and the script says so |
 | `characterImage` | A square PNG that replaces `astrid_character` (sign-in, sidebar, empty states, agents), at 512 px |
-| `checkboxImages` | **No longer drawn** (ADEV-196, register DS21): the app draws astrid-core's checkbox art in the priority tokens, so the low-priority box is already the brand's accent (its lighter ink on Dark). The script still accepts and copies the folder until it is retired. Was: a folder of square PNGs named as Astrid's are, `check_box[_repeat][_checked]_<priority 0-3>.png` (16 in all), each replacing Astrid's at 56 px |
+| `checkboxImages` | **No longer drawn** (ADEV-196, register DS21): the app draws astrid-core's checkbox art in the priority tokens, so the low-priority box is already the brand's accent (its lighter ink on Dark). **Retired:** the script ignores the key and prints a note, so an older profile still builds. Was: a folder of square PNGs named as Astrid's are, `check_box[_repeat][_checked]_<priority 0-3>.png` (16 in all), each replacing Astrid's at 56 px |
 
 Re-running the script removes only the files it wrote last time (listed in `res/.make-brand-variant`), so
 removing a key from the profile brings back Astrid's art. It never touches resources a partner added by hand.
