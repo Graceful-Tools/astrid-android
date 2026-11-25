@@ -51,6 +51,8 @@ data class TaskDetailState(
     val suggestions: List<com.gracefultools.astrid.model.CommentSuggestion> = emptyList(),
     /** Files picked for the next comment, sent with its text when Send is pressed. */
     val queued: List<QueuedFile> = emptyList(),
+    /** The quick changer the leading control opened (ADEV-151), as a row's (ADEV-150). */
+    val statusPicker: com.gracefultools.astrid.ui.common.LeadingOutcome.PickStatus? = null,
 )
 
 /** iOS's "Someone else": people found as you type, and what assigning by email came to. */
@@ -360,6 +362,56 @@ class TaskDetailViewModel(
 
     fun setLists(listIds: List<String>) = work {
         runCommand { core.run(command("setTaskLists", "taskId" to id, "listIds" to listIds)) }
+        load()
+    }
+
+    private val rowActions = com.gracefultools.astrid.ui.common.RowActions(core, waiting)
+
+    /**
+     * The leading control's tap, as the core answers for details (ADEV-151, iOS
+     * TaskDetailLeadingControl): `openPicker` opens the quick changer a row opens, through the
+     * row's own [rowActions], and answers true. Otherwise it answers false and the screen keeps
+     * its completing tap, with its complete-subtasks question.
+     */
+    fun tapLeading(): Boolean {
+        val detail = _state.value.detail ?: return false
+        if (detail.action != "openPicker") return false
+        val row = com.gracefultools.astrid.model.TaskRow(
+            id = id,
+            title = detail.task.title,
+            completed = detail.task.completed,
+            priority = detail.task.priority,
+            isRepeating = detail.task.repeating != null && detail.task.repeating != "never",
+            leading = detail.leading ?: com.gracefultools.astrid.model.LeadingControl(),
+            action = detail.action,
+            assignee = detail.assignee,
+        )
+        work {
+            when (val outcome = rowActions.leading(row)) {
+                is com.gracefultools.astrid.ui.common.LeadingOutcome.PickStatus -> _state.update { it.copy(statusPicker = outcome) }
+                is com.gracefultools.astrid.ui.common.LeadingOutcome.Refused -> _state.update { it.copy(error = outcome.message) }
+                com.gracefultools.astrid.ui.common.LeadingOutcome.Done -> load()
+            }
+        }
+        return true
+    }
+
+    /** A column from the quick changer; into Waiting with nothing to wait on, [waiting] asks. */
+    fun pickStatus(columnId: String) = work {
+        val picker = _state.value.statusPicker ?: return@work
+        _state.update { it.copy(statusPicker = null) }
+        rowActions.setStatus(picker.taskId, columnId)?.let { message -> _state.update { it.copy(error = message) } }
+        load()
+    }
+
+    fun dismissStatusPicker() = _state.update { it.copy(statusPicker = null) }
+
+    /** The quick changer's "Mark as done" / "Mark as to-do" row, or its "Complete this task?" answer. */
+    fun completeFromPicker() = work {
+        val picker = _state.value.statusPicker ?: return@work
+        _state.update { it.copy(statusPicker = null) }
+        (rowActions.complete(picker.row) as? com.gracefultools.astrid.ui.common.LeadingOutcome.Refused)
+            ?.let { refused -> _state.update { it.copy(error = refused.message) } }
         load()
     }
 
