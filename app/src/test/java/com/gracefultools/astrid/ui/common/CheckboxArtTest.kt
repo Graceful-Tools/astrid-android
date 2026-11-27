@@ -6,6 +6,7 @@ import com.gracefultools.astrid.ui.theme.DarkColors
 import com.gracefultools.astrid.ui.theme.LightColors
 import com.gracefultools.astrid.ui.theme.OceanColors
 import org.junit.Assert.assertEquals
+import java.io.File
 import org.junit.Test
 
 /**
@@ -35,5 +36,14 @@ class CheckboxArtTest {
         // The old art's box was #328ACC in every theme.
         assertEquals(LightColors.tokens.accent, checkboxTint(1, LightColors))
         assertEquals(Color(0xFF60A5FA), checkboxTint(1, DarkColors))
+    }
+
+    @Test
+    fun `ADEV-196 none of iOS's 16 checkbox PNGs is left in the resources`() {
+        val leftovers = File("src/main/res").walkTopDown()
+            .filter { it.isFile && it.name.startsWith("check_box") }
+            .map { it.relativeTo(File("src/main/res")).path }
+            .sorted().toList()
+        assertEquals("the core's checkbox art replaced these (Jon, 2026-11-24: \"Yes. Delete\")", emptyList<String>(), leftovers)
     }
 }
