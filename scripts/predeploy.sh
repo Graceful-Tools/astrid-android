@@ -40,9 +40,11 @@ fi
 
 # The scheduled loop runs under launchd on the dev Mac only (docs/AUTOMATION.md), and its test
 # drives the real zsh script against stubs, so CI (ubuntu) skips it.
-step "scripts: a brand from its profile, the literal audit (AATD-90), the size budget (AATD-91)"
+step "scripts: a brand from its profile, the literal audit (AATD-90), the size budget (AATD-91), the locks (ADEV-352)"
 scripts/test-make-brand-variant.sh
 scripts/test-check-native-size.sh
+# Every resolved version is locked and checksummed (ADEV-352); Gradle enforces it on every build.
+scripts/test-dependency-locks.sh
 # brands/acme is generated from astrid-web's acme profile: stale when that profile has moved on.
 web="${ASTRID_WEB_DIR:-../astrid-web}"
 if [[ -f "$web/brands/acme.brand.json" ]]; then
