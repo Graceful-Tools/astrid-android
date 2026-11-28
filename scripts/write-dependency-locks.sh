@@ -26,7 +26,9 @@ echo "── lockfiles ──"
 
 echo "── checksums ──"
 # Native libraries are not needed to resolve anything, and unit tests are not run: only downloads matter.
-./gradlew --console=plain -q --write-verification-metadata sha256 "${deps[@]}" \
+# --refresh-dependencies: a clean machine (CI) also fetches POMs and BOMs this one has cached from
+# earlier resolutions, and Gradle records only what it fetches. Without it CI fails verification on them.
+./gradlew --console=plain -q --refresh-dependencies --write-verification-metadata sha256 "${deps[@]}" \
   lintDebug assembleDebug assembleDebugAndroidTest compileDebugUnitTestKotlin :baselineprofile:assemble >/dev/null
 
 echo "── aapt2 for every OS ──"
