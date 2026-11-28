@@ -60,6 +60,9 @@ app/Astrid (Compose)  ──  corebridge (Kotlin facade + UniFFI bindings)  ─�
   screens re-read what moved.
 - **The core is pinned by revision** in `core/Cargo.toml` and bumped deliberately. Building against
   a local checkout: `scripts/build-core.sh --core ../astrid-core`.
+- **Every Maven version is locked and checksummed** (ADEV-352): `gradle.lockfile` per project and
+  `gradle/verification-metadata.xml`. After any version change, run `scripts/write-dependency-locks.sh`
+  and commit what it writes: [DEPENDENCIES.md](DEPENDENCIES.md).
 - **Generated Kotlin is committed** (`corebridge/src/main/java/uniffi/`) and never hand-edited; the
   gate fails if it differs from what the pinned core generates. Native `.so` files are built, not
   committed.

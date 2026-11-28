@@ -1,3 +1,13 @@
+/**
+ * Every resolved version is locked (ADEV-352): `gradle.lockfile` per project, plus
+ * `buildscript-gradle.lockfile` for the plugins themselves. A build that would resolve anything
+ * else fails, so a transitive version cannot change without a commit, and the Socket gate in
+ * astrid-web checks every version the lockfiles name. Upgrading: docs/DEPENDENCIES.md.
+ */
+buildscript {
+    configurations.classpath { resolutionStrategy.activateDependencyLocking() }
+}
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -18,3 +28,7 @@ val rustlsPlatformVerifierVersion: Provider<String> by extra(
             ?: error("rustls-platform-verifier-android is not in core/Cargo.lock")
     },
 )
+
+allprojects {
+    dependencyLocking { lockAllConfigurations() }
+}
