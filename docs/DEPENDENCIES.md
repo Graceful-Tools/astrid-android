@@ -38,6 +38,15 @@ both verify. `scripts/test-dependency-locks.sh` fails if any of the three is mis
 run `scripts/write-dependency-locks.sh` before merging, because the checksum file would otherwise
 refuse them.
 
+## Floors on what the tooling brings
+
+The first Socket run over the lockfiles (2026-11-27) refused
+`org.bouncycastle:bcprov-jdk18on:1.80.2` for a critical CVE. AGP 9.5.1 brings it into the plugins'
+classpath and lint's (`androidLintTool`). It is build tooling, never in the APK. `build.gradle.kts`
+moves every Bouncy Castle artifact up to `astrid.bouncyCastle` in `gradle.properties` (1.85), and
+`scripts/test-dependency-locks.sh` fails if a lockfile pins any other version. Remove the rule once
+an AGP upgrade brings that version or later on its own.
+
 ## What is not covered
 
 - **Robolectric's `android-all` jars** are downloaded by Robolectric at test time, outside Gradle,

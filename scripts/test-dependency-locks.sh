@@ -9,7 +9,7 @@ fail() { echo "✗ $*" >&2; exit 1; }
 
 # ADEV-352: locking is on for every project's configurations, and for the plugins' classpath.
 grep -q 'lockAllConfigurations()' build.gradle.kts || fail "build.gradle.kts does not lock every configuration"
-grep -q 'configurations.classpath { resolutionStrategy.activateDependencyLocking() }' build.gradle.kts \
+grep -A2 'configurations.classpath' build.gradle.kts | grep -q 'resolutionStrategy.activateDependencyLocking()' \
   || fail "build.gradle.kts does not lock the plugins' buildscript classpath"
 
 # ADEV-352: each included project has its lockfile, and the plugins have theirs.
@@ -33,5 +33,13 @@ for v in $(grep -o 'name="aapt2" version="[^"]*"' "$meta" | sed 's/.*version="//
     grep -q "aapt2-$v-$os.jar" "$meta" || fail "$meta has no aapt2 $v checksum for $os: scripts/write-dependency-locks.sh adds it"
   done
 done
+
+# ADEV-352: the build's own Bouncy Castle is held at a version Socket accepts (AGP 9.5.1 brings
+# 1.80.2, critical CVE). No lockfile may pin an older one.
+floor="$(sed -n 's/^astrid.bouncyCastle=//p' gradle.properties)"
+[[ -n "$floor" ]] || fail "gradle.properties does not set astrid.bouncyCastle"
+if grep -h '^org.bouncycastle:' -- *gradle.lockfile */gradle.lockfile | grep -v ":$floor=" | grep -q .; then
+  fail "a lockfile pins a Bouncy Castle other than $floor"
+fi
 
 echo "✓ dependency locks and checksums (ADEV-352)"
